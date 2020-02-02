@@ -49,14 +49,14 @@ Tilemap:
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
       m_TileFlags: 2
-      m_ColliderType: 2
+      m_ColliderType: 1
   m_AnimatedTiles: {}
   m_TileAssetArray:
   - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: d8a6b75a59a81df46975a2abf4905603, type: 2}
+    m_Data: {fileID: 11400000, guid: f090c291e35681a45b789d6eef009209, type: 2}
   m_TileSpriteArray:
   - m_RefCount: 1
-    m_Data: {fileID: 1969589144523243786, guid: 488ce501ab70c844896bd13c19dc463d,
+    m_Data: {fileID: -8810953571539542518, guid: 7940cc394a64da349b9aab6886fcaef2,
       type: 3}
   m_TileMatrixArray:
   - m_RefCount: 1
@@ -205,4 +205,4 @@ MonoBehaviour:
   m_Script: {fileID: 12395, guid: 0000000000000000e000000000000000, type: 0}
   m_Name: Palette Settings
   m_EditorClassIdentifier: 
-  cellSizing: 0
+  cellSizing: 100
