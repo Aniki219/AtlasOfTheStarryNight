@@ -7,6 +7,9 @@ public class playerController : MonoBehaviour
 {
     public float jumpHeight = 2f;
     public float timeToJumpApex = 0.5f;
+    
+    public int variableJumpIncrements = 4;
+
     public float airAccelerationTime = 0f;
     public float groundAccelerationTime = 0f;
     float moveSpeed = 4f;
@@ -44,6 +47,7 @@ public class playerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z) && isGrounded())
         {
             velocity.y = jumpVelocity;
+            StartCoroutine(jumpCoroutine());
         }
 
         float targetVelocityX = input.x * moveSpeed;
@@ -57,7 +61,23 @@ public class playerController : MonoBehaviour
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?groundAccelerationTime:airAccelerationTime);
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(velocity * Time.deltaTime);        
+    }
+
+
+    IEnumerator jumpCoroutine()
+    {
+        int i = 0;
+        while (Input.GetKey(KeyCode.Z) && i < variableJumpIncrements)
+        {
+            i++;
+            yield return new WaitForSeconds(4.0f/60);
+        }
+        if (i < variableJumpIncrements)
+        {
+            velocity.y /= 4;
+            i = variableJumpIncrements;
+        }
     }
 
     void setFacing(float vel)

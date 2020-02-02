@@ -11,8 +11,8 @@ public class characterController : MonoBehaviour
     public int horizontalRayCount = 4;
     public int verticalRayCount = 4;
 
-    float maxClimbAngle = 80;
-    float maxDescendAngle = 80;
+    public float maxClimbAngle = 80;
+    public float maxDescendAngle = 80;
 
     float horizontalRaySpacing;
     float verticalRaySpacing;
