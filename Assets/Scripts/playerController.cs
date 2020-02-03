@@ -28,6 +28,7 @@ public class playerController : MonoBehaviour
 
     enum State
     {
+        Wait,
         Movement,
         BroomStart,
         Broom
@@ -62,6 +63,8 @@ public class playerController : MonoBehaviour
                 break;
             case State.Broom:
                 handleBroom();
+                break;
+            default:
                 break;
         }
     }
@@ -107,7 +110,6 @@ public class playerController : MonoBehaviour
     {
         foreach (AnimatorControllerParameter parameter in anim.parameters)
         {
-            Debug.Log(parameter.name);
             anim.SetBool(parameter.name, false);
         }
     }
@@ -115,6 +117,8 @@ public class playerController : MonoBehaviour
     void handleBroomStart()
     {
         anim.SetTrigger("broomStart");
+        GetComponent<soundManager>().playOnBroom();
+        state = State.Wait;
     }
 
     void startBroom()
