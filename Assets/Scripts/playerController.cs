@@ -14,6 +14,7 @@ public class playerController : MonoBehaviour
     public float groundAccelerationTime = 0f;
     float moveSpeed = 4f;
     int facing = 1;
+    bool canBroom;
 
     float gravity;
     float jumpVelocity;
@@ -22,6 +23,15 @@ public class playerController : MonoBehaviour
 
     characterController controller;
     Animator anim;
+
+    State state = State.Movement;
+
+    enum State
+    {
+        Movement,
+        BroomStart,
+        Broom
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -42,13 +52,42 @@ public class playerController : MonoBehaviour
             velocity.y = 0;
         }
 
+        switch (state)
+        {
+            case State.Movement:
+                handleMovement();
+                break;
+            case State.BroomStart:
+                handleBroomStart();
+                break;
+            case State.Broom:
+                handleBroom();
+                break;
+        }
+    }
+
+    void handleMovement()
+    {
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if (Input.GetKeyDown(KeyCode.Z) && isGrounded())
+        if (isGrounded())
         {
-            velocity.y = jumpVelocity;
-            StartCoroutine(jumpCoroutine());
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                velocity.y = jumpVelocity;
+                StartCoroutine(jumpCoroutine());
+            }
+            canBroom = true;
+        } else
+        {
+            if (canBroom && Input.GetKeyDown(KeyCode.X))
+            {
+                state = State.BroomStart;
+                canBroom = false;
+                return;
+            }
         }
+
 
         float targetVelocityX = input.x * moveSpeed;
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
@@ -59,11 +98,44 @@ public class playerController : MonoBehaviour
         setFacing(targetVelocityX);
         transform.localScale = new Vector3(facing, 1, 1);
 
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below)?groundAccelerationTime:airAccelerationTime);
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);        
+        controller.Move(velocity * Time.deltaTime);
     }
 
+    void resetAnimator()
+    {
+        foreach (AnimatorControllerParameter parameter in anim.parameters)
+        {
+            Debug.Log(parameter.name);
+            anim.SetBool(parameter.name, false);
+        }
+    }
+
+    void handleBroomStart()
+    {
+        anim.SetTrigger("broomStart");
+    }
+
+    void startBroom()
+    {
+        resetAnimator();
+        state = State.Broom;
+    }
+
+    void handleBroom()
+    {
+        int directionX = Mathf.RoundToInt(transform.localScale.x);
+        if (Input.GetKeyDown(KeyCode.X) || ((directionX == -1) ? controller.collisions.left : controller.collisions.right))
+        {
+            anim.SetTrigger("broomEnd");
+            state = State.Movement;
+            return;
+        }
+        velocity.x = moveSpeed * 2 * transform.localScale.x * Time.deltaTime;
+        velocity.y = 0;
+        controller.Move(velocity);
+    }
 
     IEnumerator jumpCoroutine()
     {
