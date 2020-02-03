@@ -12,6 +12,9 @@ public class playerController : MonoBehaviour
 
     public float airAccelerationTime = 0f;
     public float groundAccelerationTime = 0f;
+
+    public GameObject starParticles;
+
     float moveSpeed = 4f;
     int facing = 1;
     bool canBroom;
@@ -142,15 +145,23 @@ public class playerController : MonoBehaviour
             return;
         }
         if ((directionX == -1) ? controller.collisions.left : controller.collisions.right) {
-            anim.SetTrigger("bonk");
-            state = State.Bonk;
-            GetComponent<soundManager>().playBonk();
-            velocity.y = 4f;
+            startBonk();
             return;
         }
         velocity.x = moveSpeed * 2 * transform.localScale.x * Time.deltaTime;
         velocity.y = 0;
         controller.Move(velocity);
+    }
+
+    void startBonk()
+    {
+        Debug.Log("hello!");
+        anim.SetTrigger("bonk");
+        state = State.Bonk;
+        GetComponent<soundManager>().playBonk();
+        velocity.y = 4f;
+        createStars(transform.position);
+        Camera.main.GetComponent<cameraController>().StartShake();
     }
 
     void bonk()
@@ -167,6 +178,11 @@ public class playerController : MonoBehaviour
     void returnToMovement()
     {
         state = State.Movement;
+    }
+
+    void createStars(Vector3 position)
+    {
+        Instantiate(starParticles, position + Vector3.up * 0.5f, Quaternion.Euler((transform.localScale.x == 1) ? 180 : 0, 90, 0));
     }
 
     IEnumerator jumpCoroutine()
