@@ -6,6 +6,8 @@ public class soundManager : MonoBehaviour
 {
     public AudioClip collectCelestium;
     public AudioClip onBroom;
+    public AudioClip broomLaunch;
+    public AudioClip bonk;
     new AudioSource audio;
 
     private void Start()
@@ -22,6 +24,18 @@ public class soundManager : MonoBehaviour
     public void playOnBroom()
     {
         audio.clip = onBroom;
+        audio.Play();
+    }
+
+    public void playBroomLaunch()
+    {
+        audio.clip = broomLaunch;
+        audio.Play();
+    }
+
+    public void playBonk()
+    {
+        audio.clip = bonk;
         audio.Play();
     }
 }

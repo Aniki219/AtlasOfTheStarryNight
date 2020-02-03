@@ -31,7 +31,8 @@ public class playerController : MonoBehaviour
         Wait,
         Movement,
         BroomStart,
-        Broom
+        Broom,
+        Bonk
     }
 
     // Start is called before the first frame update
@@ -63,6 +64,9 @@ public class playerController : MonoBehaviour
                 break;
             case State.Broom:
                 handleBroom();
+                break;
+            case State.Bonk:
+                bonk();
                 break;
             default:
                 break;
@@ -125,20 +129,44 @@ public class playerController : MonoBehaviour
     {
         resetAnimator();
         state = State.Broom;
+        GetComponent<soundManager>().playBroomLaunch();
     }
 
     void handleBroom()
     {
         int directionX = Mathf.RoundToInt(transform.localScale.x);
-        if (Input.GetKeyDown(KeyCode.X) || ((directionX == -1) ? controller.collisions.left : controller.collisions.right))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             anim.SetTrigger("broomEnd");
             state = State.Movement;
             return;
         }
+        if ((directionX == -1) ? controller.collisions.left : controller.collisions.right) {
+            anim.SetTrigger("bonk");
+            state = State.Bonk;
+            GetComponent<soundManager>().playBonk();
+            velocity.y = 4f;
+            return;
+        }
         velocity.x = moveSpeed * 2 * transform.localScale.x * Time.deltaTime;
         velocity.y = 0;
         controller.Move(velocity);
+    }
+
+    void bonk()
+    {
+        velocity.y += gravity * Time.deltaTime;
+        if (!isGrounded())
+        {
+            velocity.x = -moveSpeed/4f * transform.localScale.x;
+        }
+        
+        controller.Move(velocity * Time.deltaTime);
+    }
+
+    void returnToMovement()
+    {
+        state = State.Movement;
     }
 
     IEnumerator jumpCoroutine()
