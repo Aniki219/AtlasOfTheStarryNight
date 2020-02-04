@@ -5,24 +5,30 @@ using UnityEngine;
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
 {
-    public float jumpHeight = 2f;
-    public float timeToJumpApex = 0.5f;
+    public GameObject starRotator;
+    float jumpHeight = 2.2f;
+    float timeToJumpApex = 0.5f;
     
-    public int variableJumpIncrements = 4;
+    int variableJumpIncrements = 6;
 
-    public float airAccelerationTime = 0f;
-    public float groundAccelerationTime = 0f;
+    float airAccelerationTime = 0f;
+    float groundAccelerationTime = 0f;
 
     public GameObject starParticles;
 
     float moveSpeed = 4f;
     int facing = 1;
     bool canBroom;
+    bool resetPosition = false;
+    bool intangible = false;
+    Vector3 lastSafePosition;
+    public float resetTime = 10f;
 
     float gravity;
     float jumpVelocity;
     Vector3 velocity;
     float velocityXSmoothing;
+    Vector3 velocitySmoothing;
 
     characterController controller;
     Animator anim;
@@ -35,7 +41,8 @@ public class playerController : MonoBehaviour
         Movement,
         BroomStart,
         Broom,
-        Bonk
+        Bonk,
+        Reset
     }
 
     // Start is called before the first frame update
@@ -45,6 +52,7 @@ public class playerController : MonoBehaviour
         controller = GetComponent<characterController>();
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        lastSafePosition = transform.position;
     }
 
     // Update is called once per frame
@@ -71,8 +79,20 @@ public class playerController : MonoBehaviour
             case State.Bonk:
                 bonk();
                 break;
+            case State.Reset:
+                handleReset();
+                break;
             default:
                 break;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("ResetDamaging") && !intangible)
+        {
+            startBonk(true);
+            return;
         }
     }
 
@@ -85,6 +105,7 @@ public class playerController : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 velocity.y = jumpVelocity;
+                SoundManager.Instance.playClip("jump2");
                 StartCoroutine(jumpCoroutine());
             }
             canBroom = true;
@@ -98,7 +119,6 @@ public class playerController : MonoBehaviour
             }
         }
 
-
         float targetVelocityX = input.x * moveSpeed;
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0));
@@ -107,10 +127,15 @@ public class playerController : MonoBehaviour
 
         setFacing(targetVelocityX);
         transform.localScale = new Vector3(facing, 1, 1);
-
+    
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+
+        if (velocity.y <= 0 && controller.isSafePosition())
+        {
+            lastSafePosition = transform.position;
+        }
     }
 
     void resetAnimator()
@@ -124,7 +149,7 @@ public class playerController : MonoBehaviour
     void handleBroomStart()
     {
         anim.SetTrigger("broomStart");
-        GetComponent<soundManager>().playOnBroom();
+        SoundManager.Instance.playClip("onBroom");
         state = State.Wait;
     }
 
@@ -132,7 +157,7 @@ public class playerController : MonoBehaviour
     {
         resetAnimator();
         state = State.Broom;
-        GetComponent<soundManager>().playBroomLaunch();
+        SoundManager.Instance.playClip("broomLaunch");
     }
 
     void handleBroom()
@@ -153,14 +178,23 @@ public class playerController : MonoBehaviour
         controller.Move(velocity);
     }
 
-    void startBonk()
+    void startBonk(bool reset = false)
     {
-        Debug.Log("hello!");
+        if (reset)
+        {
+            resetPosition = true;
+            intangible = true;
+            SoundManager.Instance.playClip("hurt2");
+        } else { 
+            SoundManager.Instance.playClip("bonk");
+            createStars(transform.position);
+        }
+
+        resetAnimator();
         anim.SetTrigger("bonk");
         state = State.Bonk;
-        GetComponent<soundManager>().playBonk();
         velocity.y = 4f;
-        createStars(transform.position);
+        
         Camera.main.GetComponent<cameraController>().StartShake();
     }
 
@@ -175,9 +209,41 @@ public class playerController : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
+    void handleReset()
+    {
+        intangible = true;
+        starRotator.SetActive(true);
+        if (Vector3.SqrMagnitude(lastSafePosition - transform.position) < 0.01f)
+        {
+            transform.position = lastSafePosition;
+            returnToMovement();
+            StartCoroutine(flashEffect());
+            starRotator.SetActive(false);
+        }
+        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.deltaTime);
+    }
+
+    IEnumerator flashEffect(float duration = 1.0f)
+    {
+        float startTime = Time.time;
+        while (Time.time - startTime < duration)
+        {
+            GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
+            yield return new WaitForSeconds(0.1f);
+        }
+    }
+
     void returnToMovement()
     {
-        state = State.Movement;
+        if (resetPosition)
+        {
+            resetPosition = false;
+            state = State.Reset;
+        } else
+        {
+            intangible = false;
+            state = State.Movement;
+        }
     }
 
     void createStars(Vector3 position)

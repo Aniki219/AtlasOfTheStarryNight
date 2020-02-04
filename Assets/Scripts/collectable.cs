@@ -21,7 +21,7 @@ public class collectable : MonoBehaviour
         if (collider.CompareTag("Player"))
         {
             collected = true;
-            collider.GetComponent<soundManager>().playCollectCelestium();
+            SoundManager.Instance.playClip("collectCelestium2");
         }
     }
 

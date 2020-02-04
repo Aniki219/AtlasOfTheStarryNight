@@ -60,8 +60,6 @@ public class characterController : MonoBehaviour
             rayOrigin += Vector2.up * (horizontalRaySpacing * i);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
 
-            Debug.DrawRay(rayOrigin, Vector2.right * directionX * rayLength, Color.red);
-
             if (hit)
             {
 
@@ -112,11 +110,9 @@ public class characterController : MonoBehaviour
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
 
-            Debug.DrawRay(rayOrigin, Vector2.up * directionY * rayLength, Color.red);
-
             if (hit)
             {
-                velocity.y = (hit.distance - skinWidth) * directionY;
+                velocity.y = (hit.distance - skinWidth) * directionY;   
                 rayLength = hit.distance;
 
                 if (collisions.climbingSlope)
@@ -209,6 +205,23 @@ public class characterController : MonoBehaviour
             }
         }
         collisions.isGrounded = false;
+    }
+
+    public bool isSafePosition()
+    {
+        for (int i = 1; i < verticalRayCount - 1; i++)
+        {
+            Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
+            float maxDistance = 1 / 32f + skinWidth;
+
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, collisionMask);
+
+            if (hit)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     void UpdateRaycastOrigins()
