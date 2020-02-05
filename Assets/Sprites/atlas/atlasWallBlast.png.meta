@@ -1,16 +1,22 @@
 fileFormatVersion: 2
-guid: 7fb20fda388488c4abea0e8a4eec32b9
+guid: 75c75722188f3284b84bf8f23c258159
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2218348951282360977
-    second: atlasFall_0
+      213: 7298170357269764220
+    second: atlasWallBlast_0
   - first:
-      213: 1332125104909615212
-    second: atlasFall_1
+      213: 8050225276424665904
+    second: atlasWallBlast_1
   - first:
-      213: 460677402991132658
-    second: atlasFall_2
+      213: 1256364630501693181
+    second: atlasWallBlast_2
+  - first:
+      213: -4176157609675520078
+    second: atlasWallBlast_3
+  - first:
+      213: -8274238848172937880
+    second: atlasWallBlast_4
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -95,7 +101,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: atlasFall_0
+      name: atlasWallBlast_0
       rect:
         serializedVersion: 2
         x: 0
@@ -103,20 +109,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6d8f374cf865bce4589804a9a3dd90ef
-      internalID: -2218348951282360977
+      spriteID: 6eaeb80831bd3c14a92d47a6e32a4c33
+      internalID: 7298170357269764220
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasFall_1
+      name: atlasWallBlast_1
       rect:
         serializedVersion: 2
         x: 32
@@ -124,20 +130,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a56605a5bad6a8249b1660dd71f5b1f9
-      internalID: 1332125104909615212
+      spriteID: 52280ea4db38d6a4093b9d1b21ae8912
+      internalID: 8050225276424665904
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasFall_2
+      name: atlasWallBlast_2
       rect:
         serializedVersion: 2
         x: 64
@@ -145,14 +151,56 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6638571fcd1ac7b48a1bd46e12565349
-      internalID: 460677402991132658
+      spriteID: 46eff2f81e220c544b63d28fcd197f5a
+      internalID: 1256364630501693181
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasWallBlast_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a8967199f019f67488a3faebb1be051a
+      internalID: -4176157609675520078
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasWallBlast_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56d05064344612a449e3408d5a86bcb0
+      internalID: -8274238848172937880
       vertices: []
       indices: 
       edges: []

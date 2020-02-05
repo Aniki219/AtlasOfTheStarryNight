@@ -8,12 +8,13 @@ public class characterController : MonoBehaviour
     public LayerMask collisionMask;
     public LayerMask dangerMask;
 
-    public float skinWidth = 0.1f;
-    public int horizontalRayCount = 4;
-    public int verticalRayCount = 4;
+    public float safetyMargin = 1f;
+    float skinWidth = 0.02f;
+    int horizontalRayCount = 6;
+    int verticalRayCount = 4;
 
-    public float maxClimbAngle = 80;
-    public float maxDescendAngle = 80;
+    float maxClimbAngle = 50;
+    float maxDescendAngle = 50;
 
     float horizontalRaySpacing;
     float verticalRaySpacing;
@@ -103,7 +104,7 @@ public class characterController : MonoBehaviour
     void VerticalCollisions(ref Vector3 velocity)
     {
         float directionY = Mathf.Sign(velocity.y);
-        float rayLength = Mathf.Abs(velocity.y) + skinWidth;
+        float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1/32f;
 
         for (int i = 0; i < verticalRayCount; i++)
         {
@@ -124,6 +125,8 @@ public class characterController : MonoBehaviour
                 collisions.below = directionY == -1;
                 collisions.above = directionY == 1;
             }
+
+            //Debug.DrawLine(rayOrigin, rayOrigin + Vector2.up * directionY * rayLength);
         }
 
         if (collisions.climbingSlope)
@@ -154,6 +157,7 @@ public class characterController : MonoBehaviour
         {
             velocity.y = climbVelocityY;
             velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(velocity.x);
+
             collisions.below = true;
             collisions.climbingSlope = true;
             collisions.slopeAngle = slopeAngle;
@@ -210,12 +214,13 @@ public class characterController : MonoBehaviour
 
     public bool isSafePosition()
     {
-        Vector3 boxCastOrigin = collider.transform.position - Vector3.right * 0.5f;
-        RaycastHit2D dhit = Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, 1f, dangerMask);
+        Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2;
+        RaycastHit2D dhit = Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, safetyMargin, dangerMask);
         if (dhit)
         {
             return false;
         }
+        int rays = 0;
         for (int i = 0; i < verticalRayCount; i++)
         {
             Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
@@ -225,10 +230,10 @@ public class characterController : MonoBehaviour
 
             if (hit)
             {
-                return true;
+                rays++;
             }
         }
-        return false;
+        return rays > 1;
     }
 
     void UpdateRaycastOrigins()
@@ -271,6 +276,8 @@ public class characterController : MonoBehaviour
         public Vector3 velocityOld;
 
         public bool isGrounded;
+        public bool wallRideRight;
+        public bool wallRideLeft;
 
         public void Reset()
         {
