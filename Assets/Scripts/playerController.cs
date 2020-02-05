@@ -85,11 +85,13 @@ public class playerController : MonoBehaviour
             default:
                 break;
         }
+
+        Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.red);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("ResetDamaging") && !intangible)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && !intangible)
         {
             startBonk(true);
             return;
@@ -216,6 +218,7 @@ public class playerController : MonoBehaviour
         if (Vector3.SqrMagnitude(lastSafePosition - transform.position) < 0.01f)
         {
             transform.position = lastSafePosition;
+            velocity = Vector3.zero;
             returnToMovement();
             StartCoroutine(flashEffect());
             starRotator.SetActive(false);

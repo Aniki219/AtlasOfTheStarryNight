@@ -6,6 +6,7 @@ public class characterController : MonoBehaviour
 {
 
     public LayerMask collisionMask;
+    public LayerMask dangerMask;
 
     public float skinWidth = 0.1f;
     public int horizontalRayCount = 4;
@@ -209,7 +210,13 @@ public class characterController : MonoBehaviour
 
     public bool isSafePosition()
     {
-        for (int i = 1; i < verticalRayCount - 1; i++)
+        Vector3 boxCastOrigin = collider.transform.position - Vector3.right * 0.5f;
+        RaycastHit2D dhit = Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, 1f, dangerMask);
+        if (dhit)
+        {
+            return false;
+        }
+        for (int i = 0; i < verticalRayCount; i++)
         {
             Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
             float maxDistance = 1 / 32f + skinWidth;
