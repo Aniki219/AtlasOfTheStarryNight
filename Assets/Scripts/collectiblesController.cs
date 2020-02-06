@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class collectiblesController : MonoBehaviour
 {
-    int amountCollected = 0;
+    public int amountCollected = 0;
     Animator anim;
 
     float lastCollected = 0;
