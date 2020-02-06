@@ -23,6 +23,8 @@ public class characterController : MonoBehaviour
     RaycastOrigins raycastOrigins;
     public CollisionInfo collisions;
 
+    Vector3 fixedVelocity;
+
     void Start()
     {
         collider = GetComponent<BoxCollider2D>();
@@ -48,7 +50,13 @@ public class characterController : MonoBehaviour
             VerticalCollisions(ref velocity);
         }
 
-        transform.Translate(velocity);
+        fixedVelocity = new Vector3(velocity.x, velocity.y, velocity.z);
+    }
+
+    void FixedUpdate()
+    {
+        transform.Translate(fixedVelocity);
+        fixedVelocity = Vector3.zero;
     }
 
     void HorizontalCollisions(ref Vector3 velocity)

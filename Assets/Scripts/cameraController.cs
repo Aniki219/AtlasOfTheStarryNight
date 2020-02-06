@@ -28,17 +28,17 @@ public class cameraController : MonoBehaviour
         transform.position = new Vector3(x, y, -10);
     }
 
-    public void StartShake()
+    public void StartShake(float shakeMagnitude = 0.1f, float shakeDuration = 0.5f)
     {
-        StartCoroutine(shakeCoroutine());
+        StartCoroutine(shakeCoroutine(shakeMagnitude, shakeDuration));
     }
 
-    IEnumerator shakeCoroutine()
+    IEnumerator shakeCoroutine(float shakeMagnitude, float shakeDuration)
     {
         float startTime = Time.time;
-        while (Time.time - startTime < 0.5f)
+        while (Time.time - startTime < shakeDuration)
         {
-            shakeValue += (Vector3)Random.insideUnitCircle * 0.1f;
+            shakeValue += (Vector3)Random.insideUnitCircle * shakeMagnitude;
             yield return new WaitForEndOfFrame();
         }
         shakeValue = Vector3.zero;

@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
 {
-    float jumpHeight = 2.2f;
+    float jumpHeight = 2.55f;
     float timeToJumpApex = 0.5f;
     
     int variableJumpIncrements = 6;
@@ -18,14 +18,15 @@ public class playerController : MonoBehaviour
     float moveSpeed = 4f;
     int facing = 1;
     bool canBroom;
-    public bool resetPosition = false;
-    public bool intangible = false;
+    bool resetPosition = false;
+    bool intangible = false;
     Vector3 lastSafePosition;
-    public float resetTime = 10f;
+    float resetTime = 10f;
 
     bool isWallSliding = false;
-    public float wallSlideModifier = 0.5f;
-    float wallJumpVelocity = 0;
+    public float maxWallSlideVel = -5f;
+    float maxFallVel = -15f;
+    float wallJumpVelocity = 7;
 
     float gravity;
     float jumpVelocity;
@@ -55,7 +56,6 @@ public class playerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
         anim = GetComponent<Animator>();
         controller = GetComponent<characterController>();
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -115,6 +115,9 @@ public class playerController : MonoBehaviour
     IEnumerator WallJumpCoroutine()
     {
         state = State.WallJump;
+        GameObject explosion = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/wallBlast"), transform.position + new Vector3(-0.80f * facing, 0.23f, 0), Quaternion.identity); ;
+        explosion.transform.localScale = transform.localScale;
+        Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.25f);
         SoundManager.Instance.playClip("wallBlast");
         anim.SetBool("isJumping", false);
         anim.SetBool("isFalling", false);
@@ -126,16 +129,16 @@ public class playerController : MonoBehaviour
         anim.SetBool("isJumping", true);
         anim.SetBool("wallBlast", false);
 
-        transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+        flipHorizontal();
 
-        velocity.y = jumpVelocity / 1.5f;
+        velocity.y = wallJumpVelocity;
 
         float startTime = Time.time;
         while (Time.time - startTime < 0.1f)
         {
-            velocity.x = jumpVelocity / 1.5f * transform.localScale.x;
-            velocity.y += gravity * Time.deltaTime;
-            controller.Move(velocity * Time.deltaTime);
+            velocity.x = wallJumpVelocity * -facing;
+            velocity.y += gravity * Time.fixedDeltaTime;
+            controller.Move(velocity * Time.fixedDeltaTime);
             if (Input.GetKeyDown(KeyCode.X) && canBroom)
             {
                 state = State.BroomStart;
@@ -177,6 +180,7 @@ public class playerController : MonoBehaviour
             {
                 state = State.BroomStart;
                 canBroom = false;
+                if (isWallSliding) { flipHorizontal(); }
                 return;
             }
             isWallSliding = checkWallSliding();
@@ -196,16 +200,14 @@ public class playerController : MonoBehaviour
         anim.SetBool("wallSlide", isWallSliding);
 
         setFacing(velocity.x);
-        transform.localScale = new Vector3(facing, 1, 1);
-    
+
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
+        velocity.y += gravity * Time.fixedDeltaTime;
 
-        float yAcc = gravity + (isWallSliding ? wallSlideModifier : 1);
-        velocity.y += yAcc * Time.deltaTime;
+        if (isWallSliding && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
+        if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
 
-        if (velocity.y < -15.0f) { velocity.y = -15.0f; }
-
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(velocity * Time.fixedDeltaTime);
 
         if (velocity.y <= 0 && controller.isSafePosition())
         {
@@ -259,9 +261,9 @@ public class playerController : MonoBehaviour
             startBonk();
             return;
         }
-        velocity.x = moveSpeed * 2 * transform.localScale.x * Time.deltaTime;
+        velocity.x = moveSpeed * 2 * transform.localScale.x;
         velocity.y = 0;
-        controller.Move(velocity);
+        controller.Move(velocity * Time.fixedDeltaTime);
     }
 
     void startBonk(bool reset = false)
@@ -286,13 +288,13 @@ public class playerController : MonoBehaviour
 
     void bonk()
     {
-        velocity.y += gravity * Time.deltaTime;
+        velocity.y += gravity * Time.fixedDeltaTime;
         if (!isGrounded())
         {
             velocity.x = -moveSpeed/4f * transform.localScale.x;
         }
         
-        controller.Move(velocity * Time.deltaTime);
+        controller.Move(velocity * Time.fixedDeltaTime);
     }
 
     void handleReset(bool isSafe = false)
@@ -312,7 +314,7 @@ public class playerController : MonoBehaviour
             StartCoroutine(flashEffect());
             Destroy(starRotator);
         }
-        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.fixedDeltaTime);
     }
 
     IEnumerator flashEffect(float duration = 1.0f)
@@ -364,7 +366,13 @@ public class playerController : MonoBehaviour
         if (vel != 0)
         {
             facing = (int)Mathf.Sign(vel);
+            transform.localScale = new Vector3(facing, transform.localScale.y, transform.localScale.z);
         }
+    }
+
+    void flipHorizontal()
+    {
+        transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
     }
 
     bool isGrounded()
