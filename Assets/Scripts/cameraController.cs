@@ -1,30 +1,37 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class cameraController : MonoBehaviour
 {
     public Transform target;
     public Collider2D roomBounds;
     Camera cam;
+    PixelPerfectCamera ppcam;
     Vector3 shakeValue;
     Vector3 shakeVelocity;
+
+    [HideInInspector]
+    public float ppHeight;
+    public float ppWidth;
 
     void Start()
     {
         cam = GetComponent<Camera>();
+        ppcam = GetComponent<PixelPerfectCamera>();
+        ppHeight = ppcam.refResolutionY / 128.0f;
+        ppWidth = ppcam.refResolutionX / 128.0f;
     }
 
     // Update is called once per frame
     void Update()
     {
         transform.position = new Vector3(target.position.x, target.position.y, -10);
-        float h = cam.scaledPixelHeight/128.0f;
-        float w = cam.scaledPixelWidth/128.0f;
 
         transform.position += shakeValue;
-        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
-        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
+        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x + ppWidth, roomBounds.bounds.max.x - ppWidth);
+        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y + ppHeight, roomBounds.bounds.max.y - ppHeight);
         transform.position = new Vector3(x, y, -10);
     }
 

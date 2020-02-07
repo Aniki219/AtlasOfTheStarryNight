@@ -33,14 +33,15 @@ public class collectable : MonoBehaviour
             {
                 canCollect = false;
                 uiElement = GameObject.FindGameObjectWithTag(uiTag);
-                collectiblesController cc = uiElement.transform.parent.GetComponent<collectiblesController>();
-                cc.addOne();
+                collectiblesController controller = uiElement.transform.parent.GetComponent<collectiblesController>();
+                controller.addOne();
             }
 
-            Vector3 screenPoint = uiElement.transform.position;
+            cameraController cc = Camera.main.GetComponent<cameraController>();
+            Vector3 screenPoint = new Vector3(0, 1, 0);
 
             //find out where this is in world space
-            Vector3 worldPos = Camera.main.ScreenToWorldPoint(screenPoint);
+            Vector3 worldPos = Camera.main.ViewportToWorldPoint(screenPoint) - uiElement.transform.position/128.0f;
         
             //move towards the world space position
             transform.position = Vector3.MoveTowards(transform.position, worldPos, moveSpeed);

@@ -7,13 +7,16 @@ using UnityEngine.SceneManagement;
 public class levelTimer : MonoBehaviour
 {
     public GameObject MarsCounter;
-    int maxMars = 20;
+    public GameObject GemCounter;
+    public int maxMars = 25;
     Text timerText;
+    Text counterText;
     float startTime;
     // Start is called before the first frame update
     void Start()
     {
         timerText = GetComponent<Text>();
+        counterText = GemCounter.GetComponent<Text>();
         startTime = Time.time;
     }
 
@@ -24,7 +27,14 @@ public class levelTimer : MonoBehaviour
         {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Application.Quit();
+        }
+
         int currentMars = MarsCounter.GetComponent<collectiblesController>().amountCollected;
+        counterText.text = string.Concat("Gems: ", currentMars.ToString(), "/", maxMars.ToString());
+
         if (currentMars >= maxMars) { return; }
         timerText.text = string.Concat("Time: ", (Time.time - startTime).ToString("F2"));
     }

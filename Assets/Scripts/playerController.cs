@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
 {
-    float jumpHeight = 2.55f;
+    float jumpHeight = 2.6f;
     float timeToJumpApex = 0.5f;
     
     int variableJumpIncrements = 6;
@@ -16,7 +16,7 @@ public class playerController : MonoBehaviour
     public GameObject starParticles;
 
     float moveSpeed = 4f;
-    int facing = 1;
+    public int facing = 1;
     bool canBroom;
     bool resetPosition = false;
     bool intangible = false;
@@ -117,7 +117,7 @@ public class playerController : MonoBehaviour
         state = State.WallJump;
         GameObject explosion = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/wallBlast"), transform.position + new Vector3(-0.80f * facing, 0.23f, 0), Quaternion.identity); ;
         explosion.transform.localScale = transform.localScale;
-        Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.25f);
+        //Camera.main.GetComponent<cameraController>().StartShake(0.07f, 0.2f);
         SoundManager.Instance.playClip("wallBlast");
         anim.SetBool("isJumping", false);
         anim.SetBool("isFalling", false);
@@ -136,11 +136,12 @@ public class playerController : MonoBehaviour
         float startTime = Time.time;
         while (Time.time - startTime < 0.1f)
         {
-            velocity.x = wallJumpVelocity * -facing;
+            velocity.x = wallJumpVelocity * facing;
             velocity.y += gravity * Time.fixedDeltaTime;
             controller.Move(velocity * Time.fixedDeltaTime);
             if (Input.GetKeyDown(KeyCode.X) && canBroom)
             {
+                faceInputDirection();
                 state = State.BroomStart;
                 canBroom = false;
                 yield break;
@@ -149,6 +150,16 @@ public class playerController : MonoBehaviour
         }
         anim.SetBool("wallBlast", false);
         returnToMovement();
+    }
+
+    void faceInputDirection()
+    {
+        float dir = Input.GetAxisRaw("Horizontal");
+        if (dir != 0)
+        {
+            facing = (int)dir;
+            transform.localScale = new Vector3(facing, 1, 1);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -180,7 +191,12 @@ public class playerController : MonoBehaviour
             {
                 state = State.BroomStart;
                 canBroom = false;
-                if (isWallSliding) { flipHorizontal(); }
+                if (isWallSliding) {
+                    flipHorizontal();
+                } else
+                {
+                    faceInputDirection();
+                }
                 return;
             }
             isWallSliding = checkWallSliding();
@@ -250,18 +266,17 @@ public class playerController : MonoBehaviour
 
     void handleBroom()
     {
-        int directionX = Mathf.RoundToInt(transform.localScale.x);
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Z))
         {
             anim.SetTrigger("broomEnd");
             state = State.Movement;
             return;
         }
-        if ((directionX == -1) ? controller.collisions.left : controller.collisions.right) {
+        if ((facing == -1) ? controller.collisions.left : controller.collisions.right) {
             startBonk();
             return;
         }
-        velocity.x = moveSpeed * 2 * transform.localScale.x;
+        velocity.x = moveSpeed * 2 * facing;
         velocity.y = 0;
         controller.Move(velocity * Time.fixedDeltaTime);
     }
@@ -372,7 +387,8 @@ public class playerController : MonoBehaviour
 
     void flipHorizontal()
     {
-        transform.localScale = new Vector3(-transform.localScale.x, 1, 1);
+        facing = -(int)transform.localScale.x;
+        transform.localScale = new Vector3(facing, 1, 1);
     }
 
     bool isGrounded()
