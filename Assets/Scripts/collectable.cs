@@ -41,7 +41,7 @@ public class collectable : MonoBehaviour
             Vector3 screenPoint = new Vector3(0, 1, 0);
 
             //find out where this is in world space
-            Vector3 worldPos = Camera.main.ViewportToWorldPoint(screenPoint) - uiElement.transform.position/128.0f;
+            Vector3 worldPos = Camera.main.ViewportToWorldPoint(screenPoint) + uiElement.transform.position/128.0f;
         
             //move towards the world space position
             transform.position = Vector3.MoveTowards(transform.position, worldPos, moveSpeed);

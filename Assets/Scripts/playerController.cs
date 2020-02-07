@@ -39,6 +39,10 @@ public class playerController : MonoBehaviour
 
     GameObject starRotator;
 
+    bool fastBroom = false;
+    bool screenShake = true;
+    float wallBlastDelay = 0.2f;
+
     public State state = State.Movement;
 
     public enum State
@@ -117,14 +121,15 @@ public class playerController : MonoBehaviour
         state = State.WallJump;
         GameObject explosion = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/wallBlast"), transform.position + new Vector3(-0.80f * facing, 0.23f, 0), Quaternion.identity); ;
         explosion.transform.localScale = transform.localScale;
-        //Camera.main.GetComponent<cameraController>().StartShake(0.07f, 0.2f);
+        if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.25f, 0.2f); }
+        
         SoundManager.Instance.playClip("wallBlast");
         anim.SetBool("isJumping", false);
         anim.SetBool("isFalling", false);
         anim.SetBool("wallSlide", false);
         anim.SetBool("wallBlast", true);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(wallBlastDelay);
 
         anim.SetBool("isJumping", true);
         anim.SetBool("wallBlast", false);
@@ -252,9 +257,10 @@ public class playerController : MonoBehaviour
 
     void handleBroomStart()
     {
+
         anim.SetTrigger("broomStart");
         SoundManager.Instance.playClip("onBroom");
-        state = State.Wait;
+        state = fastBroom ? State.Broom : State.Wait;
     }
 
     void startBroom()
