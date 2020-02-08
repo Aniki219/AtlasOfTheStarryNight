@@ -39,9 +39,13 @@ public class playerController : MonoBehaviour
 
     GameObject starRotator;
 
-    bool fastBroom = false;
-    bool screenShake = true;
-    float wallBlastDelay = 0.2f;
+    //bool fastBroom = false;
+    //bool screenShake = true;
+    //float wallBlastDelay = 0.2f;
+
+    bool fastBroom = true;
+    bool screenShake = false;
+    float wallBlastDelay = 0f;
 
     public State state = State.Movement;
 
@@ -57,7 +61,6 @@ public class playerController : MonoBehaviour
         WallJump
     }
 
-    // Start is called before the first frame update
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -67,16 +70,8 @@ public class playerController : MonoBehaviour
         lastSafePosition = transform.position;
     }
 
-    // Update is called once per frame
     void Update()
     {
-        controller.checkGrounded(ref velocity);
-
-        if (controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
-
         switch (state)
         {
             case State.Movement:
@@ -142,8 +137,8 @@ public class playerController : MonoBehaviour
         while (Time.time - startTime < 0.1f)
         {
             velocity.x = wallJumpVelocity * facing;
-            velocity.y += gravity * Time.fixedDeltaTime;
-            controller.Move(velocity * Time.fixedDeltaTime);
+            velocity.y += gravity * Time.deltaTime;
+            //controller.Move(velocity * Time.deltaTime);
             if (Input.GetKeyDown(KeyCode.X) && canBroom)
             {
                 faceInputDirection();
@@ -214,6 +209,7 @@ public class playerController : MonoBehaviour
         }
 
         float targetVelocityX = input.x * moveSpeed;
+
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0));
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -.25f));
@@ -223,16 +219,24 @@ public class playerController : MonoBehaviour
         setFacing(velocity.x);
 
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
-        velocity.y += gravity * Time.fixedDeltaTime;
+        velocity.y += gravity * Time.deltaTime;
 
         if (isWallSliding && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
         if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
 
-        controller.Move(velocity * Time.fixedDeltaTime);
-
         if (velocity.y <= 0 && controller.isSafePosition())
         {
             lastSafePosition = transform.position;
+        }
+    }
+
+    private void FixedUpdate()
+    {
+        if (state == State.Reset) { return; }
+        controller.Move(velocity * Time.deltaTime);
+        if (controller.collisions.above || controller.collisions.below)
+        {
+            velocity.y = 0;
         }
     }
 
@@ -257,7 +261,7 @@ public class playerController : MonoBehaviour
 
     void handleBroomStart()
     {
-
+        velocity = Vector3.zero;
         anim.SetTrigger("broomStart");
         SoundManager.Instance.playClip("onBroom");
         state = fastBroom ? State.Broom : State.Wait;
@@ -283,8 +287,6 @@ public class playerController : MonoBehaviour
             return;
         }
         velocity.x = moveSpeed * 2 * facing;
-        velocity.y = 0;
-        controller.Move(velocity * Time.fixedDeltaTime);
     }
 
     void startBonk(bool reset = false)
@@ -309,13 +311,13 @@ public class playerController : MonoBehaviour
 
     void bonk()
     {
-        velocity.y += gravity * Time.fixedDeltaTime;
+        velocity.y += gravity * Time.deltaTime;
         if (!isGrounded())
         {
             velocity.x = -moveSpeed/4f * transform.localScale.x;
         }
         
-        controller.Move(velocity * Time.fixedDeltaTime);
+        //controller.Move(velocity * Time.deltaTime);
     }
 
     void handleReset(bool isSafe = false)
@@ -335,7 +337,7 @@ public class playerController : MonoBehaviour
             StartCoroutine(flashEffect());
             Destroy(starRotator);
         }
-        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.fixedDeltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.deltaTime);
     }
 
     IEnumerator flashEffect(float duration = 1.0f)
@@ -369,26 +371,21 @@ public class playerController : MonoBehaviour
 
     IEnumerator jumpCoroutine()
     {
-        int i = 0;
-        while (Input.GetKey(KeyCode.Z) && i < variableJumpIncrements)
+        for (int i = 0; i < variableJumpIncrements; i++)
         {
-            i++;
-            yield return new WaitForSeconds(4.0f/60);
-        }
-        if (i < variableJumpIncrements)
-        {
-            velocity.y /= 4;
-            i = variableJumpIncrements;
+            if (!Input.GetKey(KeyCode.Z)) {
+                velocity.y /= 4;
+                i = variableJumpIncrements;
+            }
+            yield return new WaitForSeconds(4/60.0f);
         }
     }
 
     void setFacing(float vel)
     {
-        if (vel != 0)
-        {
-            facing = (int)Mathf.Sign(vel);
-            transform.localScale = new Vector3(facing, transform.localScale.y, transform.localScale.z);
-        }
+        if (vel == 0) return;
+        facing = (int)Mathf.Sign(vel);
+        transform.localScale = new Vector3(facing, transform.localScale.y, transform.localScale.z);
     }
 
     void flipHorizontal()
@@ -399,7 +396,6 @@ public class playerController : MonoBehaviour
 
     bool isGrounded()
     {
-        if (velocity.y != 0) { return false; }
-        return controller.collisions.isGrounded;
+        return controller.collisions.below;
     }
 }

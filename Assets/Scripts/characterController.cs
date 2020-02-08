@@ -50,7 +50,8 @@ public class characterController : MonoBehaviour
             VerticalCollisions(ref velocity);
         }
 
-        fixedVelocity = new Vector3(velocity.x, velocity.y, velocity.z);
+        transform.Translate(velocity);
+        //fixedVelocity = velocity;
     }
 
     void FixedUpdate()
@@ -201,25 +202,6 @@ public class characterController : MonoBehaviour
         }
     }
 
-    public void checkGrounded(ref Vector3 velocity)
-    {
-        if (velocity.y > 0) { return; } ;
-        for (int i = 0; i < verticalRayCount; i++)
-        {
-            Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
-            float maxDistance = 1/32f + skinWidth;
-
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, collisionMask);
-
-            if (hit)
-            {
-                collisions.isGrounded = true;
-                return;
-            }
-        }
-        collisions.isGrounded = false;
-    }
-
     public bool isSafePosition()
     {
         Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2;
@@ -283,7 +265,6 @@ public class characterController : MonoBehaviour
         public float slopeAngle, slopeAngleOld;
         public Vector3 velocityOld;
 
-        public bool isGrounded;
         public bool wallRideRight;
         public bool wallRideLeft;
 
@@ -293,11 +274,9 @@ public class characterController : MonoBehaviour
             left = right = false;
             climbingSlope = false;
             descendingSlope = false;
-            isGrounded = false;
 
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
         }
     }
-
 }
