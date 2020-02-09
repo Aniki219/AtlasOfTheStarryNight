@@ -52,7 +52,6 @@ ExportedObj/
 sysinfo.txt
 
 # Builds
-*.zip
 *.unitypackage
 
 # Crashlytics generated file
