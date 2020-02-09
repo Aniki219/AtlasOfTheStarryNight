@@ -871,7 +871,7 @@ MonoBehaviour:
   m_AssetsPPU: 64
   m_RefResolutionX: 640
   m_RefResolutionY: 360
-  m_UpscaleRT: 0
+  m_UpscaleRT: 1
   m_PixelSnapping: 1
   m_CropFrameX: 1
   m_CropFrameY: 1
@@ -5729,10 +5729,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 35635496, guid: be6afd84baf07254283ef52ba588e651, type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 2100000, guid: c81f8d7093fca4469b1d13a985e9ae72, type: 2}
+    - target: {fileID: 1067700970, guid: be6afd84baf07254283ef52ba588e651, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1067700970, guid: be6afd84baf07254283ef52ba588e651, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 22661670111606257, guid: be6afd84baf07254283ef52ba588e651,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -5843,16 +5847,36 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canvas
       objectReference: {fileID: 0}
-    - target: {fileID: 22661670111606262, guid: be6afd84baf07254283ef52ba588e651,
+    - target: {fileID: 22661670111606263, guid: be6afd84baf07254283ef52ba588e651,
         type: 3}
-      propertyPath: m_Camera
-      value: 
-      objectReference: {fileID: 519420031}
-    - target: {fileID: 2595836379427239991, guid: be6afd84baf07254283ef52ba588e651,
+      propertyPath: m_UiScaleMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977527158820473788, guid: be6afd84baf07254283ef52ba588e651,
         type: 3}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 2100000, guid: c81f8d7093fca4469b1d13a985e9ae72, type: 2}
+      propertyPath: m_SizeDelta.x
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977527158820473788, guid: be6afd84baf07254283ef52ba588e651,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 50
+      objectReference: {fileID: 0}
+    - target: {fileID: 6836170448490785190, guid: be6afd84baf07254283ef52ba588e651,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -1.4299927
+      objectReference: {fileID: 0}
+    - target: {fileID: 8219281695436334567, guid: be6afd84baf07254283ef52ba588e651,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8219281695436334567, guid: be6afd84baf07254283ef52ba588e651,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be6afd84baf07254283ef52ba588e651, type: 3}
 --- !u!1001 &1185648039
@@ -15698,6 +15722,14 @@ PrefabInstance:
     - target: {fileID: 1721639753, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
       propertyPath: wallJumpVelocity
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721639753, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
+      propertyPath: doubleJumpHeight
+      value: 1.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 1721639753, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
+      propertyPath: timeToDoubleJumpApex
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2020351111199846934, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}

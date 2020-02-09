@@ -5,9 +5,11 @@ using UnityEngine;
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
 {
-    float jumpHeight = 2.6f;
+    float jumpHeight = 2.2f;
+    public float doubleJumpHeight = 1f;
     float timeToJumpApex = 0.5f;
-    
+    public float timeToDoubleJumpApex = 0.25f;
+
     int variableJumpIncrements = 6;
 
     float airAccelerationTime = 0.1f;
@@ -17,7 +19,8 @@ public class playerController : MonoBehaviour
 
     float moveSpeed = 4f;
     public int facing = 1;
-    bool canBroom;
+    bool canBroom = false;
+    bool canDoubleJump = false;
     bool resetPosition = false;
     bool intangible = false;
     Vector3 lastSafePosition;
@@ -30,6 +33,7 @@ public class playerController : MonoBehaviour
 
     float gravity;
     float jumpVelocity;
+    float doubleJumpVelocity;
     Vector3 velocity;
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
@@ -39,13 +43,13 @@ public class playerController : MonoBehaviour
 
     GameObject starRotator;
 
-    //bool fastBroom = false;
-    //bool screenShake = true;
-    //float wallBlastDelay = 0.2f;
+    bool fastBroom = false;
+    bool screenShake = true;
+    float wallBlastDelay = 0.2f;
 
-    bool fastBroom = true;
-    bool screenShake = false;
-    float wallBlastDelay = 0f;
+    //bool fastBroom = true;
+    //bool screenShake = false;
+    //float wallBlastDelay = 0f;
 
     public State state = State.Movement;
 
@@ -67,11 +71,14 @@ public class playerController : MonoBehaviour
         controller = GetComponent<characterController>();
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
         lastSafePosition = transform.position;
     }
 
     void Update()
     {
+        resourceManager.Instance.setResourceBars();
         switch (state)
         {
             case State.Movement:
@@ -104,6 +111,12 @@ public class playerController : MonoBehaviour
 
     void wallJumpInit()
     {
+        if (resourceManager.Instance.playerMana < 2) {
+            state = State.Movement;
+            return;
+        }
+        resourceManager.Instance.playerMana -= 2;
+        velocity.y = 0;
         StartCoroutine(WallJumpCoroutine());
     }
 
@@ -166,7 +179,7 @@ public class playerController : MonoBehaviour
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && !intangible)
         {
-            startBonk(true);
+            startBonk(1, true);
             return;
         }
     }
@@ -184,7 +197,9 @@ public class playerController : MonoBehaviour
                 StartCoroutine(jumpCoroutine());
             }
             canBroom = true;
+            canDoubleJump = true;
             isWallSliding = false;
+            resourceManager.Instance.restoreMana();
         } else
         {
             if (canBroom && Input.GetKeyDown(KeyCode.X))
@@ -201,20 +216,26 @@ public class playerController : MonoBehaviour
             }
             isWallSliding = checkWallSliding();
 
-            if (isWallSliding && Input.GetKeyDown(KeyCode.Z))
+            if (isWallSliding && Input.GetKeyDown(KeyCode.Z) && resourceManager.Instance.playerMana >= 2)
             {
                 state = State.WallJumpInit;
                 return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.playerMana >= 1)
+            {
+                doubleJump();
             }
         }
 
         float targetVelocityX = input.x * moveSpeed;
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
-        anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0));
+        anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -.25f));
         anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding);
+        if (velocity.y < 0) { anim.SetBool("doubleJump", false); }
 
         setFacing(velocity.x);
 
@@ -238,6 +259,17 @@ public class playerController : MonoBehaviour
         {
             velocity.y = 0;
         }
+    }
+
+    void doubleJump()
+    {
+        state = State.Movement;
+        resourceManager.Instance.playerMana -= 1;
+        canDoubleJump = false;
+        anim.SetBool("doubleJump", true);
+        velocity.y = doubleJumpVelocity;
+        SoundManager.Instance.playClip("doubleJump");
+        StopCoroutine(jumpCoroutine());
     }
 
     bool checkWallSliding()
@@ -276,10 +308,15 @@ public class playerController : MonoBehaviour
 
     void handleBroom()
     {
-        if (Input.GetKeyDown(KeyCode.X) || Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetKeyDown(KeyCode.X))
         {
             anim.SetTrigger("broomEnd");
             state = State.Movement;
+            return;
+        }
+        if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.playerMana >= 1)
+        {
+            doubleJump();
             return;
         }
         if ((facing == -1) ? controller.collisions.left : controller.collisions.right) {
@@ -289,7 +326,7 @@ public class playerController : MonoBehaviour
         velocity.x = moveSpeed * 2 * facing;
     }
 
-    void startBonk(bool reset = false)
+    void startBonk(int damage = 0, bool reset = false)
     {
         if (reset)
         {
@@ -300,6 +337,8 @@ public class playerController : MonoBehaviour
             SoundManager.Instance.playClip("bonk");
             createStars(transform.position);
         }
+
+        if (damage > 0) { resourceManager.Instance.takeDamage(damage); }
 
         resetAnimator();
         anim.SetTrigger("bonk");
