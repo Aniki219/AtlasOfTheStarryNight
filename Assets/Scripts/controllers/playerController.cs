@@ -78,7 +78,6 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
-        resourceManager.Instance.setResourceBars();
         switch (state)
         {
             case State.Movement:
@@ -111,11 +110,11 @@ public class playerController : MonoBehaviour
 
     void wallJumpInit()
     {
-        if (resourceManager.Instance.playerMana < 2) {
+        if (resourceManager.Instance.getPlayerMana() < 2) {
             state = State.Movement;
             return;
         }
-        resourceManager.Instance.playerMana -= 2;
+        resourceManager.Instance.usePlayerMana(2);
         velocity.y = 0;
         StartCoroutine(WallJumpCoroutine());
     }
@@ -206,7 +205,7 @@ public class playerController : MonoBehaviour
             {
                 state = State.BroomStart;
                 canBroom = false;
-                if (isWallSliding) {
+                if (isWallSliding && velocity.y < 0) {
                     flipHorizontal();
                 } else
                 {
@@ -216,13 +215,13 @@ public class playerController : MonoBehaviour
             }
             isWallSliding = checkWallSliding();
 
-            if (isWallSliding && Input.GetKeyDown(KeyCode.Z) && resourceManager.Instance.playerMana >= 2)
+            if (isWallSliding && Input.GetKeyDown(KeyCode.Z) && resourceManager.Instance.getPlayerMana() >= 2)
             {
                 state = State.WallJumpInit;
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.playerMana >= 1)
+            if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
             {
                 doubleJump();
             }
@@ -232,7 +231,7 @@ public class playerController : MonoBehaviour
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
-        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -.25f));
+        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
         anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding);
         if (velocity.y < 0) { anim.SetBool("doubleJump", false); }
@@ -264,7 +263,7 @@ public class playerController : MonoBehaviour
     void doubleJump()
     {
         state = State.Movement;
-        resourceManager.Instance.playerMana -= 1;
+        resourceManager.Instance.usePlayerMana(1);
         canDoubleJump = false;
         anim.SetBool("doubleJump", true);
         velocity.y = doubleJumpVelocity;
@@ -314,7 +313,7 @@ public class playerController : MonoBehaviour
             state = State.Movement;
             return;
         }
-        if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.playerMana >= 1)
+        if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
             doubleJump();
             return;

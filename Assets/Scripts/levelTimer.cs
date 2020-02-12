@@ -32,7 +32,7 @@ public class levelTimer : MonoBehaviour
             Application.Quit();
         }
 
-        int currentMars = MarsCounter.GetComponent<collectiblesController>().amountCollected;
+        int currentMars = MarsCounter.GetComponent<collectiblesUIController>().amountCollected;
         counterText.text = string.Concat("Gems: ", currentMars.ToString(), "/", maxMars.ToString());
 
         if (currentMars >= maxMars) { return; }

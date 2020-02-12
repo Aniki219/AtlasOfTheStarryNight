@@ -9,41 +9,39 @@ public class resourceManager : ScriptableObject
     private static resourceManager instance;
     public static resourceManager Instance { get { return instance; } }
 
-    [HideInInspector] public float playerHealth;
-    [HideInInspector] public float playerMana;
+    float playerHealth;
+    float playerMana;
 
-    public int playerMaxHealth = 5;
-    public int playerMaxMana = 3;
-
-    public int barRestoreSpeed = 6;
-
-    static GameObject canvas;
-    static Slider healthBar;
-    static Slider manaBar;
+    [SerializeField] int playerMaxHealth = 5;
+    [SerializeField] int playerMaxMana = 3;
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         instance = Resources.LoadAll<resourceManager>("Managers")[0];
-        canvas = GameObject.FindGameObjectWithTag("MainCanvas");
-        manaBar = canvas.transform.Find("ManaBar").GetComponent<Slider>();
-        healthBar = canvas.transform.Find("HealthBar").GetComponent<Slider>();
 
         instance.playerMana = instance.playerMaxMana;
         instance.playerHealth = instance.playerMaxHealth;
     }
 
-    public void setResourceBars()
+    public float getPlayerHealth(bool percentage = false)
     {
-        float manaPercent = (float)playerMana / (float)playerMaxMana;
-        float healthPercent = (float)playerHealth / (float)playerMaxHealth;
-        manaBar.value = Mathf.Lerp(manaBar.value, manaPercent, barRestoreSpeed * Time.deltaTime);
-        healthBar.value = Mathf.Lerp(healthBar.value, healthPercent, barRestoreSpeed * Time.deltaTime);
+        return percentage ? (float)playerHealth / (float)playerMaxHealth : playerHealth;
+    }
+
+    public float getPlayerMana(bool percentage = false)
+    {
+        return percentage ? (float)playerMana / (float)playerMaxMana : playerMana;
     }
 
     public void restoreMana()
     {
         playerMana = playerMaxMana;
+    }
+
+    public void usePlayerMana(int amount)
+    {
+        playerMana -= amount;
     }
 
     public void takeDamage(int damage)

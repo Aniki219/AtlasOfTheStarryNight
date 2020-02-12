@@ -125,6 +125,10 @@ public class characterController : MonoBehaviour
             {
                 velocity.y = (hit.distance - skinWidth) * directionY;   
                 rayLength = hit.distance;
+                if (directionY == -1)
+                {
+                    collisions.distanceToGround = Mathf.Min(collisions.distanceToGround, hit.distance);
+                }
 
                 if (collisions.climbingSlope)
                 {
@@ -264,6 +268,7 @@ public class characterController : MonoBehaviour
         public bool descendingSlope;
         public float slopeAngle, slopeAngleOld;
         public Vector3 velocityOld;
+        public float distanceToGround;
 
         public bool wallRideRight;
         public bool wallRideLeft;
@@ -274,6 +279,7 @@ public class characterController : MonoBehaviour
             left = right = false;
             climbingSlope = false;
             descendingSlope = false;
+            distanceToGround = 50;
 
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
