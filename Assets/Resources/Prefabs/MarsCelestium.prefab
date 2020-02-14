@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 9160696921998274333}
   - component: {fileID: -5825307669568151901}
   - component: {fileID: 1206403900}
+  - component: {fileID: -2973598692534317636}
   m_Layer: 0
   m_Name: MarsCelestium
   m_TagString: Untagged
@@ -63,6 +64,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiTag: MarsCelestium
   moveSpeed: 0.5
+  persistant: 1
+--- !u!114 &-2973598692534317636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766009363193180308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5921f24f71d9d604484f6b16c7e5a3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  persistant: 1
 --- !u!1 &7446669806401602832
 GameObject:
   m_ObjectHideFlags: 0

@@ -128,7 +128,7 @@ public class playerController : MonoBehaviour
         state = State.WallJump;
         GameObject explosion = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/wallBlast"), transform.position + new Vector3(-0.80f * facing, 0.23f, 0), Quaternion.identity); ;
         explosion.transform.localScale = transform.localScale;
-        if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.25f, 0.2f); }
+        if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
         
         SoundManager.Instance.playClip("wallBlast");
         anim.SetBool("isJumping", false);

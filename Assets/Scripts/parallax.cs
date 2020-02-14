@@ -27,6 +27,7 @@ public class parallax : MonoBehaviour
         {
             float z = child.transform.position.z;
             child.transform.position += (displacement.x * z / (z + 1/parallaxScale) ) * Vector3.right;
+            child.transform.position += (displacement.y * z / (z + 1 / parallaxScale)) * Vector3.up;
         }
 
         startPosition = cam.transform.position;

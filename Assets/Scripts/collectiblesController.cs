@@ -18,16 +18,6 @@ public class collectiblesController : MonoBehaviour
     private void Start()
     {
         uiElement = GameObject.FindGameObjectWithTag(uiTag);
-        if (SceneManager.GetActiveScene().name.Equals("speedScene1")) {
-            persistant = false;
-        }
-        if (!persistant) return;
-        uid = string.Concat(SceneManager.GetActiveScene().name, transform.position.ToString());
-        if (!gameManager.Instance.checkObjectKey(uid))
-        {
-            Destroy(gameObject);
-            return;
-        }
     }
 
     void OnTriggerEnter2D(Collider2D collider)
@@ -48,7 +38,6 @@ public class collectiblesController : MonoBehaviour
                 canCollect = false;
                 collectiblesUIController controller = uiElement.transform.parent.GetComponent<collectiblesUIController>();
                 controller.addOne();
-                if (persistant) gameManager.Instance.setObjectKey(uid, false);
             }
 
             cameraController cc = Camera.main.GetComponent<cameraController>();
