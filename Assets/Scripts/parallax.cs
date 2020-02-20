@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class parallax : MonoBehaviour
 {
-    [Range(0.01f, 1f)] public float parallaxScale = 1f;
+    [Range(0.01f, 1f)] public float parallaxScaleX = 1f;
+    [Range(0.01f, 1f)] public float parallaxScaleY = 1f;
     private Transform cam;
     Vector3 startPosition;
 
@@ -26,8 +27,8 @@ public class parallax : MonoBehaviour
         foreach (Transform child in transform)
         {
             float z = child.transform.position.z;
-            child.transform.position += (displacement.x * z / (z + 1/parallaxScale) ) * Vector3.right;
-            child.transform.position += (displacement.y * z / (z + 1 / parallaxScale)) * Vector3.up;
+            child.transform.position += (displacement.x * z / (z + 1/parallaxScaleX) ) * Vector3.right;
+            child.transform.position += (displacement.y * z / (z + 1 / parallaxScaleY)) * Vector3.up;
         }
 
         startPosition = cam.transform.position;

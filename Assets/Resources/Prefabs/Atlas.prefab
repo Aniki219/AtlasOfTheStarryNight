@@ -163,10 +163,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46801972acfa702428cda0aea1cbfe12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  starRotator: {fileID: 0}
+  doubleJumpHeight: 1.5
+  timeToDoubleJumpApex: 0.6
   starParticles: {fileID: 4700776363475074070, guid: 7f04f9e53e7b6c24cb40708794b029bc,
     type: 3}
-  resetTime: 10
+  facing: 1
+  maxWallSlideVel: -5
+  state: 1
 --- !u!114 &1721639758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -185,8 +188,4 @@ MonoBehaviour:
   dangerMask:
     serializedVersion: 2
     m_Bits: 1024
-  skinWidth: 0.02
-  horizontalRayCount: 6
-  verticalRayCount: 6
-  maxClimbAngle: 50
-  maxDescendAngle: 50
+  safetyMargin: 1
