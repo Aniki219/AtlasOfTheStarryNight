@@ -15,7 +15,7 @@ public class windmillController : MonoBehaviour
         startPos = transform.position;
         startAngle = transform.localEulerAngles.y;
     }
-
+    
     void Update()
     {
         transform.position = new Vector3(player.position.x, startPos.y, startPos.z);
