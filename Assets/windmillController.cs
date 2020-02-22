@@ -21,6 +21,6 @@ public class windmillController : MonoBehaviour
         transform.position = new Vector3(player.position.x, startPos.y, startPos.z);
         float dx = player.position.x - startPos.x;
         float theta = startAngle + dx / radius;
-        tower.localRotation = Quaternion.Euler(Vector3.right * -90 + Vector3.up * theta);
+        transform.localRotation = Quaternion.Euler(Vector3.right * -90 + Vector3.up * theta);
     }
 }

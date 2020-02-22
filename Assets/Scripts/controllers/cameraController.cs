@@ -19,9 +19,6 @@ public class cameraController : MonoBehaviour
     void Start()
     {
         cam = GetComponent<Camera>();
-        ppcam = GetComponent<PixelPerfectCamera>();
-        ppHeight = ppcam.refResolutionY / 128.0f;
-        ppWidth = ppcam.refResolutionX / 128.0f;
     }
 
     // Update is called once per frame
@@ -30,8 +27,8 @@ public class cameraController : MonoBehaviour
         transform.position = new Vector3(target.position.x, target.position.y, -10);
 
         transform.position += shakeValue;
-        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x + ppWidth, roomBounds.bounds.max.x - ppWidth);
-        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y + ppHeight, roomBounds.bounds.max.y - ppHeight);
+        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x, roomBounds.bounds.max.x - ppWidth);
+        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y, roomBounds.bounds.max.y - ppHeight);
         transform.position = new Vector3(x, y, -10);
     }
 
