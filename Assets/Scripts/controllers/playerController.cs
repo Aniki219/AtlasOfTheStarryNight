@@ -22,7 +22,6 @@ public class playerController : MonoBehaviour
     bool canBroom = false;
     bool canDoubleJump = false;
     bool resetPosition = false;
-    bool intangible = false;
     Vector3 lastSafePosition;
     float resetTime = 10f;
 
@@ -44,7 +43,7 @@ public class playerController : MonoBehaviour
     GameObject starRotator;
 
     bool fastBroom = false;
-    bool screenShake = true;
+    bool screenShake = false;
     float wallBlastDelay = 0.2f;
 
     //bool fastBroom = true;
@@ -105,7 +104,7 @@ public class playerController : MonoBehaviour
                 break;
         }
 
-        //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.red);
+        Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
     }
 
     void wallJumpInit()
@@ -176,7 +175,7 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && !intangible)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
         {
             startBonk(1, true);
             return;
@@ -292,10 +291,11 @@ public class playerController : MonoBehaviour
 
     void handleBroomStart()
     {
-        velocity = Vector3.zero;
         anim.SetTrigger("broomStart");
         SoundManager.Instance.playClip("onBroom");
         state = fastBroom ? State.Broom : State.Wait;
+        velocity = Vector3.zero;
+        controller.Move(velocity);
     }
 
     void startBroom()
@@ -325,12 +325,13 @@ public class playerController : MonoBehaviour
         velocity.x = moveSpeed * 2 * facing;
     }
 
-    void startBonk(int damage = 0, bool reset = false)
+    public void startBonk(int damage = 0, bool reset = false)
     {
+        if (!controller.collisions.tangible) { return; }
         if (reset)
         {
             resetPosition = true;
-            intangible = true;
+            controller.collisions.tangible = false;
             SoundManager.Instance.playClip("hurt2");
         } else { 
             SoundManager.Instance.playClip("bonk");
@@ -360,7 +361,7 @@ public class playerController : MonoBehaviour
 
     void handleReset(bool isSafe = false)
     {
-        intangible = true;
+        controller.collisions.tangible = false;
         anim.SetBool("resetSpin", true);
         if (!starRotator)
         {
@@ -396,7 +397,7 @@ public class playerController : MonoBehaviour
             state = State.Reset;
         } else
         {
-            intangible = false;
+            controller.collisions.tangible = true;
             state = State.Movement;
         }
         resetPosition = false;

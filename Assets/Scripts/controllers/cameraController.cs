@@ -12,13 +12,14 @@ public class cameraController : MonoBehaviour
     Vector3 shakeValue;
     Vector3 shakeVelocity;
 
-    [HideInInspector]
-    public float ppHeight;
-    public float ppWidth;
+    float w;
+    float h;
 
     void Start()
     {
         cam = GetComponent<Camera>();
+        w = (1/32) * cam.scaledPixelWidth / 2;
+        h = (1/32) * cam.scaledPixelHeight / 2;
     }
 
     // Update is called once per frame
@@ -27,8 +28,8 @@ public class cameraController : MonoBehaviour
         transform.position = new Vector3(target.position.x, target.position.y, -10);
 
         transform.position += shakeValue;
-        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x, roomBounds.bounds.max.x - ppWidth);
-        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y, roomBounds.bounds.max.y - ppHeight);
+        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
+        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
         transform.position = new Vector3(x, y, -10);
     }
 

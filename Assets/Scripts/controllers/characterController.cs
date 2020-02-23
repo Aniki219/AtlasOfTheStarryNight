@@ -4,7 +4,6 @@ using System.Collections;
 [RequireComponent(typeof(BoxCollider2D))]
 public class characterController : MonoBehaviour
 {
-
     public LayerMask collisionMask;
     public LayerMask dangerMask;
 
@@ -24,11 +23,18 @@ public class characterController : MonoBehaviour
     public CollisionInfo collisions;
 
     Vector3 fixedVelocity;
+    Vector3 additionalVelocity;
 
     void Start()
     {
         collider = GetComponent<BoxCollider2D>();
+        collisions.tangible = true;
         CalculateRaySpacing();
+    }
+
+    public void AddVelocity(Vector3 amount)
+    {
+        additionalVelocity += amount;
     }
 
     public void Move(Vector3 velocity)
@@ -51,14 +57,70 @@ public class characterController : MonoBehaviour
         }
 
         transform.Translate(velocity);
-        //fixedVelocity = velocity;
+        transform.Translate(additionalVelocity);
+
+        if ((additionalVelocity.y != 0 && crushTest(true)) || (additionalVelocity.x != 0 && crushTest(false)))
+        {
+            playerController pc = GetComponent<playerController>();
+            if (pc)
+            {
+                pc.startBonk(1, true);
+            }
+        }
+
+        additionalVelocity = Vector3.zero;
     }
 
-    void FixedUpdate()
+    bool crushTest(bool vertical)
     {
-        transform.Translate(fixedVelocity);
-        fixedVelocity = Vector3.zero;
+        float rayLength = 1 / 32f;
+        Vector3 dir;
+        Vector2 rayOrigin1, rayOrigin2, rayDirection;
+        float raySpacing;
+
+        if (vertical)
+        {
+            dir = Vector3.up;
+
+            rayOrigin1 = raycastOrigins.topLeft;
+            rayOrigin2 = raycastOrigins.bottomLeft;
+
+            raySpacing = verticalRaySpacing;
+            rayDirection = Vector2.right;
+        } else
+        {
+            dir = Vector3.right;
+
+            rayOrigin1 = raycastOrigins.bottomRight;
+            rayOrigin2 = raycastOrigins.bottomLeft;
+
+            raySpacing = horizontalRaySpacing;
+            rayDirection = Vector2.up;
+        }
+
+        for (int i = 0; i < verticalRayCount; i++)
+        {
+            rayOrigin1 += rayDirection * (raySpacing * i);
+            rayOrigin2 += rayDirection * (raySpacing * i);
+
+            RaycastHit2D hit1 = Physics2D.Raycast(rayOrigin1, dir, rayLength, collisionMask);
+            RaycastHit2D hit2 = Physics2D.Raycast(rayOrigin2, -dir, rayLength, collisionMask);
+
+            Debug.DrawLine(rayOrigin2, rayOrigin2 + -(Vector2)dir, Color.red);
+
+            if (hit1 && hit2)
+            {
+                return true;
+            }
+        }
+        return false;
     }
+
+    //void FixedUpdate()
+    //{
+    //    transform.Translate(fixedVelocity);
+    //    fixedVelocity = Vector3.zero;
+    //}
 
     void HorizontalCollisions(ref Vector3 velocity)
     {
@@ -208,6 +270,7 @@ public class characterController : MonoBehaviour
 
     public bool isSafePosition()
     {
+        if (!collisions.tangible) { return false; }
         Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2;
         RaycastHit2D dhit = Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, safetyMargin, dangerMask);
         if (dhit)
@@ -220,7 +283,8 @@ public class characterController : MonoBehaviour
             Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
             float maxDistance = 1 / 32f + skinWidth;
 
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, collisionMask);
+            LayerMask safetyMask = LayerMask.NameToLayer("Wall");
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, 1 << safetyMask);
 
             if (hit)
             {
@@ -272,6 +336,8 @@ public class characterController : MonoBehaviour
 
         public bool wallRideRight;
         public bool wallRideLeft;
+
+        public bool tangible;
 
         public void Reset()
         {
