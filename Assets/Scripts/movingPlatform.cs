@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class movingPlatform : MonoBehaviour
 {
@@ -51,26 +52,26 @@ public class movingPlatform : MonoBehaviour
 
     void checkForActors()
     {
+        //Set up math stuff
         float px = 1.0f / 32.0f;
         float hdir = Mathf.Sign(velocity.x);
 
-        Vector2 skin = new Vector2(-2*px, 2*px);
+        //We need vertical skin so that the platform can grab actors ontop and pull them down
+        Vector2 skin = new Vector2(0*px, 2*px);
         Vector2 boxSize = Vector2.Scale(col.size + skin, transform.localScale);
-        Vector2 origin = transform.position + Vector3.up * 1*px;
+
+        //The box origin moves left/right so that it doesn't pull objects
+        Vector2 origin = transform.position + Vector3.up * 1*px + Vector3.right * 1*px * Math.Sign(velocity.x);
         int actorMask = (1 << LayerMask.NameToLayer("Player"));
         RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, hdir * Vector2.right, 0.5f * px, actorMask);
 
-        if (actors.Length > 0)
+        foreach (RaycastHit2D actor in actors)
         {
-            characterController cc = actors[0].transform.GetComponent<characterController>();
+            characterController cc = actor.transform.GetComponent<characterController>();
             if (cc && col.enabled)
             {
                 cc.AddVelocity(velocity);
             }
-            //GetComponent<SpriteRenderer>().color = Color.green;
-        } else
-        {
-            //GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
 

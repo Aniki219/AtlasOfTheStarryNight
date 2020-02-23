@@ -64,7 +64,6 @@ public class characterController : MonoBehaviour
 
         cameraTarget = velocity/Time.deltaTime;
 
-        Debug.Log(additionalVelocity.y);
         if ((additionalVelocity.y != 0 && crushTest(true)) || (additionalVelocity.x != 0 && crushTest(false)))
         {
             playerController pc = GetComponent<playerController>();
