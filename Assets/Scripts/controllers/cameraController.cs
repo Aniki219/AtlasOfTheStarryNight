@@ -8,29 +8,42 @@ public class cameraController : MonoBehaviour
     public Transform target;
     public Collider2D roomBounds;
     Camera cam;
-    PixelPerfectCamera ppcam;
     Vector3 shakeValue;
     Vector3 shakeVelocity;
 
     float w;
     float h;
 
+    Vector3 velocity;
+    Vector3 focusVelocity;
+    public float smoothingTime = 0.5f;
+    Vector3 focusPoint;
+
     void Start()
     {
         cam = GetComponent<Camera>();
-        w = (1/32) * cam.scaledPixelWidth / 2;
-        h = (1/32) * cam.scaledPixelHeight / 2;
+        h = cam.orthographicSize;
+        w = h * Screen.width / Screen.height;
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
-        transform.position = new Vector3(target.position.x, target.position.y, -10);
+        Vector3 targetVelocity = target.GetComponent<characterController>().cameraTarget;
+        Vector3 targetPoint = target.transform.position;
+        Vector3 focusTarget = targetPoint + Vector3.up * Mathf.Min(0,targetVelocity.y / 10.0f);
+        focusPoint = Vector3.SmoothDamp(focusPoint, focusTarget, ref focusVelocity, smoothingTime/200.0f);
+        //Debug.DrawLine(focusPoint, focusPoint + Vector3.right * 2);
+        //Debug.DrawLine(focusTarget, focusTarget + Vector3.right * 2, Color.red);
+        Vector3 to = new Vector3(focusPoint.x, focusPoint.y, transform.position.z);
 
-        transform.position += shakeValue;
-        float x = Mathf.Clamp(transform.position.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
-        float y = Mathf.Clamp(transform.position.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
-        transform.position = new Vector3(x, y, -10);
+        to.x = Mathf.Clamp(to.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
+        to.y = Mathf.Clamp(to.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
+
+        float smoothX = Mathf.Lerp(transform.position.x, to.x, smoothingTime/10.0f);
+        float smoothY = Mathf.Lerp(transform.position.y, to.y, smoothingTime/4.0f);
+        transform.position = new Vector3(smoothX, smoothY, transform.position.z);
+        transform.position = Vector3.SmoothDamp(transform.position, to, ref velocity, smoothingTime);
     }
 
     public void StartShake(float shakeMagnitude = 0.1f, float shakeDuration = 0.5f)

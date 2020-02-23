@@ -54,9 +54,9 @@ public class movingPlatform : MonoBehaviour
         float px = 1.0f / 32.0f;
         float hdir = Mathf.Sign(velocity.x);
 
-        Vector2 skin = new Vector2(0, 2*px);
+        Vector2 skin = new Vector2(-2*px, 2*px);
         Vector2 boxSize = Vector2.Scale(col.size + skin, transform.localScale);
-        Vector2 origin = transform.position + Vector3.up * 20*px;
+        Vector2 origin = transform.position + Vector3.up * 1*px;
         int actorMask = (1 << LayerMask.NameToLayer("Player"));
         RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, hdir * Vector2.right, 0.5f * px, actorMask);
 
@@ -67,10 +67,10 @@ public class movingPlatform : MonoBehaviour
             {
                 cc.AddVelocity(velocity);
             }
-            GetComponent<SpriteRenderer>().color = Color.green;
+            //GetComponent<SpriteRenderer>().color = Color.green;
         } else
         {
-            GetComponent<SpriteRenderer>().color = Color.red;
+            //GetComponent<SpriteRenderer>().color = Color.red;
         }
     }
 
