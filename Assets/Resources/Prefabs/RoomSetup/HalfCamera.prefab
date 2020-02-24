@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1088685049204507368}
   - component: {fileID: 1088685049204507372}
   m_Layer: 0
-  m_Name: Main Camera
+  m_Name: HalfCamera
   m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -96,7 +96,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2f8694ed7a94174439c48687d9b71d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 0}
+  target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
   roomBounds: {fileID: 0}
-  ppHeight: 0
-  ppWidth: 0
+  smoothingTime: 0.5

@@ -17,6 +17,7 @@ public class cameraController : MonoBehaviour
     Vector3 velocity;
     Vector3 focusVelocity;
     public float smoothingTime = 0.5f;
+    public bool cameraTracking = true;
     Vector3 focusPoint;
 
     void Start()
@@ -31,11 +32,19 @@ public class cameraController : MonoBehaviour
     {
         Vector3 targetVelocity = target.GetComponent<characterController>().cameraTarget;
         Vector3 targetPoint = target.transform.position;
+        Vector3 to;
+
+        if (!cameraTracking)
+        {
+            to = targetPoint;
+            to.x = Mathf.Clamp(to.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
+            to.y = Mathf.Clamp(to.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
+            transform.position = new Vector3(to.x, to.y, transform.position.z);
+            return;
+        }
         Vector3 focusTarget = targetPoint + Vector3.up * Mathf.Min(0,targetVelocity.y / 10.0f);
         focusPoint = Vector3.SmoothDamp(focusPoint, focusTarget, ref focusVelocity, smoothingTime/200.0f);
-        //Debug.DrawLine(focusPoint, focusPoint + Vector3.right * 2);
-        //Debug.DrawLine(focusTarget, focusTarget + Vector3.right * 2, Color.red);
-        Vector3 to = new Vector3(focusPoint.x, focusPoint.y, transform.position.z);
+        to = new Vector3(focusPoint.x, focusPoint.y, transform.position.z);
 
         to.x = Mathf.Clamp(to.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
         to.y = Mathf.Clamp(to.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
