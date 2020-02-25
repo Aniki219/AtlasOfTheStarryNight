@@ -5,11 +5,22 @@ using UnityEngine;
 public class rotator : MonoBehaviour
 {
     public float secondsPerRev = 10;
-    float angle = 0f;
+    public Axes axes;
+    Vector3 angles;
+
+    public enum Axes
+    {
+        x,y,z
+    }
+
+    private void Start()
+    {
+        angles = transform.localEulerAngles;
+    }
 
     void Update()
     {
-        angle += -60 * 2 * Mathf.PI * Time.deltaTime / secondsPerRev;
-        transform.eulerAngles = new Vector3(transform.eulerAngles.x, 0, angle);
+        angles[(int)axes] += -60 * 2 * Mathf.PI * Time.deltaTime / secondsPerRev;
+        transform.rotation = Quaternion.Euler(angles);
     }
 }
