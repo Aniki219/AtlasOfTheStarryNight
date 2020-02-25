@@ -49,16 +49,15 @@
 
             float4 frag (v2f i) : SV_Target
             {
-    //            fixed4 col = tex2D(_MainTex, i.uv);
-				//float3 lightDir = _WorldSpaceLightPos0.xyz;
+				fixed4 col = tex2D(_MainTex, i.uv);
+				float3 lightDir = float3(1, 0, 0);
+
+				float3 forward = mul((float3x3)unity_CameraToWorld, float3(0, 0, 1));
+
 				//float intensity = max(0, dot(lightDir, i.normal));
+				float intensity = cross(forward, i.normal);
 
-				float3 diffuseLight = _LightColor0.xyz;
-
-				_Color = float4(.5, .4, .3, 1);
-				//float3 ambientLight = float3(.2, .35, .4);
-
-				return float4( _LightColor0.xyz, 0);
+				return float4( col.rgb * intensity, 0);
             }
             ENDCG
         }
