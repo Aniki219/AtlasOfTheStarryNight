@@ -211,10 +211,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1721639758, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
-      propertyPath: collisionMask.m_Bits
-      value: 2304
-      objectReference: {fileID: 0}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1524,63 +1520,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 423bf7c460491704daf4d873bcbfe838, type: 3}
---- !u!1 &1790538844
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1790538845}
-  - component: {fileID: 1790538847}
-  - component: {fileID: 1790538846}
-  m_Layer: 9
-  m_Name: 3D Hitbox
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1790538845
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790538844}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 329995620}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1790538846
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790538844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42d3648fc5105ca408dd101645a5869d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!65 &1790538847
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1790538844}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.33, y: 0.64, z: 0.1}
-  m_Center: {x: 0, y: -0.15, z: 0.05}
 --- !u!1 &1792880566
 GameObject:
   m_ObjectHideFlags: 0
@@ -1685,15 +1624,6 @@ Tilemap:
   m_GameObject: {fileID: 1792880566}
   m_Enabled: 1
   m_Tiles:
-  - first: {x: 19, y: -8, z: 0}
-    second:
-      m_TileIndex: 9
-      m_TileSpriteIndex: 13
-      m_TileMatrixIndex: 0
-      m_TileColorIndex: 0
-      m_ObjectToInstantiate: {fileID: 0}
-      m_TileFlags: 1
-      m_ColliderType: 1
   - first: {x: -2, y: -7, z: 0}
     second:
       m_TileIndex: 12
@@ -2111,7 +2041,7 @@ Tilemap:
   - first: {x: 10, y: 2, z: 0}
     second:
       m_TileIndex: 13
-      m_TileSpriteIndex: 11
+      m_TileSpriteIndex: 13
       m_TileMatrixIndex: 0
       m_TileColorIndex: 0
       m_ObjectToInstantiate: {fileID: 0}
@@ -2326,8 +2256,8 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 11400000, guid: 7d37e82a86896654f9a60ad8ddc926f3, type: 2}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
   - m_RefCount: 0
@@ -2359,17 +2289,16 @@ Tilemap:
     m_Data: {fileID: 0}
   - m_RefCount: 0
     m_Data: {fileID: 0}
-  - m_RefCount: 1
-    m_Data: {fileID: 1166502882414685108, guid: 117ccae2df645254fa915c56a1113c50,
-      type: 3}
+  - m_RefCount: 0
+    m_Data: {fileID: 0}
   - m_RefCount: 67
     m_Data: {fileID: 7931750411546027987, guid: 117ccae2df645254fa915c56a1113c50,
       type: 3}
   - m_RefCount: 1
-    m_Data: {fileID: 8687535801290203016, guid: 7940cc394a64da349b9aab6886fcaef2,
+    m_Data: {fileID: 1166502882414685108, guid: 117ccae2df645254fa915c56a1113c50,
       type: 3}
   m_TileMatrixArray:
-  - m_RefCount: 69
+  - m_RefCount: 68
     m_Data:
       e00: 1
       e01: 0
@@ -2388,7 +2317,7 @@ Tilemap:
       e32: 0
       e33: 1
   m_TileColorArray:
-  - m_RefCount: 69
+  - m_RefCount: 68
     m_Data: {r: 1, g: 1, b: 1, a: 1}
   m_AnimationFrameRate: 1
   m_Color: {r: 1, g: 1, b: 1, a: 1}

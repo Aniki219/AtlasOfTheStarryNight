@@ -15,6 +15,6 @@ EditorBuildSettings:
     path: Assets/Scenes/windMillExterior.unity
     guid: fa7092c49269c7a43a8cf57c60addb6c
   - enabled: 1
-    path: Assets/Scenes/Spinners1.unity
+    path: Assets/Scenes/Windmill Levels/Spinners1.unity
     guid: 875b3e8da7f4a7042a0bc3979d7f87aa
   m_configObjects: {}

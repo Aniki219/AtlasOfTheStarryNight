@@ -15,12 +15,11 @@ public class playerController : MonoBehaviour
     float airAccelerationTime = 0.1f;
     float groundAccelerationTime = 0f;
 
-    public GameObject starParticles;
-
     float moveSpeed = 4f;
     public int facing = 1;
     bool canBroom = false;
     bool canDoubleJump = false;
+    bool canTornado = true;
     bool resetPosition = false;
     Vector3 lastSafePosition;
     float resetTime = 10f;
@@ -61,12 +60,13 @@ public class playerController : MonoBehaviour
         Bonk,
         Reset,
         WallJumpInit,
-        WallJump
+        WallJump,
+        Tornado
     }
 
     void Start()
     {
-        anim = GetComponent<Animator>();
+        anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -100,11 +100,70 @@ public class playerController : MonoBehaviour
             case State.WallJump:
                 handleWallJump();
                 break;
+            case State.Tornado:
+                handleTornado();
+                break;
             default:
                 break;
         }
 
-        Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+        //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (state == State.Reset || state == State.Bonk)
+        {
+            return;
+        }
+        resetPosition = other.transform.tag == "ResetDamaging";
+        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
+        {
+            startBonk(1, resetPosition);
+            return;
+        }
+
+        if (other.tag == "Tornado" && canTornado)
+        {
+            canTornado = false;
+            state = State.Tornado;
+            StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.25f, 0.1f));
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.tag == "Tornado")
+        {
+            canTornado = true;
+            anim.SetBool("inTornado", false);
+        }
+    }
+
+    IEnumerator LerpToPosition(Vector3 pos, float time = 0.5f)
+    {
+        while (Vector3.SqrMagnitude(transform.position - pos) > 0.01f)
+        {
+            transform.position = Vector3.SmoothDamp(transform.position, pos, ref velocitySmoothing, time);
+            yield return new WaitForEndOfFrame();
+        }
+        yield return 0;
+    }
+
+    void handleTornado()
+    {
+        canTornado = false;
+        canBroom = true;
+        canDoubleJump = true;
+        anim.SetBool("inTornado", true);
+        velocity = Vector3.zero;
+        faceInputDirection();
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            firstJump();
+            anim.SetBool("inTornado", false);
+            state = State.Movement;
+        }
     }
 
     void wallJumpInit()
@@ -149,7 +208,7 @@ public class playerController : MonoBehaviour
         {
             velocity.x = wallJumpVelocity * facing;
             velocity.y += gravity * Time.deltaTime;
-            //controller.Move(velocity * Time.deltaTime);
+
             if (Input.GetKeyDown(KeyCode.X) && canBroom)
             {
                 faceInputDirection();
@@ -173,15 +232,6 @@ public class playerController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
-        {
-            startBonk(1, true);
-            return;
-        }
-    }
-
     void handleMovement()
     {
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
@@ -190,9 +240,7 @@ public class playerController : MonoBehaviour
         {
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                velocity.y = jumpVelocity;
-                SoundManager.Instance.playClip("jump2");
-                StartCoroutine(jumpCoroutine());
+                firstJump();
             }
             canBroom = true;
             canDoubleJump = true;
@@ -233,7 +281,7 @@ public class playerController : MonoBehaviour
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
         anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding);
-        if (velocity.y < 0) { anim.SetBool("doubleJump", false); }
+        //if (velocity.y < 0) { anim.SetBool("doubleJump", false); }
 
         setFacing(velocity.x);
 
@@ -247,6 +295,13 @@ public class playerController : MonoBehaviour
         {
             lastSafePosition = transform.position;
         }
+    }
+
+    void firstJump()
+    {
+        velocity.y = jumpVelocity;
+        SoundManager.Instance.playClip("jump2");
+        StartCoroutine(jumpCoroutine());
     }
 
     private void FixedUpdate()
@@ -264,7 +319,7 @@ public class playerController : MonoBehaviour
         state = State.Movement;
         resourceManager.Instance.usePlayerMana(1);
         canDoubleJump = false;
-        anim.SetBool("doubleJump", true);
+        anim.SetTrigger("doubleJump");
         velocity.y = doubleJumpVelocity;
         SoundManager.Instance.playClip("doubleJump");
         StopCoroutine(jumpCoroutine());
@@ -328,10 +383,10 @@ public class playerController : MonoBehaviour
     public void startBonk(int damage = 0, bool reset = false)
     {
         if (!controller.collisions.tangible) { return; }
+        controller.collisions.tangible = false;
         if (reset)
         {
             resetPosition = true;
-            controller.collisions.tangible = false;
             SoundManager.Instance.playClip("hurt2");
         } else { 
             SoundManager.Instance.playClip("bonk");
@@ -405,7 +460,7 @@ public class playerController : MonoBehaviour
 
     void createStars(Vector3 position)
     {
-        Instantiate(starParticles, position + Vector3.up * 0.5f, Quaternion.Euler((transform.localScale.x == 1) ? 180 : 0, 90, 0));
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((transform.localScale.x == 1) ? 180 : 0, 90, 0));
     }
 
     IEnumerator jumpCoroutine()

@@ -8,6 +8,7 @@ TagManager:
   - MarsCelestium
   - MainCanvas
   - ResetDamaging
+  - Tornado
   layers:
   - Default
   - TransparentFX

@@ -42,6 +42,10 @@ public class resourceManager : ScriptableObject
     public void usePlayerMana(int amount)
     {
         playerMana -= amount;
+        GameObject canv = GameObject.FindGameObjectWithTag("MainCanvas");
+        if (canv) { 
+            canv.SendMessage("FlashManaBar");
+        }
     }
 
     public void takeDamage(int damage)

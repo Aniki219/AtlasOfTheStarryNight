@@ -31,10 +31,10 @@ public class gameManager : ScriptableObject
 
     public bool checkObjectKey(string key)
     {
-        foreach (KeyValuePair<string, bool> keyValues in objects)
-        {
-            Debug.Log(keyValues.Key + " : " + keyValues.Value);
-        }
+        //foreach (KeyValuePair<string, bool> keyValues in objects)
+        //{
+        //    Debug.Log(keyValues.Key + " : " + keyValues.Value);
+        //}
         if (objects.ContainsKey(key)) { return objects[key]; }
         objects.Add(key, true);
         return true;

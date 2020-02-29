@@ -45,7 +45,10 @@ public class movingPlatform : MonoBehaviour
             }
         }
 
-        checkForActors();
+        if (!col.isTrigger)
+        {
+            checkForActors();
+        }
 
         transform.position += velocity;
     }
