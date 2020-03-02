@@ -9,6 +9,7 @@ TagManager:
   - MainCanvas
   - ResetDamaging
   - Tornado
+  - Follower
   layers:
   - Default
   - TransparentFX

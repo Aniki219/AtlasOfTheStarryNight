@@ -125,9 +125,35 @@ public class playerController : MonoBehaviour
 
         if (other.tag == "Tornado" && canTornado)
         {
+            resetAnimator();
+            SoundManager.Instance.playClip("LevelObjects/EnterTornado");
             canTornado = false;
             state = State.Tornado;
-            StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.25f, 0.1f));
+            StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
+        }
+
+        if (other.tag == "Follower")
+        {
+            followController other_fc = other.GetComponent<followController>();
+            if (!other_fc.canCollect) { return; }
+
+            int numFollowers = 0;
+            other_fc.following = getFollower(GetComponent<followController>());
+            other_fc.following.followedBy = other_fc;
+            other_fc.canCollect = false;
+
+            followController getFollower(followController fc)
+            {
+                if (!fc.followedBy)
+                {
+                    return fc;
+                } else
+                {
+                    numFollowers++;
+                    return getFollower(fc.followedBy);
+                }
+            }
+            SoundManager.Instance.playClip("Collectibles/starShard", numFollowers);
         }
     }
 
@@ -142,7 +168,7 @@ public class playerController : MonoBehaviour
 
     IEnumerator LerpToPosition(Vector3 pos, float time = 0.5f)
     {
-        while (Vector3.SqrMagnitude(transform.position - pos) > 0.01f)
+        while (Vector3.SqrMagnitude(transform.position - pos) > 0.005f)
         {
             transform.position = Vector3.SmoothDamp(transform.position, pos, ref velocitySmoothing, time);
             yield return new WaitForEndOfFrame();
@@ -157,12 +183,12 @@ public class playerController : MonoBehaviour
         canDoubleJump = true;
         anim.SetBool("inTornado", true);
         velocity = Vector3.zero;
-        faceInputDirection();
         if (Input.GetKeyDown(KeyCode.Z))
         {
             firstJump();
             anim.SetBool("inTornado", false);
             state = State.Movement;
+            //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
     }
 
@@ -281,7 +307,6 @@ public class playerController : MonoBehaviour
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
         anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding);
-        //if (velocity.y < 0) { anim.SetBool("doubleJump", false); }
 
         setFacing(velocity.x);
 
@@ -350,7 +375,6 @@ public class playerController : MonoBehaviour
         SoundManager.Instance.playClip("onBroom");
         state = fastBroom ? State.Broom : State.Wait;
         velocity = Vector3.zero;
-        controller.Move(velocity);
     }
 
     void startBroom()
@@ -410,8 +434,6 @@ public class playerController : MonoBehaviour
         {
             velocity.x = -moveSpeed/4f * transform.localScale.x;
         }
-        
-        //controller.Move(velocity * Time.deltaTime);
     }
 
     void handleReset(bool isSafe = false)
@@ -488,7 +510,7 @@ public class playerController : MonoBehaviour
         transform.localScale = new Vector3(facing, 1, 1);
     }
 
-    bool isGrounded()
+    public bool isGrounded()
     {
         return controller.collisions.below;
     }

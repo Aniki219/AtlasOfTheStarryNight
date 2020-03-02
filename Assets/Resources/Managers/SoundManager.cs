@@ -10,18 +10,13 @@ public class SoundManager : ScriptableObject
 
     static AudioSource audioSource;
 
-    //public SoundManager()
-    //{
-    //    instance = this;
-    //}
-
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         instance = Resources.LoadAll<SoundManager>("Managers")[0];
     }
 
-    public void playClip(string clipPath)
+    public void playClip(string clipPath, int pitch = 0)
     {
         if (!audioSource)
         {
@@ -31,6 +26,7 @@ public class SoundManager : ScriptableObject
         if (audioSource)
         {
             AudioClip clip = (AudioClip)Resources.Load<AudioClip>(string.Concat("Sounds/", clipPath));
+            audioSource.outputAudioMixerGroup.audioMixer.SetFloat("Pitch", 1.0f + pitch / 20.0f);
             audioSource.PlayOneShot(clip);
         }
     }
