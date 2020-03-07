@@ -10,6 +10,7 @@ TagManager:
   - ResetDamaging
   - Tornado
   - Follower
+  - Star
   layers:
   - Default
   - TransparentFX

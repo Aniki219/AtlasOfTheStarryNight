@@ -51,7 +51,7 @@ public class cameraController : MonoBehaviour
 
         float smoothX = Mathf.Lerp(transform.position.x, to.x, smoothingTime/10.0f);
         float smoothY = Mathf.Lerp(transform.position.y, to.y, smoothingTime/4.0f);
-        transform.position = new Vector3(smoothX, smoothY, transform.position.z);
+        transform.position = new Vector3(smoothX, smoothY, transform.position.z) + shakeValue;
         transform.position = Vector3.SmoothDamp(transform.position, to, ref velocity, smoothingTime);
     }
 
@@ -65,7 +65,7 @@ public class cameraController : MonoBehaviour
         float startTime = Time.time;
         while (Time.time - startTime < shakeDuration)
         {
-            shakeValue += (Vector3)Random.insideUnitCircle * shakeMagnitude;
+            shakeValue = (Vector3)Random.insideUnitCircle * shakeMagnitude;
             yield return new WaitForEndOfFrame();
         }
         shakeValue = Vector3.zero;

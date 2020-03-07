@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: -5825307669568151901}
   - component: {fileID: 1206403900}
   - component: {fileID: -2973598692534317636}
+  - component: {fileID: 1049070261}
   m_Layer: 0
   m_Name: MarsCelestium
-  m_TagString: Untagged
+  m_TagString: Follower
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -65,6 +66,7 @@ MonoBehaviour:
   uiTag: MarsCelestium
   moveSpeed: 0.5
   persistant: 1
+  collectionClipPath: collectCelestium2
 --- !u!114 &-2973598692534317636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,6 +80,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistant: 1
+--- !u!114 &1049070261
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1766009363193180308}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9dfdceb3678e85b4a85840374302667d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collectSound: {fileID: 0}
+  breakSound: {fileID: 0}
+  following: {fileID: 0}
+  followedBy: {fileID: 0}
+  canMoveParent: 1
+  canCollect: 1
+  groundAction: 1
 --- !u!1 &7446669806401602832
 GameObject:
   m_ObjectHideFlags: 0

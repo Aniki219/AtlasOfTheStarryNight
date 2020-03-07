@@ -6,9 +6,9 @@ using UnityEngine;
 public class playerController : MonoBehaviour
 {
     float jumpHeight = 2.2f;
-    public float doubleJumpHeight = 1f;
+    float doubleJumpHeight = 1.5f;
     float timeToJumpApex = 0.5f;
-    public float timeToDoubleJumpApex = 0.25f;
+    float timeToDoubleJumpApex = 0.6f;
 
     int variableJumpIncrements = 6;
 
@@ -16,7 +16,7 @@ public class playerController : MonoBehaviour
     float groundAccelerationTime = 0f;
 
     float moveSpeed = 4f;
-    public int facing = 1;
+    int facing = 1;
     bool canBroom = false;
     bool canDoubleJump = false;
     bool canTornado = true;
@@ -25,7 +25,7 @@ public class playerController : MonoBehaviour
     float resetTime = 10f;
 
     bool isWallSliding = false;
-    public float maxWallSlideVel = -5f;
+    float maxWallSlideVel = -5f;
     float maxFallVel = -15f;
     float wallJumpVelocity = 7;
 
@@ -40,6 +40,7 @@ public class playerController : MonoBehaviour
     Animator anim;
 
     GameObject starRotator;
+    Transform currentTornado;
 
     bool fastBroom = false;
     bool screenShake = false;
@@ -58,11 +59,18 @@ public class playerController : MonoBehaviour
         BroomStart,
         Broom,
         Bonk,
+        Hurt,
         Reset,
         WallJumpInit,
         WallJump,
         Tornado
     }
+
+    //Any state thatcannot receive damage or interact with triggers
+    List<State> intangibleStates = new List<State>
+    {
+        State.Hurt, State.Bonk, State.Reset
+    };
 
     void Start()
     {
@@ -88,7 +96,9 @@ public class playerController : MonoBehaviour
             case State.Broom:
                 handleBroom();
                 break;
+            //Hurt and Bonk look the same to the player, but have different effects
             case State.Bonk:
+            case State.Hurt:
                 bonk();
                 break;
             case State.Reset:
@@ -112,7 +122,7 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (state == State.Reset || state == State.Bonk)
+        if (intangibleStates.Contains(state))
         {
             return;
         }
@@ -129,7 +139,8 @@ public class playerController : MonoBehaviour
             SoundManager.Instance.playClip("LevelObjects/EnterTornado");
             canTornado = false;
             state = State.Tornado;
-            StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
+            currentTornado = other.transform;
+            //StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
         }
 
         if (other.tag == "Follower")
@@ -183,11 +194,14 @@ public class playerController : MonoBehaviour
         canDoubleJump = true;
         anim.SetBool("inTornado", true);
         velocity = Vector3.zero;
+        transform.position = Vector3.SmoothDamp(transform.position, currentTornado.position, ref velocitySmoothing, 0.05f);
+
         if (Input.GetKeyDown(KeyCode.Z))
         {
             firstJump();
             anim.SetBool("inTornado", false);
             state = State.Movement;
+            currentTornado = null;
             //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
     }
@@ -421,8 +435,8 @@ public class playerController : MonoBehaviour
 
         resetAnimator();
         anim.SetTrigger("bonk");
-        state = State.Bonk;
         velocity.y = 4f;
+        state = (damage > 0) ? State.Hurt : State.Bonk;
         
         Camera.main.GetComponent<cameraController>().StartShake();
     }
@@ -467,7 +481,7 @@ public class playerController : MonoBehaviour
         GetComponent<SpriteRenderer>().enabled = true;
     }
 
-    void returnToMovement()
+    public void returnToMovement()
     {
         if (resetPosition && !controller.isSafePosition())
         {
@@ -478,6 +492,13 @@ public class playerController : MonoBehaviour
             state = State.Movement;
         }
         resetPosition = false;
+    }
+
+    public void cutScenePrep()
+    {
+        velocity = Vector3.zero;
+        resetAnimator();
+        state = State.Wait;
     }
 
     void createStars(Vector3 position)
