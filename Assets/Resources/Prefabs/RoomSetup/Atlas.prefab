@@ -43,8 +43,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.33, y: 0.64, z: 0.1}
-  m_Center: {x: 0, y: -0.15, z: 0.05}
+  m_Size: {x: 0.33, y: 0.64, z: 0.01}
+  m_Center: {x: 0, y: -0.15, z: 0.005}
 --- !u!114 &1790538846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,10 +222,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46801972acfa702428cda0aea1cbfe12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  doubleJumpHeight: 1.5
-  timeToDoubleJumpApex: 0.6
-  facing: 1
-  maxWallSlideVel: -5
   state: 1
 --- !u!114 &1721639758
 MonoBehaviour:
@@ -265,3 +261,4 @@ MonoBehaviour:
   followedBy: {fileID: 0}
   canMoveParent: 0
   canCollect: 1
+  groundAction: 1

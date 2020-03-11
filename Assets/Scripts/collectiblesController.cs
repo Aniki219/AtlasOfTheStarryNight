@@ -94,7 +94,6 @@ public class collectiblesController : MonoBehaviour
             transform.position = player.transform.position + Vector3.up * (1.0f + elapsedTime/4.0f);
             yield return new WaitForEndOfFrame();
         }
-        
 
         GetComponent<ParticleSystem>().Play();
         Destroy(gameObject, 1.0f);
