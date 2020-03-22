@@ -122,11 +122,11 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
+        resetPosition = other.transform.tag == "ResetDamaging";
         if (intangibleStates.Contains(state))
         {
             return;
         }
-        resetPosition = other.transform.tag == "ResetDamaging";
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
         {
             startBonk(1, resetPosition);
@@ -140,7 +140,12 @@ public class playerController : MonoBehaviour
             canTornado = false;
             state = State.Tornado;
             currentTornado = other.transform;
-            //StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
+            Deformer deformer = other.GetComponent<Deformer>();
+            if (deformer)
+            {
+                StartCoroutine(deformer.deformAndReform(new Vector3(1.75f, 1.25f, 1.0f), 0.1f, new Vector3(1.0f, 1.0f, 1.0f), 0.5f));
+            }
+                //StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
         }
 
         if (other.tag == "Follower")
@@ -203,6 +208,18 @@ public class playerController : MonoBehaviour
             state = State.Movement;
             currentTornado = null;
             //SoundManager.Instance.playClip("LevelObjects/WindPuff");
+        }
+        if (Input.GetKeyDown(KeyCode.DownArrow))
+        {
+            movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
+            if (mp)
+            {
+                velocity.x = mp.getVelocity().x;
+            }
+            anim.SetBool("inTornado", false);
+            state = State.Movement;
+            currentTornado = null;
+            SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
     }
 

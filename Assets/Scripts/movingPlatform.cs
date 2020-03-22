@@ -9,7 +9,7 @@ public class movingPlatform : MonoBehaviour
     public int currentNode = 1;
 
     Vector3 lastPosition;
-    Vector3 velocity;
+    public Vector3 velocity;
     Transform nodes;
     List<Vector3> nodePositions;
 
@@ -29,7 +29,7 @@ public class movingPlatform : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!nodes) { return; }
+        if (!nodes || nodes.childCount < 2) { return; }
 
         Vector3 targetPos = nodePositions[currentNode];
 
@@ -84,5 +84,10 @@ public class movingPlatform : MonoBehaviour
         foreach (Transform node in nodes) {
             nodePositions.Add(node.position);
         }
+    }
+
+    public Vector3 getVelocity()
+    {
+        return velocity * 1/(Time.deltaTime);
     }
 }
