@@ -25,6 +25,10 @@ public class movingPlatform : MonoBehaviour
         nodePositions = new List<Vector3>();
         nodes = transform.Find("Nodes");
         calculateNodePositions();
+        if (!nodes || nodes.childCount > 0)
+        {
+            transform.position = nodePositions[currentNode];
+        }
     }
 
     void FixedUpdate()

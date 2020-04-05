@@ -206,7 +206,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 2
-  currentNode: 1
+  currentNode: 0
   velocity: {x: 0, y: 0, z: 0}
 --- !u!114 &1782002811
 MonoBehaviour:

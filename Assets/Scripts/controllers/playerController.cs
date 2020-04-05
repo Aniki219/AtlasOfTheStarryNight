@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour
     bool canBroom = false;
     bool canDoubleJump = false;
     bool canTornado = true;
-    bool resetPosition = false;
+    [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
     float resetTime = 10f;
 
@@ -122,7 +122,10 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        resetPosition = other.transform.tag == "ResetDamaging";
+        if (other.transform.tag == "ResetDamaging")
+        {
+            resetPosition = true;
+        }
         if (intangibleStates.Contains(state))
         {
             return;
@@ -143,7 +146,7 @@ public class playerController : MonoBehaviour
             Deformer deformer = other.GetComponent<Deformer>();
             if (deformer)
             {
-                StartCoroutine(deformer.deformAndReform(new Vector3(1.75f, 1.25f, 1.0f), 0.1f, new Vector3(1.0f, 1.0f, 1.0f), 0.5f));
+                deformer.startDeform(new Vector3(1.75f, .75f, 1.0f), 0.1f);
             }
                 //StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
         }
@@ -205,7 +208,14 @@ public class playerController : MonoBehaviour
         {
             firstJump();
             anim.SetBool("inTornado", false);
-            state = State.Movement;
+            //state = State.Movement;
+            returnToMovement();
+            Deformer deformer = currentTornado.GetComponent<Deformer>();
+            if (deformer)
+            {
+                deformer.startDeform(new Vector3(0.75f, 2.0f, 1.0f), 0.1f);
+                SoundManager.Instance.playClip("LevelObjects/EnterTornado", 1);
+            }
             currentTornado = null;
             //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
@@ -216,17 +226,24 @@ public class playerController : MonoBehaviour
             {
                 velocity.x = mp.getVelocity().x;
             }
+            Deformer deformer = currentTornado.GetComponent<Deformer>();
+            if (deformer)
+            {
+                deformer.startDeform(new Vector3(2.0f, 0.25f, 1.0f), 0.1f);
+            }
             anim.SetBool("inTornado", false);
-            state = State.Movement;
+            //state = State.Movement;
+            returnToMovement();
             currentTornado = null;
-            SoundManager.Instance.playClip("LevelObjects/WindPuff");
+            SoundManager.Instance.playClip("LevelObjects/EnterTornado", -1);
         }
     }
 
     void wallJumpInit()
     {
         if (resourceManager.Instance.getPlayerMana() < 2) {
-            state = State.Movement;
+            //state = State.Movement;
+            returnToMovement();
             return;
         }
         resourceManager.Instance.usePlayerMana(2);
@@ -355,6 +372,7 @@ public class playerController : MonoBehaviour
 
     void firstJump()
     {
+        GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
         StartCoroutine(jumpCoroutine());
@@ -372,7 +390,8 @@ public class playerController : MonoBehaviour
 
     void doubleJump()
     {
-        state = State.Movement;
+        //state = State.Movement;
+        returnToMovement();
         resourceManager.Instance.usePlayerMana(1);
         canDoubleJump = false;
         anim.SetTrigger("doubleJump");
@@ -420,7 +439,8 @@ public class playerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.X))
         {
             anim.SetTrigger("broomEnd");
-            state = State.Movement;
+            //state = State.Movement;
+            returnToMovement();
             return;
         }
         if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
@@ -435,6 +455,8 @@ public class playerController : MonoBehaviour
         velocity.x = moveSpeed * 2 * facing;
     }
 
+    //Take whether to set resetPos or not
+    //Set state to Hurt or Bonk
     public void startBonk(int damage = 0, bool reset = false)
     {
         if (!controller.collisions.tangible) { return; }
@@ -467,6 +489,9 @@ public class playerController : MonoBehaviour
         }
     }
 
+    //Activates on State.Reset
+    //Sets tangible to true
+    //Returnns to movement after reaching lastSafePosition
     void handleReset(bool isSafe = false)
     {
         controller.collisions.tangible = false;
@@ -498,6 +523,9 @@ public class playerController : MonoBehaviour
         GetComponent<SpriteRenderer>().enabled = true;
     }
 
+    //Always turns off resetPosition
+    //If not in a safe spot and resetPosition is true, sets state to reset
+    //Otherwise sets state to movement and sets tangible to true
     public void returnToMovement()
     {
         if (resetPosition && !controller.isSafePosition())
