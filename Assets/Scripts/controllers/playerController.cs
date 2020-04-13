@@ -63,7 +63,8 @@ public class playerController : MonoBehaviour
         Reset,
         WallJumpInit,
         WallJump,
-        Tornado
+        Tornado,
+        Eat
     }
 
     //Any state thatcannot receive damage or interact with triggers
@@ -89,6 +90,7 @@ public class playerController : MonoBehaviour
         {
             case State.Movement:
                 handleMovement();
+                canPickUp();
                 break;
             case State.BroomStart:
                 handleBroomStart();
@@ -130,6 +132,7 @@ public class playerController : MonoBehaviour
         {
             return;
         }
+
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
         {
             startBonk(1, resetPosition);
@@ -148,7 +151,6 @@ public class playerController : MonoBehaviour
             {
                 deformer.startDeform(new Vector3(1.75f, .75f, 1.0f), 0.1f);
             }
-                //StartCoroutine(LerpToPosition(other.transform.position + Vector3.up * -0.1f, 0.05f));
         }
 
         if (other.tag == "Follower")
@@ -183,6 +185,26 @@ public class playerController : MonoBehaviour
             canTornado = true;
             anim.SetBool("inTornado", false);
         }
+    }
+
+    void canPickUp()
+    {
+        if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded())
+        {
+            RaycastHit2D pickup = Physics2D.Raycast(transform.position, -Vector2.up, 0.5f, 1 << LayerMask.NameToLayer("Pickupable"));
+            if (pickup.collider != null)
+            {
+                pickup.transform.SendMessage("pickUp");
+            }
+        }
+    }
+
+    public void startEat()
+    {
+        state = State.Eat;
+        velocity = new Vector3(0, 0, 0);
+        resetAnimator();
+        anim.SetBool("eat", true);
     }
 
     IEnumerator LerpToPosition(Vector3 pos, float time = 0.5f)
@@ -411,7 +433,7 @@ public class playerController : MonoBehaviour
         return false;
     }
 
-    void resetAnimator()
+    public void resetAnimator()
     {
         foreach (AnimatorControllerParameter parameter in anim.parameters)
         {

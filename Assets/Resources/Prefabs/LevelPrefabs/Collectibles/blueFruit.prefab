@@ -11,7 +11,8 @@ GameObject:
   - component: {fileID: 818169731356441677}
   - component: {fileID: 7036535921847365295}
   - component: {fileID: 1035478923}
-  m_Layer: 0
+  - component: {fileID: 4854768852309888890}
+  m_Layer: 13
   m_Name: sprite
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -69,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 10
+  m_SortingOrder: 1
   m_Sprite: {fileID: -2963326566618615234, guid: 60c53eb86a2a0354b8ba34fa3a496955,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -98,6 +99,25 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0.05}
   serializedVersion: 2
   m_Radius: 0.3
+--- !u!95 &4854768852309888890
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 399118194853452795}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d44e501b47e8e0d46912d0c10978fcbc, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &8446288284418514068
 GameObject:
   m_ObjectHideFlags: 0
@@ -109,6 +129,7 @@ GameObject:
   - component: {fileID: 8446288284418514058}
   - component: {fileID: 1006500047823354714}
   - component: {fileID: 6974294512475422772}
+  - component: {fileID: 696124210}
   m_Layer: 0
   m_Name: blueFruit
   m_TagString: Untagged
@@ -164,3 +185,19 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
+--- !u!58 &696124210
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8446288284418514068}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: -0.1}
+  serializedVersion: 2
+  m_Radius: 0.4

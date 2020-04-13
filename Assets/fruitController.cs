@@ -32,6 +32,27 @@ public class fruitController : MonoBehaviour
         StartCoroutine(turnIntoPickup());
     }
 
+    public void pickUp()
+    {
+        rb.simulated = false;
+        StartCoroutine(getEaten());
+    }
+
+    IEnumerator getEaten()
+    {
+        GetComponentInChildren<Animator>().SetTrigger("eat");
+        GameObject atlas = GameObject.Find("Atlas");
+        playerController pc = atlas.GetComponent<playerController>();
+        transform.rotation = Quaternion.identity;
+        transform.localScale = new Vector3(atlas.transform.localScale.x, 1.0f, 1.0f);
+        transform.position = atlas.transform.position + atlas.transform.localScale.x * Vector3.right * 0.75f + Vector3.up * 0.75f;
+        pc.startEat();
+        yield return new WaitForSeconds(2.0f);
+        pc.returnToMovement();
+        pc.resetAnimator();
+        Destroy(gameObject);
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.tag == "Player")
@@ -57,6 +78,7 @@ public class fruitController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
         canPickUp = true;
+        gameObject.layer = LayerMask.NameToLayer("Pickupable");
     }
 
     IEnumerator wobble()
