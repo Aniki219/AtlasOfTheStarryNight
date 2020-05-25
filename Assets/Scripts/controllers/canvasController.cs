@@ -10,7 +10,7 @@ public class canvasController : MonoBehaviour
     Color healthBarColor;
     Color manaBarColor;
 
-    float barRestoreSpeed = 6f; 
+    float barRestoreSpeed = 6f;
 
     void Update()
     {

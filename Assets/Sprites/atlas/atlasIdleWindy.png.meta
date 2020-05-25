@@ -1,31 +1,40 @@
 fileFormatVersion: 2
-guid: ba07fcb547bd19d469ef02a59b7a2bf1
+guid: 55b8f31364ea9a54da7b314303401106
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 4420518993440042633
-    second: atlasIdle_0
+      213: 4925110964847658231
+    second: atlasIdleWindy_0
   - first:
-      213: 7665087001770978772
-    second: atlasIdle_1
+      213: -8324895382274834389
+    second: atlasIdleWindy_1
   - first:
-      213: -1079516496681991875
-    second: atlasIdle_2
+      213: -4415202585489610233
+    second: atlasIdleWindy_2
   - first:
-      213: -6324898485483972568
-    second: atlasIdle_3
+      213: -5224392309531181138
+    second: atlasIdleWindy_3
   - first:
-      213: -3643042696906761971
-    second: atlasIdle_4
+      213: 1574054797644710657
+    second: atlasIdleWindy_4
   - first:
-      213: 8330965606517837072
-    second: atlasIdle_5
+      213: 8136561410528395473
+    second: atlasIdleWindy_5
   - first:
-      213: -1472710849988812664
-    second: atlasIdle_6
+      213: 5321175624896401827
+    second: atlasIdleWindy_6
   - first:
-      213: 3184967971750807882
-    second: atlasIdle_7
+      213: -6327247347610094407
+    second: atlasIdleWindy_7
+  - first:
+      213: -1448176872211359092
+    second: atlasIdleWindy_8
+  - first:
+      213: 187444225321847517
+    second: atlasIdleWindy_9
+  - first:
+      213: 3298496336141137284
+    second: atlasIdleWindy_10
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -110,91 +119,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: atlasIdle_0
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: e78df93103cde324981e0bdf1e818da6
-      internalID: 4420518993440042633
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: atlasIdle_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2d07c68fdbc6ecc449c5a3d5de22d28f
-      internalID: 7665087001770978772
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: atlasIdle_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2afcdefe5035479439639bbb5cc90891
-      internalID: -1079516496681991875
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: atlasIdle_3
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0e61f91669ed72944938632aef329ee5
-      internalID: -6324898485483972568
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: atlasIdle_4
+      name: atlasIdleWindy_0
       rect:
         serializedVersion: 2
         x: 0
@@ -208,14 +133,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7761b9cd32cd46045a227861107af857
-      internalID: -3643042696906761971
+      spriteID: e6049439b117df244a812d4fcaf27d2c
+      internalID: 4925110964847658231
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasIdle_5
+      name: atlasIdleWindy_1
       rect:
         serializedVersion: 2
         x: 32
@@ -229,14 +154,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 19121538c1032fa48ab473fa7ecc0c5c
-      internalID: 8330965606517837072
+      spriteID: 8a10b8a318a9d0b4dad422f342e2b729
+      internalID: -8324895382274834389
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasIdle_6
+      name: atlasIdleWindy_2
       rect:
         serializedVersion: 2
         x: 64
@@ -250,14 +175,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6e92085aa6c0db74495265bd6286521a
-      internalID: -1472710849988812664
+      spriteID: 5ae835e1fe23aed46bfe38b6ea58a6aa
+      internalID: -4415202585489610233
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasIdle_7
+      name: atlasIdleWindy_3
       rect:
         serializedVersion: 2
         x: 96
@@ -271,8 +196,155 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 71a79b7291f77764e90dd9dc09e3e3b8
-      internalID: 3184967971750807882
+      spriteID: efe142d60c0279841b45ae3794a955e5
+      internalID: -5224392309531181138
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 46d1875b7e362d34398f1b7caf204cde
+      internalID: 1574054797644710657
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a0d18b7fbb77d86478ad55725f15d932
+      internalID: 8136561410528395473
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6fe3c397cc7b146429cab95afdb9b2d5
+      internalID: 5321175624896401827
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 81b67098af8951740b4a678b3e1d33d4
+      internalID: -6327247347610094407
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_8
+      rect:
+        serializedVersion: 2
+        x: 256
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df6d990f560f4aa43add2c9b78f4740d
+      internalID: -1448176872211359092
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_9
+      rect:
+        serializedVersion: 2
+        x: 288
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 43e348e49aae17144b93805cc6e800a5
+      internalID: 187444225321847517
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasIdleWindy_10
+      rect:
+        serializedVersion: 2
+        x: 320
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b443a67f4c8c5ba4894e9fb707531b0b
+      internalID: 3298496336141137284
       vertices: []
       indices: 
       edges: []
