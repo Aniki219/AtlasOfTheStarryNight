@@ -155,6 +155,8 @@ public class diveToadController : MonoBehaviour
         act = Mathf.Max(actionCoolDown / 2.0f, act);
         anim.SetBool("Hurt", true);
 
+        deformer.flashWhite();
+
         StartCoroutine(getHurt());
         if (hp <= 0)
         {
@@ -206,9 +208,13 @@ public class diveToadController : MonoBehaviour
             }
             velocity.y = 0;
         }
-        if (velocity.y > 0 && ((controller.collisions.right && velocity.x > 0) || (controller.collisions.left && velocity.x < 0)))
+        if ((controller.collisions.right && velocity.x > 0) || (controller.collisions.left && velocity.x < 0))
         {
-            velocity.y = 0;
+            velocity.x = 0;
+            if (velocity.y > 0)
+            {
+                velocity.y = 0;
+            }
         }
     }
 

@@ -4,12 +4,27 @@ using UnityEngine;
 
 public class Deformer : MonoBehaviour
 {
+    public Material defaultMaterial;
+    public Material flashMaterial;
     public void startDeform(Vector3 to, float timeTo, float timeReturn = 0.5f)
     {
         StopCoroutine("deformAndReform");
         transform.localScale = new Vector3(Mathf.Sign(transform.localScale.x), 1.0f, 1.0f);
         
         StartCoroutine(deformAndReform(to, timeTo, timeReturn));
+    }
+
+    public void flashWhite()
+    {
+        StartCoroutine(flashCoroutine());
+    }
+
+    public IEnumerator flashCoroutine()
+    {
+        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        sprite.material = flashMaterial;
+        yield return new WaitForSeconds(0.1f);
+        sprite.material = defaultMaterial;
     }
 
     public IEnumerator deformAndReform(Vector3 to, float timeTo, float timeReturn)
