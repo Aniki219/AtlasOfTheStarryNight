@@ -75,9 +75,10 @@ public class playerController : MonoBehaviour
 
     void Start()
     {
+        gameManager.Instance.player = gameObject;
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
-        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
+        gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
@@ -280,7 +281,7 @@ public class playerController : MonoBehaviour
     IEnumerator WallJumpCoroutine()
     {
         state = State.WallJump;
-        GameObject explosion = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/wallBlast"), transform.position + new Vector3(-0.80f * facing, 0.23f, 0), Quaternion.identity); ;
+        GameObject explosion = gameManager.Instance.createInstance("Effects/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
         explosion.transform.localScale = transform.localScale;
         if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
         
@@ -331,9 +332,9 @@ public class playerController : MonoBehaviour
     void handleMovement()
     {
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-
         if (isGrounded())
         {
+        //Debug.Log(velocity.y);
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 firstJump();
@@ -488,7 +489,13 @@ public class playerController : MonoBehaviour
             resetPosition = true;
             SoundManager.Instance.playClip("hurt2");
         } else { 
-            SoundManager.Instance.playClip("bonk");
+            if (damage > 0)
+            {
+                SoundManager.Instance.playClip("hurt");
+            } else
+            {
+                SoundManager.Instance.playClip("bonk");
+            }
             createStars(transform.position);
         }
 

@@ -1,25 +1,43 @@
 fileFormatVersion: 2
-guid: 68c06147624fc6b42914496a4649f82d
+guid: 099295eb737145943a00884bc956c63c
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 2416194355030262994
-    second: divetoadIdle_0
+      213: -3165426604258852398
+    second: divetoadSheet_0
   - first:
-      213: 6343849775166484600
-    second: divetoadIdle_1
+      213: -4066694820471247903
+    second: divetoadSheet_1
   - first:
-      213: -138511905583141090
-    second: divetoadIdle_2
+      213: -8780085370627066765
+    second: divetoadSheet_2
   - first:
-      213: -5816017382582544950
-    second: divetoadIdle_3
+      213: -8321063770833266740
+    second: divetoadSheet_3
   - first:
-      213: 4653297407112897453
-    second: divetoadIdle_4
+      213: 4539491943449277110
+    second: divetoadSheet_4
   - first:
-      213: 6572329439007714550
-    second: divetoadIdle_5
+      213: 3421165811579266877
+    second: divetoadSheet_5
+  - first:
+      213: -8442454696697564835
+    second: divetoadSheet_6
+  - first:
+      213: -5030181433160747775
+    second: divetoadSheet_7
+  - first:
+      213: 1326371291700796514
+    second: divetoadSheet_8
+  - first:
+      213: -7050550498261969774
+    second: divetoadSheet_9
+  - first:
+      213: 5186137804884619239
+    second: divetoadSheet_10
+  - first:
+      213: 8591312236368428883
+    second: divetoadSheet_11
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -104,7 +122,238 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: divetoadIdle_0
+      name: divetoadSheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d8abebad9c7efd1429248a8f274e8d2f
+      internalID: -3165426604258852398
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_1
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05caff04f8a5a9145a172cfd96d5a8bd
+      internalID: -4066694820471247903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_2
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0f5c75ac94664845b9cdf21c58f545a
+      internalID: -8780085370627066765
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_3
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8cde8f245e0507d45b9a57e983cb7aa9
+      internalID: -8321063770833266740
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 64
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e399e6291f7041b47ba0204f4cbfb036
+      internalID: 4539491943449277110
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ecf4086875649de48a9f8af34ccf02cb
+      internalID: 3421165811579266877
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_6
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 48
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2143a2d95545db64bb72f4cc358497a0
+      internalID: -8442454696697564835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 324eae68d92caed4db44b71abbe6097d
+      internalID: -5030181433160747775
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_8
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 32
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f25c151679c9c4f4db773f28092173eb
+      internalID: 1326371291700796514
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_9
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 633a82e0e4a5f3c4a81d02807c90caf1
+      internalID: -7050550498261969774
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_10
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 16
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b6e5837641c2754ca6e5d29a62de1f6
+      internalID: 5186137804884619239
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: divetoadSheet_11
       rect:
         serializedVersion: 2
         x: 0
@@ -118,113 +367,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7dff393e491ffac4380198c0fe839c1c
-      internalID: 2416194355030262994
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: divetoadIdle_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0ce94dc34f5848147bdab3aacfe33d34
-      internalID: 6343849775166484600
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: divetoadIdle_2
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a8eb59e7ff4a47e4f91eb54fe72eccd1
-      internalID: -138511905583141090
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: divetoadIdle_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 290a0b984ae881f40b821b66c7193cfc
-      internalID: -5816017382582544950
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: divetoadIdle_4
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: f4f1e68caf73da3428e5eb5a81a07ac6
-      internalID: 4653297407112897453
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: divetoadIdle_5
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b00bab1d9f05da14c83ffc65bf2d07f1
-      internalID: 6572329439007714550
+      spriteID: ec604e752d2344d4caff7764f4024818
+      internalID: 8591312236368428883
       vertices: []
       indices: 
       edges: []

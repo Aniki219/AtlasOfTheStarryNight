@@ -11,6 +11,10 @@ public class gameManager : ScriptableObject
     public static gameManager Instance { get { return instance; } }
 
     static Dictionary<string, bool> objects = new Dictionary<string, bool>();
+    public float gravity = -17.6f;
+    public float maxFallVel = -15f;
+
+    public GameObject player;
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
@@ -47,5 +51,11 @@ public class gameManager : ScriptableObject
         } else {
             objects.Add(key, value);
         }
+    }
+
+    public GameObject createInstance(string name, Vector3 at)
+    {
+        GameObject inst = Instantiate(Resources.Load<GameObject>("Prefabs/" + name), at, Quaternion.identity);
+        return inst;
     }
 }
