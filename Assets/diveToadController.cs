@@ -42,7 +42,7 @@ public class diveToadController : MonoBehaviour
     {
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
-        deformer = GetComponent<Deformer>();
+        deformer = GetComponentInChildren<Deformer>();
 
         gravity = gameManager.Instance.gravity;
         maxFallVel = gameManager.Instance.maxFallVel;
