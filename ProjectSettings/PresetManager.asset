@@ -9,7 +9,7 @@ PresetManager:
       m_ManagedTypePPtr: {fileID: 0}
       m_ManagedTypeFallback: 
     defaultPresets:
-    - m_Preset: {fileID: 2655988077585873504, guid: 6cfeeee71b3ffac4c99b0410bb0937ec,
+    - m_Preset: {fileID: 2655988077585873504, guid: a62241044800150449918afc138531b1,
         type: 2}
   - type:
       m_NativeTypeID: 114

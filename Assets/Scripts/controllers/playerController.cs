@@ -64,7 +64,9 @@ public class playerController : MonoBehaviour
         WallJumpInit,
         WallJump,
         Tornado,
-        Eat
+        Eat,
+        Attack,
+        ChargeAttack
     }
 
     //Any state thatcannot receive damage or interact with triggers
@@ -99,6 +101,12 @@ public class playerController : MonoBehaviour
             case State.Broom:
                 handleBroom();
                 break;
+            case State.ChargeAttack:
+                handleChargeAttack();
+                break;
+            case State.Attack:
+                handleAttack();
+                break;
             //Hurt and Bonk look the same to the player, but have different effects
             case State.Bonk:
             case State.Hurt:
@@ -121,6 +129,27 @@ public class playerController : MonoBehaviour
         }
 
         //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+    }
+
+    void handleChargeAttack()
+    {
+        velocity = Vector3.zero;
+        if (!Input.GetKey(KeyCode.C))
+        {
+            state = State.Attack;
+            anim.SetTrigger("Attack");
+        }
+    }
+
+    void handleAttack()
+    {
+        velocity = Vector3.zero;
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            state = State.Attack;
+            anim.SetTrigger("Attack");
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -334,7 +363,13 @@ public class playerController : MonoBehaviour
         Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
         if (isGrounded())
         {
-        //Debug.Log(velocity.y);
+            if (Input.GetKey(KeyCode.C))
+            {
+                state = State.ChargeAttack;
+                anim.SetTrigger("ChargeAttack");
+                return;
+            }
+
             if (Input.GetKeyDown(KeyCode.Z))
             {
                 firstJump();
@@ -439,6 +474,7 @@ public class playerController : MonoBehaviour
         foreach (AnimatorControllerParameter parameter in anim.parameters)
         {
             anim.SetBool(parameter.name, false);
+            //anim.ResetTrigger(parameter.name);
         }
     }
 
@@ -557,6 +593,11 @@ public class playerController : MonoBehaviour
     //Otherwise sets state to movement and sets tangible to true
     public void returnToMovement()
     {
+        if (state == State.ChargeAttack || state == State.Attack)
+        {
+            resetAnimator();
+            anim.SetTrigger("Idle");
+        }
         if (resetPosition && !controller.isSafePosition())
         {
             state = State.Reset;
