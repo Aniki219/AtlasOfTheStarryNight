@@ -532,6 +532,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 919852811, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
+      propertyPath: defaultMaterial
+      value: 
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+    - target: {fileID: 919852811, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
+      propertyPath: flashMaterial
+      value: 
+      objectReference: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -6983,6 +6991,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: divetoad (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6726984603581895696, guid: 3c26f66c1d96b854d8536a00dc56b43f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6726984603581895698, guid: 3c26f66c1d96b854d8536a00dc56b43f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -7056,6 +7069,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: divetoad
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726984603581895696, guid: 3c26f66c1d96b854d8536a00dc56b43f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6726984603581895698, guid: 3c26f66c1d96b854d8536a00dc56b43f,
         type: 3}
