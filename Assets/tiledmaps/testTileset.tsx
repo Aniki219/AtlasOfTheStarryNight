@@ -21,14 +21,4 @@
    <object id="1" template="fullCollision.tx" x="0" y="0"/>
   </objectgroup>
  </tile>
- <tile id="5">
-  <objectgroup draworder="index" id="2">
-   <object id="1" template="fullCollision.tx" x="0" y="0"/>
-  </objectgroup>
- </tile>
- <tile id="6">
-  <objectgroup draworder="index" id="4">
-   <object id="3" template="fullCollision.tx" x="0" y="0"/>
-  </objectgroup>
- </tile>
 </tileset>

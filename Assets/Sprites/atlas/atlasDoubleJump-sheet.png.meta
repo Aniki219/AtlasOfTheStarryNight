@@ -17,6 +17,15 @@ TextureImporter:
   - first:
       213: -41545021270553992
     second: atlasDoubleJump-sheet_4
+  - first:
+      213: 4512732278673991299
+    second: atlasDoubleJump-sheet_5
+  - first:
+      213: 7175167593067445014
+    second: atlasDoubleJump-sheet_6
+  - first:
+      213: 7588954927818806161
+    second: atlasDoubleJump-sheet_7
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -115,7 +124,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0ff6fa0da9ef1c547890bcc1ab3a299b
+      spriteID: 94f740a50cb6a2b468ea8876d07be507
       internalID: -8761962695985315249
       vertices: []
       indices: 
@@ -136,7 +145,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 69cca3e13f4cfdf4882e3b784cef2aab
+      spriteID: a74322917d3e0a8408e9670cc7e7d31f
       internalID: 586145570066709984
       vertices: []
       indices: 
@@ -157,7 +166,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d387592a952906e4da9a87cef2c0c5f0
+      spriteID: 4ff728c0eaa4e8649b6cf299b104b1a6
       internalID: 9152891644562308016
       vertices: []
       indices: 
@@ -178,7 +187,7 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: f3c6bb2c1e592ac44b2fda731a0f8579
+      spriteID: 6c41942d0420c9f4885a6607d41a20c0
       internalID: -4738762005451968953
       vertices: []
       indices: 
@@ -199,8 +208,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2175901779b4f41409ef7390e6acc8cb
+      spriteID: 468ae49c24a2eeb47b0f88a3db136c54
       internalID: -41545021270553992
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasDoubleJump-sheet_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d7774ae3f308dab46b66a374b47e8a4b
+      internalID: 4512732278673991299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasDoubleJump-sheet_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c226dfe90eb136e46b2b0aef58442954
+      internalID: 7175167593067445014
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: atlasDoubleJump-sheet_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2bc52f7862d127c4cb1ab48dad58d7ef
+      internalID: 7588954927818806161
       vertices: []
       indices: 
       edges: []

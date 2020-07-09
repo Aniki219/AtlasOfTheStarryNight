@@ -5,6 +5,7 @@ using UnityEngine;
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
 {
+    #region Vars
     float jumpHeight = 2.2f;
     float doubleJumpHeight = 1.5f;
     float timeToJumpApex = 0.5f;
@@ -24,7 +25,6 @@ public class playerController : MonoBehaviour
     Vector3 lastSafePosition;
     float resetTime = 10f;
 
-    bool isWallSliding = false;
     float maxWallSlideVel = -5f;
     float maxFallVel = -15f;
     float wallJumpVelocity = 7;
@@ -32,7 +32,7 @@ public class playerController : MonoBehaviour
     float gravity;
     float jumpVelocity;
     float doubleJumpVelocity;
-    Vector3 velocity;
+    public Vector3 velocity;
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
 
@@ -49,7 +49,9 @@ public class playerController : MonoBehaviour
     //bool fastBroom = true;
     //bool screenShake = false;
     //float wallBlastDelay = 0f;
+    #endregion
 
+    #region State
     public State state = State.Movement;
 
     public enum State
@@ -74,7 +76,9 @@ public class playerController : MonoBehaviour
     {
         State.Hurt, State.Bonk, State.Reset
     };
+    #endregion
 
+    #region Unity functions
     void Start()
     {
         gameManager.Instance.player = gameObject;
@@ -93,6 +97,7 @@ public class playerController : MonoBehaviour
         {
             case State.Movement:
                 handleMovement();
+                handleAttackInput();
                 canPickUp();
                 break;
             case State.BroomStart:
@@ -101,10 +106,8 @@ public class playerController : MonoBehaviour
             case State.Broom:
                 handleBroom();
                 break;
-            case State.ChargeAttack:
-                handleChargeAttack();
-                break;
             case State.Attack:
+                handleMovement(!isGrounded(), false);
                 handleAttack();
                 break;
             //Hurt and Bonk look the same to the player, but have different effects
@@ -131,24 +134,13 @@ public class playerController : MonoBehaviour
         //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
     }
 
-    void handleChargeAttack()
+    private void FixedUpdate()
     {
-        velocity = Vector3.zero;
-        if (!Input.GetKey(KeyCode.C))
+        if (state == State.Reset) { return; }
+        controller.Move(velocity * Time.deltaTime);
+        if (controller.collisions.above || controller.collisions.below)
         {
-            state = State.Attack;
-            anim.SetTrigger("Attack");
-        }
-    }
-
-    void handleAttack()
-    {
-        velocity = Vector3.zero;
-
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            state = State.Attack;
-            anim.SetTrigger("Attack");
+            velocity.y = 0;
         }
     }
 
@@ -198,7 +190,8 @@ public class playerController : MonoBehaviour
                 if (!fc.followedBy)
                 {
                     return fc;
-                } else
+                }
+                else
                 {
                     numFollowers++;
                     return getFollower(fc.followedBy);
@@ -216,7 +209,98 @@ public class playerController : MonoBehaviour
             anim.SetBool("inTornado", false);
         }
     }
+    #endregion
 
+    void handleMovement(bool acceptInput = true, bool canTurnAround = true)
+    {
+        Vector2 input = new Vector2(0, 0);
+        if (acceptInput)
+        {
+            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+        }
+
+        if (isGrounded())
+        {
+            if (Input.GetKeyDown(KeyCode.Z))
+            {
+                firstJump();
+            }
+            canBroom = true;
+            canDoubleJump = true;
+            resourceManager.Instance.restoreMana();
+        }
+        else
+        {
+            if (canBroom && Input.GetKeyDown(KeyCode.X))
+            {
+                state = State.BroomStart;
+                canBroom = false;
+                if (isWallSliding() && velocity.y < 0)
+                {
+                    flipHorizontal();
+                }
+                else
+                {
+                    faceInputDirection();
+                }
+                return;
+            }
+
+            if (isWallSliding() && Input.GetKeyDown(KeyCode.Z) && resourceManager.Instance.getPlayerMana() >= 2)
+            {
+                state = State.WallJumpInit;
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+            {
+                doubleJump();
+            }
+        }
+
+        float targetVelocityX = input.x * moveSpeed;
+
+        anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
+        anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
+        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
+        anim.SetBool("isGrounded", isGrounded());
+        anim.SetBool("wallSlide", isWallSliding());
+
+        if (canTurnAround) setFacing(velocity.x);
+
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
+        velocity.y += gravity * Time.deltaTime;
+
+        if (isWallSliding() && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
+        if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
+
+        if (velocity.y <= 0 && controller.isSafePosition())
+        {
+            lastSafePosition = transform.position;
+        }
+    }
+
+    #region Attacking
+    void handleAttackInput()
+    {
+        if (Input.GetKey(KeyCode.C))
+        {
+            state = State.Attack;
+            anim.SetTrigger("SelectAttack");
+        }
+    }
+
+    void handleAttack()
+    {
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            state = State.Attack;
+            anim.SetTrigger("Attack");
+        }
+    }
+    #endregion
+
+    #region Interact
     void canPickUp()
     {
         if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded())
@@ -228,15 +312,9 @@ public class playerController : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    public void startEat()
-    {
-        state = State.Eat;
-        velocity = new Vector3(0, 0, 0);
-        resetAnimator();
-        anim.SetBool("eat", true);
-    }
-
+    #region Enumerators
     IEnumerator LerpToPosition(Vector3 pos, float time = 0.5f)
     {
         while (Vector3.SqrMagnitude(transform.position - pos) > 0.005f)
@@ -246,7 +324,71 @@ public class playerController : MonoBehaviour
         }
         yield return 0;
     }
+    IEnumerator flashEffect(float duration = 1.0f)
+    {
+        float startTime = Time.time;
+        while (Time.time - startTime < duration)
+        {
+            GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
+            yield return new WaitForSeconds(0.1f);
+        }
+        GetComponent<SpriteRenderer>().enabled = true;
+    }
+    IEnumerator jumpCoroutine()
+    {
+        for (int i = 0; i < variableJumpIncrements; i++)
+        {
+            if (!Input.GetKey(KeyCode.Z))
+            {
+                velocity.y /= 4;
+                i = variableJumpIncrements;
+            }
+            yield return new WaitForSeconds(4 / 60.0f);
+        }
+    }
+    IEnumerator WallJumpCoroutine()
+    {
+        state = State.WallJump;
+        GameObject explosion = gameManager.Instance.createInstance("Effects/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
+        explosion.transform.localScale = transform.localScale;
+        if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
 
+        SoundManager.Instance.playClip("wallBlast");
+        anim.SetBool("isJumping", false);
+        anim.SetBool("isFalling", false);
+        anim.SetBool("wallSlide", false);
+        anim.SetBool("wallBlast", true);
+
+        yield return new WaitForSeconds(wallBlastDelay);
+
+        anim.SetBool("isJumping", true);
+        anim.SetBool("wallBlast", false);
+
+        flipHorizontal();
+
+        velocity.y = wallJumpVelocity;
+
+        float startTime = Time.time;
+        while (Time.time - startTime < 0.1f)
+        {
+            velocity.x = wallJumpVelocity * facing;
+            velocity.y += gravity * Time.deltaTime;
+
+            if (Input.GetKeyDown(KeyCode.X) && canBroom)
+            {
+                faceInputDirection();
+                state = State.BroomStart;
+                canBroom = false;
+                yield break;
+            }
+            yield return new WaitForFixedUpdate();
+        }
+        anim.SetBool("wallBlast", false);
+        returnToMovement();
+    }
+    #endregion
+
+    #region One-offs
     void handleTornado()
     {
         canTornado = false;
@@ -290,10 +432,28 @@ public class playerController : MonoBehaviour
             SoundManager.Instance.playClip("LevelObjects/EnterTornado", -1);
         }
     }
+    public void startEat()
+    {
+        state = State.Eat;
+        velocity = new Vector3(0, 0, 0);
+        resetAnimator();
+        anim.SetBool("eat", true);
+    }
+    void setFacing(float vel)
+    {
+        //During Movement we can keep track of the direction the player is facing each frame
+        if (vel == 0) return;
+        facing = (int)Mathf.Sign(vel);
+        transform.localScale = new Vector3(facing, transform.localScale.y, transform.localScale.z);
+    }
 
+    #endregion
+
+    #region Jumps & WallJumps
     void wallJumpInit()
     {
-        if (resourceManager.Instance.getPlayerMana() < 2) {
+        if (resourceManager.Instance.getPlayerMana() < 2)
+        {
             //state = State.Movement;
             returnToMovement();
             return;
@@ -307,143 +467,12 @@ public class playerController : MonoBehaviour
     {
     }
 
-    IEnumerator WallJumpCoroutine()
-    {
-        state = State.WallJump;
-        GameObject explosion = gameManager.Instance.createInstance("Effects/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
-        explosion.transform.localScale = transform.localScale;
-        if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
-        
-        SoundManager.Instance.playClip("wallBlast");
-        anim.SetBool("isJumping", false);
-        anim.SetBool("isFalling", false);
-        anim.SetBool("wallSlide", false);
-        anim.SetBool("wallBlast", true);
-
-        yield return new WaitForSeconds(wallBlastDelay);
-
-        anim.SetBool("isJumping", true);
-        anim.SetBool("wallBlast", false);
-
-        flipHorizontal();
-
-        velocity.y = wallJumpVelocity;
-
-        float startTime = Time.time;
-        while (Time.time - startTime < 0.1f)
-        {
-            velocity.x = wallJumpVelocity * facing;
-            velocity.y += gravity * Time.deltaTime;
-
-            if (Input.GetKeyDown(KeyCode.X) && canBroom)
-            {
-                faceInputDirection();
-                state = State.BroomStart;
-                canBroom = false;
-                yield break;
-            }
-            yield return new WaitForFixedUpdate();
-        }
-        anim.SetBool("wallBlast", false);
-        returnToMovement();
-    }
-
-    void faceInputDirection()
-    {
-        float dir = Input.GetAxisRaw("Horizontal");
-        if (dir != 0)
-        {
-            facing = (int)dir;
-            transform.localScale = new Vector3(facing, 1, 1);
-        }
-    }
-
-    void handleMovement()
-    {
-        Vector2 input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        if (isGrounded())
-        {
-            if (Input.GetKey(KeyCode.C))
-            {
-                state = State.ChargeAttack;
-                anim.SetTrigger("ChargeAttack");
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z))
-            {
-                firstJump();
-            }
-            canBroom = true;
-            canDoubleJump = true;
-            isWallSliding = false;
-            resourceManager.Instance.restoreMana();
-        } else
-        {
-            if (canBroom && Input.GetKeyDown(KeyCode.X))
-            {
-                state = State.BroomStart;
-                canBroom = false;
-                if (isWallSliding && velocity.y < 0) {
-                    flipHorizontal();
-                } else
-                {
-                    faceInputDirection();
-                }
-                return;
-            }
-            isWallSliding = checkWallSliding();
-
-            if (isWallSliding && Input.GetKeyDown(KeyCode.Z) && resourceManager.Instance.getPlayerMana() >= 2)
-            {
-                state = State.WallJumpInit;
-                return;
-            }
-
-            if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
-            {
-                doubleJump();
-            }
-        }
-
-        float targetVelocityX = input.x * moveSpeed;
-
-        anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
-        anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
-        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
-        anim.SetBool("isGrounded", isGrounded());
-        anim.SetBool("wallSlide", isWallSliding);
-
-        setFacing(velocity.x);
-
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
-        velocity.y += gravity * Time.deltaTime;
-
-        if (isWallSliding && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
-        if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
-
-        if (velocity.y <= 0 && controller.isSafePosition())
-        {
-            lastSafePosition = transform.position;
-        }
-    }
-
     void firstJump()
     {
         GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
         StartCoroutine(jumpCoroutine());
-    }
-
-    private void FixedUpdate()
-    {
-        if (state == State.Reset) { return; }
-        controller.Move(velocity * Time.deltaTime);
-        if (controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
     }
 
     void doubleJump()
@@ -457,27 +486,10 @@ public class playerController : MonoBehaviour
         SoundManager.Instance.playClip("doubleJump");
         StopCoroutine(jumpCoroutine());
     }
+    #endregion
 
-    bool checkWallSliding()
-    {
-        if (isGrounded()) { return false; }
-        float hdir = Input.GetAxisRaw("Horizontal");
-
-        if (controller.collisions.left && hdir == -1 || controller.collisions.right && hdir == 1) {
-            return true;
-        }
-        return false;
-    }
-
-    public void resetAnimator()
-    {
-        foreach (AnimatorControllerParameter parameter in anim.parameters)
-        {
-            anim.SetBool(parameter.name, false);
-            //anim.ResetTrigger(parameter.name);
-        }
-    }
-
+    #region Broom Mechanics
+    //State BroomStart waits for Atlas to get on Broom. Animator calls startBroom
     void handleBroomStart()
     {
         anim.SetTrigger("broomStart");
@@ -486,6 +498,7 @@ public class playerController : MonoBehaviour
         velocity = Vector3.zero;
     }
 
+    //Called by animator after hopping on broom
     void startBroom()
     {
         resetAnimator();
@@ -513,7 +526,9 @@ public class playerController : MonoBehaviour
         }
         velocity.x = moveSpeed * 2 * facing;
     }
+    #endregion
 
+    #region Damage, Bonking, and Reseting
     //Take whether to set resetPos or not
     //Set state to Hurt or Bonk
     public void startBonk(int damage = 0, bool reset = false)
@@ -577,17 +592,6 @@ public class playerController : MonoBehaviour
         transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.deltaTime);
     }
 
-    IEnumerator flashEffect(float duration = 1.0f)
-    {
-        float startTime = Time.time;
-        while (Time.time - startTime < duration)
-        {
-            GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
-            yield return new WaitForSeconds(0.1f);
-        }
-        GetComponent<SpriteRenderer>().enabled = true;
-    }
-
     //Always turns off resetPosition
     //If not in a safe spot and resetPosition is true, sets state to reset
     //Otherwise sets state to movement and sets tangible to true
@@ -609,6 +613,17 @@ public class playerController : MonoBehaviour
         resetPosition = false;
     }
 
+    public void resetAnimator()
+    {
+        foreach (AnimatorControllerParameter parameter in anim.parameters)
+        {
+            anim.SetBool(parameter.name, false);
+            //anim.ResetTrigger(parameter.name);
+        }
+    }
+    #endregion
+
+    #region Helpers
     public void cutScenePrep()
     {
         velocity = Vector3.zero;
@@ -616,28 +631,19 @@ public class playerController : MonoBehaviour
         state = State.Wait;
     }
 
-    void createStars(Vector3 position)
+    void faceInputDirection()
     {
-        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((transform.localScale.x == 1) ? 180 : 0, 90, 0));
-    }
-
-    IEnumerator jumpCoroutine()
-    {
-        for (int i = 0; i < variableJumpIncrements; i++)
+        float dir = Input.GetAxisRaw("Horizontal");
+        if (dir != 0)
         {
-            if (!Input.GetKey(KeyCode.Z)) {
-                velocity.y /= 4;
-                i = variableJumpIncrements;
-            }
-            yield return new WaitForSeconds(4/60.0f);
+            facing = (int)dir;
+            transform.localScale = new Vector3(facing, 1, 1);
         }
     }
 
-    void setFacing(float vel)
+    void createStars(Vector3 position)
     {
-        if (vel == 0) return;
-        facing = (int)Mathf.Sign(vel);
-        transform.localScale = new Vector3(facing, transform.localScale.y, transform.localScale.z);
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((transform.localScale.x == 1) ? 180 : 0, 90, 0));
     }
 
     void flipHorizontal()
@@ -645,9 +651,24 @@ public class playerController : MonoBehaviour
         facing = -(int)transform.localScale.x;
         transform.localScale = new Vector3(facing, 1, 1);
     }
+    #endregion
 
+    #region isBools
     public bool isGrounded()
     {
         return controller.collisions.below;
     }
+
+    bool isWallSliding()
+    {
+        if (isGrounded()) { return false; }
+        float hdir = Input.GetAxisRaw("Horizontal");
+
+        if (controller.collisions.left && hdir == -1 || controller.collisions.right && hdir == 1)
+        {
+            return true;
+        }
+        return false;
+    }
+    #endregion
 }
