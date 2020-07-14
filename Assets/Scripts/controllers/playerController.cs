@@ -21,6 +21,7 @@ public class playerController : MonoBehaviour
     bool canBroom = false;
     bool canDoubleJump = false;
     bool canTornado = true;
+    bool arialAttacking = false;
     [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
     float resetTime = 10f;
@@ -37,6 +38,7 @@ public class playerController : MonoBehaviour
     Vector3 velocitySmoothing;
 
     characterController controller;
+    particleMaker particleMaker;
     Animator anim;
 
     GameObject starRotator;
@@ -84,6 +86,7 @@ public class playerController : MonoBehaviour
         gameManager.Instance.player = gameObject;
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
+        particleMaker = GetComponent<particleMaker>();
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -107,7 +110,7 @@ public class playerController : MonoBehaviour
                 handleBroom();
                 break;
             case State.Attack:
-                handleMovement(!isGrounded(), false);
+                handleMovement(!isGrounded(), false, false);
                 handleAttack();
                 break;
             //Hurt and Bonk look the same to the player, but have different effects
@@ -211,7 +214,7 @@ public class playerController : MonoBehaviour
     }
     #endregion
 
-    void handleMovement(bool acceptInput = true, bool canTurnAround = true)
+    void handleMovement(bool acceptInput = true, bool canJump = true, bool canTurnAround = true)
     {
         Vector2 input = new Vector2(0, 0);
         if (acceptInput)
@@ -221,7 +224,7 @@ public class playerController : MonoBehaviour
 
         if (isGrounded())
         {
-            if (Input.GetKeyDown(KeyCode.Z))
+            if (Input.GetKeyDown(KeyCode.Z) && canJump)
             {
                 firstJump();
             }
@@ -252,7 +255,7 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+            if (Input.GetKeyDown(KeyCode.Z) && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
             {
                 doubleJump();
             }
@@ -283,7 +286,7 @@ public class playerController : MonoBehaviour
     #region Attacking
     void handleAttackInput()
     {
-        if (Input.GetKey(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C))
         {
             state = State.Attack;
             anim.SetTrigger("SelectAttack");
@@ -292,10 +295,25 @@ public class playerController : MonoBehaviour
 
     void handleAttack()
     {
+        anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
         if (Input.GetKeyDown(KeyCode.C))
         {
             state = State.Attack;
             anim.SetTrigger("Attack");
+        }
+        if (!isGrounded())
+        {
+            arialAttacking = true;
+        } else
+        {
+            if (arialAttacking)
+            {
+                anim.SetTrigger("attackLand");
+                anim.SetBool("Attacking", false);
+                particleMaker.createDust();
+                
+            }
+            arialAttacking = false;
         }
     }
     #endregion
@@ -609,16 +627,25 @@ public class playerController : MonoBehaviour
         {
             controller.collisions.tangible = true;
             state = State.Movement;
+            anim.SetTrigger("Idle");
         }
         resetPosition = false;
+        arialAttacking = false;
     }
 
     public void resetAnimator()
     {
         foreach (AnimatorControllerParameter parameter in anim.parameters)
         {
-            anim.SetBool(parameter.name, false);
-            //anim.ResetTrigger(parameter.name);
+            if (parameter.name == "resetSpin") continue;
+            if (parameter.type == AnimatorControllerParameterType.Bool)
+            {
+                anim.SetBool(parameter.name, false);
+            }
+            if (parameter.type == AnimatorControllerParameterType.Trigger)
+            {
+                anim.ResetTrigger(parameter.name);
+            }
         }
     }
     #endregion
