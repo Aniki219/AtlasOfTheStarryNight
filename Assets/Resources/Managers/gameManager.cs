@@ -53,9 +53,9 @@ public class gameManager : ScriptableObject
         }
     }
 
-    public GameObject createInstance(string name, Vector3 at)
+    public GameObject createInstance(string name, Vector3 at, Transform parent = null)
     {
-        GameObject inst = Instantiate(Resources.Load<GameObject>("Prefabs/" + name), at, Quaternion.identity);
+        GameObject inst = Instantiate(Resources.Load<GameObject>("Prefabs/" + name), at, Quaternion.identity, parent);
         return inst;
     }
 }

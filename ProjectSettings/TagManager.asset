@@ -11,6 +11,7 @@ TagManager:
   - Tornado
   - Follower
   - Star
+  - AllyHitbox
   layers:
   - Default
   - TransparentFX

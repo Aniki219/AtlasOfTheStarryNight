@@ -82,4 +82,12 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events: []
+  m_Events:
+  - time: 0.13333334
+    functionName: createHitbox
+    data: 
+    objectReferenceParameter: {fileID: 11400000, guid: 48b513f552eb18444b54703d59546354,
+      type: 2}
+    floatParameter: 0
+    intParameter: 0
+    messageOptions: 0

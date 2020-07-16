@@ -218,9 +218,12 @@ public class diveToadController : MonoBehaviour
         }
     }
 
-    private void OnMouseDown()
+    private void OnTriggerEnter2D(Collider2D other)
     {
-        hurt(1);
+        if (other.tag == "AllyHitbox")
+        {
+            hurt(1);
+        }
     }
 
     public bool isGrounded()

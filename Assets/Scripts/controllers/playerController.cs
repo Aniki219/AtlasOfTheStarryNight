@@ -149,58 +149,70 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.transform.tag == "ResetDamaging")
-        {
-            resetPosition = true;
-        }
-        if (intangibleStates.Contains(state))
-        {
-            return;
-        }
+        List<Collider2D> hitters = new List<Collider2D>();
+        other.GetContacts(hitters);
 
-        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
-        {
-            startBonk(1, resetPosition);
-            return;
-        }
+        //if (hitters.Count > 0 && hitters.Find(ele => ele.tag == "AllyHitbox")) {
+        //    return;
+        //}
 
-        if (other.tag == "Tornado" && canTornado)
+        foreach( Collider2D h in hitters)
         {
-            resetAnimator();
-            SoundManager.Instance.playClip("LevelObjects/EnterTornado");
-            canTornado = false;
-            state = State.Tornado;
-            currentTornado = other.transform;
-            Deformer deformer = other.GetComponent<Deformer>();
-            if (deformer)
+            if (h.tag == "AllyHitbox") continue;
+
+            if (other.transform.tag == "ResetDamaging")
             {
-                deformer.startDeform(new Vector3(1.75f, .75f, 1.0f), 0.1f);
+                resetPosition = true;
             }
-        }
-
-        if (other.tag == "Follower")
-        {
-            followController other_fc = other.GetComponent<followController>();
-            if (!other_fc.canCollect) { return; }
-
-            int numFollowers = 0;
-            other_fc.following = getFollower(GetComponent<followController>());
-            other_fc.following.followedBy = other_fc;
-            other_fc.canCollect = false;
-
-            followController getFollower(followController fc)
+            if (intangibleStates.Contains(state))
             {
-                if (!fc.followedBy)
+                return;
+            }
+
+            if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
+            {
+                startBonk(1, resetPosition);
+                return;
+            }
+
+            if (other.tag == "Tornado" && canTornado)
+            {
+                resetAnimator();
+                SoundManager.Instance.playClip("LevelObjects/EnterTornado");
+                canTornado = false;
+                state = State.Tornado;
+                currentTornado = other.transform;
+                Deformer deformer = other.GetComponent<Deformer>();
+                if (deformer)
                 {
-                    return fc;
-                }
-                else
-                {
-                    numFollowers++;
-                    return getFollower(fc.followedBy);
+                    deformer.startDeform(new Vector3(1.75f, .75f, 1.0f), 0.1f);
                 }
             }
-            SoundManager.Instance.playClip("Collectibles/starShard", numFollowers);
+
+            if (other.tag == "Follower")
+            {
+                followController other_fc = other.GetComponent<followController>();
+                if (!other_fc.canCollect) { return; }
+
+                int numFollowers = 0;
+                other_fc.following = getFollower(GetComponent<followController>());
+                other_fc.following.followedBy = other_fc;
+                other_fc.canCollect = false;
+
+                followController getFollower(followController fc)
+                {
+                    if (!fc.followedBy)
+                    {
+                        return fc;
+                    }
+                    else
+                    {
+                        numFollowers++;
+                        return getFollower(fc.followedBy);
+                    }
+                }
+                SoundManager.Instance.playClip("Collectibles/starShard", numFollowers);
+            }
         }
     }
 
@@ -315,6 +327,13 @@ public class playerController : MonoBehaviour
             }
             arialAttacking = false;
         }
+    }
+
+    public void createHitbox(HitBox hitBox)
+    {
+        GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, transform.localScale), transform);
+        hb.transform.localScale = hitBox.size;
+        Destroy(hb, hitBox.duration);
     }
     #endregion
 
