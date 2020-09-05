@@ -12,4 +12,5 @@ public class HitBox : ScriptableObject
     public float damage = 1.0f;
     public bool knockback = false;
     public bool spike = false;
+    public bool bounce = false;
 }

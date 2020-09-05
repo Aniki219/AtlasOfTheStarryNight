@@ -33,6 +33,7 @@ public class playerController : MonoBehaviour
     float gravity;
     float jumpVelocity;
     float doubleJumpVelocity;
+
     public Vector3 velocity;
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
@@ -523,6 +524,13 @@ public class playerController : MonoBehaviour
         velocity.y = doubleJumpVelocity;
         SoundManager.Instance.playClip("doubleJump");
         StopCoroutine(jumpCoroutine());
+    }
+
+    public void bounce(float bounceVelocity, string sound = "jump2")
+    {
+        GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        velocity.y = bounceVelocity;
+        SoundManager.Instance.playClip(sound);
     }
     #endregion
 

@@ -15,12 +15,15 @@ public class gameManager : ScriptableObject
     public float maxFallVel = -15f;
 
     public GameObject player;
+    public playerController playerCtrl;
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += setGameObjects;
+        instance.player = GameObject.Find("Atlas");
+        instance.playerCtrl = instance.player.GetComponent<playerController>();
     }
 
     public void switchScene(string to)
