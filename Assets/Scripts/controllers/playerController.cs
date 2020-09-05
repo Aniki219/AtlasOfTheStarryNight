@@ -236,7 +236,7 @@ public class playerController : MonoBehaviour
 
         if (isGrounded())
         {
-            if (Input.GetKeyDown(KeyCode.Z) && canJump)
+            if (Input.GetButtonDown("Jump") && canJump)
             {
                 firstJump();
             }
@@ -246,7 +246,7 @@ public class playerController : MonoBehaviour
         }
         else
         {
-            if (canBroom && Input.GetKeyDown(KeyCode.X))
+            if (canBroom && Input.GetButtonDown("Broom"))
             {
                 state = State.BroomStart;
                 canBroom = false;
@@ -261,13 +261,13 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if (isWallSliding() && Input.GetKeyDown(KeyCode.Z) && resourceManager.Instance.getPlayerMana() >= 2)
+            if (isWallSliding() && Input.GetButtonDown("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
             {
                 state = State.WallJumpInit;
                 return;
             }
 
-            if (Input.GetKeyDown(KeyCode.Z) && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+            if (Input.GetButtonDown("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
             {
                 doubleJump();
             }
@@ -298,7 +298,7 @@ public class playerController : MonoBehaviour
     #region Attacking
     void handleAttackInput()
     {
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetButtonDown("Attack"))
         {
             state = State.Attack;
             anim.SetTrigger("SelectAttack");
@@ -308,7 +308,7 @@ public class playerController : MonoBehaviour
     void handleAttack()
     {
         anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetButtonDown("Attack"))
         {
             state = State.Attack;
             anim.SetTrigger("Attack");
@@ -333,6 +333,7 @@ public class playerController : MonoBehaviour
     {
         GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, transform.localScale), transform);
         hb.transform.localScale = hitBox.size;
+        hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
         Destroy(hb, hitBox.duration);
     }
     #endregion
@@ -375,7 +376,7 @@ public class playerController : MonoBehaviour
     {
         for (int i = 0; i < variableJumpIncrements; i++)
         {
-            if (!Input.GetKey(KeyCode.Z))
+            if (!Input.GetButton("Jump"))
             {
                 velocity.y /= 4;
                 i = variableJumpIncrements;
@@ -411,7 +412,7 @@ public class playerController : MonoBehaviour
             velocity.x = wallJumpVelocity * facing;
             velocity.y += gravity * Time.deltaTime;
 
-            if (Input.GetKeyDown(KeyCode.X) && canBroom)
+            if (Input.GetButtonDown("Broom") && canBroom)
             {
                 faceInputDirection();
                 state = State.BroomStart;
@@ -435,7 +436,7 @@ public class playerController : MonoBehaviour
         velocity = Vector3.zero;
         transform.position = Vector3.SmoothDamp(transform.position, currentTornado.position, ref velocitySmoothing, 0.05f);
 
-        if (Input.GetKeyDown(KeyCode.Z))
+        if (Input.GetButtonDown("Jump"))
         {
             firstJump();
             anim.SetBool("inTornado", false);
@@ -545,14 +546,14 @@ public class playerController : MonoBehaviour
 
     void handleBroom()
     {
-        if (Input.GetKeyDown(KeyCode.X))
+        if (Input.GetButtonDown("Broom"))
         {
             anim.SetTrigger("broomEnd");
             //state = State.Movement;
             returnToMovement();
             return;
         }
-        if (Input.GetKeyDown(KeyCode.Z) && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+        if (Input.GetButtonDown("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
             doubleJump();
             return;
@@ -710,7 +711,7 @@ public class playerController : MonoBehaviour
         if (isGrounded()) { return false; }
         float hdir = Input.GetAxisRaw("Horizontal");
 
-        if (controller.collisions.left && hdir == -1 || controller.collisions.right && hdir == 1)
+        if (controller.collisions.wallRideLeft && hdir == -1 || controller.collisions.wallRideRight && hdir == 1)
         {
             return true;
         }

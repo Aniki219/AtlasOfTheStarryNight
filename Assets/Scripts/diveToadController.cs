@@ -14,8 +14,7 @@ public class diveToadController : MonoBehaviour
     float maxFallVel;
 
     public float actionCoolDown = 2.0f;
-    public float maxhp = 3;
-    float hp;
+    public healthController health;
     float act;
     bool awakened = false;
 
@@ -40,6 +39,7 @@ public class diveToadController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        health = GetComponentInChildren<healthController>();
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         deformer = GetComponentInChildren<Deformer>();
@@ -48,7 +48,6 @@ public class diveToadController : MonoBehaviour
         maxFallVel = gameManager.Instance.maxFallVel;
         state = State.Movement;
         act = actionCoolDown;
-        hp = maxhp;
     }
 
     void Update()
@@ -147,18 +146,19 @@ public class diveToadController : MonoBehaviour
         anim.SetTrigger("Attack");
     }
 
-    void hurt(int dmg)
+    public void hurt(HitBox hitbox, bool left)
     {
-        hp -= dmg;
-        velocity.x = -2.5f * facing;
-        velocity.y = 3f;
+        health.takeDamage(hitbox.damage);
+        float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
+        velocity.x = kbStrength * hitbox.kbDir.x * (left ? -1 : 1);
+        velocity.y = kbStrength * 1.5f * hitbox.kbDir.y;
         act = Mathf.Max(actionCoolDown / 2.0f, act);
         anim.SetBool("Hurt", true);
 
         deformer.flashWhite();
 
         StartCoroutine(getHurt());
-        if (hp <= 0)
+        if (health.hitpoints <= 0)
         {
             gameManager.Instance.createInstance("Effects/EnemyPop", transform.position);
             GameObject star = gameManager.Instance.createInstance("Effects/StarParticles", transform.position);
@@ -222,7 +222,8 @@ public class diveToadController : MonoBehaviour
     {
         if (other.tag == "AllyHitbox")
         {
-            hurt(1);
+            HitBox hb = other.GetComponent<AllyHitBoxController>().hitbox;
+            hurt(hb, other.transform.localScale.x < 0);
         }
     }
 

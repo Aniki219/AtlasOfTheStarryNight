@@ -150,6 +150,8 @@ public class characterController : MonoBehaviour
         float directionX = Mathf.Sign(velocity.x);
         float rayLength = Mathf.Abs(velocity.x) + skinWidth;
 
+        int checkMidSection = 0;
+        int numberofMidSegments = 2;
         for (int i = 0; i < horizontalRayCount; i++)
         {
             Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
@@ -191,6 +193,16 @@ public class characterController : MonoBehaviour
                     collisions.left = directionX == -1;
                     collisions.right = directionX == 1;
                 }
+
+                if (i < 5)
+                {
+                    checkMidSection++;
+                }
+            }
+            if (checkMidSection >= numberofMidSegments)
+            {
+                collisions.wallRideLeft = collisions.left;
+                collisions.wallRideRight = collisions.right;
             }
         }
     }
@@ -366,6 +378,7 @@ public class characterController : MonoBehaviour
         {
             above = below = false;
             left = right = false;
+            wallRideLeft = wallRideRight = false;
             climbingSlope = false;
             descendingSlope = false;
             distanceToGround = 50;
