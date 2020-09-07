@@ -7,7 +7,7 @@ public class selectAttack : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerController pc = animator.gameObject.GetComponent<playerController>();
+        playerController pc = animator.gameObject.GetComponentInParent<playerController>();
         animator.SetBool("Attacking", true);
         bool up = Input.GetAxisRaw("Vertical") > 0.1f;
         bool down = Input.GetAxisRaw("Vertical") < -0.1f;

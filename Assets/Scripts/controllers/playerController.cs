@@ -41,6 +41,7 @@ public class playerController : MonoBehaviour
     characterController controller;
     particleMaker particleMaker;
     Animator anim;
+    Transform sprite;
 
     GameObject starRotator;
     Transform currentTornado;
@@ -85,6 +86,7 @@ public class playerController : MonoBehaviour
     void Start()
     {
         gameManager.Instance.player = gameObject;
+        sprite = transform.Find("AtlasSprite");
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
@@ -339,7 +341,7 @@ public class playerController : MonoBehaviour
 
     public void createHitbox(HitBox hitBox)
     {
-        GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, transform.localScale), transform);
+        GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, sprite.localScale), transform);
         hb.transform.localScale = hitBox.size;
         hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
         Destroy(hb, hitBox.duration);
@@ -396,7 +398,7 @@ public class playerController : MonoBehaviour
     {
         state = State.WallJump;
         GameObject explosion = gameManager.Instance.createInstance("Effects/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
-        explosion.transform.localScale = transform.localScale;
+        explosion.transform.localScale = sprite.localScale;
         if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
 
         SoundManager.Instance.playClip("wallBlast");
@@ -490,7 +492,7 @@ public class playerController : MonoBehaviour
         //During Movement we can keep track of the direction the player is facing each frame
         if (vel == 0) return;
         facing = (int)Mathf.Sign(vel);
-        transform.localScale = new Vector3(facing, transform.localScale.y, transform.localScale.z);
+        sprite.localScale = new Vector3(facing, sprite.localScale.y, sprite.localScale.z);
     }
 
     #endregion
@@ -552,7 +554,7 @@ public class playerController : MonoBehaviour
     }
 
     //Called by animator after hopping on broom
-    void startBroom()
+    public void startBroom()
     {
         resetAnimator();
         state = State.Broom;
@@ -618,7 +620,7 @@ public class playerController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
         if (!isGrounded())
         {
-            velocity.x = -moveSpeed/4f * transform.localScale.x;
+            velocity.x = -moveSpeed/4f * sprite.localScale.x;
         }
     }
 
@@ -699,19 +701,19 @@ public class playerController : MonoBehaviour
         if (dir != 0)
         {
             facing = (int)dir;
-            transform.localScale = new Vector3(facing, 1, 1);
+            sprite.localScale = new Vector3(facing, 1, 1);
         }
     }
 
     void createStars(Vector3 position)
     {
-        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((transform.localScale.x == 1) ? 180 : 0, 90, 0));
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
     }
 
     void flipHorizontal()
     {
-        facing = -(int)transform.localScale.x;
-        transform.localScale = new Vector3(facing, 1, 1);
+        facing = -(int)sprite.localScale.x;
+        sprite.localScale = new Vector3(facing, 1, 1);
     }
     #endregion
 
