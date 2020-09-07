@@ -12,6 +12,8 @@ TagManager:
   - Follower
   - Star
   - AllyHitbox
+  - Enemy
+  - BroomCollectible
   layers:
   - Default
   - TransparentFX

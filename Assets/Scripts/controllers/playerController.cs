@@ -170,6 +170,13 @@ public class playerController : MonoBehaviour
                 return;
             }
 
+            if (other.CompareTag("BroomCollectible"))
+            {
+                other.SendMessage("OnBroomCollide");
+                gameManager.Instance.createInstance("LevelPrefabs/Level Objects/BombBerry", transform.position - new Vector3(-.6f, 0.3f, 0), transform);
+                Debug.Log("dsasdasd");
+            }
+
             if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
             {
                 startBonk(1, resetPosition);

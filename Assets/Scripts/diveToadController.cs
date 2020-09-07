@@ -14,7 +14,7 @@ public class diveToadController : MonoBehaviour
     float maxFallVel;
 
     public float actionCoolDown = 2.0f;
-    public healthController health;
+    healthController health;
     float act;
     bool awakened = false;
 
@@ -39,7 +39,7 @@ public class diveToadController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        health = GetComponentInChildren<healthController>();
+        health = GetComponent<healthController>();
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         deformer = GetComponentInChildren<Deformer>();

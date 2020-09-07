@@ -139,9 +139,10 @@ GameObject:
   - component: {fileID: 6726984603581895701}
   - component: {fileID: 6726984603581895700}
   - component: {fileID: 6726984603581895702}
+  - component: {fileID: 8181496851768960744}
   m_Layer: 10
   m_Name: divetoad
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -195,7 +196,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6726984603581895696}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d44b605d00cbb5c4ab9861895c72f515, type: 3}
   m_Name: 
@@ -215,7 +216,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6726984603581895696}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a1001aa7f73d18b4ea0cf29c927290cc, type: 3}
   m_Name: 
@@ -223,6 +224,20 @@ MonoBehaviour:
   actionCoolDown: 2
   health: {fileID: 0}
   state: 0
+--- !u!114 &8181496851768960744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6726984603581895696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4ab60c55c8da04844b4239caf1e96f0c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hitpoints: 0
+  maxHitpoints: 3
 --- !u!1001 &1381473423557012512
 PrefabInstance:
   m_ObjectHideFlags: 0

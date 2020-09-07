@@ -21,7 +21,7 @@ public class healthController : MonoBehaviour
     {
         fillParent = GetComponentInChildren<CanvasGroup>();
         fillParent.alpha = 0;
-        slider = GetComponent<Slider>();
+        slider = GetComponentInChildren<Slider>();
 
         hitpoints = maxHitpoints;
     }

@@ -7,6 +7,8 @@ public class characterController : MonoBehaviour
     public LayerMask collisionMask;
     public LayerMask dangerMask;
 
+    public bool lockPosition = false;
+
     public float safetyMargin = 1f;
     float skinWidth = 0.02f;
     int horizontalRayCount = 6;
@@ -42,6 +44,7 @@ public class characterController : MonoBehaviour
 
     public void Move(Vector3 velocity)
     {
+        if (lockPosition) { return; }
         UpdateRaycastOrigins();
         collisions.Reset();
         collisions.velocityOld = velocity;

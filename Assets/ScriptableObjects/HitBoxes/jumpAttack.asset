@@ -19,3 +19,4 @@ MonoBehaviour:
   damage: 1
   knockback: 1
   spike: 0
+  bounce: 0

@@ -22,13 +22,13 @@ AnimationClip:
     - time: 0
       value: {fileID: -8653385520238438876, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
-    - time: 0.13333334
+    - time: 0.083333336
       value: {fileID: -697086912063529615, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
-    - time: 0.21666667
+    - time: 0.16666667
       value: {fileID: 7385060343856977996, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
-    - time: 0.3
+    - time: 0.25
       value: {fileID: 5456291557061139598, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
     - time: 0.41666666
@@ -83,7 +83,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.13333334
+  - time: 0
     functionName: createHitbox
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 48b513f552eb18444b54703d59546354,
