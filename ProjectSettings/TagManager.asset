@@ -30,7 +30,7 @@ TagManager:
   - NoReset
   - IgnoreActors
   - Pickupable
-  - 
+  - IgnorePlayer
   - 
   - 
   - 

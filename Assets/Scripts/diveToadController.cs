@@ -150,21 +150,28 @@ public class diveToadController : MonoBehaviour
     {
         health.takeDamage(hitbox.damage);
         float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
-        velocity.x = kbStrength * hitbox.kbDir.x * (left ? -1 : 1);
-        velocity.y = kbStrength * 1.5f * hitbox.kbDir.y;
+        float dx = hitbox.kbDir.x;
+        float dy = hitbox.kbDir.y;
+        if (hitbox.explosive)
+        {
+            Vector2 dir = (transform.position - hitbox.position).normalized;
+            dx = dir.x;
+            dy = dir.y;
+        }
+        velocity.x = kbStrength * dx * (left ? -1 : 1);
+        velocity.y = kbStrength * 1.5f * dy;
         act = Mathf.Max(actionCoolDown / 2.0f, act);
         anim.SetBool("Hurt", true);
+
+        if (hitbox.incendiary)
+        {
+            Vector3 rpos = new Vector3(Random.Range(-.25f, .25f), Random.Range(-.25f, .25f), 0);
+            gameManager.Instance.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
+        }
 
         deformer.flashWhite();
 
         StartCoroutine(getHurt());
-        if (health.hitpoints <= 0)
-        {
-            gameManager.Instance.createInstance("Effects/EnemyPop", transform.position);
-            GameObject star = gameManager.Instance.createInstance("Effects/StarParticles", transform.position);
-            SoundManager.Instance.playClip("hurt");
-            Destroy(gameObject, 0.25f);
-        }
     }
 
     IEnumerator getHurt()

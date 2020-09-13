@@ -5,6 +5,27 @@ TextureImporter:
   - first:
       213: -5107658304765014505
     second: BombBerryPlant_0
+  - first:
+      213: 7188789480485045358
+    second: BombBerryPlant_1
+  - first:
+      213: 98442816548482216
+    second: BombBerryPlant_2
+  - first:
+      213: -3787608252168475312
+    second: BombBerryPlant_3
+  - first:
+      213: 2340409811028143247
+    second: BombBerryPlant_4
+  - first:
+      213: -8992366113940801325
+    second: BombBerryPlant_5
+  - first:
+      213: 667943558506728197
+    second: BombBerryPlant_6
+  - first:
+      213: 5579629894475697101
+    second: BombBerryPlant_7
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -103,8 +124,155 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0cf8b92071a28cf4c902f00d65121a02
+      spriteID: ec726126e94bb2d419732e30fa743ddd
       internalID: -5107658304765014505
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d419e84bfcff1f4e965e092018a2460
+      internalID: 7188789480485045358
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_2
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e1a30c08784176b4bb40d9da85b47f45
+      internalID: 98442816548482216
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f68a7d529b1de7240ad9e0d0810bc678
+      internalID: -3787608252168475312
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6168a74f26a73574d962a69882db0586
+      internalID: 2340409811028143247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fad3cd3b82873d049b6e04cfc37ceee9
+      internalID: -8992366113940801325
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b7f9b2239a929647b44c9509fdc1f3a
+      internalID: 667943558506728197
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BombBerryPlant_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d5a1c49749f3bb44d9150a0dd3565394
+      internalID: 5579629894475697101
       vertices: []
       indices: 
       edges: []

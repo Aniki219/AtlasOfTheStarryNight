@@ -4,33 +4,61 @@ using UnityEngine;
 
 public class bombBerryPlantController : MonoBehaviour
 {
-    playerController pc;
     Animator anim;
+    public float regrowTime = 5f;
+    public bool canPick = true;
 
-    void Start()
+    private void Start()
     {
-        pc = gameManager.Instance.playerCtrl;
         anim = GetComponent<Animator>();
     }
 
-    void Update()
+    public void OnBroomCollide()
     {
-        if (pc.state == playerController.State.Bonk)
-        {
-            Boom();
-        }
+        if (!canPick) return;
+        createBombBerry();
+        StartCoroutine(Picked());
     }
 
-    void Boom()
+    IEnumerator Picked()
     {
-        anim.SetTrigger("Boom");
+        canPick = false;
+        anim.SetTrigger("Picked");
+        yield return new WaitForSeconds(regrowTime);
+        anim.SetTrigger("Regrow");
+        yield return new WaitForSeconds(0.5f);
+        canPick = true;
+        yield return 0;
+    }
+
+    GameObject createBombBerry(bool atPlayer = true)
+    {
+        Vector3 at = transform.position;
+        Transform parent = null;
+        Transform hanger = gameManager.Instance.playerHanger;
+        if (atPlayer)
+        {
+            parent = hanger;
+            at = hanger.position - Vector3.up * 0.15f;
+        }
+        
+        return gameManager.Instance.createInstance("LevelPrefabs/Level Objects/BombBerry", at, parent);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Enemy"))
+        if (collision.CompareTag("AllyHitbox") && canPick)
         {
-            Boom();
+            HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
+            if (hb.interactBroom)
+            {
+                GameObject bb = createBombBerry(false);
+                bb.GetComponent<bombBerryController>().isSimulated();
+                float dx = Vector3.Distance(gameManager.Instance.player.transform.position, transform.position);
+                float scale = -350 * Mathf.Pow((dx - 0.5f), 2) + 200;
+                bb.GetComponent<Rigidbody2D>().AddForce(new Vector2(1.25f * hb.facing, 1) * scale);
+                StartCoroutine(Picked());
+            }
         }
     }
 }

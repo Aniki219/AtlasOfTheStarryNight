@@ -19,3 +19,7 @@ MonoBehaviour:
   damage: 1
   knockback: 0
   spike: 0
+  bounce: 0
+  interactBroom: 1
+  explosive: 0
+  incendiary: 0

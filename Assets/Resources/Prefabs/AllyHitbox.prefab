@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 3355354512742101276}
   - component: {fileID: 5528626944535571205}
   - component: {fileID: 4427236531219868007}
+  - component: {fileID: 4140796262240622443}
   m_Layer: 0
   m_Name: AllyHitbox
   m_TagString: AllyHitbox
@@ -121,3 +122,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitbox: {fileID: 0}
+--- !u!50 &4140796262240622443
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5966284067388097523}
+  m_BodyType: 0
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 0.0001
+  m_LinearDrag: 1000000
+  m_AngularDrag: 1000000
+  m_GravityScale: 0
+  m_Material: {fileID: 0}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 7

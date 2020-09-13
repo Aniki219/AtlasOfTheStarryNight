@@ -13,6 +13,8 @@ public class healthController : MonoBehaviour
     float timeSinceHit = 100f;
     float hideVelocity;
 
+    bool dead = false;
+
     Slider slider;
     CanvasGroup fillParent;
 
@@ -48,5 +50,21 @@ public class healthController : MonoBehaviour
     {
         hitpoints -= amount;
         timeSinceHit = 0;
+        if (!dead)
+        {
+            checkDead();
+        }
+    }
+
+    void checkDead()
+    {
+        if (hitpoints <= 0)
+        {
+            dead = true;
+            gameManager.Instance.createInstance("Effects/EnemyPop", transform.position);
+            GameObject star = gameManager.Instance.createInstance("Effects/StarParticles", transform.position);
+            SoundManager.Instance.playClip("hurt");
+            Destroy(gameObject, 0.25f);
+        }
     }
 }

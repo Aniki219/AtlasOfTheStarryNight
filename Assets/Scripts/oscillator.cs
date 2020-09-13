@@ -9,6 +9,8 @@ public class oscillator : MonoBehaviour
     Vector3 startPos;
     Vector3 oscillationDirection;
     public float oscillationSize = 5.0f;
+    public bool rotational = false;
+    Vector3 startPosition;
 
     float frameCount = 0.0f;
 
@@ -25,12 +27,24 @@ public class oscillator : MonoBehaviour
         startPos = transform.position;
         oscillationDirection = Vector3.zero;
         oscillationDirection[(int)axis] = 1;
+        if (rotational)
+        {
+            transform.localEulerAngles -= oscillationDirection * oscillationSize * 0.5f;
+        }
+        startPosition = transform.localPosition;
     }
 
     // Update is called once per frame
     void Update()
-    {
-        frameCount += 1.0f;
-        transform.position += oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI / 60.0f * cyclesPerSecond) * oscillationSize/32.0f;
+    { 
+        frameCount += Time.deltaTime;
+        if (rotational)
+        {
+            float angle = Mathf.Sin(frameCount * 2.0f * Mathf.PI * cyclesPerSecond);
+            transform.localRotation = Quaternion.Euler(oscillationDirection * angle * oscillationSize);
+        } else
+        {
+            transform.position = startPosition + oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI * cyclesPerSecond) * oscillationSize;
+        }
     }
 }

@@ -16,6 +16,7 @@ public class gameManager : ScriptableObject
 
     public GameObject player;
     public playerController playerCtrl;
+    public Transform playerHanger;
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
@@ -23,6 +24,7 @@ public class gameManager : ScriptableObject
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += setGameObjects;
         instance.player = GameObject.Find("Atlas");
+        instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
         instance.playerCtrl = instance.player.GetComponent<playerController>();
     }
 

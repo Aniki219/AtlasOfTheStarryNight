@@ -172,11 +172,9 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if (other.CompareTag("BroomCollectible"))
+            if (other.CompareTag("BroomCollectible") && state == State.Broom)
             {
                 other.SendMessage("OnBroomCollide");
-                gameManager.Instance.createInstance("LevelPrefabs/Level Objects/BombBerry", transform.position - new Vector3(-.6f, 0.3f, 0), transform);
-                Debug.Log("dsasdasd");
             }
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
@@ -253,6 +251,11 @@ public class playerController : MonoBehaviour
             canBroom = true;
             canDoubleJump = true;
             resourceManager.Instance.restoreMana();
+            if (Input.GetButtonDown("Broom"))
+            {
+                state = State.BroomStart;
+                canBroom = false;
+            }
         }
         else
         {
@@ -342,6 +345,7 @@ public class playerController : MonoBehaviour
     public void createHitbox(HitBox hitBox)
     {
         GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, sprite.localScale), transform);
+        hitBox.facing = (sprite.localScale.x > 0) ? 1 : -1;
         hb.transform.localScale = hitBox.size;
         hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
         Destroy(hb, hitBox.duration);
@@ -377,10 +381,10 @@ public class playerController : MonoBehaviour
         float startTime = Time.time;
         while (Time.time - startTime < duration)
         {
-            GetComponent<SpriteRenderer>().enabled = !GetComponent<SpriteRenderer>().enabled;
+            GetComponentInChildren<SpriteRenderer>().enabled = !GetComponentInChildren<SpriteRenderer>().enabled;
             yield return new WaitForSeconds(0.1f);
         }
-        GetComponent<SpriteRenderer>().enabled = true;
+        GetComponentInChildren<SpriteRenderer>().enabled = true;
     }
     IEnumerator jumpCoroutine()
     {
@@ -397,7 +401,7 @@ public class playerController : MonoBehaviour
     IEnumerator WallJumpCoroutine()
     {
         state = State.WallJump;
-        GameObject explosion = gameManager.Instance.createInstance("Effects/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
+        GameObject explosion = gameManager.Instance.createInstance("Effects/Explosions/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
         explosion.transform.localScale = sprite.localScale;
         if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
 
@@ -566,12 +570,13 @@ public class playerController : MonoBehaviour
         if (Input.GetButtonDown("Broom"))
         {
             anim.SetTrigger("broomEnd");
-            //state = State.Movement;
+            eventManager.Instance.BroomCancelEvent();
             returnToMovement();
             return;
         }
         if (Input.GetButtonDown("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
+            eventManager.Instance.BroomCancelEvent();
             doubleJump();
             return;
         }
@@ -611,6 +616,7 @@ public class playerController : MonoBehaviour
         anim.SetTrigger("bonk");
         velocity.y = 4f;
         state = (damage > 0) ? State.Hurt : State.Bonk;
+        eventManager.Instance.BonkEvent();
         
         Camera.main.GetComponent<cameraController>().StartShake();
     }
