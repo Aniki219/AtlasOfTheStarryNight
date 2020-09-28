@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 3
   m_Sprite: {fileID: 21300000, guid: b092218560dba4b4c9f4df4f24857572, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -207,6 +207,7 @@ MonoBehaviour:
   dangerMask:
     serializedVersion: 2
     m_Bits: 0
+  lockPosition: 0
   safetyMargin: 1
   cameraTarget: {x: 0, y: 0, z: 0}
 --- !u!114 &6726984603581895702
@@ -222,7 +223,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   actionCoolDown: 2
-  health: {fileID: 0}
   state: 0
 --- !u!114 &8181496851768960744
 MonoBehaviour:
