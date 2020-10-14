@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class healthController : MonoBehaviour
 {
-    [HideInInspector] public float hitpoints;
+    /*[HideInInspector] */public float hitpoints;
     public float maxHitpoints = 3;
 
     float smoothTime = 0.1f;
@@ -15,6 +15,9 @@ public class healthController : MonoBehaviour
 
     bool dead = false;
 
+    public bool hurtByPlayer = false;
+    public bool takeOneDamage = false;
+
     Slider slider;
     CanvasGroup fillParent;
 
@@ -22,7 +25,7 @@ public class healthController : MonoBehaviour
     void Start()
     {
         fillParent = GetComponentInChildren<CanvasGroup>();
-        fillParent.alpha = 0;
+        if (fillParent) fillParent.alpha = 0;
         slider = GetComponentInChildren<Slider>();
 
         hitpoints = maxHitpoints;
@@ -37,13 +40,19 @@ public class healthController : MonoBehaviour
             hitpoints = maxHitpoints;
         }
 
-        if (timeSinceHit >= 2f) { 
-            fillParent.alpha = Mathf.SmoothDamp(fillParent.alpha, 0, ref hideVelocity, 0.25f);
-        } else
+        if (slider && fillParent)
         {
-            fillParent.alpha = 1;
+            if (timeSinceHit >= 2f)
+            {
+                fillParent.alpha = Mathf.SmoothDamp(fillParent.alpha, 0, ref hideVelocity, 0.25f);
+            }
+            else
+            {
+                fillParent.alpha = 1;
+            }
+
+            slider.value = Mathf.SmoothDamp(slider.value, hitpoints / maxHitpoints, ref smoothVelocity, smoothTime);
         }
-        slider.value = Mathf.SmoothDamp(slider.value, hitpoints / maxHitpoints, ref smoothVelocity, smoothTime);
     }
 
     public void takeDamage(float amount)
@@ -65,6 +74,18 @@ public class healthController : MonoBehaviour
             GameObject star = gameManager.Instance.createInstance("Effects/StarParticles", transform.position);
             SoundManager.Instance.playClip("hurt");
             Destroy(gameObject, 0.25f);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (hurtByPlayer && collision.CompareTag("AllyHitbox"))
+        {
+            float dmg = 1;
+            if (!takeOneDamage) {
+                dmg = collision.GetComponent<hitBoxComponent>().hitBox.damage;
+            }
+            takeDamage(dmg);
         }
     }
 }

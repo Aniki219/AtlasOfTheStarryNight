@@ -3191,8 +3191,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10ccf67dcaae8054e8e59464b9ec3f16, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parallaxScaleX: 0.414
-  parallaxScaleY: 0.111
+  parallaxScaleX: 0.438
+  parallaxScaleY: 0.01
 --- !u!4 &1238949982
 Transform:
   m_ObjectHideFlags: 0

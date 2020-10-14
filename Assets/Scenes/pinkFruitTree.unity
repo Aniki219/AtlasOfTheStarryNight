@@ -2446,7 +2446,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cyclesPerSecond: 6
   axis: 0
-  oscillationSize: 1
+  oscillationSize: 0.1
+  rotational: 0
 --- !u!1 &1748749411
 GameObject:
   m_ObjectHideFlags: 0

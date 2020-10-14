@@ -345,7 +345,7 @@ public class playerController : MonoBehaviour
     public void createHitbox(HitBox hitBox)
     {
         GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, sprite.localScale), transform);
-        hitBox.facing = (sprite.localScale.x > 0) ? 1 : -1;
+        hitBox.kbDir.x *= (sprite.localScale.x > 0) ? 1 : -1;
         hb.transform.localScale = hitBox.size;
         hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
         Destroy(hb, hitBox.duration);
@@ -584,6 +584,8 @@ public class playerController : MonoBehaviour
             startBonk();
             return;
         }
+        float vdir = Input.GetAxisRaw("Vertical");
+        velocity.y = moveSpeed / 2.0f * vdir;
         velocity.x = moveSpeed * 2 * facing;
     }
     #endregion

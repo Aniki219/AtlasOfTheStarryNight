@@ -152,6 +152,7 @@ public class diveToadController : MonoBehaviour
         float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
         float dx = hitbox.kbDir.x;
         float dy = hitbox.kbDir.y;
+
         if (hitbox.explosive)
         {
             Vector2 dir = (transform.position - hitbox.position).normalized;
@@ -230,7 +231,7 @@ public class diveToadController : MonoBehaviour
         if (other.tag == "AllyHitbox")
         {
             HitBox hb = other.GetComponent<AllyHitBoxController>().hitbox;
-            hurt(hb, other.transform.localScale.x < 0);
+            hurt(hb, false);
         }
     }
 
