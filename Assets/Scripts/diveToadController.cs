@@ -15,8 +15,10 @@ public class diveToadController : MonoBehaviour
 
     public float actionCoolDown = 2.0f;
     healthController health;
-    float act;
+    public float act = 0;
     bool awakened = false;
+
+    public bool readyToPounce = false;
 
     public State state;
 
@@ -47,7 +49,7 @@ public class diveToadController : MonoBehaviour
         gravity = gameManager.Instance.gravity;
         maxFallVel = gameManager.Instance.maxFallVel;
         state = State.Movement;
-        act = actionCoolDown;
+        act = (readyToPounce) ? 0 : actionCoolDown;
     }
 
     void Update()
@@ -94,11 +96,10 @@ public class diveToadController : MonoBehaviour
             }
             else
             {
-                act = actionCoolDown;
-
                 //If they are within jump range
                 if (xdist <= 2.5f)
                 {
+                    act = actionCoolDown;
                     //If they are below
                     if (dy > 1)
                     {

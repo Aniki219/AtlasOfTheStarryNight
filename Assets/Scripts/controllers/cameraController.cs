@@ -28,6 +28,10 @@ public class cameraController : MonoBehaviour
         cam = GetComponent<Camera>();
         h = cam.orthographicSize;
         w = h * Screen.width / Screen.height;
+        Vector3 to = target.position;
+        to.x = Mathf.Clamp(to.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
+        to.y = Mathf.Clamp(to.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
+        transform.position = new Vector3(to.x, to.y, transform.position.z);
     }
 
     // Update is called once per frame

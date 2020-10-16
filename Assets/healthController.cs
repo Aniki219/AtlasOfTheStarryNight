@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class healthController : MonoBehaviour
 {
-    /*[HideInInspector] */public float hitpoints;
+    [HideInInspector] public float hitpoints;
     public float maxHitpoints = 3;
 
     float smoothTime = 0.1f;
@@ -17,6 +17,7 @@ public class healthController : MonoBehaviour
 
     public bool hurtByPlayer = false;
     public bool takeOneDamage = false;
+    public bool cantHitThroughWall = false;
 
     Slider slider;
     CanvasGroup fillParent;
@@ -81,6 +82,17 @@ public class healthController : MonoBehaviour
     {
         if (hurtByPlayer && collision.CompareTag("AllyHitbox"))
         {
+            Vector3 origin = gameManager.Instance.player.transform.position;
+            Vector3 dir = transform.position - origin;
+
+            if (cantHitThroughWall)
+            {
+                LayerMask wallLayer = LayerMask.NameToLayer("Wall");
+                if (Physics2D.RaycastAll(origin, dir, dir.magnitude, 1 << wallLayer).Length > 1)
+                {
+                    return;
+                }
+            }
             float dmg = 1;
             if (!takeOneDamage) {
                 dmg = collision.GetComponent<hitBoxComponent>().hitBox.damage;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
@@ -25,6 +26,9 @@ public class playerController : MonoBehaviour
     [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
     float resetTime = 10f;
+
+    doorController currentDoor = null;
+    string currentDoorLabel = "none";
 
     float maxWallSlideVel = -5f;
     float maxFallVel = -15f;
@@ -85,6 +89,10 @@ public class playerController : MonoBehaviour
     #region Unity functions
     void Start()
     {
+        if (currentDoorLabel != "none")
+        {
+            Debug.Log(currentDoorLabel);
+        }
         gameManager.Instance.player = gameObject;
         sprite = transform.Find("AtlasSprite");
         anim = GetComponentInChildren<Animator>();
@@ -105,6 +113,7 @@ public class playerController : MonoBehaviour
                 handleMovement();
                 handleAttackInput();
                 canPickUp();
+                canDoor();
                 break;
             case State.BroomStart:
                 handleBroomStart();
@@ -197,6 +206,11 @@ public class playerController : MonoBehaviour
                 }
             }
 
+            if (other.CompareTag("Door"))
+            {
+                currentDoor = other.GetComponent<doorController>();
+            }
+
             if (other.tag == "Follower")
             {
                 followController other_fc = other.GetComponent<followController>();
@@ -230,6 +244,11 @@ public class playerController : MonoBehaviour
         {
             canTornado = true;
             anim.SetBool("inTornado", false);
+        }
+
+        if (other.CompareTag("Door"))
+        {
+            currentDoor = null;
         }
     }
     #endregion
@@ -321,6 +340,7 @@ public class playerController : MonoBehaviour
     void handleAttack()
     {
         anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        
         if (Input.GetButtonDown("Attack"))
         {
             state = State.Attack;
@@ -441,6 +461,14 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region One-offs
+    void canDoor()
+    {
+        if (currentDoor != null && Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            currentDoorLabel = currentDoor.label;
+            SceneManager.LoadScene(currentDoor.targetScene.name);
+        }
+    }
     void handleTornado()
     {
         canTornado = false;
