@@ -160,7 +160,7 @@ public class diveToadController : MonoBehaviour
             dx = dir.x;
             dy = dir.y;
         }
-        velocity.x = kbStrength * dx * (left ? -1 : 1);
+        velocity.x = kbStrength * dx;
         velocity.y = kbStrength * 1.5f * dy;
         act = Mathf.Max(actionCoolDown / 2.0f, act);
         anim.SetBool("Hurt", true);

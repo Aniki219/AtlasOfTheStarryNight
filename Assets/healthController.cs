@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEditor;
+using UnityEngine.Events;
 
 public class healthController : MonoBehaviour
 {
@@ -18,6 +20,9 @@ public class healthController : MonoBehaviour
     public bool hurtByPlayer = false;
     public bool takeOneDamage = false;
     public bool cantHitThroughWall = false;
+
+    public bool blockInfront = false;
+    public UnityEvent blockCallback;
 
     Slider slider;
     CanvasGroup fillParent;
@@ -93,11 +98,32 @@ public class healthController : MonoBehaviour
                     return;
                 }
             }
+            if (blockInfront && Mathf.Sign(dir.x * transform.localScale.x) != -1)
+            {
+                if (blockCallback != null) blockCallback.Invoke();
+                return;
+            }
             float dmg = 1;
             if (!takeOneDamage) {
-                dmg = collision.GetComponent<hitBoxComponent>().hitBox.damage;
+                dmg = collision.GetComponent<AllyHitBoxController>().hitbox.damage;
             }
             takeDamage(dmg);
         }
+    }
+}
+
+
+[CustomEditor(typeof(healthController))]
+public class healthControllerEditor : Editor
+{
+    void OnInspectorGUI()
+    {
+        var myScript = target as MyScript;
+
+        myScript.flag = GUILayout.Toggle(myScript.flag, "Flag");
+
+        if (myScript.flag)
+            myScript.i = EditorGUILayout.IntSlider("I field:", myScript.i, 1, 100);
+
     }
 }

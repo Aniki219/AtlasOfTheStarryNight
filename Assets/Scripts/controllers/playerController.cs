@@ -89,10 +89,7 @@ public class playerController : MonoBehaviour
     #region Unity functions
     void Start()
     {
-        if (currentDoorLabel != "none")
-        {
-            Debug.Log(currentDoorLabel);
-        }
+        gameManager.Instance.setPlayer();
         gameManager.Instance.player = gameObject;
         sprite = transform.Find("AtlasSprite");
         anim = GetComponentInChildren<Animator>();
@@ -103,6 +100,12 @@ public class playerController : MonoBehaviour
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
         lastSafePosition = transform.position;
+        warpToCurrentDoor();
+    }
+
+    private void OnDestroy()
+    {
+        gameManager.Instance.currentDoorLabel = currentDoorLabel;
     }
 
     void Update()
@@ -365,7 +368,7 @@ public class playerController : MonoBehaviour
     public void createHitbox(HitBox hitBox)
     {
         GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, sprite.localScale), transform);
-        hitBox.kbDir.x *= (sprite.localScale.x > 0) ? 1 : -1;
+        hitBox.kbDir.x = (sprite.localScale.x > 0) ? 1 : -1;
         hb.transform.localScale = hitBox.size;
         hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
         Destroy(hb, hitBox.duration);
@@ -465,8 +468,36 @@ public class playerController : MonoBehaviour
     {
         if (currentDoor != null && Input.GetKeyDown(KeyCode.UpArrow))
         {
-            currentDoorLabel = currentDoor.label;
-            SceneManager.LoadScene(currentDoor.targetScene.name);
+            cutScenePrep();
+            StartCoroutine(doDoor());
+        }
+    }
+    IEnumerator doDoor()
+    {
+        currentDoorLabel = currentDoor.label;
+        GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<canvasController>().doBlackout();
+        yield return new WaitForSeconds(0.5f);
+        SceneManager.LoadScene(currentDoor.targetScene.name);
+    }
+    void warpToCurrentDoor()
+    {
+        currentDoorLabel = gameManager.Instance.currentDoorLabel;
+        if (currentDoorLabel != "none")
+        {
+            GameObject[] doors = GameObject.FindGameObjectsWithTag("Door");
+            if (doors.Length == 0)
+            {
+                currentDoorLabel = "none";
+                return;
+            }
+            foreach (GameObject door in doors)
+            {
+                if (door.GetComponent<doorController>().label == currentDoorLabel)
+                {
+                    transform.position = door.transform.position;
+                    return;
+                }
+            }
         }
     }
     void handleTornado()

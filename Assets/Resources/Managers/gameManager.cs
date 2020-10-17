@@ -18,13 +18,21 @@ public class gameManager : ScriptableObject
     public playerController playerCtrl;
     public Transform playerHanger;
 
+    public string currentDoorLabel = "none";
+
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += setGameObjects;
+        instance.setPlayer();
+        instance.currentDoorLabel = "none";
+    }
+
+    public void setPlayer()
+    {
         instance.player = GameObject.Find("Atlas");
-        instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
+        instance.playerHanger = instance.player.transform.Find("Atlas/AtlasSprite/Hanger");
         instance.playerCtrl = instance.player.GetComponent<playerController>();
     }
 
