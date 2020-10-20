@@ -1,25 +1,19 @@
 fileFormatVersion: 2
-guid: ea4d48f7125efb1429b3df6e3671e28f
+guid: ad47603310da39f40a02538d801b10ea
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -4881429847229300915
-    second: chargerWalk_0
+      213: -3812016461046307568
+    second: chargerCharge_0
   - first:
-      213: -508383369052592103
-    second: chargerWalk_1
+      213: 6223883890994839806
+    second: chargerCharge_1
   - first:
-      213: -4525259270334466855
-    second: chargerWalk_2
+      213: 407251204292479256
+    second: chargerCharge_2
   - first:
-      213: -6987681341217183164
-    second: chargerWalk_3
-  - first:
-      213: -9139343188725994053
-    second: chargerWalk_4
-  - first:
-      213: -7339461513215298859
-    second: chargerWalk_5
+      213: -4387135190416678633
+    second: chargerCharge_3
   externalObjects: {}
   serializedVersion: 10
   mipmaps:
@@ -104,7 +98,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: chargerWalk_0
+      name: chargerCharge_0
       rect:
         serializedVersion: 2
         x: 0
@@ -118,14 +112,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9d6451e85023c7b45889cc1c544788d2
-      internalID: -4881429847229300915
+      spriteID: f0c7f2e85ac92ed40b3ccf4f64fa86de
+      internalID: -3812016461046307568
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chargerWalk_1
+      name: chargerCharge_1
       rect:
         serializedVersion: 2
         x: 24
@@ -139,14 +133,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8edbeed966e3b22468eb4fef72f5e2e3
-      internalID: -508383369052592103
+      spriteID: 0446c09605707fd448cfaa53c6d2ae64
+      internalID: 6223883890994839806
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chargerWalk_2
+      name: chargerCharge_2
       rect:
         serializedVersion: 2
         x: 48
@@ -160,14 +154,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8b386b5e6c42ffc45bd01a76c148471e
-      internalID: -4525259270334466855
+      spriteID: e2cd1484e54d8ad489afb2f6b4f87f20
+      internalID: 407251204292479256
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: chargerWalk_3
+      name: chargerCharge_3
       rect:
         serializedVersion: 2
         x: 72
@@ -181,50 +175,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b72b3845dbaf1174b8037708aa0571b3
-      internalID: -6987681341217183164
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chargerWalk_4
-      rect:
-        serializedVersion: 2
-        x: 96
-        y: 0
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 106cdfaaf4ec8af489cc08a1744e7f48
-      internalID: -9139343188725994053
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: chargerWalk_5
-      rect:
-        serializedVersion: 2
-        x: 120
-        y: 0
-        width: 24
-        height: 24
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1487d1b607dc0604eb0e3608d7208dd6
-      internalID: -7339461513215298859
+      spriteID: f2dc1f7e9ec020c4fac4a9df0ed3a476
+      internalID: -4387135190416678633
       vertices: []
       indices: 
       edges: []

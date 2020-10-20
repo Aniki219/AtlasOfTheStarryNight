@@ -6840,9 +6840,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -7106,9 +7109,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -7427,9 +7433,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -7556,9 +7565,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -7799,6 +7811,7 @@ GameObject:
   - component: {fileID: 747219767}
   - component: {fileID: 747219766}
   - component: {fileID: 747219765}
+  - component: {fileID: 747219768}
   m_Layer: 10
   m_Name: GreenCharger
   m_TagString: Enemy
@@ -7836,16 +7849,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 3
-  hurtByPlayer: 1
-  takeOneDamage: 0
+  takeOneDamage: 1
   cantHitThroughWall: 0
-  blockInfront: 1
-  blockCallback:
+  hurtByPlayer: 1
+  hurtCallback:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 747219763}
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 747219768}
+        m_MethodName: hurt
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -7854,6 +7866,10 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  blockInfront: 1
+  blockCallback:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &747219766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7888,7 +7904,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.009468555, y: -0.100997925}
+  m_Offset: {x: -0.009468555, y: -0.13594747}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -7899,8 +7915,29 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.5896945, y: 0.37507343}
+  m_Size: {x: 0.5896945, y: 0.44497252}
   m_EdgeRadius: 0
+--- !u!114 &747219768
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747219763}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0fbd21bf0133af449a1669466beb8301, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentState: 
+  weight: 1
+  visionRange: 5
+  moveSpeed: 1
+  velocity: {x: 0, y: 0, z: 0}
+  readyToPounce: 0
+  homeX: 0
+  targetX: 0
+  leashRange: 3
 --- !u!1 &773017038
 GameObject:
   m_ObjectHideFlags: 0
@@ -8014,9 +8051,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -8143,9 +8183,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -8272,9 +8315,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -8984,7 +9030,7 @@ Tilemap:
       - {fileID: -3204547131554026112, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 7273263941680540802, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -8754159306422364542, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: 11, y: -7, z: 0}
@@ -9056,7 +9102,7 @@ Tilemap:
       - {fileID: -3204547131554026112, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 7273263941680540802, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -8754159306422364542, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: 11, y: -5, z: 0}
@@ -9146,7 +9192,7 @@ Tilemap:
       - {fileID: -3204547131554026112, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 7273263941680540802, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -8754159306422364542, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -6, y: 0, z: 0}
@@ -9155,7 +9201,7 @@ Tilemap:
       - {fileID: 2382680025897568349, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -420715159535973148, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 810696913400139445, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -7, y: 1, z: 0}
@@ -9200,7 +9246,7 @@ Tilemap:
       - {fileID: 2382680025897568349, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -420715159535973148, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 810696913400139445, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -4, y: 6, z: 0}
@@ -9245,7 +9291,7 @@ Tilemap:
       - {fileID: 1896352847626391005, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -1678404251535746677, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -558947354639247387, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6.0000005
+      m_AnimationSpeed: 6
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -2, y: 7, z: 0}
@@ -9567,9 +9613,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -9791,9 +9840,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -10002,9 +10054,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -10192,15 +10247,19 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 917463010, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
+      propertyPath: m_Size.x
+      value: 0.4
+      objectReference: {fileID: 0}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -1.92
+      value: -2.196
       objectReference: {fileID: 0}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 7.1
+      value: 7.022
       objectReference: {fileID: 0}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
@@ -10271,6 +10330,7 @@ GameObject:
   - component: {fileID: 1860743585}
   - component: {fileID: 1860743584}
   - component: {fileID: 1860743583}
+  - component: {fileID: 1860743581}
   m_Layer: 0
   m_Name: sprite
   m_TagString: Untagged
@@ -10278,6 +10338,20 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &1860743581
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1860743580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  flashMaterial: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
 --- !u!95 &1860743583
 Animator:
   serializedVersion: 3
@@ -10354,7 +10428,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1860743580}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -10394,9 +10468,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
-  hurtByPlayer: 1
   takeOneDamage: 1
   cantHitThroughWall: 1
+  hurtByPlayer: 1
+  hurtCallback:
+    m_PersistentCalls:
+      m_Calls: []
   blockInfront: 0
   blockCallback:
     m_PersistentCalls:
@@ -19205,7 +19282,7 @@ Tilemap:
       - {fileID: 3095471123362814300, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -2998757311135127146, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 8149868223576113712, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -15, y: 8, z: 0}
@@ -19232,7 +19309,7 @@ Tilemap:
       - {fileID: 3095471123362814300, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -2998757311135127146, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 8149868223576113712, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -15, y: 10, z: 0}
@@ -19286,7 +19363,7 @@ Tilemap:
       - {fileID: 1532508063456082509, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: 1867490251256156808, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -6858591650521445365, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -15, y: 13, z: 0}
@@ -19340,7 +19417,7 @@ Tilemap:
       - {fileID: 1896352847626391005, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -1678404251535746677, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
       - {fileID: -558947354639247387, guid: a71b3dbd59d66fa4d9a595231301aa34, type: 3}
-      m_AnimationSpeed: 6
+      m_AnimationSpeed: 6.0000005
       m_AnimationTimeOffset: 0
       m_IsLooping: 1
   - first: {x: -4, y: 14, z: 0}

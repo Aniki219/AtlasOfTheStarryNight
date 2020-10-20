@@ -12,7 +12,7 @@ public class characterController : MonoBehaviour
     public float safetyMargin = 1f;
     float skinWidth = 0.02f;
     int horizontalRayCount = 6;
-    int verticalRayCount = 4;
+    int verticalRayCount = 5;
 
     float maxClimbAngle = 50;
     float maxDescendAngle = 50;
@@ -46,6 +46,7 @@ public class characterController : MonoBehaviour
     {
         if (lockPosition) { return; }
         UpdateRaycastOrigins();
+        
         collisions.Reset();
         collisions.velocityOld = velocity;
 
@@ -57,10 +58,10 @@ public class characterController : MonoBehaviour
         {
             HorizontalCollisions(ref velocity);
         }
-        if (velocity.y != 0)
-        {
-            VerticalCollisions(ref velocity);
-        }
+
+        VerticalCollisions(ref velocity);
+        
+
 
         transform.Translate(velocity);
         transform.Translate(additionalVelocity);
@@ -212,7 +213,7 @@ public class characterController : MonoBehaviour
 
     void VerticalCollisions(ref Vector3 velocity)
     {
-        float directionY = Mathf.Sign(velocity.y);
+        float directionY = Mathf.Sign(velocity.y - skinWidth - 1 / 32f);
         float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1/32f;
 
         for (int i = 0; i < verticalRayCount; i++)
@@ -237,8 +238,8 @@ public class characterController : MonoBehaviour
 
                 collisions.below = directionY == -1;
                 collisions.above = directionY == 1;
+                break;
             }
-
             //Debug.DrawLine(rayOrigin, rayOrigin + Vector2.up * directionY * rayLength);
         }
 

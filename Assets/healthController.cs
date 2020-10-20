@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEditor;
 using UnityEngine.Events;
+using MyBox;
 
 public class healthController : MonoBehaviour
 {
@@ -17,12 +18,16 @@ public class healthController : MonoBehaviour
 
     bool dead = false;
 
-    public bool hurtByPlayer = false;
     public bool takeOneDamage = false;
     public bool cantHitThroughWall = false;
 
+    public bool hurtByPlayer = true;
+    [ConditionalField("hurtByPlayer")] public HurtEvent hurtCallback;
+    [System.Serializable]
+    public class HurtEvent : UnityEvent<HitBox> {}
+
     public bool blockInfront = false;
-    public UnityEvent blockCallback;
+    [ConditionalField("blockInfront")] public UnityEvent blockCallback;
 
     Slider slider;
     CanvasGroup fillParent;
@@ -87,6 +92,7 @@ public class healthController : MonoBehaviour
     {
         if (hurtByPlayer && collision.CompareTag("AllyHitbox"))
         {
+            HitBox hitbox = collision.GetComponent<AllyHitBoxController>().hitbox;
             Vector3 origin = gameManager.Instance.player.transform.position;
             Vector3 dir = transform.position - origin;
 
@@ -105,25 +111,13 @@ public class healthController : MonoBehaviour
             }
             float dmg = 1;
             if (!takeOneDamage) {
-                dmg = collision.GetComponent<AllyHitBoxController>().hitbox.damage;
+                dmg = hitbox.damage;
             }
             takeDamage(dmg);
+
+            //Remember to set the hurtCallback as Dynamic and not Static
+            //or it will user the Inspector HitBox (which shouldn't exist)
+            hurtCallback.Invoke(hitbox);
         }
-    }
-}
-
-
-[CustomEditor(typeof(healthController))]
-public class healthControllerEditor : Editor
-{
-    void OnInspectorGUI()
-    {
-        var myScript = target as MyScript;
-
-        myScript.flag = GUILayout.Toggle(myScript.flag, "Flag");
-
-        if (myScript.flag)
-            myScript.i = EditorGUILayout.IntSlider("I field:", myScript.i, 1, 100);
-
     }
 }
