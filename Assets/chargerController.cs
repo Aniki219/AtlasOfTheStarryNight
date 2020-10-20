@@ -8,12 +8,19 @@ public class chargerController : enemyAI
     public float homeX;
     public float targetX;
     public float leashRange = 3.0f;
+    public float chargeVelocity = 4.0f;
+
+    float chargeStart = Mathf.Infinity;
+    public float chargeDuration = 3.0f;
+
+    float lastCharge = -10;
+    public Transform starOrigin;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
-        state.addStates("Snarl", "Charge", "StopSlide", "Plop", "Bonk", "Pop", "Roll");
+        state.addStates("Snarl", "Charge", "Slide", "Plop", "Bonk", "Pop", "Roll");
         intangibleStates.AddRange(state.findStates("Plop", "Bonk"));
 
         actionCoolDown = 3.0f;
@@ -23,32 +30,43 @@ public class chargerController : enemyAI
 
     void Update()
     {
+        gravity = gameManager.Instance.gravity;
         currentState = state.getState();
         switch (state.getState())
         {
             case "Movement":
                 handleMovement();
-                applyGravity();
                 break;
             case "Charge":
                 handleCharge();
-                applyGravity();
                 break;
+            case "Slide":
+                handleSlide();
+                break;
+            case "Bonk":
+                velocity.x *= 0.97f;
+                velocity.y *= 0.99f;
+                gravity = gameManager.Instance.gravity/1.5f;
+                break;                
             default:
-                applyGravity();
                 break;
         }
+        anim.SetBool("isGrounded", isGrounded());
+        applyGravity();
     }
 
     // Update is called once per frame
     void handleMovement()
     {
-        anim.SetBool("isFalling", !isGrounded && (velocity.y < -1.0f));
-        anim.SetBool("isWalking", isGrounded && (Mathf.Abs(velocity.x) > 0));
+        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -1.0f));
+        anim.SetBool("isWalking", isGrounded() && (Mathf.Abs(velocity.x) > 0));
+        if (velocity.x != 0) setFacing((int)Mathf.Sign(velocity.x));
         
-        if (lineOfSight() && isGrounded)
+        if (lineOfSight() && isGrounded() && ((Time.time - lastCharge) > 1.0f))
         {
             triggerState("Snarl");
+            resetVelocity();
+            return;
         }
         
         if (act <= 0)
@@ -73,9 +91,47 @@ public class chargerController : enemyAI
         if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
     }
 
+    public void StartCharge()
+    {
+        chargeStart = Time.time;
+        state.setState("Charge");
+    }
+
     void handleCharge()
     {
+        velocity.x = chargeVelocity * getFacing();
 
+        if (Time.time - chargeStart > chargeDuration)
+        {
+            triggerState("Slide");
+            chargeStart = Mathf.Infinity;
+        }
+
+        if ((controller.collisions.left && getFacing() == -1) ||
+            (controller.collisions.right && getFacing() == 1))
+        {
+            wallBonk();
+            triggerState("Bonk");
+        }
+    }
+
+    protected override void OnReturnToMovement()
+    {
+        lastCharge = Time.time;
+    }
+
+    void wallBonk()
+    {
+        createStars(starOrigin.position);
+        velocity.x = -3.0f * getFacing();
+        velocity.y = 3.5f;
+        returnToMovement(1.0f);
+    }
+
+    void handleSlide()
+    {
+        velocity.x *= 0.95f;
+        returnToMovement(0.5f, true);
     }
 
     void applyGravity()
@@ -83,29 +139,8 @@ public class chargerController : enemyAI
         velocity.y += gravity * Time.deltaTime;
     }
 
-    void jump()
+    void FixedUpdate()
     {
-        deformer.startDeform(new Vector3(0.9f, 1.1f, 1.0f), 0.1f, 0.1f);
-        velocity.x = 2.5f * facing;
-        velocity.y = 3f;
-    }
-
-    void attack()
-    {
-        velocity.x = 4f * facing;
-        velocity.y = 3f;
-        anim.SetTrigger("Attack");
-    }
-
-    void setFacing()
-    {
-        if (!isGrounded) return;
-        transform.localScale = new Vector3(facing * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-    }
-
-    protected override void FixedUpdate()
-    {
-        base.FixedUpdate();
         controller.Move(velocity * Time.deltaTime);
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -126,7 +161,11 @@ public class chargerController : enemyAI
                     returnToMovement();
                 }
             }
-            velocity.y = 0;
+            if ((controller.collisions.above && velocity.y > 0) ||
+                (controller.collisions.below && velocity.y < 0))
+            {
+                velocity.y = 0;
+            }
         }
         if ((controller.collisions.right && velocity.x > 0) || (controller.collisions.left && velocity.x < 0))
         {

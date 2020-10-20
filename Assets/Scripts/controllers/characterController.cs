@@ -213,7 +213,14 @@ public class characterController : MonoBehaviour
 
     void VerticalCollisions(ref Vector3 velocity)
     {
-        float directionY = Mathf.Sign(velocity.y - skinWidth - 1 / 32f);
+        /* Okay listen. For some reason I don't want to just copy and paste this
+         * and always check vertical collisions in both directions. It probably
+         * wouldn't be an issue, but I insist on making this difficult. For now
+         * there is a bias toward dirY being negative so that floor collisions
+         * trigger when the character is standing still. This might cause issues
+         * still when vel.y == 0. Point is, if you are having vertical collision 
+         * issues, consider just always checking up and down regardless of velocity */
+        float directionY = Mathf.Sign(velocity.y - skinWidth);
         float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1/32f;
 
         for (int i = 0; i < verticalRayCount; i++)

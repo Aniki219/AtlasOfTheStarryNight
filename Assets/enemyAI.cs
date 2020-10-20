@@ -29,10 +29,11 @@ public abstract class enemyAI : MonoBehaviour
     protected float act = 0;
 
     //Physics vars
-    public bool isGrounded = true;
     public Vector3 velocity;
     protected float gravity;
     protected float maxFallVel;
+
+    bool returningToMovement = false;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -49,11 +50,6 @@ public abstract class enemyAI : MonoBehaviour
         state.addStates("Hurt", "Wait", "Attack");
         intangibleStates = state.findStates("Hurt", "Wait");
         state.setState("Movement");
-    }
-
-    protected virtual void FixedUpdate()
-    {
-        isGrounded = controller.collisions.below;
     }
 
     public void hurt(HitBox hitbox)
@@ -90,7 +86,7 @@ public abstract class enemyAI : MonoBehaviour
         int wallsLayer = LayerMask.NameToLayer("Wall");
         int playerLayer = LayerMask.NameToLayer("Player");
 
-        Vector3 direction = transform.localScale;
+        Vector3 direction = new Vector3(transform.localScale.x, 0, 0);
         RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, visionRange, (1 << wallsLayer) | (1 << playerLayer));
 
         return (hit.collider != null && hit.collider.CompareTag("Player"));
@@ -111,9 +107,51 @@ public abstract class enemyAI : MonoBehaviour
         anim.SetTrigger(statename);
     }
 
-    protected void returnToMovement()
+    protected void returnToMovement(float waitSeconds = 0, bool resetVel = false)
     {
-        state.setState("Movement");
-        anim.SetTrigger("returnToMovement");
+        if (!returningToMovement) StartCoroutine(myfunc());
+
+        IEnumerator myfunc()
+        {
+            returningToMovement = true;
+
+            yield return new WaitForSeconds(waitSeconds); 
+            state.setState("Movement");
+            anim.SetTrigger("returnToMovement");
+            if (resetVel) resetVelocity();
+            OnReturnToMovement();
+
+            returningToMovement = false;
+        }
+    }
+
+    protected virtual void OnReturnToMovement()
+    {
+    }
+
+    protected void setFacing(int facing = 1)
+    {
+        if (!isGrounded()) return;
+        transform.localScale = new Vector3(facing * Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+    }
+
+    protected float getFacing()
+    {
+        return transform.localScale.x;
+    }
+
+    protected void resetVelocity()
+    {
+        velocity = Vector3.zero;
+    }
+
+    protected bool isGrounded()
+    {
+        return controller.collisions.below;
+    }
+
+    protected void createStars(Vector3 position)
+    {
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
     }
 }

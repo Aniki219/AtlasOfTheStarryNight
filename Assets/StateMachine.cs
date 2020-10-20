@@ -38,6 +38,7 @@ public class StateMachine
     public State findState(string statename)
     {
         State rtnState = stateList.Find(s => s.getName() == statename);
+        if (rtnState == null) throw new Exception("State: " + statename + " not found!");
         return rtnState;
     }
 

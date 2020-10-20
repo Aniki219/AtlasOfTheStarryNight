@@ -104,7 +104,7 @@ public class healthController : MonoBehaviour
                     return;
                 }
             }
-            if (blockInfront && Mathf.Sign(dir.x * transform.localScale.x) != -1)
+            if (blockInfront && Mathf.Sign(dir.x * transform.localScale.x) != 1)
             {
                 if (blockCallback != null) blockCallback.Invoke();
                 return;
