@@ -16,6 +16,9 @@ public class chargerController : enemyAI
     float lastCharge = -10;
     public Transform starOrigin;
 
+    ParticleSystem dustTrail;
+    float rollStartTime = 0;
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -26,11 +29,14 @@ public class chargerController : enemyAI
         actionCoolDown = 3.0f;
         act = (readyToPounce) ? 0 : actionCoolDown;
         targetX = homeX = transform.position.x;
+
+        dustTrail = sprite.GetComponent<ParticleSystem>();
     }
 
     void Update()
     {
         gravity = gameManager.Instance.gravity;
+        handleDustParticles();
         currentState = state.getState();
         switch (state.getState())
         {
@@ -47,12 +53,26 @@ public class chargerController : enemyAI
                 velocity.x *= 0.97f;
                 velocity.y *= 0.99f;
                 gravity = gameManager.Instance.gravity/1.5f;
-                break;                
+                act = actionCoolDown;
+                break;
+            case "Roll":
+                handleRoll();
+                break;
             default:
                 break;
         }
         anim.SetBool("isGrounded", isGrounded());
         applyGravity();
+
+        if (state.getState() == "Roll") {
+            healthCtrl.blocking = true;
+            harmEnemies = true;
+        } else
+        {
+            healthCtrl.blocking = false;
+            harmEnemies = false;
+            sprite.rotation = Quaternion.Euler(0, 0, 0);
+        }
     }
 
     // Update is called once per frame
@@ -73,22 +93,46 @@ public class chargerController : enemyAI
         {
             targetX = homeX + Random.Range(-leashRange, leashRange);
             act = actionCoolDown;
+
+            float dir = Mathf.Sign(targetX - transform.position.x);
+            float dist = Mathf.Abs(targetX - transform.position.x);
+            if (dist > moveSpeed * 2.0f * Time.deltaTime)
+            {
+                velocity.x = moveSpeed * dir;
+            }
+            else
+            {
+                velocity.x = 0;
+            }
         } else
         {
             act -= Time.deltaTime;
         }
 
-        float dir = Mathf.Sign(targetX - transform.position.x);
-        float dist = Mathf.Abs(targetX - transform.position.x);
-        if (dist > moveSpeed * 2.0f * Time.deltaTime)
-        {
-            velocity.x = moveSpeed * dir;
-        } else
-        {
-            velocity.x = 0;
-        }
-
         if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
+    }
+
+    void handleDustParticles()
+    {
+        var emission = dustTrail.emission;
+        emission.rateOverDistance = 0;
+        if (state.getState() == "Charge") emission.rateOverDistance = 1.5f;
+        if (state.getState() == "Slide") emission.rateOverDistance = 10f;
+
+        var shape = dustTrail.shape;
+        shape.position = new Vector3(-0.5f * getFacing(), -0.2f, 0);
+        shape.scale = sprite.localScale;
+    }
+
+    void handleRoll()
+    {
+        float rspeed = -getFacing() * velocity.x * Time.deltaTime * 180.0f/Mathf.PI;
+        sprite.Rotate(new Vector3(0, 0, rspeed));
+        velocity.x *= 0.98f;
+        if (Time.time - rollStartTime > 3.0f)
+        {
+            endRoll();
+        }
     }
 
     public void StartCharge()
@@ -101,7 +145,7 @@ public class chargerController : enemyAI
     {
         velocity.x = chargeVelocity * getFacing();
 
-        if (Time.time - chargeStart > chargeDuration)
+        if (Time.time - chargeStart > chargeDuration && !lineOfSight())
         {
             triggerState("Slide");
             chargeStart = Mathf.Infinity;
@@ -118,20 +162,24 @@ public class chargerController : enemyAI
     protected override void OnReturnToMovement()
     {
         lastCharge = Time.time;
+        targetX = homeX = transform.position.x;
     }
 
     void wallBonk()
     {
-        createStars(starOrigin.position);
+        createStars(transform.position + 0.25f * Vector3.right);
+        deformer.startDeform(new Vector3(0.5f, 1.5f, 1.0f), 0.1f);
         velocity.x = -3.0f * getFacing();
         velocity.y = 3.5f;
-        returnToMovement(1.0f);
+        returnToMovement(1.0f, true);
     }
 
     void handleSlide()
     {
         velocity.x *= 0.95f;
-        returnToMovement(0.5f, true);
+        float slideDuration = 0.75f;
+        returnToMovement(slideDuration, true);
+        act = actionCoolDown;
     }
 
     void applyGravity()
@@ -150,7 +198,8 @@ public class chargerController : enemyAI
                 if (velocity.y <= -4f)
                 {
                     triggerState("Plop");
-                    Invoke("returnToIdle", 1.5f);
+                    resetVelocity();
+                    returnToMovement(1.5f, true);
                 }
                 else
                 {
@@ -175,5 +224,30 @@ public class chargerController : enemyAI
                 velocity.y = 0;
             }
         }
+    }
+
+    public void startRoll()
+    {
+        velocity.x = healthCtrl.lastHitBy.kbDir.x * 4.0f;
+        velocity.y = 4.0f;
+        resetAnimator();
+        triggerState("Roll");
+        sprite.localPosition = new Vector3(0, -0.1f, 0);
+        rollStartTime = Time.time;
+    }
+
+    void endRoll()
+    {
+        velocity.y = 3.5f;
+        sprite.localPosition = new Vector3(0, 0, 0);
+        sprite.localRotation = Quaternion.Euler(0,0,0);
+        anim.SetTrigger("Pop");
+        deformer.startDeform(new Vector3(1.5f, 1.5f, 1.5f), 0.1f, 0.25f);
+        returnToMovement(0.25f, true);
+    }
+
+    protected override void OnTriggerEnter2D(Collider2D other)
+    {
+        base.OnTriggerEnter2D(other);
     }
 }

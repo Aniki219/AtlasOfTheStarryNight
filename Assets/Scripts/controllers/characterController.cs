@@ -12,7 +12,7 @@ public class characterController : MonoBehaviour
     public float safetyMargin = 1f;
     float skinWidth = 0.02f;
     int horizontalRayCount = 6;
-    int verticalRayCount = 5;
+    int verticalRayCount = 4;
 
     float maxClimbAngle = 50;
     float maxDescendAngle = 50;
@@ -58,11 +58,11 @@ public class characterController : MonoBehaviour
         {
             HorizontalCollisions(ref velocity);
         }
-
-        VerticalCollisions(ref velocity);
-        
-
-
+        if (velocity.y != 0) {
+            VerticalCollisions(ref velocity);
+        }
+        checkGrounded();
+                       
         transform.Translate(velocity);
         transform.Translate(additionalVelocity);
 
@@ -143,12 +143,6 @@ public class characterController : MonoBehaviour
         return false;
     }
 
-    //void FixedUpdate()
-    //{
-    //    transform.Translate(fixedVelocity);
-    //    fixedVelocity = Vector3.zero;
-    //}
-
     void HorizontalCollisions(ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
@@ -213,14 +207,7 @@ public class characterController : MonoBehaviour
 
     void VerticalCollisions(ref Vector3 velocity)
     {
-        /* Okay listen. For some reason I don't want to just copy and paste this
-         * and always check vertical collisions in both directions. It probably
-         * wouldn't be an issue, but I insist on making this difficult. For now
-         * there is a bias toward dirY being negative so that floor collisions
-         * trigger when the character is standing still. This might cause issues
-         * still when vel.y == 0. Point is, if you are having vertical collision 
-         * issues, consider just always checking up and down regardless of velocity */
-        float directionY = Mathf.Sign(velocity.y - skinWidth);
+        float directionY = Mathf.Sign(velocity.y);
         float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1/32f;
 
         for (int i = 0; i < verticalRayCount; i++)
@@ -265,6 +252,26 @@ public class characterController : MonoBehaviour
                     velocity.x = (hit.distance - skinWidth) * directionX;
                     collisions.slopeAngle = slopeAngle;
                 }
+            }
+        }
+    }
+
+    void checkGrounded()
+    {
+        float directionY = -1;
+        float rayLength = skinWidth + 1 / 32f;
+
+        for (int i = 0; i < verticalRayCount; i++)
+        {
+            Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
+            rayOrigin += Vector2.right * (verticalRaySpacing * i);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
+
+            if (hit)
+            {
+                rayLength = hit.distance;
+                collisions.isGrounded = directionY == -1;
+                break;
             }
         }
     }
@@ -379,6 +386,7 @@ public class characterController : MonoBehaviour
         public float slopeAngle, slopeAngleOld;
         public Vector3 velocityOld;
         public float distanceToGround;
+        public bool isGrounded;
 
         public bool wallRideRight;
         public bool wallRideLeft;
@@ -393,6 +401,7 @@ public class characterController : MonoBehaviour
             climbingSlope = false;
             descendingSlope = false;
             distanceToGround = 50;
+            isGrounded = false;
 
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;

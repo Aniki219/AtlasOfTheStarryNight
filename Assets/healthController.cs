@@ -26,6 +26,8 @@ public class healthController : MonoBehaviour
     [System.Serializable]
     public class HurtEvent : UnityEvent<HitBox> {}
 
+    [HideInInspector] public bool blocking = false;
+    [HideInInspector] public HitBox lastHitBy = null;
     public bool blockInfront = false;
     [ConditionalField("blockInfront")] public UnityEvent blockCallback;
 
@@ -95,6 +97,7 @@ public class healthController : MonoBehaviour
             HitBox hitbox = collision.GetComponent<AllyHitBoxController>().hitbox;
             Vector3 origin = gameManager.Instance.player.transform.position;
             Vector3 dir = transform.position - origin;
+            lastHitBy = hitbox;
 
             if (cantHitThroughWall)
             {
@@ -104,7 +107,7 @@ public class healthController : MonoBehaviour
                     return;
                 }
             }
-            if (blockInfront && Mathf.Sign(dir.x * transform.localScale.x) != 1)
+            if (blocking || (blockInfront && Mathf.Sign(dir.x * transform.localScale.x) != 1))
             {
                 if (blockCallback != null) blockCallback.Invoke();
                 return;

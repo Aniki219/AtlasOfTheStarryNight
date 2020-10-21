@@ -10,6 +10,8 @@ public abstract class enemyAI : MonoBehaviour
     protected Animator anim;
     protected Deformer deformer;
     protected Transform sprite;
+    protected BoxCollider2D collider;
+    protected healthController healthCtrl;
 
     protected StateMachine state;
     public string currentState;
@@ -19,6 +21,9 @@ public abstract class enemyAI : MonoBehaviour
     public float weight = 1.0f;
     public float visionRange = 5.0f;
     public float moveSpeed = 0;
+
+    //Hitbox hurts toher enemies
+    protected bool harmEnemies = false;
 
     //Direction Enemy is Facing
     protected int facing = 1;
@@ -41,6 +46,8 @@ public abstract class enemyAI : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         deformer = GetComponentInChildren<Deformer>();
+        collider = GetComponent<BoxCollider2D>();
+        healthCtrl = GetComponent<healthController>();
         sprite = transform.Find("sprite");
 
         gravity = gameManager.Instance.gravity;
@@ -103,6 +110,7 @@ public abstract class enemyAI : MonoBehaviour
 
     protected void triggerState(string statename)
     {
+        resetAnimator();
         state.setState(statename);
         anim.SetTrigger(statename);
     }
@@ -147,11 +155,35 @@ public abstract class enemyAI : MonoBehaviour
 
     protected bool isGrounded()
     {
-        return controller.collisions.below;
+        return controller.collisions.isGrounded;
     }
 
     protected void createStars(Vector3 position)
     {
-        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position, Quaternion.identity);
+    }
+
+    protected void resetAnimator()
+    {
+        foreach (AnimatorControllerParameter parameter in anim.parameters)
+        {
+            if (parameter.name == "resetSpin") continue;
+            if (parameter.type == AnimatorControllerParameterType.Bool)
+            {
+                anim.SetBool(parameter.name, false);
+            }
+            if (parameter.type == AnimatorControllerParameterType.Trigger)
+            {
+                anim.ResetTrigger(parameter.name);
+            }
+        }
+    }
+
+    protected virtual void OnTriggerEnter2D(Collider2D other)
+    {
+        if (harmEnemies && other.CompareTag("Enemy")) {
+            healthController hc = other.GetComponent<healthController>();
+            hc.takeDamage(3.0f);
+        }
     }
 }
