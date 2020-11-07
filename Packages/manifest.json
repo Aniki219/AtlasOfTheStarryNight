@@ -6,10 +6,12 @@
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.2d.tilemap.extras": "https://github.com/Unity-Technologies/2d-extras.git#master",
     "com.unity.collab-proxy": "1.2.16",
+    "com.unity.editorcoroutines": "1.0.0",
     "com.unity.ext.nunit": "1.0.0",
     "com.unity.ide.rider": "1.1.0",
     "com.unity.ide.vscode": "1.1.3",
     "com.unity.package-manager-ui": "2.2.0",
+    "com.unity.quicksearch": "1.5.4",
     "com.unity.render-pipelines.lightweight": "6.9.2",
     "com.unity.shadergraph": "6.9.2",
     "com.unity.test-framework": "1.0.13",
@@ -49,13 +51,13 @@
     "com.unity.modules.xr": "1.0.0"
   },
   "lock": {
-    "com.unity.2d.tilemap.extras": {
-      "hash": "a95c07ac963132f767842418cb3b7c260d9c8cad",
-      "revision": "master"
-    },
     "com.mybox": {
       "hash": "900922be56cf6d547df65650037da21ef3ba54d1",
       "revision": "HEAD"
+    },
+    "com.unity.2d.tilemap.extras": {
+      "hash": "a95c07ac963132f767842418cb3b7c260d9c8cad",
+      "revision": "master"
     }
   }
 }

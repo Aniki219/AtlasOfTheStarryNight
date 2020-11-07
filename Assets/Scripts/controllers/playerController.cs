@@ -108,8 +108,14 @@ public class playerController : MonoBehaviour
         gameManager.Instance.currentDoorLabel = currentDoorLabel;
     }
 
+   
+
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.T))
+        {
+            
+        }
         switch (state)
         {
             case State.Movement:

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/WorldMap/guidance.unity
+    guid: 598b07b50ffc2e04ea7433972cb68949
+  - enabled: 1
     path: Assets/Scenes/Main Menu.unity
     guid: e455277f710f8364abf7b886ddfb2b39
   - enabled: 1
@@ -23,4 +26,22 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/bounceOnEnemies.unity
     guid: 56755c64d44107c499e31cdf9d206fc7
+  - enabled: 1
+    path: Assets/Scenes/paintTest.unity
+    guid: dcea6a2397aec134d94bcacea2c9b11d
+  - enabled: 1
+    path: Assets/Scenes/pinkFruitTree.unity
+    guid: 55b48f4611d2a5a458372f79b95ff5ce
+  - enabled: 1
+    path: Assets/Scenes/roomTemplate.unity
+    guid: 320417fe9c02dc94394f23943739c7dd
+  - enabled: 1
+    path: Assets/Scenes/stoneTest.unity
+    guid: dab3ec49912081b4ba605c3672104a56
+  - enabled: 1
+    path: Assets/Scenes/tornadoSnake.unity
+    guid: cac758e2a064bc046918eff85d8e9262
+  - enabled: 1
+    path: Assets/Scenes/witchCanyon.unity
+    guid: df3dbed2731a55945b46043a1d4a945f
   m_configObjects: {}
