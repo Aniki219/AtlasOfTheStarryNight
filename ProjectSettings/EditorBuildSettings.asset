@@ -30,6 +30,9 @@ EditorBuildSettings:
     path: Assets/Scenes/paintTest.unity
     guid: dcea6a2397aec134d94bcacea2c9b11d
   - enabled: 1
+    path: Assets/Scenes/WorldMap/grassArea.unity
+    guid: 47dbae6fd78a88b40a7078b6b1317fc0
+  - enabled: 1
     path: Assets/Scenes/pinkFruitTree.unity
     guid: 55b48f4611d2a5a458372f79b95ff5ce
   - enabled: 1
@@ -44,4 +47,10 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/witchCanyon.unity
     guid: df3dbed2731a55945b46043a1d4a945f
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/downGrass.unity
+    guid: 1880495ff5de0ae49913ca356779f53d
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/profession.unity
+    guid: 7e697715eb8dc214a8af58aeb84f57d1
   m_configObjects: {}

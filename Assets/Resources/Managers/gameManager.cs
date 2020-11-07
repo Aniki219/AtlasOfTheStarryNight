@@ -18,6 +18,11 @@ public class gameManager : ScriptableObject
     public playerController playerCtrl;
     public Transform playerHanger;
 
+    private float playerStartX;
+    private float playerStartY;
+    private bool playerStartJump;
+    private bool canSetPosition;
+
     public string currentDoorLabel = "none";
 
     [RuntimeInitializeOnLoadMethod]
@@ -25,7 +30,9 @@ public class gameManager : ScriptableObject
     {
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += setGameObjects;
-        instance.setPlayer();
+        //instance.setPlayer();
+        instance.playerStartJump = false;
+        instance.canSetPosition = false;
         instance.currentDoorLabel = "none";
     }
 
@@ -34,10 +41,24 @@ public class gameManager : ScriptableObject
         instance.player = GameObject.Find("Atlas");
         instance.playerHanger = instance.player.transform.Find("Atlas/AtlasSprite/Hanger");
         instance.playerCtrl = instance.player.GetComponent<playerController>();
+
+        if (instance.canSetPosition)
+        {
+            player.transform.position = new Vector3(playerStartX, playerStartY, 0);
+            if (instance.playerStartJump)
+            {
+                playerCtrl.bounce(8.0f);
+                playerStartJump = false;
+            }
+        }
+        instance.canSetPosition = true;
     }
 
-    public void switchScene(string to)
+    public void switchScene(string to, float startx, float starty, bool startJump = false)
     {
+        playerStartX = startx;
+        playerStartY = starty;
+        playerStartJump = startJump;
         SceneManager.LoadScene(to);
     }
 

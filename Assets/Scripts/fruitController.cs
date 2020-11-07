@@ -34,6 +34,8 @@ public class fruitController : MonoBehaviour
 
     public void pickUp()
     {
+        if (!canPickUp) return;
+        canPickUp = false;
         rb.simulated = false;
         StartCoroutine(getEaten());
     }

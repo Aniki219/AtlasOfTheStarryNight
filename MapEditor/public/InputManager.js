@@ -24,6 +24,7 @@ function inputUpdate() {
 function mousePressed() {
   if (mouseButton == LEFT) {
     mouse.left = true;
+    selectTile();
   }
 }
 

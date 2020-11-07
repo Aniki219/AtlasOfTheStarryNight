@@ -88,11 +88,6 @@ class Tile {
       if (cenDist < 7) {
         fill(150, 150, 200);
         noStroke();
-        if (mouse.left) {
-          this.selected = true;
-          this.dragStart.x = mouse.cx;
-          this.dragStart.y = mouse.cy;
-        }
       }
       ellipse(x, y, 15, 15);
     }
@@ -140,5 +135,22 @@ class Vertex {
       line(0, 0, x2, -y2);
     pop();
     strokeWeight(1);
+  }
+}
+
+function selectTile() {
+  let topTile = null;
+  for (let tile of tiles) {
+    let {x, y} = tile.getCenter();
+    let cenDist = dist(mouse.ax, mouse.ay, x, y);
+    if (cenDist < 7) {
+      topTile = tile;
+    }
+    console.log(cenDist);
+  }
+  if (topTile != null) {
+    topTile.selected = true;
+    topTile.dragStart.x = mouse.cx;
+    topTile.dragStart.y = mouse.cy;
   }
 }

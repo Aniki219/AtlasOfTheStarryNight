@@ -15,6 +15,7 @@ TagManager:
   - Enemy
   - BroomCollectible
   - Door
+  - RoomBounds
   layers:
   - Default
   - TransparentFX

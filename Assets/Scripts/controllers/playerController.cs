@@ -7,7 +7,7 @@ using UnityEngine.SceneManagement;
 public class playerController : MonoBehaviour
 {
     #region Vars
-    float jumpHeight = 2.2f;
+    //float jumpHeight = 2.2f;
     float doubleJumpHeight = 1.5f;
     float timeToJumpApex = 0.5f;
     float timeToDoubleJumpApex = 0.6f;
@@ -46,6 +46,7 @@ public class playerController : MonoBehaviour
     particleMaker particleMaker;
     Animator anim;
     Transform sprite;
+    BoxCollider2D boxCollider;
 
     GameObject starRotator;
     Transform currentTornado;
@@ -92,9 +93,12 @@ public class playerController : MonoBehaviour
         gameManager.Instance.setPlayer();
         gameManager.Instance.player = gameObject;
         sprite = transform.Find("AtlasSprite");
+
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
+        boxCollider = GetComponent<BoxCollider2D>();
+
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -154,8 +158,12 @@ public class playerController : MonoBehaviour
             default:
                 break;
         }
-
         //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+    }
+
+    private void LateUpdate()
+    {
+        checkRoomBoundaries();
     }
 
     private void FixedUpdate()
@@ -787,6 +795,60 @@ public class playerController : MonoBehaviour
     {
         facing = -(int)sprite.localScale.x;
         sprite.localScale = new Vector3(facing, 1, 1);
+    }
+
+    void checkRoomBoundaries()
+    {
+        GameObject roomBounds = GameObject.FindGameObjectWithTag("RoomBounds");
+        if (roomBounds == null) throw new System.Exception("No RoomBounds in Scene: " + SceneManager.GetActiveScene().name);
+
+        BoxCollider2D bounds = roomBounds.GetComponent<BoxCollider2D>();
+        Vector2 boundsPos = new Vector2(
+            bounds.transform.position.x + bounds.offset.x,
+            bounds.transform.position.y + bounds.offset.y);
+
+        AtlasScene switchScene = new AtlasScene();
+        float startx = 0;
+        float starty = 0;
+        bool startBounce = false;
+        //UP
+        if (transform.position.y + boxCollider.size.y / 2.0f >
+            boundsPos.y + bounds.size.y / 2.0f)
+        {
+            switchScene = AtlasSceneManager.Instance.neighbors[0];
+            startx = transform.position.x;
+            starty = -4.5f + 0.6f;
+            startBounce = true;
+        }
+        //LEFT
+        if (transform.position.x - boxCollider.size.x / 2.0f <
+            boundsPos.x - bounds.size.x / 2.0f)
+        {
+            switchScene = AtlasSceneManager.Instance.neighbors[1];
+            startx = 8.0f - 0.4f;
+            starty = transform.position.y;
+        }
+        //RIGHT
+        if (transform.position.x + boxCollider.size.x / 2.0f >
+            boundsPos.x + bounds.size.x / 2.0f)
+        {
+            switchScene = AtlasSceneManager.Instance.neighbors[2];
+            startx = 0.4f - 8.0f;
+            starty = transform.position.y;
+        }
+        //DOWN
+        if (transform.position.y - boxCollider.size.y / 2.0f <
+            boundsPos.y - bounds.size.y / 2.0f)
+        {
+            switchScene = AtlasSceneManager.Instance.neighbors[3];
+            startx = transform.position.x;
+            starty = 4.5f - 0.6f;
+        }
+        if (switchScene != null && switchScene.name != "null")
+        {
+            Debug.Log(switchScene.name);
+            gameManager.Instance.switchScene(switchScene.name, startx, starty, startBounce);
+        }
     }
     #endregion
 

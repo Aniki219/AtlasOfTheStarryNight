@@ -10,7 +10,7 @@ public abstract class enemyAI : MonoBehaviour
     protected Animator anim;
     protected Deformer deformer;
     protected Transform sprite;
-    protected BoxCollider2D collider;
+    protected BoxCollider2D boxCollider;
     protected healthController healthCtrl;
 
     protected StateMachine state;
@@ -46,7 +46,7 @@ public abstract class enemyAI : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         controller = GetComponent<characterController>();
         deformer = GetComponentInChildren<Deformer>();
-        collider = GetComponent<BoxCollider2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         healthCtrl = GetComponent<healthController>();
         sprite = transform.Find("sprite");
 
