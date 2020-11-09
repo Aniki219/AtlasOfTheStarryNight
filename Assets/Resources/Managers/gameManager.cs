@@ -30,7 +30,7 @@ public class gameManager : ScriptableObject
     {
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += setGameObjects;
-        //instance.setPlayer();
+        instance.setPlayer();
         instance.playerStartJump = false;
         instance.canSetPosition = false;
         instance.currentDoorLabel = "none";

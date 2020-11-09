@@ -89,10 +89,6 @@ public class AtlasSceneManager : ScriptableObject
         neighbors.Add(findSceneByCoords(sceneCoords + new Vector2(1, 0)));
         neighbors.Add(findSceneByCoords(sceneCoords + new Vector2(0, 1)));
 
-        foreach(AtlasScene n in neighbors) {
-            Debug.Log(n.name);
-        }
-
         return neighbors;
     }
 
@@ -148,9 +144,9 @@ public class AtlasScene
 
     public AtlasScene()
     {
-        this.name = "null";
-        this.x = -1;
-        this.y = -1;
+        name = "null";
+        x = -1;
+        y = -1;
     }
 
     public AtlasScene(string name, int x, int y)

@@ -46,8 +46,9 @@ public class characterController : MonoBehaviour
     {
         if (lockPosition) { return; }
         UpdateRaycastOrigins();
-        
         collisions.Reset();
+        checkGrounded();
+
         collisions.velocityOld = velocity;
 
         if (velocity.y < 0)
@@ -61,7 +62,7 @@ public class characterController : MonoBehaviour
         if (velocity.y != 0) {
             VerticalCollisions(ref velocity);
         }
-        checkGrounded();
+        
                        
         transform.Translate(velocity);
         transform.Translate(additionalVelocity);
@@ -270,7 +271,7 @@ public class characterController : MonoBehaviour
             if (hit)
             {
                 rayLength = hit.distance;
-                collisions.isGrounded = directionY == -1;
+                collisions.isGrounded = true;
                 break;
             }
         }

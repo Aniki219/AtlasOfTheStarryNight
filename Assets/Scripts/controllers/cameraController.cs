@@ -5,8 +5,8 @@ using UnityEngine.U2D;
 
 public class cameraController : MonoBehaviour
 {
-    public Transform target;
-    public Collider2D roomBounds;
+    [HideInInspector] public Transform target;
+    [HideInInspector] public Collider2D roomBounds;
     Camera cam;
     Vector3 shakeValue;
     Vector3 shakeVelocity;
@@ -22,21 +22,29 @@ public class cameraController : MonoBehaviour
     public float smoothingTime = 0.5f;
     public bool cameraTracking = true;
     Vector3 focusPoint;
+    Bounds bounds;
 
     void Start()
     {
+        target = gameManager.Instance.player.transform;
         cam = GetComponent<Camera>();
+        bounds = GameObject.Find("RoomBounds").GetComponent<BoxCollider2D>().bounds;
         h = cam.orthographicSize;
         w = h * Screen.width / Screen.height;
         Vector3 to = target.position;
-        to.x = Mathf.Clamp(to.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
-        to.y = Mathf.Clamp(to.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
+        to.x = Mathf.Clamp(to.x, bounds.min.x + w, bounds.max.x - w);
+        to.y = Mathf.Clamp(to.y, bounds.min.y + h, bounds.max.y - h);
         transform.position = new Vector3(to.x, to.y, transform.position.z);
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (target == null)
+        {
+            target = gameManager.Instance.player.transform;
+        }
+
         Vector3 targetVelocity = target.GetComponent<characterController>().cameraTarget;
         Vector3 targetPoint = target.transform.position;
         Vector3 to;
@@ -44,8 +52,8 @@ public class cameraController : MonoBehaviour
         if (!cameraTracking)
         {
             to = targetPoint;
-            to.x = Mathf.Clamp(to.x, roomBounds.bounds.min.x + w, roomBounds.bounds.max.x - w);
-            to.y = Mathf.Clamp(to.y, roomBounds.bounds.min.y + h, roomBounds.bounds.max.y - h);
+            to.x = Mathf.Clamp(to.x, bounds.min.x + w, bounds.max.x - w);
+            to.y = Mathf.Clamp(to.y, bounds.min.y + h, bounds.max.y - h);
             transform.position = new Vector3(to.x, to.y, transform.position.z);
             return;
         }
@@ -53,11 +61,11 @@ public class cameraController : MonoBehaviour
         focusPoint = Vector3.SmoothDamp(focusPoint, focusTarget, ref focusVelocity, smoothingTime/200.0f);
         to = new Vector3(focusPoint.x, focusPoint.y, transform.position.z);
 
-        float minX = roomBounds.bounds.min.x + w;
-        float maxX = roomBounds.bounds.max.x - w;
+        float minX = bounds.min.x + w;
+        float maxX = bounds.max.x - w;
 
-        float minY = roomBounds.bounds.min.y + h;
-        float maxY = roomBounds.bounds.max.y - h;
+        float minY = bounds.min.y + h;
+        float maxY = bounds.max.y - h;
 
         to.x = Mathf.Clamp(to.x, minX, maxX);
         to.y = Mathf.Clamp(to.y, minY, maxY);
@@ -68,8 +76,15 @@ public class cameraController : MonoBehaviour
         transform.position = new Vector3(smoothX, smoothY, transform.position.z) + shakeValue;
         transform.position = Vector3.SmoothDamp(transform.position, to, ref velocity, smoothingTime);
 
-        percentX = (transform.position.x - minX) / (maxX - minX);
-        percentY = (transform.position.y - minY) / (maxY - minY);
+        if (maxX - minX > 0 && maxY - minY > 0)
+        {
+            percentX = (transform.position.x - minX) / (maxX - minX);
+            percentY = (transform.position.y - minY) / (maxY - minY);
+        } else
+        {
+            percentX = 0;
+            percentY = 0;
+        }
     }
 
     public void StartShake(float shakeMagnitude = 0.1f, float shakeDuration = 0.5f)

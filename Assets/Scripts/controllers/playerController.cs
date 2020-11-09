@@ -55,6 +55,8 @@ public class playerController : MonoBehaviour
     bool screenShake = false;
     float wallBlastDelay = 0.2f;
 
+    private static bool created = false;
+
     //bool fastBroom = true;
     //bool screenShake = false;
     //float wallBlastDelay = 0f;
@@ -90,8 +92,7 @@ public class playerController : MonoBehaviour
     #region Unity functions
     void Start()
     {
-        gameManager.Instance.setPlayer();
-        gameManager.Instance.player = gameObject;
+        
         sprite = transform.Find("AtlasSprite");
 
         anim = GetComponentInChildren<Animator>();
@@ -105,6 +106,18 @@ public class playerController : MonoBehaviour
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
         lastSafePosition = transform.position;
         warpToCurrentDoor();
+
+        if (!created)
+        {
+            DontDestroyOnLoad(gameObject);
+            created = true;
+      
+            //gameManager.Instance.player = gameObject;
+        } else
+        {
+            Destroy(gameObject);
+        }
+        gameManager.Instance.setPlayer();
     }
 
     private void OnDestroy()
@@ -614,6 +627,7 @@ public class playerController : MonoBehaviour
 
     public void bounce(float bounceVelocity, string sound = "jump2")
     {
+        Debug.Log("bounce");
         GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
@@ -802,51 +816,43 @@ public class playerController : MonoBehaviour
         GameObject roomBounds = GameObject.FindGameObjectWithTag("RoomBounds");
         if (roomBounds == null) throw new System.Exception("No RoomBounds in Scene: " + SceneManager.GetActiveScene().name);
 
-        BoxCollider2D bounds = roomBounds.GetComponent<BoxCollider2D>();
-        Vector2 boundsPos = new Vector2(
-            bounds.transform.position.x + bounds.offset.x,
-            bounds.transform.position.y + bounds.offset.y);
+        Bounds bounds = roomBounds.GetComponent<BoxCollider2D>().bounds;
 
         AtlasScene switchScene = new AtlasScene();
         float startx = 0;
         float starty = 0;
         bool startBounce = false;
         //UP
-        if (transform.position.y + boxCollider.size.y / 2.0f >
-            boundsPos.y + bounds.size.y / 2.0f)
+        if (transform.position.y + boxCollider.size.y / 2.0f > bounds.max.y)
         {
             switchScene = AtlasSceneManager.Instance.neighbors[0];
             startx = transform.position.x;
-            starty = -4.5f + 0.6f;
-            startBounce = true;
+            starty = -4.5f + 1.4f;
+            //startBounce = true;
         }
         //LEFT
-        if (transform.position.x - boxCollider.size.x / 2.0f <
-            boundsPos.x - bounds.size.x / 2.0f)
+        if (transform.position.x - boxCollider.size.x / 2.0f < bounds.min.x)
         {
             switchScene = AtlasSceneManager.Instance.neighbors[1];
-            startx = 8.0f - 0.4f;
+            startx = 8.0f - 0.3f;
             starty = transform.position.y;
         }
         //RIGHT
-        if (transform.position.x + boxCollider.size.x / 2.0f >
-            boundsPos.x + bounds.size.x / 2.0f)
+        if (transform.position.x + boxCollider.size.x / 2.0f > bounds.max.x)
         {
             switchScene = AtlasSceneManager.Instance.neighbors[2];
-            startx = 0.4f - 8.0f;
+            startx = 0.3f - 8.0f;
             starty = transform.position.y;
         }
         //DOWN
-        if (transform.position.y - boxCollider.size.y / 2.0f <
-            boundsPos.y - bounds.size.y / 2.0f)
+        if (transform.position.y - boxCollider.size.y / 2.0f < bounds.min.y)
         {
             switchScene = AtlasSceneManager.Instance.neighbors[3];
             startx = transform.position.x;
-            starty = 4.5f - 0.6f;
+            starty = 4.5f - 0.4f;
         }
         if (switchScene != null && switchScene.name != "null")
         {
-            Debug.Log(switchScene.name);
             gameManager.Instance.switchScene(switchScene.name, startx, starty, startBounce);
         }
     }

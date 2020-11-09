@@ -1,28 +1,37 @@
 const tiles = [];
 
 class Tile {
-  constructor(scene = null, x = 0, y = 0) {
-    this.vertecies = [
-      new Vertex(x+0,   y+0,   0*PI/4),
-      new Vertex(x+0.5, y+0,   1*PI/4),
-      new Vertex(x+1,   y+0,   2*PI/4),
-      new Vertex(x+1,   y+0.5, 3*PI/4),
-      new Vertex(x+1,   y+1,   4*PI/4),
-      new Vertex(x+0.5, y+1,   5*PI/4),
-      new Vertex(x+0,   y+1,   6*PI/4),
-      new Vertex(x+0,   y+0.5, 7*PI/4)
-    ]
+  constructor(scene = null, x = 0, y = 0, w = 1, h = 1) {
     this.scene = scene;
     this.x = x;
     this.y = y;
+    this.w = w;
+    this.h = h;
+    this.vertecies = this.setVerticies();
     this.dragStart = {x, y};
+    this.stretchDir = {x, y};
     this.selected = false;
+    this.stretch = false;
     tiles.push(this);
   }
 
   update() {
     this.draw();
     this.drag();
+  }
+
+  setVerticies() {
+    let {x, y, w, h} = this;
+    return [
+      new Vertex(x, 0,   y, 0,   3*PI/4),
+      new Vertex(x, w/2, y, 0,   2*PI/4),
+      new Vertex(x, w,   y, 0,   1*PI/4),
+      new Vertex(x, w,   y, h/2, 0*PI/4),
+      new Vertex(x, w,   y, h,   7*PI/4),
+      new Vertex(x, w/2, y, h,   6*PI/4),
+      new Vertex(x, 0,   y, h,   5*PI/4),
+      new Vertex(x, 0,   y, h/2, 4*PI/4)
+    ]
   }
 
   drag() {
@@ -77,7 +86,10 @@ class Tile {
       let y = grid.toWorldCoord(v.y);
 
       if (dist(mouse.ax, mouse.ay, x, y) < 30) {
-        v.draw()
+        v.draw();
+        if (dist(mouse.ax, mouse.ay, x, y) < 10) {
+          v.draw();
+        }
       }
     }
     let {x, y} = this.getCenter();
@@ -112,27 +124,33 @@ function drawTiles() {
 }
 
 class Vertex {
-  constructor(x, y, dir) {
-    this.x = x;
-    this.y = y;
+  constructor(x, xo, y, yo) {
+    let xx = xo - 0.5;
+    let yy = yo - 0.5;
+    let mag = sqrt(xx*xx + yy*yy);
+    this.ax = x+0.55*xx/mag+0.5;
+    this.ay = y+0.55*yy/mag+0.5;
+
+    this.x = x+xo;
+    this.y = y+yo;
     this.s = 8;
-    this.dir = dir;
+    this.dir = atan2(yo-0.5, xo-0.5);
     this.clr = color(255,255,255);
   }
 
   draw() {
-    let x = grid.toWorldCoord(this.x);
-    let y = grid.toWorldCoord(this.y);
-    let x2 = 10 * cos(3*PI/4);
-    let y2 = 10 * sin(3*PI/4);
+    let x = grid.toWorldCoord(this.ax);
+    let y = grid.toWorldCoord(this.ay);
+    let x2 = 15 * cos(3*PI/4);
+    let y2 = 15 * sin(3*PI/4);
 
-    stroke(150,150,200);
-    strokeWeight(8);
+    fill(this.clr);
+    stroke(0);
+    strokeWeight(2);
     push()
       translate(x, y);
-      rotate(-3*PI/4+this.dir);
-      line(0, 0, x2, y2);
-      line(0, 0, x2, -y2);
+      rotate(this.dir);
+      triangle(0, 0, x2, y2, x2, -y2);
     pop();
     strokeWeight(1);
   }
