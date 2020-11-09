@@ -117,7 +117,7 @@ public class playerController : MonoBehaviour
         {
             Destroy(gameObject);
         }
-        gameManager.Instance.setPlayer();
+        //gameManager.Instance.setPlayer();
     }
 
     private void OnDestroy()

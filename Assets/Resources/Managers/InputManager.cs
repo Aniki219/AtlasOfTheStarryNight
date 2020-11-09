@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Managers/InputManager")]
-public class inputManager : ScriptableObject
+public class InputManager : ScriptableObject
 {
-    private static inputManager instance;
-    public static inputManager Instance { get { return instance; } }
+    private static InputManager instance;
+    public static InputManager Instance { get { return instance; } }
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
-        instance = Resources.LoadAll<inputManager>("Managers")[0];
+        instance = Resources.LoadAll<InputManager>("Managers")[0];
     }
 }

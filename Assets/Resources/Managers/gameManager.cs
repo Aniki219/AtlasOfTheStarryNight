@@ -29,11 +29,11 @@ public class gameManager : ScriptableObject
     private static void Init()
     {
         instance = Resources.LoadAll<gameManager>("Managers")[0];
-        SceneManager.sceneLoaded += setGameObjects;
-        instance.setPlayer();
+        SceneManager.sceneLoaded += onSceneLoad;
         instance.playerStartJump = false;
         instance.canSetPosition = false;
         instance.currentDoorLabel = "none";
+        instance.setPlayer();
     }
 
     public void setPlayer()
@@ -62,9 +62,10 @@ public class gameManager : ScriptableObject
         SceneManager.LoadScene(to);
     }
 
-    static void setGameObjects(Scene scene, LoadSceneMode mode)
+    static void onSceneLoad(Scene scene, LoadSceneMode mode)
     {
-        
+        Debug.Log("scene loaded");
+        instance.setPlayer();
     }
 
     public bool checkObjectKey(string key)
