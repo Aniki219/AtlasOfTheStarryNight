@@ -9,8 +9,8 @@ public class selectAttack : StateMachineBehaviour
     {
         playerController pc = animator.gameObject.GetComponentInParent<playerController>();
         animator.SetBool("Attacking", true);
-        bool up = Input.GetAxisRaw("Vertical") > 0.1f;
-        bool down = Input.GetAxisRaw("Vertical") < -0.1f;
+        bool up = AtlasInputManager.getAxisState("Dpad").y > 0.1f;
+        bool down = AtlasInputManager.getAxisState("Dpad").y < -0.1f;
 
         bool falling = (pc.velocity.y < -0.1);
 

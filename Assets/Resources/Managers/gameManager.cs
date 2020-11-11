@@ -44,12 +44,9 @@ public class gameManager : ScriptableObject
 
         if (instance.canSetPosition)
         {
-            player.transform.position = new Vector3(playerStartX, playerStartY, 0);
-            if (instance.playerStartJump)
-            {
-                playerCtrl.bounce(8.0f);
-                playerStartJump = false;
-            }
+            instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
+            Physics2D.SyncTransforms();
+            instance.player.GetComponent<characterController>().setCollidable(true);
         }
         instance.canSetPosition = true;
     }
@@ -64,7 +61,6 @@ public class gameManager : ScriptableObject
 
     static void onSceneLoad(Scene scene, LoadSceneMode mode)
     {
-        Debug.Log("scene loaded");
         instance.setPlayer();
     }
 

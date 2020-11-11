@@ -32,7 +32,7 @@ public class characterController : MonoBehaviour
     void Start()
     {
         collider = GetComponent<BoxCollider2D>();
-        collisions.tangible = true;
+        collisions.Init();
         CalculateRaySpacing();
     }
 
@@ -47,22 +47,25 @@ public class characterController : MonoBehaviour
         if (lockPosition) { return; }
         UpdateRaycastOrigins();
         collisions.Reset();
-        checkGrounded();
-
         collisions.velocityOld = velocity;
 
-        if (velocity.y < 0)
+        if (collisions.collidable)
         {
-            DescendSlope(ref velocity);
+            checkGrounded();
+
+            if (velocity.y < 0)
+            {
+                DescendSlope(ref velocity);
+            }
+            if (velocity.x != 0)
+            {
+                HorizontalCollisions(ref velocity);
+            }
+            if (velocity.y != 0)
+            {
+                VerticalCollisions(ref velocity);
+            }
         }
-        if (velocity.x != 0)
-        {
-            HorizontalCollisions(ref velocity);
-        }
-        if (velocity.y != 0) {
-            VerticalCollisions(ref velocity);
-        }
-        
                        
         transform.Translate(velocity);
         transform.Translate(additionalVelocity);
@@ -208,11 +211,12 @@ public class characterController : MonoBehaviour
 
     void VerticalCollisions(ref Vector3 velocity)
     {
+        UpdateRaycastOrigins();
         float directionY = Mathf.Sign(velocity.y);
         float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1/32f;
 
         for (int i = 0; i < verticalRayCount; i++)
-        {
+        { 
             Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
@@ -348,7 +352,7 @@ public class characterController : MonoBehaviour
         return rays > 1;
     }
 
-    void UpdateRaycastOrigins()
+    public void UpdateRaycastOrigins()
     {
         Bounds bounds = collider.bounds;
         bounds.Expand(skinWidth * -2);
@@ -370,6 +374,11 @@ public class characterController : MonoBehaviour
         horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
         verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
     }
+
+    public void setCollidable(bool on = true)
+    {
+        collisions.collidable = on;
+    } 
 
     struct RaycastOrigins
     {
@@ -393,6 +402,7 @@ public class characterController : MonoBehaviour
         public bool wallRideLeft;
 
         public bool tangible;
+        public bool collidable;
 
         public void Reset()
         {
@@ -406,6 +416,13 @@ public class characterController : MonoBehaviour
 
             slopeAngleOld = slopeAngle;
             slopeAngle = 0;
+        }
+
+        public void Init()
+        {
+            Reset();
+            tangible = true;
+            collidable = true;
         }
     }
 }

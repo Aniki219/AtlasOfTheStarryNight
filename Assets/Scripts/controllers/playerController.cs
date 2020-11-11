@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 [RequireComponent (typeof (characterController))]
@@ -129,10 +130,6 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T))
-        {
-            
-        }
         switch (state)
         {
             case State.Movement:
@@ -288,19 +285,19 @@ public class playerController : MonoBehaviour
         Vector2 input = new Vector2(0, 0);
         if (acceptInput)
         {
-            input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+            input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, Input.GetAxisRaw("Vertical"));
         }
 
         if (isGrounded())
         {
-            if (Input.GetButtonDown("Jump") && canJump)
+            if (AtlasInputManager.getKeyPressed("Jump") && canJump)
             {
                 firstJump();
             }
             canBroom = true;
             canDoubleJump = true;
             resourceManager.Instance.restoreMana();
-            if (Input.GetButtonDown("Broom"))
+            if (AtlasInputManager.getKeyPressed("Broom"))
             {
                 state = State.BroomStart;
                 canBroom = false;
@@ -308,7 +305,7 @@ public class playerController : MonoBehaviour
         }
         else
         {
-            if (canBroom && Input.GetButtonDown("Broom"))
+            if (canBroom && AtlasInputManager.getKeyPressed("Broom"))
             {
                 state = State.BroomStart;
                 canBroom = false;
@@ -323,13 +320,13 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if (isWallSliding() && Input.GetButtonDown("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
+            if (isWallSliding() && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
             {
                 state = State.WallJumpInit;
                 return;
             }
 
-            if (Input.GetButtonDown("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+            if (AtlasInputManager.getKeyPressed("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
             {
                 doubleJump();
             }
@@ -360,7 +357,7 @@ public class playerController : MonoBehaviour
     #region Attacking
     void handleAttackInput()
     {
-        if (Input.GetButtonDown("Attack"))
+        if (AtlasInputManager.getKeyPressed("Attack"))
         {
             state = State.Attack;
             anim.SetTrigger("SelectAttack");
@@ -371,7 +368,7 @@ public class playerController : MonoBehaviour
     {
         anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
         
-        if (Input.GetButtonDown("Attack"))
+        if (AtlasInputManager.getKeyPressed("Attack"))
         {
             state = State.Attack;
             anim.SetTrigger("Attack");
@@ -440,7 +437,7 @@ public class playerController : MonoBehaviour
     {
         for (int i = 0; i < variableJumpIncrements; i++)
         {
-            if (!Input.GetButton("Jump"))
+            if (!AtlasInputManager.getKey("Jump"))
             {
                 velocity.y /= 4;
                 i = variableJumpIncrements;
@@ -476,7 +473,7 @@ public class playerController : MonoBehaviour
             velocity.x = wallJumpVelocity * facing;
             velocity.y += gravity * Time.deltaTime;
 
-            if (Input.GetButtonDown("Broom") && canBroom)
+            if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
             {
                 faceInputDirection();
                 state = State.BroomStart;
@@ -493,7 +490,7 @@ public class playerController : MonoBehaviour
     #region One-offs
     void canDoor()
     {
-        if (currentDoor != null && Input.GetKeyDown(KeyCode.UpArrow))
+        if (currentDoor != null && AtlasInputManager.getKeyPressed("Interact"))
         {
             cutScenePrep();
             StartCoroutine(doDoor());
@@ -536,7 +533,7 @@ public class playerController : MonoBehaviour
         velocity = Vector3.zero;
         transform.position = Vector3.SmoothDamp(transform.position, currentTornado.position, ref velocitySmoothing, 0.05f);
 
-        if (Input.GetButtonDown("Jump"))
+        if (AtlasInputManager.getKeyPressed("Jump"))
         {
             firstJump();
             anim.SetBool("inTornado", false);
@@ -627,7 +624,6 @@ public class playerController : MonoBehaviour
 
     public void bounce(float bounceVelocity, string sound = "jump2")
     {
-        Debug.Log("bounce");
         GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
@@ -654,14 +650,14 @@ public class playerController : MonoBehaviour
 
     void handleBroom()
     {
-        if (Input.GetButtonDown("Broom"))
+        if (AtlasInputManager.getKeyPressed("Broom"))
         {
             anim.SetTrigger("broomEnd");
             eventManager.Instance.BroomCancelEvent();
             returnToMovement();
             return;
         }
-        if (Input.GetButtonDown("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+        if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
             eventManager.Instance.BroomCancelEvent();
             doubleJump();
@@ -671,7 +667,7 @@ public class playerController : MonoBehaviour
             startBonk();
             return;
         }
-        float vdir = Input.GetAxisRaw("Vertical");
+        float vdir = AtlasInputManager.getAxisState("Dpad").y;
         velocity.y = moveSpeed / 2.0f * vdir;
         velocity.x = moveSpeed * 2 * facing;
     }
@@ -792,7 +788,7 @@ public class playerController : MonoBehaviour
 
     void faceInputDirection()
     {
-        float dir = Input.GetAxisRaw("Horizontal");
+        float dir = AtlasInputManager.getAxisState("Dpad").x;
         if (dir != 0)
         {
             facing = (int)dir;
@@ -828,7 +824,6 @@ public class playerController : MonoBehaviour
             switchScene = AtlasSceneManager.Instance.neighbors[0];
             startx = transform.position.x;
             starty = -4.5f + 1.4f;
-            //startBounce = true;
         }
         //LEFT
         if (transform.position.x - boxCollider.size.x / 2.0f < bounds.min.x)
@@ -853,6 +848,7 @@ public class playerController : MonoBehaviour
         }
         if (switchScene != null && switchScene.name != "null")
         {
+            controller.setCollidable(false);
             gameManager.Instance.switchScene(switchScene.name, startx, starty, startBounce);
         }
     }
@@ -867,7 +863,7 @@ public class playerController : MonoBehaviour
     bool isWallSliding()
     {
         if (isGrounded()) { return false; }
-        float hdir = Input.GetAxisRaw("Horizontal");
+        float hdir = AtlasInputManager.getAxisState("Dpad").x;
 
         if (controller.collisions.wallRideLeft && hdir == -1 || controller.collisions.wallRideRight && hdir == 1)
         {
