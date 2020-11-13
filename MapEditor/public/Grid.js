@@ -6,7 +6,7 @@ class Grid {
   }
 
   update() {
-    stroke(255, 255, 255);
+    stroke(GREY);
     for (let i = GRID_MARGIN; i <= width-GRID_MARGIN; i += this.gridSize) {
       line(i, GRID_MARGIN, i, height - GRID_MARGIN);
       line(GRID_MARGIN, i, width-GRID_MARGIN, i);
@@ -15,8 +15,8 @@ class Grid {
     if (mouse.in) {
       let x = mouse.cx * this.gridSize + GRID_MARGIN;
       let y = mouse.cy * this.gridSize + GRID_MARGIN;
-      strokeWeight(6);
-      stroke(150, 150, 225 + 25*sin(frameCount * 1 * 2*PI/60));
+      strokeWeight(3);
+      stroke(LIGHTBLUE);
       noFill();
       rect(x, y, this.gridSize, this.gridSize);
       strokeWeight(1);

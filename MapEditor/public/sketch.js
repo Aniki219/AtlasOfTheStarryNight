@@ -5,6 +5,9 @@ var val;
 var dataObj;
 
 function setup() {
+  LIGHTBLUE = color(180, 180, 250);
+  GREY = color(80, 80, 80);
+  WHITE = color(255, 255, 255);
   getDataObj();
   getSceneNames();
 
@@ -22,7 +25,9 @@ function draw() {
   background(40);
   inputUpdate();
   grid.update();
+  setTileCoords();
   drawTiles();
+  warnOverlapTiles();
 
   if (getKeyCode(CONTROL) && getKeyDown("S")) {
     saveData();
@@ -32,13 +37,11 @@ function draw() {
 
 function getDataObj() {
   let rawdata = fs.readFileSync(`${__dirname}/../data/test.json`);
+  dataObj = {};
   dataObj = JSON.parse(rawdata);
-
   if (!dataObj.hasOwnProperty("scenes")) {
     dataObj.scenes = [];
   }
-
-
 }
 
 function getSceneNames() {
@@ -54,14 +57,14 @@ function getSceneNames() {
   let dataScenes = dataObj.scenes;
   let purgedScenes = [];
   for (let scene of dataScenes) {
-    if (files.includes(scene.name + ".unity")) {
+    if (files.includes(scene.scene + ".unity")) {
       purgedScenes.push(scene);
     }
   }
   dataObj.scenes = purgedScenes;
 
   for(let sceneName in fileObj) {
-    if (!dataObj.scenes.find(scene => scene.name == sceneName)) {
+    if (!dataObj.scenes.find(s => s.scene == sceneName)) {
       let newScene = new Scene(sceneName)
       dataObj.scenes.push(newScene);
     }
@@ -70,8 +73,11 @@ function getSceneNames() {
 
 function saveData() {
   for (let t of tiles) {
-    dataObj.scenes.find(s => s.name == t.scene).x = t.x;
-    dataObj.scenes.find(s => s.name == t.scene).y = t.y;
+    let {scene, x, y, w, h, coords} = t;
+    let sceneObj = dataObj.scenes.find(s => s.scene == scene);
+    if (sceneObj) {
+      Object.assign(sceneObj, {scene, x, y, w, h, coords});
+    }
   }
   jsondata = JSON.stringify(dataObj);
   fs.writeFileSync(`${__dirname}/../data/test.json`, jsondata);
