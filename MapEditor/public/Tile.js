@@ -102,11 +102,16 @@ class Tile {
     let y = grid.toWorldCoord(this.y);
     let w = this.w * grid.gridSize;
     let h = this.h * grid.gridSize;
-    rect(x, y, w, h);
-    fill(50);
+    if (getImage(this.scene + ".png") != null) {
+      image(getImage(this.scene + ".png"), x, y, w, h);
+    } else {
+      rect(x, y, w, h);
+      fill(50);
+      noStroke();
+      textSize(16);
+      text(this.scene, x + w/2, y+h/2);
+    }
     noStroke();
-    textSize(16);
-    text(this.scene, x + w/2, y+h/2);
 
     if (mouse.cx <= this.x + this.w && mouse.cy <= this.y +  this.h) {
       this.highlightVertecies();

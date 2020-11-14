@@ -21,6 +21,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/ladder.unity
     guid: 9085a589b031cbf4b82def52e51e33bd
   - enabled: 1
+    path: Assets/Scenes/WorldMap/newScene.unity
+    guid: 29e23cd058b963b4aac28f488ae87169
+  - enabled: 1
     path: Assets/Scenes/WorldMap/profession.unity
     guid: 7e697715eb8dc214a8af58aeb84f57d1
   - enabled: 1

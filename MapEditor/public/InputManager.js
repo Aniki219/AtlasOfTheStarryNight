@@ -6,24 +6,37 @@ const mouse = {
 const register = {};
 
 function inputUpdate() {
-  mouse.ax = mouseX;
-  mouse.ay = mouseY;
-  mouse.x = mouseX - GRID_MARGIN;
-  mouse.y = mouseY - GRID_MARGIN;
+  let smx = mouseX / settings.scale.x - settings.translate.x;
+  let smy = mouseY / settings.scale.y - settings.translate.y;
+
+  mouse.ax = smx;
+  mouse.ay = smy;
+  mouse.x = (smx - GRID_MARGIN);
+  mouse.y = (smy - GRID_MARGIN);
   mouse.cx = floor(mouse.x / grid.gridSize);
   mouse.cy = floor(mouse.y / grid.gridSize);
 }
 
 function mousePressed() {
-  if (mouseButton == LEFT) {
-    register["mouse" + mouseButton] = new ButtonState(true);
-  }
+  register["mouse" + mouseButton] = new ButtonState(true);
 }
 
 function mouseReleased() {
-  if (mouseButton == LEFT) {
-    register["mouse" + mouseButton] = new ButtonState(false);
-  }
+  register["mouse" + mouseButton] = new ButtonState(false);
+}
+
+function mouseWheel(event) {
+  let scaleStep = settings.scale.x/10;
+  let ds = (event.delta >= 0) ? -1 : 1;
+
+  settings.scale.x = max(.16, settings.scale.x + 1.6*ds*scaleStep);
+  settings.scale.y = max(.09, settings.scale.y + 0.9*ds*scaleStep);
+
+  let newMouseax = mouseX / settings.scale.x - settings.translate.x;
+  let newMouseay = mouseY / settings.scale.y - settings.translate.y;
+
+  settings.translate.x += newMouseax - mouse.ax;
+  settings.translate.y += newMouseay - mouse.ay;
 }
 
 function keyPressed() {

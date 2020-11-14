@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -141,6 +141,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_StaticEditorFlags
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 650972519180489162, guid: 9be7b0abf6af865499cae76b6d3a4986,
+        type: 3}
+      propertyPath: m_Icon
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 650972519180489163, guid: 9be7b0abf6af865499cae76b6d3a4986,
         type: 3}
@@ -416,7 +421,7 @@ GameObject:
   m_Component:
   - component: {fileID: 430668495}
   - component: {fileID: 430668496}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: plains3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -33557,6 +33562,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: ParallaxBackgroundParent
+      objectReference: {fileID: 0}
+    - target: {fileID: 7014162145261154142, guid: 6703c29cd16e6764b85a4ae69db1c973,
+        type: 3}
+      propertyPath: m_Layer
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8295782834729610028, guid: 6703c29cd16e6764b85a4ae69db1c973,
         type: 3}

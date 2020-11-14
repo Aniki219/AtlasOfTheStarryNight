@@ -29,6 +29,7 @@ public class AtlasSceneManager : ScriptableObject
         {
             instance.sceneData = sceneData;
         }
+        Debug.Log("Scene Data Updated!");
         return sceneData;
     }
 
@@ -54,7 +55,8 @@ public class AtlasSceneManager : ScriptableObject
         AtlasScene fromScene = getScene();
 
         AtlasScene toScene = getNeighborWithCoords(getPlayerCoords() + dir);
-        if (toScene == null || toScene.scene == "null") return;
+        if (toScene == null) throw new Exception("Null scene data found at coords " + (getPlayerCoords() + dir));
+        if (toScene.scene == "null") return;
         
         Vector2 d = (toScene.size + fromScene.size) * 0.5f;
         Vector2 t = (fromScene.getCenter() - toScene.getCenter()) * -SCREEN_HEIGHT;
@@ -138,10 +140,7 @@ public class AtlasSceneManager : ScriptableObject
 
     public static AtlasScene getNeighborWithCoords(Vector2 coords)
     {
-        if (instance.neighbors == null || instance.neighbors.Count == 0)
-        {
-            instance.neighbors = getNeighbors();
-        }
+        instance.neighbors = getNeighbors();
 
         return instance.neighbors.Find(s =>
         {
@@ -165,8 +164,11 @@ public class AtlasSceneManager : ScriptableObject
         player.y = Mathf.Clamp(player.y, bottomLeft.y, bottomLeft.y + scene.size.y * SCREEN_HEIGHT);
 
         Vector2 d = player - bottomLeft;
-        playerCoords.x = (int)((d.x / SCREEN_WIDTH) + scene.position.x);
-        playerCoords.y = (int)(scene.size.y - (d.y / SCREEN_HEIGHT) + scene.position.y);
+        Vector2 normd = new Vector2(
+            (int)Mathf.Clamp(d.x / SCREEN_WIDTH, 0, scene.size.x-1),
+            (int)Mathf.Clamp(d.y / SCREEN_HEIGHT, 0, scene.size.y-1));
+        playerCoords.x = normd.x + scene.position.x;
+        playerCoords.y = scene.size.y - 1 - normd.y + scene.position.y;
 
         return playerCoords;
     }
@@ -200,19 +202,11 @@ public class AtlasSceneManager : ScriptableObject
         {
             sceneName = SceneManager.GetActiveScene().name;
         }
-        AtlasSceneData sceneData;
-        if (Instance && Instance.sceneData != null)
+        if (Instance && Instance.sceneData == null)
         {
-            sceneData = instance.sceneData;
+            getSceneData();
         }
-        else
-        {
-            StreamReader reader = new StreamReader(path);
-            string json = reader.ReadToEnd();
-            reader.Close();
-            sceneData = JsonUtility.FromJson<AtlasSceneData>(json);
-        }
-        AtlasScene currentScene = sceneData.scenes.Find(s => s.scene == sceneName);
+        AtlasScene currentScene = instance.sceneData.scenes.Find(s => s.scene == sceneName);
         if (instance) instance.currentScene = currentScene;
         return currentScene;
     }

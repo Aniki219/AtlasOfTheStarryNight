@@ -33,7 +33,7 @@ TagManager:
   - IgnoreActors
   - Pickupable
   - IgnorePlayer
-  - 
+  - BackgroundTexture
   - 
   - 
   - 

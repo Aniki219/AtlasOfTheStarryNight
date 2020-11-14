@@ -14,8 +14,18 @@ public class WorldScenes : EditorWindow
         GetWindow(typeof(WorldScenes));
     }
 
+    [MenuItem("MapEditor/UpdateSceneData")]
+    public static void updateSceneData()
+    {
+        AtlasSceneManager.getSceneData();
+    }
+
     void OnGUI()
     {
+        if (GUILayout.Button("Take Screenshot"))
+        {
+            ScreenshotEditor.takeScreenshot();
+        }
         List<SceneAsset> m_SceneAssets = new List<SceneAsset>();
         string folderName = Application.dataPath + "/Scenes/WorldMap/";
         var dirInfo = new DirectoryInfo(folderName);

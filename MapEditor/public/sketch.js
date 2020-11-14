@@ -3,6 +3,10 @@ const fs = require('fs');
 
 var val;
 var dataObj;
+var settings = {
+  scale: {x: 1.6, y: 0.9},
+  translate: {x: 50, y: 50}
+}
 
 function setup() {
   LIGHTBLUE = color(180, 180, 250);
@@ -21,17 +25,50 @@ function setup() {
   textAlign(CENTER, CENTER);
 }
 
+var screenshots;
+function preload() {
+  screenshots = {};
+  let imageFiles = fs.readdirSync(`${__dirname}/../screenshots`);
+  for (let img of imageFiles) {
+    screenshots[img] = loadImage(`${__dirname}/../screenshots/${img}`);
+  }
+}
+
+function getImage(filename) {
+  if (screenshots[filename]) {
+    return screenshots[filename];
+  }
+  return null;
+}
+
 function draw() {
-  background(40);
-  inputUpdate();
-  grid.update();
-  setTileCoords();
-  drawTiles();
-  warnOverlapTiles();
+  push()
+  scale(settings.scale.x, settings.scale.y);
+  translate(settings.translate.x, settings.translate.y);
+    background(40);
+    inputUpdate();
+    cameraUpdate();
+    grid.update();
+    setTileCoords();
+    drawTiles();
+    warnOverlapTiles();
+  pop();
 
   if (getKeyCode(CONTROL) && getKeyDown("S")) {
     saveData();
     console.log("Saved!");
+  }
+}
+
+function cameraUpdate() {
+  if (getMousePressed("center")) {
+    camera.dragStart = createVector(mouse.ax, mouse.ay);
+  }
+  if (getMouseDown("center")) {
+    let d = createVector(mouse.ax - camera.dragStart.x, mouse.ay - camera.dragStart.y);
+    settings.translate.x += d.x;
+    settings.translate.y += d.y;
+    camera.dragStart = createVector(mouse.ax - d.x, mouse.ay - d.y);
   }
 }
 
