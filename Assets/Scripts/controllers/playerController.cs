@@ -43,7 +43,7 @@ public class playerController : MonoBehaviour
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
 
-    characterController controller;
+    public characterController controller;
     particleMaker particleMaker;
     Animator anim;
     Transform sprite;
@@ -814,43 +814,28 @@ public class playerController : MonoBehaviour
 
         Bounds bounds = roomBounds.GetComponent<BoxCollider2D>().bounds;
 
-        AtlasScene switchScene = new AtlasScene();
-        float startx = 0;
-        float starty = 0;
-        bool startBounce = false;
+        AtlasSceneManager.getPlayerCoords();
         //UP
         if (transform.position.y + boxCollider.size.y / 2.0f > bounds.max.y)
         {
-            switchScene = AtlasSceneManager.Instance.neighbors[0];
-            startx = transform.position.x;
-            starty = -4.5f + 1.4f;
+            AtlasSceneManager.switchScene(-Vector2.up);
         }
         //LEFT
         if (transform.position.x - boxCollider.size.x / 2.0f < bounds.min.x)
         {
-            switchScene = AtlasSceneManager.Instance.neighbors[1];
-            startx = 8.0f - 0.3f;
-            starty = transform.position.y;
+            AtlasSceneManager.switchScene(-Vector2.right);
         }
         //RIGHT
         if (transform.position.x + boxCollider.size.x / 2.0f > bounds.max.x)
         {
-            switchScene = AtlasSceneManager.Instance.neighbors[2];
-            startx = 0.3f - 8.0f;
-            starty = transform.position.y;
+            AtlasSceneManager.switchScene(Vector2.right);
         }
         //DOWN
         if (transform.position.y - boxCollider.size.y / 2.0f < bounds.min.y)
         {
-            switchScene = AtlasSceneManager.Instance.neighbors[3];
-            startx = transform.position.x;
-            starty = 4.5f - 0.4f;
+            AtlasSceneManager.switchScene(Vector2.up);
         }
-        if (switchScene != null && switchScene.name != "null")
-        {
-            controller.setCollidable(false);
-            gameManager.Instance.switchScene(switchScene.name, startx, starty, startBounce);
-        }
+        
     }
     #endregion
 

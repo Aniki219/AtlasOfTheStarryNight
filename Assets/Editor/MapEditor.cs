@@ -13,6 +13,8 @@ public class MapEditor : Editor
     [MenuItem("MapEditor/Display Neighbors")]
     public static void displayNeighbors()
     {
+        AtlasSceneManager.getSceneData();
+        AtlasSceneManager.getNeighbors();
         loadScene();
     }
 
@@ -28,23 +30,21 @@ public class MapEditor : Editor
     static void loadScene()
     {
         List<AtlasScene> neighbors = AtlasSceneManager.getNeighbors();
+        AtlasScene currentScene = AtlasSceneManager.getScene();
 
-        for (int i = 0; i < 4; i++)
+        foreach (AtlasScene n in neighbors)
         {
-            AtlasScene scene = neighbors[i];
-            if (scene.name != "null")
+            if (n.scene != "null")
             {
-                EditorSceneManager.OpenScene("Assets/Scenes/WorldMap/" + scene.name + ".unity", OpenSceneMode.Additive);
-
-                if (i == 0) shiftScene(scene.name, 0, 1);
-                if (i == 1) shiftScene(scene.name, -1, 0);
-                if (i == 2) shiftScene(scene.name, 1, 0);
-                if (i == 3) shiftScene(scene.name, 0, -1);
+                EditorSceneManager.OpenScene("Assets/Scenes/WorldMap/" + n.scene + ".unity", OpenSceneMode.Additive);
+                Vector2 d = (n.size + currentScene.size)*0.5f;
+                Vector2 t = (n.getCenter() - currentScene.getCenter());
+                shiftScene(n.scene, t.x, -t.y);
             }
         }
     }
 
-    static void shiftScene(string name, int xdir, int ydir)
+    static void shiftScene(string name, float xdir, float ydir)
     {
         Scene currentScene = SceneManager.GetSceneAt(0);
         Scene rightScene = SceneManager.GetSceneByName(name);

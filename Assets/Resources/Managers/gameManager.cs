@@ -20,7 +20,6 @@ public class gameManager : ScriptableObject
 
     private float playerStartX;
     private float playerStartY;
-    private bool playerStartJump;
     private bool canSetPosition;
 
     public string currentDoorLabel = "none";
@@ -30,10 +29,10 @@ public class gameManager : ScriptableObject
     {
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += onSceneLoad;
-        instance.playerStartJump = false;
         instance.canSetPosition = false;
         instance.currentDoorLabel = "none";
-        instance.setPlayer();
+        //Calls setPlayer
+        onSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single); 
     }
 
     public void setPlayer()
@@ -51,11 +50,11 @@ public class gameManager : ScriptableObject
         instance.canSetPosition = true;
     }
 
-    public void switchScene(string to, float startx, float starty, bool startJump = false)
+    public void switchScene(string to, float startx, float starty)
     {
         playerStartX = startx;
         playerStartY = starty;
-        playerStartJump = startJump;
+        playerCtrl.controller.setCollidable(false);
         SceneManager.LoadScene(to);
     }
 

@@ -49,7 +49,6 @@ public class AtlasInputManager : ScriptableObject
 
     static void setAxisState(string axisName, Vector2 state)
     {
-        Debug.Log(state);
         AxisState axisState = axisStates.Find(axis => axis.axisName == axisName);
         if (axisState == null) throw new Exception("No axisState " + axisName + " Found!");
         axisState.state = state;

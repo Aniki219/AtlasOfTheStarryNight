@@ -6,51 +6,24 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/WorldMap/guidance.unity
-    guid: 598b07b50ffc2e04ea7433972cb68949
-  - enabled: 1
-    path: Assets/Scenes/Main Menu.unity
-    guid: e455277f710f8364abf7b886ddfb2b39
-  - enabled: 1
-    path: Assets/Scenes/speedScene1.unity
-    guid: 2cda990e2423bbf4892e6590ba056729
-  - enabled: 1
-    path: Assets/Scenes/windMillExterior.unity
-    guid: fa7092c49269c7a43a8cf57c60addb6c
-  - enabled: 1
-    path: Assets/Scenes/Windmill Levels/Spinners1.unity
-    guid: 875b3e8da7f4a7042a0bc3979d7f87aa
-  - enabled: 1
-    path: Assets/Scenes/AltairKettle.unity
-    guid: c5166b6e87659cd40b8885062af19a2b
-  - enabled: 1
-    path: Assets/Scenes/bounceOnEnemies.unity
-    guid: 56755c64d44107c499e31cdf9d206fc7
-  - enabled: 1
-    path: Assets/Scenes/paintTest.unity
-    guid: dcea6a2397aec134d94bcacea2c9b11d
-  - enabled: 1
-    path: Assets/Scenes/WorldMap/grassArea.unity
-    guid: 47dbae6fd78a88b40a7078b6b1317fc0
-  - enabled: 1
-    path: Assets/Scenes/pinkFruitTree.unity
-    guid: 55b48f4611d2a5a458372f79b95ff5ce
-  - enabled: 1
-    path: Assets/Scenes/roomTemplate.unity
-    guid: 320417fe9c02dc94394f23943739c7dd
-  - enabled: 1
-    path: Assets/Scenes/stoneTest.unity
-    guid: dab3ec49912081b4ba605c3672104a56
-  - enabled: 1
-    path: Assets/Scenes/tornadoSnake.unity
-    guid: cac758e2a064bc046918eff85d8e9262
-  - enabled: 1
-    path: Assets/Scenes/witchCanyon.unity
-    guid: df3dbed2731a55945b46043a1d4a945f
+    path: Assets/Scenes/WorldMap/2by2.unity
+    guid: d1e8e28e5f99f7b4abf72d27bd65372c
   - enabled: 1
     path: Assets/Scenes/WorldMap/downGrass.unity
     guid: 1880495ff5de0ae49913ca356779f53d
   - enabled: 1
+    path: Assets/Scenes/WorldMap/grassArea.unity
+    guid: 47dbae6fd78a88b40a7078b6b1317fc0
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/guidance.unity
+    guid: 598b07b50ffc2e04ea7433972cb68949
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/ladder.unity
+    guid: 9085a589b031cbf4b82def52e51e33bd
+  - enabled: 1
     path: Assets/Scenes/WorldMap/profession.unity
     guid: 7e697715eb8dc214a8af58aeb84f57d1
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/template.unity
+    guid: d5f03f3e36f378d41bbdb1d5317a0abd
   m_configObjects: {}

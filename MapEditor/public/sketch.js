@@ -51,6 +51,7 @@ function getSceneNames() {
 
   for(fn of files) {
     let sceneName = fn.split(".")[0];
+    if (sceneName == "template") continue;
     fileObj[sceneName] = true;
   }
 
@@ -74,11 +75,13 @@ function getSceneNames() {
 function saveData() {
   for (let t of tiles) {
     let {scene, x, y, w, h, coords} = t;
+    let position = {x, y};
+    let size = {x: w, y: h};
     let sceneObj = dataObj.scenes.find(s => s.scene == scene);
     if (sceneObj) {
-      Object.assign(sceneObj, {scene, x, y, w, h, coords});
+      Object.assign(sceneObj, {scene, position, size, coords});
     }
   }
-  jsondata = JSON.stringify(dataObj);
+  jsondata = JSON.stringify(dataObj, null, 2);
   fs.writeFileSync(`${__dirname}/../data/test.json`, jsondata);
 }

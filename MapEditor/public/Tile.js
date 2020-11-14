@@ -242,9 +242,9 @@ function setTileCoords() {
   }
 }
 
-function checkTilesAtCoord(col, row) {
+function checkTilesAtCoord(x, y) {
   return tiles.filter(tile =>
-    tile.coords.find(c => c.col == col && c.row == row)
+    tile.coords.find(c => c.x == x && c.y == y)
   );
 }
 
@@ -284,8 +284,8 @@ function warnOverlapTiles() {
 }
 
 class TileCoord {
-  constructor(col, row) {
-    this.col = col;
-    this.row = row;
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
   }
 }
