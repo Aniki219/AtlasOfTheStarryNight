@@ -14,6 +14,7 @@ public class HitBox : ScriptableObject
     public bool knockback = false;
     public bool spike = false;
     public bool bounce = false;
+    public bool broom = false;
     public bool interactBroom = false;
     public bool explosive = false;
     public bool incendiary = false;

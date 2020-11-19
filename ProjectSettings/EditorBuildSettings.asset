@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/2by2.unity
     guid: d1e8e28e5f99f7b4abf72d27bd65372c
   - enabled: 1
+    path: Assets/Scenes/WorldMap/bounceOnEnemies.unity
+    guid: 56755c64d44107c499e31cdf9d206fc7
+  - enabled: 1
     path: Assets/Scenes/WorldMap/downGrass.unity
     guid: 1880495ff5de0ae49913ca356779f53d
   - enabled: 1

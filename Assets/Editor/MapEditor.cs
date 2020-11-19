@@ -44,7 +44,7 @@ public class MapEditor : Editor
         }
     }
 
-    static void shiftScene(string name, float xdir, float ydir)
+    public static void shiftScene(string name, float xdir, float ydir)
     {
         Scene currentScene = SceneManager.GetSceneAt(0);
         Scene rightScene = SceneManager.GetSceneByName(name);

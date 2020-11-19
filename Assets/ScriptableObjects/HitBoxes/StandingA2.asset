@@ -17,9 +17,11 @@ MonoBehaviour:
   kbDir: {x: 1, y: 1, z: 0}
   duration: 0.083333336
   damage: 1
+  facing: 1
   knockback: 0
   spike: 0
   bounce: 0
+  broom: 1
   interactBroom: 1
   explosive: 0
   incendiary: 0

@@ -12,10 +12,16 @@ public class canvasController : MonoBehaviour
     public Image blackoutPanel;
     float barRestoreSpeed = 6f;
 
+    private static bool created = false;
+
     private void Start()
     {
-        blackoutPanel.color = new Vector4(0, 0, 0, 1.0f);
-        doBlackout(false);
+        if (created) Destroy(gameObject);
+        created = true;
+
+        DontDestroyOnLoad(gameObject);
+        //blackoutPanel.color = new Vector4(0, 0, 0, 1.0f);
+        //doBlackout(false);
     }
 
     void Update()

@@ -108,17 +108,10 @@ public class playerController : MonoBehaviour
         lastSafePosition = transform.position;
         warpToCurrentDoor();
 
-        if (!created)
-        {
-            DontDestroyOnLoad(gameObject);
-            created = true;
-      
-            //gameManager.Instance.player = gameObject;
-        } else
-        {
-            Destroy(gameObject);
-        }
-        //gameManager.Instance.setPlayer();
+        if (created) Destroy(gameObject);
+        created = true;
+
+        DontDestroyOnLoad(gameObject);
     }
 
     private void OnDestroy()
@@ -208,7 +201,7 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if (other.CompareTag("BroomCollectible") && state == State.Broom)
+            if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && state == State.Broom)
             {
                 other.SendMessage("OnBroomCollide");
             }
@@ -299,23 +292,21 @@ public class playerController : MonoBehaviour
             resourceManager.Instance.restoreMana();
             if (AtlasInputManager.getKeyPressed("Broom"))
             {
-                state = State.BroomStart;
-                canBroom = false;
+                triggerBroomStart();
             }
         }
         else
         {
             if (canBroom && AtlasInputManager.getKeyPressed("Broom"))
             {
-                state = State.BroomStart;
-                canBroom = false;
+                triggerBroomStart();
                 if (isWallSliding() && velocity.y < 0)
                 {
                     flipHorizontal();
                 }
                 else
                 {
-                    faceInputDirection();
+                    faceDirection();
                 }
                 return;
             }
@@ -475,9 +466,8 @@ public class playerController : MonoBehaviour
 
             if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
             {
-                faceInputDirection();
-                state = State.BroomStart;
-                canBroom = false;
+                faceDirection();
+                triggerBroomStart();
                 yield break;
             }
             yield return new WaitForFixedUpdate();
@@ -631,12 +621,22 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region Broom Mechanics
+    //Popping a WooshBerry calls this.
+    public void triggerBroomStart(bool fast = false, float dir = 0)
+    {
+        faceDirection(dir);
+        state = State.BroomStart;
+        fastBroom = fast;
+        canBroom = false;
+    }
+    
     //State BroomStart waits for Atlas to get on Broom. Animator calls startBroom
     void handleBroomStart()
     {
         anim.SetTrigger("broomStart");
         SoundManager.Instance.playClip("onBroom");
         state = fastBroom ? State.Broom : State.Wait;
+        fastBroom = false;
         velocity = Vector3.zero;
     }
 
@@ -786,9 +786,9 @@ public class playerController : MonoBehaviour
         state = State.Wait;
     }
 
-    void faceInputDirection()
+    void faceDirection(float dir = 0)
     {
-        float dir = AtlasInputManager.getAxisState("Dpad").x;
+        if (dir == 0) dir = AtlasInputManager.getAxisState("Dpad").x;
         if (dir != 0)
         {
             facing = (int)dir;
@@ -829,7 +829,6 @@ public class playerController : MonoBehaviour
         if (transform.position.x + boxCollider.size.x / 2.0f > bounds.max.x)
         {
             AtlasSceneManager.switchScene(Vector2.right);
-            Debug.Log("go right");
         }
         //DOWN
         if (transform.position.y - boxCollider.size.y / 2.0f < bounds.min.y)

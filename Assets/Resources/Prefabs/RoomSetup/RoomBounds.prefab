@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 650972519180489268}
   - component: {fileID: 650972519180489163}
   - component: {fileID: 650972519180489269}
+  - component: {fileID: 195339449154015505}
   m_Layer: 0
   m_Name: RoomBounds
   m_TagString: RoomBounds
@@ -70,3 +71,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d6549d57a14d74a9e40260e1ba29e3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &195339449154015505
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650972519180489162}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5d957fa51ee4904d9bbf1deea4dc4c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  alwaysShowCollider: 1

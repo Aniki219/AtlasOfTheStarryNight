@@ -8,8 +8,13 @@ public class Screenshot : MonoBehaviour {
 
     [SerializeField] int width = 1024;
     [SerializeField] int height = 512;
-    string folder = "../MapEditor/screenshots";
     [SerializeField] bool ensureTransparentBackground = false;
+
+    public void setResolutionScale(float wScale, float hScale = 1.0f)
+    {
+        width = Mathf.RoundToInt(1536.0f * wScale);
+        height = Mathf.RoundToInt(864.0f * hScale);
+    }
 
     public void TakeScreenshot() {
         string dir = "Assets/../MapEditor/screenshots/";

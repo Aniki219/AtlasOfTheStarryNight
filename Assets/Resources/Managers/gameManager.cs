@@ -38,7 +38,7 @@ public class gameManager : ScriptableObject
     public void setPlayer()
     {
         instance.player = GameObject.Find("Atlas");
-        instance.playerHanger = instance.player.transform.Find("Atlas/AtlasSprite/Hanger");
+        instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
         instance.playerCtrl = instance.player.GetComponent<playerController>();
 
         if (instance.canSetPosition)

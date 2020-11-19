@@ -14,12 +14,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   position: {x: 0.4, y: 0, z: 0}
   size: {x: 1.25, y: 1, z: 1}
-  kbDir: {x: 1, y: 1, z: 0}
+  kbDir: {x: -1, y: 1, z: 0}
   duration: 0.083333336
   damage: 1
+  facing: 1
   knockback: 0
   spike: 0
   bounce: 0
+  broom: 1
   interactBroom: 1
   explosive: 0
   incendiary: 0

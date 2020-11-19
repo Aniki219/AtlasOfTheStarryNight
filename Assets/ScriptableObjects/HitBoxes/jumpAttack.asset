@@ -21,6 +21,7 @@ MonoBehaviour:
   knockback: 1
   spike: 0
   bounce: 0
+  broom: 1
   interactBroom: 1
   explosive: 0
   incendiary: 0

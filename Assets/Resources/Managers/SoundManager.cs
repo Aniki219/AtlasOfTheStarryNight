@@ -27,7 +27,8 @@ public class SoundManager : ScriptableObject
         {
             AudioClip clip = (AudioClip)Resources.Load<AudioClip>(string.Concat("Sounds/", clipPath));
             audioSource.outputAudioMixerGroup.audioMixer.SetFloat("Pitch", 1.0f + pitch / 20.0f);
-            audioSource.PlayOneShot(clip);
+            audioSource.clip = clip;
+            audioSource.Play();
         }
     }
 }

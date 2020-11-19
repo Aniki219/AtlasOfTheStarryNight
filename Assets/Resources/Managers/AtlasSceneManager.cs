@@ -8,8 +8,8 @@ using UnityEngine.SceneManagement;
 [CreateAssetMenu(menuName = "Managers/AtlasSceneManager")]
 public class AtlasSceneManager : ScriptableObject
 {
-    private const float SCREEN_WIDTH = 16.0f;
-    private const float SCREEN_HEIGHT = 9.0f;
+    public const float SCREEN_WIDTH = 16.0f;
+    public const float SCREEN_HEIGHT = 9.0f;
 
     private static AtlasSceneManager instance;
     public static AtlasSceneManager Instance { get { return instance; } }
@@ -25,11 +25,6 @@ public class AtlasSceneManager : ScriptableObject
         string json = reader.ReadToEnd();
         reader.Close();
         AtlasSceneData sceneData = JsonUtility.FromJson<AtlasSceneData>(json);
-        if (Instance)
-        {
-            instance.sceneData = sceneData;
-        }
-        Debug.Log("Scene Data Updated!");
         return sceneData;
     }
 
@@ -92,7 +87,6 @@ public class AtlasSceneManager : ScriptableObject
 
     public static Vector2 getSceneCoords(string sceneName = null)
     {
-        Debug.Log("get scene coords");
         if (sceneName == null)
         {
             sceneName = SceneManager.GetActiveScene().name;
@@ -112,18 +106,10 @@ public class AtlasSceneManager : ScriptableObject
         {
             sceneName = SceneManager.GetActiveScene().name;
         }
-        AtlasSceneData sceneData;
-        List<AtlasScene> neighbors = new List<AtlasScene>();
-        if (instance)
-        {
-            sceneData = instance.sceneData;
-            instance.neighbors = neighbors;
-        } else
-        {
-            sceneData = getSceneData();
-        }
+        AtlasSceneData sceneData = getSceneData();
         AtlasScene currentScene = getScene();
 
+        List<AtlasScene> neighbors = new List<AtlasScene>();
         for (int x = 0; x < currentScene.size.x; x++)
         {
             neighbors.Add(findSceneByCoords(currentScene.position + new Vector2(x, -1)));
@@ -175,14 +161,7 @@ public class AtlasSceneManager : ScriptableObject
 
     public static AtlasScene findSceneByCoords(Vector2 sceneCoords)
     {
-        AtlasSceneData sceneData;
-        if (instance != null && instance.sceneData != null)
-        {
-            sceneData = instance.sceneData;
-        } else
-        {
-            sceneData = getSceneData();
-        }
+        AtlasSceneData sceneData = getSceneData();
         AtlasScene rtnScene = sceneData.scenes.Find(s => {return
             sceneCoords.x < s.position.x + s.size.x &&
             sceneCoords.x >= s.position.x &&
@@ -202,12 +181,8 @@ public class AtlasSceneManager : ScriptableObject
         {
             sceneName = SceneManager.GetActiveScene().name;
         }
-        if (Instance && Instance.sceneData == null)
-        {
-            getSceneData();
-        }
-        AtlasScene currentScene = instance.sceneData.scenes.Find(s => s.scene == sceneName);
-        if (instance) instance.currentScene = currentScene;
+        AtlasSceneData sceneData = getSceneData();
+        AtlasScene currentScene = sceneData.scenes.Find(s => s.scene == sceneName);
         return currentScene;
     }
 }
