@@ -41,7 +41,7 @@ public class oscillator : MonoBehaviour
         if (rotational)
         {
             float angle = Mathf.Sin(frameCount * 2.0f * Mathf.PI * cyclesPerSecond);
-            transform.localRotation = Quaternion.Euler(oscillationDirection * angle * oscillationSize);
+            transform.localRotation = Quaternion.Euler(oscillationDirection * angle * oscillationSize * transform.localScale.y); //Upside down switches cw to ccw i think..
         } else
         {
             transform.position = startPosition + oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI * cyclesPerSecond) * oscillationSize;

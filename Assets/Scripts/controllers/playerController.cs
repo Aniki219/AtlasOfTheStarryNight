@@ -667,7 +667,7 @@ public class playerController : MonoBehaviour
             startBonk();
             return;
         }
-        float vdir = AtlasInputManager.getAxisState("Dpad").y;
+        float vdir = 0 * AtlasInputManager.getAxisState("Dpad").y;
         velocity.y = moveSpeed / 2.0f * vdir;
         velocity.x = moveSpeed * 2 * facing;
     }

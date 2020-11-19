@@ -17,6 +17,8 @@ public class BerryPlantController : MonoBehaviour
     [System.Serializable]
     public class BroomEvent : UnityEvent<bool> { }
 
+    public GameObject pickParticle;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -53,6 +55,7 @@ public class BerryPlantController : MonoBehaviour
     {
         canPick = false;
         anim.SetTrigger("Picked");
+        if (pickParticle) Instantiate(pickParticle, transform);
         yield return new WaitForSeconds(regrowTime);
         anim.SetTrigger("Regrow");
         yield return new WaitForSeconds(0.5f);

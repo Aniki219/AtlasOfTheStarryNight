@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class selfDestruct : MonoBehaviour
 {
+    public float lifetime = Mathf.Infinity;
     public bool destroyOnAnimEnd = false;
     public void destructSelf()
     {
         Destroy(gameObject);
+    }
+
+    public void Start()
+    {
+        if (lifetime != Mathf.Infinity) Destroy(gameObject, lifetime);
     }
 
     private void Update()
