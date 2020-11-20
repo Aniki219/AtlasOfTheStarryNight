@@ -26,7 +26,7 @@ public class BerryPlantController : MonoBehaviour
 
     public void bumpPlayer()
     {
-        gameManager.Instance.playerCtrl.bounce(7);
+        gameManager.Instance.playerCtrl.bounce(9);
         StartCoroutine(Picked());
     }
 
