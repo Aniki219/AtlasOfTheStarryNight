@@ -9,12 +9,14 @@ public class bombBerryController : MonoBehaviour
     bool flying = false;
     Vector3 dir;
     float flySpeed = 5.0f;
+    Rigidbody2D rb;
 
     void Start()
     {
         eventManager.Instance.onBonkEvent += Boom;
         eventManager.Instance.onBroomCancel += Drop;
         anim = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -70,14 +72,26 @@ public class bombBerryController : MonoBehaviour
             collision.GetComponent<BerryPlantController>().pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
         }
 
-        if (collision.CompareTag("AllyHitbox") && GetComponent<Rigidbody2D>().velocity.magnitude < 1)
+        if (collision.CompareTag("BumpBerryPlant"))
+        {
+            BerryPlantController bc = collision.GetComponent<BerryPlantController>();
+            if (!bc.canPick) return;
+            bc.pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
+            isSimulated(true);
+            anim.SetTrigger("Idle");
+            flying = false;
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 1;
+            rb.AddForce(Vector3.Scale(bc.getDir(), new Vector3(1.0f, 2.0f, 1.0f)) * 150.0f);
+        }
+
+        if (collision.CompareTag("AllyHitbox") && rb.velocity.magnitude < 1)
         {
             HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
             if (hb.interactBroom)
             {
                 float dx = Vector3.Distance(gameManager.Instance.player.transform.position, transform.position);
-                float scale = -350 * Mathf.Pow((dx - 0.5f), 2) + 200;
-                GetComponent<Rigidbody2D>().AddForce(new Vector2(1.25f * hb.facing, 1) * scale);
+                rb.AddForce(new Vector2(1.25f * hb.kbDir.x, 1) * 150);
             }
         }
     }
@@ -87,10 +101,9 @@ public class bombBerryController : MonoBehaviour
         float elapsedTime = 0;
         float startTime = Time.time;
         anim.SetTrigger("Wings");
-        GetComponent<Rigidbody2D>().gravityScale = 0;
-        Rigidbody2D rigidbody = GetComponent<Rigidbody2D>();
-        rigidbody.velocity = new Vector3(0f, 0f, 0f);
-        rigidbody.angularVelocity = 0;
+        rb.gravityScale = 0;
+        rb.velocity = new Vector3(0f, 0f, 0f);
+        rb.angularVelocity = 0;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 
         while (elapsedTime < 0.05f)

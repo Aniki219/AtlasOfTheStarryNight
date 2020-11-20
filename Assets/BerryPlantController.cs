@@ -24,6 +24,12 @@ public class BerryPlantController : MonoBehaviour
         anim = GetComponent<Animator>();
     }
 
+    public void bumpPlayer()
+    {
+        gameManager.Instance.playerCtrl.bounce(7);
+        StartCoroutine(Picked());
+    }
+
     public void OnBroomCollide()
     {
         if (!canPick) return;
@@ -63,6 +69,11 @@ public class BerryPlantController : MonoBehaviour
         yield return 0;
     }
 
+    public Vector3 getDir()
+    {
+        return transform.right * transform.localScale.x + transform.up * transform.localScale.y;
+    }
+
     GameObject createBombBerry(bool atPlayer = true)
     {
         Vector3 at = transform.position;
@@ -87,6 +98,10 @@ public class BerryPlantController : MonoBehaviour
                 if (tag == "WooshBerryPlant")
                 {
                     broomCallback.Invoke(true);
+                }
+                if (tag == "BumpBerryPlant")
+                {
+                    pickCallback.Invoke(hb);
                 }
             }
             if (hb.interactBroom)

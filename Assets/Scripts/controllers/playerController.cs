@@ -615,6 +615,7 @@ public class playerController : MonoBehaviour
     public void bounce(float bounceVelocity, string sound = "jump2")
     {
         GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        returnToMovement();
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
     }

@@ -18,6 +18,7 @@ TagManager:
   - RoomBounds
   - WooshBerryPlant
   - BombBerryPlant
+  - BumpBerryPlant
   layers:
   - Default
   - TransparentFX
