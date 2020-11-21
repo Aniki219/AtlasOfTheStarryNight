@@ -19,6 +19,7 @@ TagManager:
   - WooshBerryPlant
   - BombBerryPlant
   - BumpBerryPlant
+  - BombExplosion
   layers:
   - Default
   - TransparentFX

@@ -13,9 +13,10 @@ GameObject:
   - component: {fileID: 3733189206529131249}
   - component: {fileID: 3733189206529131254}
   - component: {fileID: 6338262918067117377}
+  - component: {fileID: -7725452726735937621}
   m_Layer: 0
   m_Name: 64Explosion
-  m_TagString: Untagged
+  m_TagString: BombExplosion
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -115,6 +116,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2d10969f178800b4f8e4a84324f73a06, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lifetime: Infinity
   destroyOnAnimEnd: 1
 --- !u!114 &6338262918067117377
 MonoBehaviour:
@@ -129,3 +131,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitBox: {fileID: 11400000, guid: a59410fe1bdde7b498ce5d1b033752a6, type: 2}
+--- !u!58 &-7725452726735937621
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3733189206529131250}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 1
