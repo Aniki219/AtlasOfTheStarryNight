@@ -16,7 +16,7 @@ public class SoundManager : ScriptableObject
         instance = Resources.LoadAll<SoundManager>("Managers")[0];
     }
 
-    public void playClip(string clipPath, int pitch = 0)
+    public void playClip(string clipPath, int pitch = 0, Vector3? origin = null)
     {
         if (!audioSource)
         {
@@ -27,8 +27,8 @@ public class SoundManager : ScriptableObject
         {
             AudioClip clip = (AudioClip)Resources.Load<AudioClip>(string.Concat("Sounds/", clipPath));
             audioSource.outputAudioMixerGroup.audioMixer.SetFloat("Pitch", 1.0f + pitch / 20.0f);
-            audioSource.clip = clip;
-            audioSource.Play();
+            if (origin == null || Vector3.Distance(Camera.main.transform.position + Vector3.forward * 10.0f, (Vector3)origin) < 9.5f)
+            audioSource.PlayOneShot(clip);
         }
     }
 }

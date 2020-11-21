@@ -14,16 +14,20 @@ public class Deformer : MonoBehaviour
         StartCoroutine(deformAndReform(to, timeTo, timeReturn));
     }
 
-    public void flashWhite()
+    public void flashWhite(float time = 0.1f)
     {
-        StartCoroutine(flashCoroutine());
+        StartCoroutine(flashCoroutine(time));
     }
 
-    public IEnumerator flashCoroutine()
+    private IEnumerator flashCoroutine(float time)
     {
         SpriteRenderer sprite = GetComponent<SpriteRenderer>();
+        if (sprite == null)
+        {
+            sprite = GetComponentInChildren<SpriteRenderer>();
+        }
         sprite.material = flashMaterial;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(time);
         sprite.material = defaultMaterial;
     }
 

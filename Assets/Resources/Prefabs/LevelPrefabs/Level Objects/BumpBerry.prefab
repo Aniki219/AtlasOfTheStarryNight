@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 495180147399256997}
   - component: {fileID: 495180147399256992}
   - component: {fileID: 495180147399256995}
+  - component: {fileID: 3993322642314714489}
   m_Layer: 17
   m_Name: BumpBerry
   m_TagString: BumpBerryPlant
@@ -149,14 +150,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744d5d72cf70c1a40880199658cd7590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regrowTime: 5
+  regrowTime: 3
   canPick: 1
   pickCallback:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 495180147399256992}
         m_MethodName: bumpPlayer
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -170,17 +171,20 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 495180147399256992}
         m_MethodName: bumpPlayer
-        m_Mode: 1
+        m_Mode: 2
         m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgument: {fileID: 11400000, guid: 22bb06a5e72edae45ac41e17a1ff370b,
+            type: 2}
+          m_ObjectArgumentAssemblyTypeName: HitBox, Assembly-CSharp
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  pickParticle: {fileID: 7837217630231440469, guid: 052b3dd0aac0def40a4a3ad25e9c33dd,
+  pickParticle: {fileID: 7837217630231440469, guid: df65318db034fe74a8e686ed53a7b40d,
     type: 3}
+  pickSound: {fileID: 8300000, guid: 86260936bdbfb8b4d856095f25bafe24, type: 3}
+  regrowSound: {fileID: 8300000, guid: ac1b90a2da7146844b29c03077036f46, type: 3}
 --- !u!61 &495180147399256995
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -207,3 +211,17 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.4933939, y: 0.4933939}
   m_EdgeRadius: 0
+--- !u!114 &3993322642314714489
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495180147399257001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}

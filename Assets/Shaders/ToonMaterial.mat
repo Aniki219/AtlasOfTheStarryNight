@@ -9,7 +9,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: ToonMaterial
   m_Shader: {fileID: 4800000, guid: b8fc282978d09f54ba72b574f0e8414a, type: 3}
-  m_ShaderKeywords: _EMISSION _RECEIVE_SHADOWS_OFF
+  m_ShaderKeywords: ETC1_EXTERNAL_ALPHA _EMISSION _RECEIVE_SHADOWS_OFF
   m_LightmapFlags: 2
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0

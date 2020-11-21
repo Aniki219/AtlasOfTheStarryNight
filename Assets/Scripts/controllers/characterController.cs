@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using MyBox;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(BoxCollider2D))]
 public class characterController : MonoBehaviour
@@ -28,6 +30,11 @@ public class characterController : MonoBehaviour
     Vector3 additionalVelocity;
 
     public Vector3 cameraTarget;
+
+    public bool bonkCeiling = false;
+    [ConditionalField("bonkCeiling")] public BonkCeilingEvent OnBonkCeiling;
+    [System.Serializable]
+    public class BonkCeilingEvent : UnityEvent<float> { }
 
     void Start()
     {
@@ -223,6 +230,7 @@ public class characterController : MonoBehaviour
 
             if (hit)
             {
+                if (directionY == 1 && bonkCeiling) OnBonkCeiling.Invoke(velocity.y);
                 velocity.y = (hit.distance - skinWidth) * directionY;   
                 rayLength = hit.distance;
                 if (directionY == -1)
@@ -237,6 +245,7 @@ public class characterController : MonoBehaviour
 
                 collisions.below = directionY == -1;
                 collisions.above = directionY == 1;
+
                 break;
             }
             //Debug.DrawLine(rayOrigin, rayOrigin + Vector2.up * directionY * rayLength);

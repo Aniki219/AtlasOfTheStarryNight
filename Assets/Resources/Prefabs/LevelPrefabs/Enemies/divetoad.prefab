@@ -210,6 +210,10 @@ MonoBehaviour:
   lockPosition: 0
   safetyMargin: 1
   cameraTarget: {x: 0, y: 0, z: 0}
+  bonkCeiling: 0
+  OnBonkCeiling:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &6726984603581895702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,6 +256,7 @@ MonoBehaviour:
   blockCallback:
     m_PersistentCalls:
       m_Calls: []
+  hurtSound: {fileID: 8300000, guid: a62717d3930a2674e9bc3f89b8bac6a9, type: 3}
 --- !u!1001 &1381473423557012512
 PrefabInstance:
   m_ObjectHideFlags: 0

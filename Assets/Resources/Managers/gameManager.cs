@@ -14,6 +14,7 @@ public class gameManager : ScriptableObject
     public float gravity = -17.6f;
     public float maxFallVel = -15f;
 
+    public canvasController canvasCtrl;
     public GameObject player;
     public playerController playerCtrl;
     public Transform playerHanger;
@@ -38,6 +39,7 @@ public class gameManager : ScriptableObject
     public void setPlayer()
     {
         instance.player = GameObject.Find("Atlas");
+        instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<canvasController>();
         instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
         instance.playerCtrl = instance.player.GetComponent<playerController>();
 
@@ -46,6 +48,11 @@ public class gameManager : ScriptableObject
             instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
             Physics2D.SyncTransforms();
             instance.player.GetComponent<characterController>().setCollidable(true);
+            if (instance.playerCtrl.state == playerController.State.Wait)
+            {
+                playerCtrl.returnToMovement();
+                canvasCtrl.doBlackout(false);
+            }
         }
         instance.canSetPosition = true;
     }
@@ -60,6 +67,31 @@ public class gameManager : ScriptableObject
 
     static void onSceneLoad(Scene scene, LoadSceneMode mode)
     {
+        if (instance.currentDoorLabel != "none")
+        {
+            GameObject door = null;
+            GameObject[] doors = GameObject.FindGameObjectsWithTag("Door");
+            if (doors.Length == 1)
+            {
+                door = doors[0];
+            }
+            if (doors.Length > 1)
+            {
+                foreach (GameObject d in doors)
+                {
+                    if (d.GetComponent<doorController>().label == instance.currentDoorLabel)
+                    {
+                        door = d;
+                        break;
+                    }
+                }
+            }
+            if (door != null)
+            {
+                instance.playerStartX = door.transform.position.x;
+                instance.playerStartY = door.transform.position.y;
+            }
+        }
         instance.setPlayer();
     }
 

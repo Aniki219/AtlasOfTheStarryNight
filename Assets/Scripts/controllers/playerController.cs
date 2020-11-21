@@ -48,6 +48,7 @@ public class playerController : MonoBehaviour
     Animator anim;
     Transform sprite;
     BoxCollider2D boxCollider;
+    Deformer deformer;
 
     GameObject starRotator;
     Transform currentTornado;
@@ -100,6 +101,7 @@ public class playerController : MonoBehaviour
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
+        deformer = GetComponent<Deformer>();
 
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -136,6 +138,7 @@ public class playerController : MonoBehaviour
                 break;
             case State.Broom:
                 handleBroom();
+                handleAttackInput();
                 break;
             case State.Attack:
                 handleMovement(!isGrounded(), false, false);
@@ -219,10 +222,10 @@ public class playerController : MonoBehaviour
                 canTornado = false;
                 state = State.Tornado;
                 currentTornado = other.transform;
-                Deformer deformer = other.GetComponent<Deformer>();
-                if (deformer)
+                Deformer nadoDeformer = other.GetComponent<Deformer>();
+                if (nadoDeformer)
                 {
-                    deformer.startDeform(new Vector3(1.75f, .75f, 1.0f), 0.1f);
+                    nadoDeformer.startDeform(new Vector3(1.75f, .75f, 1.0f), 0.1f);
                 }
             }
 
@@ -350,6 +353,7 @@ public class playerController : MonoBehaviour
     {
         if (AtlasInputManager.getKeyPressed("Attack"))
         {
+            if (state == State.Broom) { eventManager.Instance.BroomCancelEvent(); }
             state = State.Attack;
             anim.SetTrigger("SelectAttack");
         }
@@ -491,7 +495,8 @@ public class playerController : MonoBehaviour
         currentDoorLabel = currentDoor.label;
         GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<canvasController>().doBlackout();
         yield return new WaitForSeconds(0.5f);
-        SceneManager.LoadScene(currentDoor.targetScene.name);
+        gameManager.Instance.currentDoorLabel = currentDoor.label;
+        gameManager.Instance.switchScene(currentDoor.targetScene.name, 0, 0);
     }
     void warpToCurrentDoor()
     {
@@ -529,10 +534,10 @@ public class playerController : MonoBehaviour
             anim.SetBool("inTornado", false);
             //state = State.Movement;
             returnToMovement();
-            Deformer deformer = currentTornado.GetComponent<Deformer>();
-            if (deformer)
+            Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
+            if (nadoDeformer)
             {
-                deformer.startDeform(new Vector3(0.75f, 2.0f, 1.0f), 0.1f);
+                nadoDeformer.startDeform(new Vector3(0.75f, 2.0f, 1.0f), 0.1f);
                 SoundManager.Instance.playClip("LevelObjects/EnterTornado", 1);
             }
             currentTornado = null;
@@ -545,13 +550,12 @@ public class playerController : MonoBehaviour
             {
                 velocity.x = mp.getVelocity().x;
             }
-            Deformer deformer = currentTornado.GetComponent<Deformer>();
-            if (deformer)
+            Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
+            if (nadoDeformer)
             {
-                deformer.startDeform(new Vector3(2.0f, 0.25f, 1.0f), 0.1f);
+                nadoDeformer.startDeform(new Vector3(2.0f, 0.25f, 1.0f), 0.1f);
             }
             anim.SetBool("inTornado", false);
-            //state = State.Movement;
             returnToMovement();
             currentTornado = null;
             SoundManager.Instance.playClip("LevelObjects/EnterTornado", -1);
@@ -570,6 +574,12 @@ public class playerController : MonoBehaviour
         if (vel == 0) return;
         facing = (int)Mathf.Sign(vel);
         sprite.localScale = new Vector3(facing, sprite.localScale.y, sprite.localScale.z);
+    }
+    public void OnBonkCeiling(float vy)
+    {
+        if (state == State.Movement)
+        deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.2f, 0.25f);
+        gameManager.Instance.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
     }
 
     #endregion
@@ -594,7 +604,7 @@ public class playerController : MonoBehaviour
 
     void firstJump()
     {
-        GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
         StartCoroutine(jumpCoroutine());
@@ -612,10 +622,11 @@ public class playerController : MonoBehaviour
         StopCoroutine(jumpCoroutine());
     }
 
-    public void bounce(float bounceVelocity, string sound = "jump2")
+    public void bounce(float bounceVelocity, bool flash = true, string sound = "jump2")
     {
-        GetComponent<Deformer>().startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
-        returnToMovement();
+        deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        if (state == State.Broom) returnToMovement();
+        if (flash) deformer.flashWhite();
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
     }
@@ -797,9 +808,10 @@ public class playerController : MonoBehaviour
         }
     }
 
-    void createStars(Vector3 position)
+    void createStars(Vector3? position = null)
     {
-        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
+        if (position == null) position = transform.position;
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
     }
 
     void flipHorizontal()

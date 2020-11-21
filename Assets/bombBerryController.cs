@@ -34,8 +34,11 @@ public class bombBerryController : MonoBehaviour
     void Boom()
     {
         hasBoomed = true;
+        flying = false;
+        rb.velocity = Vector2.zero;
         isSimulated(false);
         anim.SetTrigger("Boom");
+        SoundManager.Instance.playClip("Boom");
         GetComponent<selfDestruct>().destroyOnAnimEnd = true;
         gameManager.Instance.createInstance("Effects/Explosions/64Explosion", transform.position);
     }

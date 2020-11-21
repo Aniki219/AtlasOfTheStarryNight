@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 6249957850551527284}
   - component: {fileID: 6249957850551527287}
   - component: {fileID: 6249957850551527291}
+  - component: {fileID: 8921165412249882944}
   m_Layer: 17
   m_Name: BombBerryPlant
   m_TagString: BombBerryPlant
@@ -141,6 +142,9 @@ MonoBehaviour:
   broomCallback:
     m_PersistentCalls:
       m_Calls: []
+  pickParticle: {fileID: 0}
+  pickSound: {fileID: 8300000, guid: 7447177e8b4e62d489d8d1c19b6b1cca, type: 3}
+  regrowSound: {fileID: 8300000, guid: 5c614e38274be4a4fac9e881be4894ed, type: 3}
 --- !u!95 &6249957850551527291
 Animator:
   serializedVersion: 3
@@ -160,3 +164,17 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &8921165412249882944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6249957850551527286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}

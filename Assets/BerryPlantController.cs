@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
+[RequireComponent(typeof(Deformer), typeof(BoxCollider2D))]
 public class BerryPlantController : MonoBehaviour
 {
     Animator anim;
@@ -18,15 +19,23 @@ public class BerryPlantController : MonoBehaviour
     public class BroomEvent : UnityEvent<bool> { }
 
     public GameObject pickParticle;
+    public AudioClip pickSound;
+    public AudioClip regrowSound;
+
+    Deformer deformer;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
+        deformer = GetComponent<Deformer>();
     }
 
-    public void bumpPlayer()
+    public void bumpPlayer(HitBox hb)
     {
-        gameManager.Instance.playerCtrl.bounce(9);
+        if (hb != null && hb.name != "")
+        {
+            gameManager.Instance.playerCtrl.bounce(9, true);
+        }
         StartCoroutine(Picked());
     }
 
@@ -60,11 +69,15 @@ public class BerryPlantController : MonoBehaviour
     IEnumerator Picked()
     {
         canPick = false;
+        deformer.flashWhite(0.2f);
+        if (pickSound) SoundManager.Instance.playClip(pickSound.name);
+        if (pickParticle) Instantiate(pickParticle, transform.position, Quaternion.identity);
+        yield return new WaitForSeconds(0.1f);
         anim.SetTrigger("Picked");
-        if (pickParticle) Instantiate(pickParticle, transform);
         yield return new WaitForSeconds(regrowTime);
         anim.SetTrigger("Regrow");
         yield return new WaitForSeconds(0.5f);
+        if (regrowSound) SoundManager.Instance.playClip(regrowSound.name, -2, transform.position);
         canPick = true;
         yield return 0;
     }

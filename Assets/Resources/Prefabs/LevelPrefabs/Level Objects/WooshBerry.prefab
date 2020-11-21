@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1279541664}
   - component: {fileID: 1279541666}
   - component: {fileID: 1279541667}
+  - component: {fileID: -7325879653678202139}
   m_Layer: 17
   m_Name: WooshBerry
   m_TagString: WooshBerryPlant
@@ -175,6 +176,8 @@ MonoBehaviour:
         m_CallState: 2
   pickParticle: {fileID: 7837217630231440469, guid: 052b3dd0aac0def40a4a3ad25e9c33dd,
     type: 3}
+  pickSound: {fileID: 8300000, guid: 4323f71ff1bc7114eb89fa3a57332a2b, type: 3}
+  regrowSound: {fileID: 8300000, guid: 264b11552a1c6b243a5d3aa1f401389e, type: 3}
 --- !u!114 &1279541666
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,3 +210,17 @@ MonoBehaviour:
   axis: 2
   oscillationSize: 2
   rotational: 1
+--- !u!114 &-7325879653678202139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5235961991136082181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}

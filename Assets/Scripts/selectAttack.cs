@@ -8,29 +8,46 @@ public class selectAttack : StateMachineBehaviour
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
         playerController pc = animator.gameObject.GetComponentInParent<playerController>();
+        foreach (AnimatorControllerParameter key in animator.parameters)
+        {
+            if (key.type == AnimatorControllerParameterType.Trigger)
+            animator.ResetTrigger(key.name);
+        }
         animator.SetBool("Attacking", true);
         bool up = AtlasInputManager.getAxisState("Dpad").y > 0.1f;
         bool down = AtlasInputManager.getAxisState("Dpad").y < -0.1f;
 
         bool falling = (pc.velocity.y < -0.1);
 
-        if (up) animator.SetTrigger("UpAttack");
-        else if (down) animator.SetTrigger("DownAttack");
+        if (up)
+        {
+            animator.SetTrigger("UpAttack");
+            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        }
+        else if (down)
+        {
+            animator.SetTrigger("DownAttack");
+            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        }
         else
         {
             if (!pc.isGrounded())
             {
-                if (falling) {
+                if (falling)
+                {
                     animator.SetTrigger("FallingAttack");
-                } else
+                }
+                else
                 {
                     animator.SetTrigger("RisingAttack");
                 }
 
-            } else
+            }
+            else
             {
                 animator.SetTrigger("Attack");
             }
+            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
         }
     }
 

@@ -34,6 +34,8 @@ public class healthController : MonoBehaviour
     Slider slider;
     CanvasGroup fillParent;
 
+    public AudioClip hurtSound;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -121,6 +123,7 @@ public class healthController : MonoBehaviour
             //Remember to set the hurtCallback as Dynamic and not Static
             //or it will user the Inspector HitBox (which shouldn't exist)
             hurtCallback.Invoke(hitbox);
+            if (hurtSound) SoundManager.Instance.playClip(hurtSound.name);
         }
     }
 }

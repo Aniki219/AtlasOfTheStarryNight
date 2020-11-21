@@ -25,7 +25,19 @@ public class oscillator : MonoBehaviour
     void Start()
     {
         oscillationDirection = Vector3.zero;
-        oscillationDirection[(int)axis] = 1;
+        //oscillationDirection[(int)axis] = 1;
+        switch ((int)axis)
+        {
+            case 0:
+                oscillationDirection = transform.right;
+                break;
+            case 1:
+                oscillationDirection = transform.up;
+                break;
+            case 2:
+                oscillationDirection = transform.forward;
+                break;
+        }
         if (rotational)
         {
             transform.localEulerAngles -= oscillationDirection * oscillationSize * 0.5f;

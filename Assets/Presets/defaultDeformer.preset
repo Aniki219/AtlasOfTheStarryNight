@@ -32,4 +32,4 @@ Preset:
   - target: {fileID: 0}
     propertyPath: flashMaterial
     value: 
-    objectReference: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
+    objectReference: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
