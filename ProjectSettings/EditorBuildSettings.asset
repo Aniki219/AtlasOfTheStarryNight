@@ -15,6 +15,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/bounceOnEnemies.unity
     guid: 56755c64d44107c499e31cdf9d206fc7
   - enabled: 1
+    path: Assets/Scenes/WorldMap/courage.unity
+    guid: 58fb99fcc939e2147972e74c8e4b5b4b
+  - enabled: 1
     path: Assets/Scenes/WorldMap/downGrass.unity
     guid: 1880495ff5de0ae49913ca356779f53d
   - enabled: 1

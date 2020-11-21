@@ -4,10 +4,13 @@ using UnityEngine;
 
 public class Bombable : MonoBehaviour
 {
+    public GameObject bits;
+
     private void OnTriggerStay2D(Collider2D collision)
     {
         if  (collision.CompareTag("BombExplosion"))
         {
+            Instantiate(bits, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }
     }

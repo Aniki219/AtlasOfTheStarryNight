@@ -14,7 +14,7 @@ public class characterController : MonoBehaviour
     public float safetyMargin = 1f;
     float skinWidth = 0.02f;
     int horizontalRayCount = 6;
-    int verticalRayCount = 4;
+    int verticalRayCount = 6;
 
     float maxClimbAngle = 50;
     float maxDescendAngle = 50;
@@ -218,9 +218,9 @@ public class characterController : MonoBehaviour
 
     void VerticalCollisions(ref Vector3 velocity)
     {
-        UpdateRaycastOrigins();
+       // UpdateRaycastOrigins();
         float directionY = Mathf.Sign(velocity.y);
-        float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1/32f;
+        float rayLength = Mathf.Abs(velocity.y) + skinWidth + 1.0f/32.0f;
 
         for (int i = 0; i < verticalRayCount; i++)
         { 
@@ -231,7 +231,7 @@ public class characterController : MonoBehaviour
             if (hit)
             {
                 if (directionY == 1 && bonkCeiling) OnBonkCeiling.Invoke(velocity.y);
-                velocity.y = (hit.distance - skinWidth) * directionY;   
+                velocity.y = (hit.distance - skinWidth - 1/32.0f) * directionY;   
                 rayLength = hit.distance;
                 if (directionY == -1)
                 {
