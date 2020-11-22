@@ -88,7 +88,7 @@ public class bombBerryController : MonoBehaviour
             rb.AddForce(Vector3.Scale(bc.getDir(), new Vector3(1.0f, 2.0f, 1.0f)) * 150.0f);
         }
 
-        if (collision.CompareTag("AllyHitbox") && rb.velocity.magnitude < 1)
+        if (!flying && collision.CompareTag("AllyHitbox") && rb.velocity.magnitude < 1)
         {
             HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
             if (hb.interactBroom)

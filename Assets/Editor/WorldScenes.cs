@@ -7,14 +7,15 @@ using UnityEngine;
 public class WorldScenes : EditorWindow
 {
     public SceneAsset sceneAsset;
+    Vector2 scrollpos;
 
-    [MenuItem("MapEditor/Scenes")]
+    [MenuItem("MapEditor/_Scenes")]
     public static void ViewWorldScenes()
     {
-        GetWindow(typeof(WorldScenes));
+        GetWindow(typeof(WorldScenes), false, "World Scenes");
     }
 
-    [MenuItem("MapEditor/UpdateSceneData")]
+    [MenuItem("MapEditor/Update Scene Data")]
     public static void updateSceneData()
     {
         AtlasSceneManager.getSceneData();
@@ -22,10 +23,9 @@ public class WorldScenes : EditorWindow
 
     void OnGUI()
     {
-        if (GUILayout.Button("Take Screenshot"))
-        {
-            ScreenshotEditor.takeScreenshot();
-        }
+        EditorGUILayout.BeginHorizontal();
+
+        scrollpos = EditorGUILayout.BeginScrollView(scrollpos, GUIStyle.none, GUI.skin.verticalScrollbar);
         List<SceneAsset> m_SceneAssets = new List<SceneAsset>();
         string folderName = Application.dataPath + "/Scenes/WorldMap/";
         var dirInfo = new DirectoryInfo(folderName);
@@ -40,6 +40,37 @@ public class WorldScenes : EditorWindow
         {
             sceneAsset = EditorGUILayout.ObjectField("", sa, typeof(SceneAsset), true) as SceneAsset;
         }
+        EditorGUILayout.EndScrollView();
+
+        EditorGUILayout.BeginVertical();
+        if (GUILayout.Button("Take Screenshot"))
+        {
+            ScreenshotEditor.takeScreenshot();
+            GUIUtility.ExitGUI();
+        }
+        if (GUILayout.Button("Add Scenes to Build"))
+        {
+            AddAllWorldScenes();
+            GUIUtility.ExitGUI();
+        }
+        if (GUILayout.Button("Update Scene Data"))
+        {
+            AtlasSceneManager.getSceneData();
+        }
+        if (GUILayout.Button("Toggle Neighbors"))
+        {
+            MapEditor.toggleNeighbors();
+            GUIUtility.ExitGUI();
+        }
+        if (GUILayout.Button("Open Map Editor"))
+        {
+            Object mapEditor = AssetDatabase.LoadAssetAtPath("Assets/Scenes/MapEditor.lnk", typeof(Object));
+            AssetDatabase.OpenAsset(mapEditor);
+            GUIUtility.ExitGUI();
+        }
+        EditorGUILayout.EndVertical();
+        EditorGUILayout.EndHorizontal();
+
     }
 
     [MenuItem("MapEditor/Add World Scenes to Build")]

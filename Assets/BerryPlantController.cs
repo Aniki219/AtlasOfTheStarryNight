@@ -34,7 +34,7 @@ public class BerryPlantController : MonoBehaviour
     {
         if (hb != null && hb.name != "")
         {
-            gameManager.Instance.playerCtrl.bounce(9, true);
+            gameManager.Instance.playerCtrl.bounce(9);
         }
         StartCoroutine(Picked());
     }
@@ -105,6 +105,7 @@ public class BerryPlantController : MonoBehaviour
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
         {
+            gameManager.Instance.player.GetComponent<Deformer>().flashWhite();
             HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
             if (hb.broom)
             {

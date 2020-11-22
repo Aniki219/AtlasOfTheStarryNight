@@ -26,7 +26,7 @@ public class playerController : MonoBehaviour
     bool arialAttacking = false;
     [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
-    float resetTime = 10f;
+    float resetTime = 0.25f;
 
     doorController currentDoor = null;
     string currentDoorLabel = "none";
@@ -43,7 +43,7 @@ public class playerController : MonoBehaviour
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
 
-    public characterController controller;
+    [HideInInspector] public characterController controller;
     particleMaker particleMaker;
     Animator anim;
     Transform sprite;
@@ -94,7 +94,6 @@ public class playerController : MonoBehaviour
     #region Unity functions
     void Start()
     {
-        
         sprite = transform.Find("AtlasSprite");
 
         anim = GetComponentInChildren<Animator>();
@@ -115,13 +114,6 @@ public class playerController : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
-
-    private void OnDestroy()
-    {
-        gameManager.Instance.currentDoorLabel = currentDoorLabel;
-    }
-
-   
 
     void Update()
     {
@@ -281,7 +273,7 @@ public class playerController : MonoBehaviour
         Vector2 input = new Vector2(0, 0);
         if (acceptInput)
         {
-            input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, Input.GetAxisRaw("Vertical"));
+            input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
         }
 
         if (isGrounded())
@@ -353,7 +345,7 @@ public class playerController : MonoBehaviour
     {
         if (AtlasInputManager.getKeyPressed("Attack"))
         {
-            if (state == State.Broom) { eventManager.Instance.BroomCancelEvent(); }
+            if (state == State.Broom) { endBroom(); }
             state = State.Attack;
             anim.SetTrigger("SelectAttack");
         }
@@ -397,7 +389,7 @@ public class playerController : MonoBehaviour
     #region Interact
     void canPickUp()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded())
+        if (AtlasInputManager.getKeyPressed("Pick Up") && isGrounded())
         {
             RaycastHit2D pickup = Physics2D.Raycast(transform.position, -Vector2.up, 0.5f, 1 << LayerMask.NameToLayer("Pickupable"));
             if (pickup.collider != null)
@@ -436,7 +428,6 @@ public class playerController : MonoBehaviour
             {
                 velocity.y /= 4;
                 i = variableJumpIncrements;
-                Debug.Log("boop");
                 yield return 0;
             }
             yield return new WaitForSeconds(4 / 60.0f);
@@ -545,7 +536,7 @@ public class playerController : MonoBehaviour
             currentTornado = null;
             //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (AtlasInputManager.getKeyPressed("Pick Up"))
         {
             movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
             if (mp)
@@ -624,11 +615,10 @@ public class playerController : MonoBehaviour
         StopCoroutine(jumpCoroutine());
     }
 
-    public void bounce(float bounceVelocity, bool flash = true, string sound = "jump2")
+    public void bounce(float bounceVelocity, string sound = "jump2")
     {
         deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
-        if (state == State.Broom) returnToMovement();
-        if (flash) deformer.flashWhite();
+        if (state == State.Broom) endBroom();
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
     }
@@ -666,14 +656,12 @@ public class playerController : MonoBehaviour
     {
         if (AtlasInputManager.getKeyPressed("Broom"))
         {
-            anim.SetTrigger("broomEnd");
-            eventManager.Instance.BroomCancelEvent();
-            returnToMovement();
+            endBroom();
             return;
         }
         if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
-            eventManager.Instance.BroomCancelEvent();
+            endBroom();
             doubleJump();
             return;
         }
@@ -685,6 +673,13 @@ public class playerController : MonoBehaviour
         velocity.y = moveSpeed / 2.0f * vdir;
         velocity.x = moveSpeed * 2 * facing;
     }
+
+    void endBroom()
+    {
+        anim.SetTrigger("broomEnd");
+        eventManager.Instance.BroomCancelEvent();
+        returnToMovement();
+    }
     #endregion
 
     #region Damage, Bonking, and Reseting
@@ -692,6 +687,7 @@ public class playerController : MonoBehaviour
     //Set state to Hurt or Bonk
     public void startBonk(int damage = 0, bool reset = false)
     {
+        anim.SetBool("resetSpin", reset);
         if (!controller.collisions.tangible) { return; }
         controller.collisions.tangible = false;
         if (reset)
@@ -735,7 +731,6 @@ public class playerController : MonoBehaviour
     void handleReset(bool isSafe = false)
     {
         controller.collisions.tangible = false;
-        anim.SetBool("resetSpin", true);
         if (!starRotator)
         {
             starRotator = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarRotator"), transform);
@@ -749,7 +744,7 @@ public class playerController : MonoBehaviour
             StartCoroutine(flashEffect());
             Destroy(starRotator);
         }
-        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime);
     }
 
     //Always turns off resetPosition

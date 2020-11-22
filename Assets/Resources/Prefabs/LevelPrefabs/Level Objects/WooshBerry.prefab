@@ -51,6 +51,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -144,12 +146,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744d5d72cf70c1a40880199658cd7590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regrowTime: 5
+  regrowTime: 3
   canPick: 1
   pickCallback:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1279541664}
+        m_TargetAssemblyTypeName: 
         m_MethodName: wooshBerryOnBroom
         m_Mode: 6
         m_Arguments:
@@ -164,6 +167,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1279541664}
+        m_TargetAssemblyTypeName: 
         m_MethodName: wooshBerryOnBroom
         m_Mode: 0
         m_Arguments:

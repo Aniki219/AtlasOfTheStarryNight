@@ -23,7 +23,7 @@ public class movingPlatform : MonoBehaviour
         velocity = Vector3.zero;
         lastPosition = transform.position;
         nodePositions = new List<Vector3>();
-        nodes = transform.Find("Nodes");
+        nodes = transform.parent.Find("Nodes");
         calculateNodePositions();
         if (!nodes || nodes.childCount > 0)
         {
