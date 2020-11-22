@@ -53,8 +53,16 @@ public class BerryPlantController : MonoBehaviour
 
     public void wooshBerryOnBroom(bool player = false)
     {
-        if (player) gameManager.Instance.playerCtrl.triggerBroomStart(true, transform.localScale.x);
-        StartCoroutine(Picked());
+        if (player)
+        {
+            gameManager.Instance.playerCtrl.hitLag();
+            Invoke("playerBroom", 0.12f);
+        }
+            StartCoroutine(Picked());
+    }
+    public void playerBroom()
+    {
+        gameManager.Instance.playerCtrl.triggerBroomStart(true, transform.localScale.x);
     }
 
     public void bombBerryCallback(HitBox hb)

@@ -574,7 +574,21 @@ public class playerController : MonoBehaviour
         deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.2f, 0.25f);
         gameManager.Instance.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
     }
-
+    public void hitLag(float duration = 0.1f)
+    {
+        StartCoroutine(doHitLag(duration));
+    }
+    IEnumerator doHitLag(float duration)
+    {
+        Vector3 oldVelocity = velocity;
+        velocity = Vector3.zero;
+        State oldState = state;
+        state = State.Wait;
+        deformer.flashWhite();
+        yield return new WaitForSeconds(duration);
+        state = oldState;
+        //velocity = oldVelocity;
+    }
     #endregion
 
     #region Jumps & WallJumps

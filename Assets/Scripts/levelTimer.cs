@@ -8,7 +8,7 @@ public class levelTimer : MonoBehaviour
 {
     public GameObject MarsCounter;
     public GameObject GemCounter;
-    public int maxMars = 25;
+    int maxMars;
     Text timerText;
     Text counterText;
     float startTime;
@@ -18,6 +18,7 @@ public class levelTimer : MonoBehaviour
         timerText = GetComponent<Text>();
         counterText = GemCounter.GetComponent<Text>();
         startTime = Time.time;
+        maxMars = GameObject.Find("Celestium Grid/Celestium").transform.childCount;
     }
 
     // Update is called once per frame
@@ -33,9 +34,10 @@ public class levelTimer : MonoBehaviour
         }
 
         int currentMars = MarsCounter.GetComponent<collectiblesUIController>().amountCollected;
+        int currentStars = GameObject.FindGameObjectsWithTag("Star").Length;
         counterText.text = string.Concat("Gems: ", currentMars.ToString(), "/", maxMars.ToString());
 
-        if (currentMars >= maxMars) { return; }
-        timerText.text = string.Concat("Time: ", (Time.time - startTime).ToString("F2"));
+        if (currentMars >= maxMars + currentStars) { return; }
+        timerText.text = string.Concat("Time: ", (Time.time - startTime).ToString("F1"));
     }
 }
