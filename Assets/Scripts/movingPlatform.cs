@@ -49,11 +49,7 @@ public class movingPlatform : MonoBehaviour
             }
         }
 
-        if (!col.isTrigger)
-        {
-            checkForActors();
-        }
-
+        checkForActors();
         transform.position += velocity;
     }
 
@@ -69,15 +65,29 @@ public class movingPlatform : MonoBehaviour
 
         //The box origin moves left/right so that it doesn't pull objects
         Vector2 origin = transform.position + Vector3.up * 1*px + Vector3.right * 1*px * Math.Sign(velocity.x);
-        int actorMask = (1 << LayerMask.NameToLayer("Player"));
-        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, hdir * Vector2.right, 0.5f * px, actorMask);
+        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, hdir * Vector2.right + Vector2.up, 5f * px);
 
         foreach (RaycastHit2D actor in actors)
         {
-            characterController cc = actor.transform.GetComponent<characterController>();
-            if (cc && col.enabled)
+            if (actor.transform.CompareTag("Player"))
             {
-                cc.AddVelocity(velocity);
+
+                actor.transform.Translate(velocity);
+            }
+            else
+            {
+                Debug.Log(col.bounds.max.y);
+                Rigidbody2D rb = actor.transform.GetComponent<Rigidbody2D>();
+                Collider2D other = actor.transform.GetComponent<Collider2D>();
+                if (rb &&
+                    rb.velocity.y <= Mathf.Max(0, velocity.y) &&
+                    other &&
+                    other.bounds.min.y >= col.bounds.max.y)
+                {
+                    rb.velocity = Vector2.zero;
+                    rb.AddRelativeForce(-Physics2D.gravity);
+                    rb.transform.Translate(velocity);
+                }
             }
         }
     }

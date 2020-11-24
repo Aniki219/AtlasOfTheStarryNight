@@ -16,14 +16,14 @@ public class oneWayPlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!player) { return; }
-        if (player.transform.position.y > transform.position.y + player.GetComponent<BoxCollider2D>().size.y)
-        {
-            col.enabled = true;
-        } else if (player.transform.position.y < transform.position.y + 10/32f)
-        {
-            col.enabled = false;
-        }
+        //if (!player) { return; }
+        //if (player.transform.position.y > transform.position.y + player.GetComponent<BoxCollider2D>().size.y)
+        //{
+        //    col.enabled = true;
+        //} else if (player.transform.position.y < transform.position.y + 10/32f)
+        //{
+        //    col.enabled = false;
+        //}
 
         //if (col.enabled)
         //{

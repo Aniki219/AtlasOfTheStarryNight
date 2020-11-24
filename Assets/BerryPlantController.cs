@@ -113,7 +113,7 @@ public class BerryPlantController : MonoBehaviour
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
         {
-            gameManager.Instance.player.GetComponent<Deformer>().flashWhite();
+            gameManager.Instance.player.GetComponentInChildren<Deformer>().flashWhite();
             HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
             if (hb.broom)
             {

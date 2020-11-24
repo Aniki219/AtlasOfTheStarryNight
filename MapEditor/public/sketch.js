@@ -119,6 +119,7 @@ function saveData() {
       Object.assign(sceneObj, {scene, position, size, coords});
     }
   }
-  jsondata = JSON.stringify(dataObj, null, 2);
+  //put 2 for pretty print 0 for copypaste-able
+  jsondata = JSON.stringify(dataObj, null, 0);
   fs.writeFileSync(`${__dirname}/../data/test.json`, jsondata);
 }

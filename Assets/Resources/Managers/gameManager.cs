@@ -115,6 +115,19 @@ public class gameManager : ScriptableObject
         }
     }
 
+    public void clearPersistence(string scene)
+    {
+        List<string> keys = new List<string>(objects.Keys);
+        foreach (string key in keys)
+        {
+            if (key.Contains(scene))
+            {
+                objects[key] = true;
+                Debug.Log(objects[key]);
+            }
+        }
+    }
+
     public GameObject createInstance(string name, Vector3 at, Transform parent = null)
     {
         GameObject inst = Instantiate(Resources.Load<GameObject>("Prefabs/" + name), at, Quaternion.identity, parent);

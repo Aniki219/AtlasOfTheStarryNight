@@ -12,6 +12,8 @@ public class levelTimer : MonoBehaviour
     Text timerText;
     Text counterText;
     float startTime;
+    float startx;
+    float starty;
     // Start is called before the first frame update
     void Start()
     {
@@ -19,6 +21,8 @@ public class levelTimer : MonoBehaviour
         counterText = GemCounter.GetComponent<Text>();
         startTime = Time.time;
         maxMars = GameObject.Find("Celestium Grid/Celestium").transform.childCount;
+        startx = gameManager.Instance.player.transform.position.x;
+        starty = gameManager.Instance.player.transform.position.y;
     }
 
     // Update is called once per frame
@@ -26,7 +30,12 @@ public class levelTimer : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            startTime = Time.time;
+            MarsCounter.GetComponent<collectiblesUIController>().amountCollected = 0;
+            gameManager.Instance.playerCtrl.resetAnimator();
+            gameManager.Instance.playerCtrl.returnToMovement();
+            gameManager.Instance.clearPersistence(SceneManager.GetActiveScene().name);
+            gameManager.Instance.switchScene(SceneManager.GetActiveScene().name, startx, starty);
         }
         if (Input.GetKeyDown(KeyCode.Escape))
         {

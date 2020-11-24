@@ -57,6 +57,8 @@ public class playerController : MonoBehaviour
     bool screenShake = false;
     float wallBlastDelay = 0.2f;
 
+    Coroutine jumpCRVar;
+
     private static bool created = false;
 
     //bool fastBroom = true;
@@ -97,10 +99,10 @@ public class playerController : MonoBehaviour
         sprite = transform.Find("AtlasSprite");
 
         anim = GetComponentInChildren<Animator>();
+        deformer = GetComponentInChildren<Deformer>();
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
-        deformer = GetComponent<Deformer>();
 
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -614,7 +616,7 @@ public class playerController : MonoBehaviour
         deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
-        StartCoroutine(jumpCoroutine());
+        jumpCRVar = StartCoroutine(jumpCoroutine());
     }
 
     void doubleJump()
@@ -626,7 +628,7 @@ public class playerController : MonoBehaviour
         anim.SetTrigger("doubleJump");
         velocity.y = doubleJumpVelocity;
         SoundManager.Instance.playClip("doubleJump");
-        StopCoroutine(jumpCoroutine());
+        if (jumpCRVar != null) StopCoroutine(jumpCRVar);
     }
 
     public void bounce(float bounceVelocity, string sound = "jump2")
@@ -635,6 +637,7 @@ public class playerController : MonoBehaviour
         if (state == State.Broom) endBroom();
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
+        if (jumpCRVar != null)  StopCoroutine(jumpCRVar);
     }
     #endregion
 
@@ -642,6 +645,8 @@ public class playerController : MonoBehaviour
     //Popping a WooshBerry calls this.
     public void triggerBroomStart(bool fast = false, float dir = 0)
     {
+        if (resetPosition || !controller.collisions.tangible) return;
+        if (intangibleStates.Contains(state)) return;
         faceDirection(dir);
         state = State.BroomStart;
         fastBroom = fast;
