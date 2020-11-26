@@ -33,19 +33,21 @@ public class movingPlatform : MonoBehaviour
 
     void FixedUpdate()
     {
-        if (!nodes || nodes.childCount < 2) { return; }
-
-        Vector3 targetPos = nodePositions[currentNode];
-
-        if (Vector3.Distance(transform.position, targetPos) > maxDistanceDelta)
+        if (nodes && nodes.childCount > 1)
         {
-            velocity = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime) - transform.position;
-        } else
-        {
-            currentNode++;
-            if (currentNode >= nodePositions.Count)
+            Vector3 targetPos = nodePositions[currentNode];
+
+            if (Vector3.Distance(transform.position, targetPos) > maxDistanceDelta)
             {
-                currentNode = 0;
+                velocity = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime) - transform.position;
+            }
+            else
+            {
+                currentNode++;
+                if (currentNode >= nodePositions.Count)
+                {
+                    currentNode = 0;
+                }
             }
         }
 
@@ -65,18 +67,19 @@ public class movingPlatform : MonoBehaviour
 
         //The box origin moves left/right so that it doesn't pull objects
         Vector2 origin = transform.position + Vector3.up * 1*px + Vector3.right * 1*px * Math.Sign(velocity.x);
-        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, hdir * Vector2.right + Vector2.up, 5f * px);
+        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, Vector2.up, 5f * px,  ~(LayerMask.GetMask("Wall") | LayerMask.GetMask("Platform")));
 
         foreach (RaycastHit2D actor in actors)
         {
             if (actor.transform.CompareTag("Player"))
             {
-
-                actor.transform.Translate(velocity);
+                if (actor.transform.GetComponent<playerController>().canMovingPlatform())
+                {
+                    actor.transform.Translate(velocity);
+                }
             }
             else
             {
-                Debug.Log(col.bounds.max.y);
                 Rigidbody2D rb = actor.transform.GetComponent<Rigidbody2D>();
                 Collider2D other = actor.transform.GetComponent<Collider2D>();
                 if (rb &&

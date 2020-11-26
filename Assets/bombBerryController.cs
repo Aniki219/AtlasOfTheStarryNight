@@ -5,6 +5,7 @@ using UnityEngine;
 public class bombBerryController : MonoBehaviour
 {
     Animator anim;
+    bool hasEvents = false;
     bool hasBoomed = false;
     bool flying = false;
     Vector3 dir;
@@ -13,8 +14,12 @@ public class bombBerryController : MonoBehaviour
 
     void Start()
     {
-        eventManager.Instance.onBonkEvent += Boom;
-        eventManager.Instance.onBroomCancel += Drop;
+        if (transform.parent && transform.parent.name == "Hanger")
+        {
+            eventManager.Instance.onBonkEvent += Boom;
+            eventManager.Instance.onBroomCancel += Drop;
+            hasEvents = true;
+        }
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
     }
@@ -57,6 +62,7 @@ public class bombBerryController : MonoBehaviour
 
     void removeEvents()
     {
+        if (!hasEvents) return;
         eventManager.Instance.onBonkEvent -= Boom;
         eventManager.Instance.onBroomCancel -= Drop;
     }
@@ -71,7 +77,7 @@ public class bombBerryController : MonoBehaviour
         if (collision.CompareTag("WooshBerryPlant"))
         {
             if (!collision.GetComponent<BerryPlantController>().canPick) return;
-            StartCoroutine(BeginWoosh(collision.transform.position, collision.transform.localScale.x));
+            StartCoroutine(BeginWoosh(collision.gameObject.transform.position, collision.transform.GetComponent<BerryPlantController>().getForward()));
             collision.GetComponent<BerryPlantController>().pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
         }
 
@@ -81,11 +87,13 @@ public class bombBerryController : MonoBehaviour
             if (!bc.canPick) return;
             bc.pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
             isSimulated(true);
+            anim.SetBool("Wings", false);
             anim.SetTrigger("Idle");
             flying = false;
             rb.velocity = Vector2.zero;
             rb.gravityScale = 1;
-            rb.AddForce(Vector3.Scale(bc.getDir(), new Vector3(1.0f, 2.0f, 1.0f)) * 150.0f);
+            Vector2 bumpDir = new Vector2(1.0f, 2.0f);
+            rb.AddForce(Vector3.Scale(bc.getDir(), bumpDir * 150.0f));
         }
 
         if (!flying && collision.CompareTag("AllyHitbox") && rb.velocity.magnitude < 1)
@@ -99,24 +107,26 @@ public class bombBerryController : MonoBehaviour
         }
     }
 
-    IEnumerator BeginWoosh(Vector3 startPosition, float dir)
+    IEnumerator BeginWoosh(Vector3 startPosition, Vector2 dir)
     {
-        float elapsedTime = 0;
-        float startTime = Time.time;
-        anim.SetTrigger("Wings");
+        anim.SetBool("Wings", true);
         rb.gravityScale = 0;
         rb.velocity = new Vector3(0f, 0f, 0f);
         rb.angularVelocity = 0;
+        rb.rotation = 0;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 
-        while (elapsedTime < 0.05f)
-        {
-            elapsedTime = Time.time - startTime;
-            transform.position = Vector3.Lerp(transform.position, startPosition, elapsedTime/0.05f);
-            yield return new WaitForEndOfFrame();
-        }
+        Vector3 vel = new Vector3();
+
+        //while (Vector3.Distance(startPosition, transform.position) > 0.01f)
+        //{
+        //    transform.position = Vector3.SmoothDamp(transform.position, startPosition, ref vel, 0.05f);
+        //    yield return new WaitForEndOfFrame();
+        //}
+        transform.position = startPosition;
+        this.dir = dir;
         flying = true;
-        this.dir = Vector3.right * dir;
+        yield return 0;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

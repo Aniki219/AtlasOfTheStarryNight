@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(SpriteRenderer))]
 public class Deformer : MonoBehaviour
 {
-    public Material defaultMaterial;
+    Material defaultMaterial;
     public Material flashMaterial;
+
     public void startDeform(Vector3 to, float timeTo, float timeReturn = 0.5f)
     {
         StopCoroutine("deformAndReform");
@@ -28,7 +30,7 @@ public class Deformer : MonoBehaviour
         }
         sprite.material = flashMaterial;
         yield return new WaitForSeconds(time);
-        sprite.material = defaultMaterial;
+        sprite.material = playerStatsManager.Instance.currentSkin;
     }
 
     public IEnumerator deformAndReform(Vector3 to, float timeTo, float timeReturn)

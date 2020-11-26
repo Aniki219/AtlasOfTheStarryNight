@@ -46,7 +46,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Pick Up",
+                    "name": "Crouch",
                     "type": "Button",
                     "id": "a557e63b-7d36-492e-b993-6197fed50141",
                     "expectedControlType": "Button",
@@ -161,7 +161,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Pick Up",
+                    "action": "Crouch",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

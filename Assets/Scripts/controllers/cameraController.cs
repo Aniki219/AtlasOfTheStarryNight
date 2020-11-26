@@ -76,15 +76,11 @@ public class cameraController : MonoBehaviour
         transform.position = new Vector3(smoothX, smoothY, transform.position.z) + shakeValue;
         transform.position = Vector3.SmoothDamp(transform.position, to, ref velocity, smoothingTime);
 
-        if (maxX - minX > 0 && maxY - minY > 0)
-        {
-            percentX = (transform.position.x - minX) / (maxX - minX);
-            percentY = (transform.position.y - minY) / (maxY - minY);
-        } else
-        {
-            percentX = 0;
-            percentY = 0;
-        }
+        percentX = 0;
+        percentY = 0;
+
+        if (maxX - minX > 0) percentX = (transform.position.x - minX) / (maxX - minX);
+        if (maxY - minY > 0) percentY = (transform.position.y - minY) / (maxY - minY);
     }
 
     public void StartShake(float shakeMagnitude = 0.1f, float shakeDuration = 0.5f)

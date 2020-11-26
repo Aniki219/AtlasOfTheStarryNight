@@ -91,6 +91,11 @@ public class playerController : MonoBehaviour
     {
         State.Hurt, State.Bonk, State.Reset
     };
+
+    List<State> moveableStates = new List<State>
+    {
+        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat
+    };
     #endregion
 
     #region Unity functions
@@ -125,7 +130,8 @@ public class playerController : MonoBehaviour
                 handleMovement();
                 handleAttackInput();
                 canPickUp();
-                canDoor();
+                allowDoor();
+                allowCrouch();
                 break;
             case State.BroomStart:
                 handleBroomStart();
@@ -181,10 +187,9 @@ public class playerController : MonoBehaviour
         List<Collider2D> hitters = new List<Collider2D>();
         other.GetContacts(hitters);
 
-        //if (hitters.Count > 0 && hitters.Find(ele => ele.tag == "AllyHitbox")) {
-        //    return;
-        //}
-
+        //Because the hitboxes appear as children, we have to filter AllyHitboxes out
+        //Otherwise you could get hurt by whacking brambles or something
+        //We can probably use this to implement hitlag when hurting things..
         foreach( Collider2D h in hitters)
         {
             if (h.tag == "AllyHitbox") continue;
@@ -196,11 +201,6 @@ public class playerController : MonoBehaviour
             if (intangibleStates.Contains(state))
             {
                 return;
-            }
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && state == State.Broom)
-            {
-                other.SendMessage("OnBroomCollide");
             }
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
@@ -252,6 +252,14 @@ public class playerController : MonoBehaviour
                 }
                 SoundManager.Instance.playClip("Collectibles/starShard", numFollowers);
             }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && state == State.Broom)
+        {
+            other.SendMessage("OnBroomCollide");
         }
     }
 
@@ -391,7 +399,7 @@ public class playerController : MonoBehaviour
     #region Interact
     void canPickUp()
     {
-        if (AtlasInputManager.getKeyPressed("Pick Up") && isGrounded())
+        if (AtlasInputManager.getKeyPressed("Crouch") && isGrounded())
         {
             RaycastHit2D pickup = Physics2D.Raycast(transform.position, -Vector2.up, 0.5f, 1 << LayerMask.NameToLayer("Pickupable"));
             if (pickup.collider != null)
@@ -477,13 +485,21 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region One-offs
-    void canDoor()
+    void allowDoor()
     {
         if (currentDoor != null && AtlasInputManager.getKeyPressed("Interact"))
         {
             cutScenePrep();
             StartCoroutine(doDoor());
         }
+    }
+    void allowCrouch()
+    {
+        anim.SetBool("isCrouching", AtlasInputManager.getAxisState("Dpad").y < 0 && isGrounded());
+    }
+    public bool canMovingPlatform()
+    {
+        return moveableStates.Contains(state);
     }
     IEnumerator doDoor()
     {
@@ -538,7 +554,7 @@ public class playerController : MonoBehaviour
             currentTornado = null;
             //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
-        if (AtlasInputManager.getKeyPressed("Pick Up"))
+        if (AtlasInputManager.getKeyPressed("Crouch"))
         {
             movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
             if (mp)
@@ -773,8 +789,7 @@ public class playerController : MonoBehaviour
     {
         if (state == State.ChargeAttack || state == State.Attack)
         {
-            resetAnimator();
-            anim.SetTrigger("Idle");
+            if (!anim.GetBool("isCrouching")) resetAnimator();
         }
         if (resetPosition && !controller.isSafePosition())
         {
@@ -783,7 +798,8 @@ public class playerController : MonoBehaviour
         {
             controller.collisions.tangible = true;
             state = State.Movement;
-            anim.SetTrigger("Idle");
+
+            if (!anim.GetBool("isCrouching")) anim.SetTrigger("Idle");
         }
         resetPosition = false;
         arialAttacking = false;
