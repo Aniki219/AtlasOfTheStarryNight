@@ -4,10 +4,16 @@ using UnityEngine;
 
 public class particleMaker : MonoBehaviour
 {
-    public void createDust()
+    public void createDust(bool small = false)
     {
-        GameObject left = gameManager.Instance.createInstance("Effects/dustCloud", transform.position + new Vector3(-0.20f, -0.23f, 0));
-        GameObject right = gameManager.Instance.createInstance("Effects/dustCloud", transform.position + new Vector3(0.20f, -0.23f, 0));
+        GameObject left = gameManager.Instance.createInstance("Effects/dustCloud", transform.position + new Vector3(-0.20f, -0.3f, 0));
+        GameObject right = gameManager.Instance.createInstance("Effects/dustCloud", transform.position + new Vector3(0.20f, -0.3f, 0));
         left.GetComponent<translator>().direction = Vector2.left;
+
+        if (small)
+        {
+            left.transform.localScale = Vector3.one * 0.75f;
+            right.transform.localScale = Vector3.one * 0.75f;
+        }
     }
 }

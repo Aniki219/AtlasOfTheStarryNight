@@ -36,6 +36,9 @@ public class characterController : MonoBehaviour
     [System.Serializable]
     public class BonkCeilingEvent : UnityEvent<float> { }
 
+    public bool hasLandingEvent = false;
+    [ConditionalField("bonkCeiling")] public UnityEvent OnLanding;
+
     void Start()
     {
         collider = GetComponent<BoxCollider2D>();
@@ -236,9 +239,10 @@ public class characterController : MonoBehaviour
                 if (directionY == 1 && bonkCeiling) OnBonkCeiling.Invoke(velocity.y);
                 velocity.y = (hit.distance - skinWidth - 1/32.0f) * directionY;   
                 rayLength = hit.distance;
-                if (directionY == -1)
+                collisions.distanceToGround = Mathf.Min(collisions.distanceToGround, hit.distance);
+                if (hasLandingEvent && directionY == -1 && collisions.distanceToGround > 0.055f)
                 {
-                    collisions.distanceToGround = Mathf.Min(collisions.distanceToGround, hit.distance);
+                    OnLanding.Invoke();
                 }
 
                 if (collisions.climbingSlope)

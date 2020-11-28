@@ -19,7 +19,7 @@ public class playerController : MonoBehaviour
     float groundAccelerationTime = 0f;
 
     float moveSpeed = 4f;
-    int facing = 1;
+    public int facing = 1;
     bool canBroom = false;
     bool canDoubleJump = false;
     bool canTornado = true;
@@ -58,6 +58,7 @@ public class playerController : MonoBehaviour
     float wallBlastDelay = 0.2f;
 
     Coroutine jumpCRVar;
+    Coroutine turnAroundCRVar;
 
     private static bool created = false;
 
@@ -97,7 +98,7 @@ public class playerController : MonoBehaviour
         State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat
     };
     #endregion
-
+    
     #region Unity functions
     void Start()
     {
@@ -124,6 +125,7 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
+        anim.speed = 1;
         switch (state)
         {
             case State.Movement:
@@ -304,14 +306,13 @@ public class playerController : MonoBehaviour
         {
             if (canBroom && AtlasInputManager.getKeyPressed("Broom"))
             {
-                triggerBroomStart();
-                if (isWallSliding() && velocity.y < 0)
+                if (isWallSliding())
                 {
                     flipHorizontal();
-                }
-                else
+                    triggerBroomStart(fastBroom, facing);
+                } else
                 {
-                    faceDirection();
+                    triggerBroomStart(fastBroom, facing);
                 }
                 return;
             }
@@ -328,7 +329,12 @@ public class playerController : MonoBehaviour
             }
         }
 
-        float targetVelocityX = input.x * moveSpeed;
+        float currentMoveSpeed = moveSpeed;
+        if (anim.GetBool("isCrouching"))
+        {
+            currentMoveSpeed = 1.5f;
+        }
+        float targetVelocityX = input.x * currentMoveSpeed;
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
@@ -473,7 +479,6 @@ public class playerController : MonoBehaviour
 
             if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
             {
-                faceDirection();
                 triggerBroomStart();
                 yield break;
             }
@@ -583,14 +588,28 @@ public class playerController : MonoBehaviour
     {
         //During Movement we can keep track of the direction the player is facing each frame
         if (vel == 0) return;
-        facing = (int)Mathf.Sign(vel);
-        sprite.localScale = new Vector3(facing, sprite.localScale.y, sprite.localScale.z);
+        if (facing != (int)Mathf.Sign(vel))
+        {
+            if (anim.GetBool("isCrouching"))
+            {
+            } else {
+                
+                anim.SetTrigger("turnAround");
+                facing = (int)Mathf.Sign(vel);
+            }
+        }
+        sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     }
     public void OnBonkCeiling(float vy)
     {
         if (state == State.Movement)
-        deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.2f, 0.25f);
+        deformer.startDeform(new Vector3(1.2f, 0.8f, 1.0f), 0.2f, 0.25f, 1.0f);
         gameManager.Instance.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
+    }
+    public void OnLanding()
+    {
+        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f);
+        particleMaker.createDust(true);
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -629,7 +648,7 @@ public class playerController : MonoBehaviour
 
     void firstJump()
     {
-        deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
         jumpCRVar = StartCoroutine(jumpCoroutine());
@@ -637,7 +656,6 @@ public class playerController : MonoBehaviour
 
     void doubleJump()
     {
-        //state = State.Movement;
         returnToMovement();
         resourceManager.Instance.usePlayerMana(1);
         canDoubleJump = false;
@@ -649,7 +667,7 @@ public class playerController : MonoBehaviour
 
     public void bounce(float bounceVelocity, string sound = "jump2")
     {
-        deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
         if (state == State.Broom) endBroom();
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
@@ -663,7 +681,7 @@ public class playerController : MonoBehaviour
     {
         if (resetPosition || !controller.collisions.tangible) return;
         if (intangibleStates.Contains(state)) return;
-        faceDirection(dir);
+        setFacing(dir);
         state = State.BroomStart;
         fastBroom = fast;
         canBroom = false;
@@ -830,26 +848,17 @@ public class playerController : MonoBehaviour
         state = State.Wait;
     }
 
-    void faceDirection(float dir = 0)
-    {
-        if (dir == 0) dir = AtlasInputManager.getAxisState("Dpad").x;
-        if (dir != 0)
-        {
-            facing = (int)dir;
-            sprite.localScale = new Vector3(facing, 1, 1);
-        }
-    }
-
     void createStars(Vector3? position = null)
     {
         if (position == null) position = transform.position;
-        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((facing == 1) ? 180 : 0, 90, 0));
     }
 
+    //Flip horizontal without turn animation
     void flipHorizontal()
     {
-        facing = -(int)sprite.localScale.x;
-        sprite.localScale = new Vector3(facing, 1, 1);
+        facing = -(int)Mathf.Sign(sprite.localScale.x);
+        sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, 1, 1);
     }
 
     void checkRoomBoundaries()

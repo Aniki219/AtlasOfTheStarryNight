@@ -116,13 +116,6 @@ public class bombBerryController : MonoBehaviour
         rb.rotation = 0;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 
-        Vector3 vel = new Vector3();
-
-        //while (Vector3.Distance(startPosition, transform.position) > 0.01f)
-        //{
-        //    transform.position = Vector3.SmoothDamp(transform.position, startPosition, ref vel, 0.05f);
-        //    yield return new WaitForEndOfFrame();
-        //}
         transform.position = startPosition;
         this.dir = dir;
         flying = true;
