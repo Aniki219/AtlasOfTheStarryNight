@@ -51,6 +51,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -119,7 +121,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.052428618, y: -0.097866535}
+  m_Offset: {x: 0.027128771, y: -0.097866535}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -130,7 +132,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.43377098, y: 0.5526085}
+  m_Size: {x: 0.50222945, y: 0.5526085}
   m_EdgeRadius: 0
 --- !u!114 &1279541664
 MonoBehaviour:
@@ -144,12 +146,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 744d5d72cf70c1a40880199658cd7590, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  regrowTime: 5
+  regrowTime: 3
   canPick: 1
+  forwardLaunch: 0
   pickCallback:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1279541664}
+        m_TargetAssemblyTypeName: 
         m_MethodName: wooshBerryOnBroom
         m_Mode: 6
         m_Arguments:
@@ -164,6 +168,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1279541664}
+        m_TargetAssemblyTypeName: 
         m_MethodName: wooshBerryOnBroom
         m_Mode: 0
         m_Arguments:

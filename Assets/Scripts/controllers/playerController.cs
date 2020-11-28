@@ -19,14 +19,14 @@ public class playerController : MonoBehaviour
     float groundAccelerationTime = 0f;
 
     float moveSpeed = 4f;
-    int facing = 1;
+    public int facing = 1;
     bool canBroom = false;
     bool canDoubleJump = false;
     bool canTornado = true;
     bool arialAttacking = false;
     [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
-    float resetTime = 10f;
+    float resetTime = 0.25f;
 
     doorController currentDoor = null;
     string currentDoorLabel = "none";
@@ -43,7 +43,7 @@ public class playerController : MonoBehaviour
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
 
-    public characterController controller;
+    [HideInInspector] public characterController controller;
     particleMaker particleMaker;
     Animator anim;
     Transform sprite;
@@ -56,6 +56,9 @@ public class playerController : MonoBehaviour
     bool fastBroom = false;
     bool screenShake = false;
     float wallBlastDelay = 0.2f;
+
+    Coroutine jumpCRVar;
+    Coroutine turnAroundCRVar;
 
     private static bool created = false;
 
@@ -89,19 +92,23 @@ public class playerController : MonoBehaviour
     {
         State.Hurt, State.Bonk, State.Reset
     };
-    #endregion
 
+    List<State> moveableStates = new List<State>
+    {
+        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat
+    };
+    #endregion
+    
     #region Unity functions
     void Start()
     {
-        
         sprite = transform.Find("AtlasSprite");
 
         anim = GetComponentInChildren<Animator>();
+        deformer = GetComponentInChildren<Deformer>();
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
-        deformer = GetComponent<Deformer>();
 
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -116,22 +123,17 @@ public class playerController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    private void OnDestroy()
-    {
-        gameManager.Instance.currentDoorLabel = currentDoorLabel;
-    }
-
-   
-
     void Update()
     {
+        anim.speed = 1;
         switch (state)
         {
             case State.Movement:
                 handleMovement();
                 handleAttackInput();
                 canPickUp();
-                canDoor();
+                allowDoor();
+                allowCrouch();
                 break;
             case State.BroomStart:
                 handleBroomStart();
@@ -187,10 +189,9 @@ public class playerController : MonoBehaviour
         List<Collider2D> hitters = new List<Collider2D>();
         other.GetContacts(hitters);
 
-        //if (hitters.Count > 0 && hitters.Find(ele => ele.tag == "AllyHitbox")) {
-        //    return;
-        //}
-
+        //Because the hitboxes appear as children, we have to filter AllyHitboxes out
+        //Otherwise you could get hurt by whacking brambles or something
+        //We can probably use this to implement hitlag when hurting things..
         foreach( Collider2D h in hitters)
         {
             if (h.tag == "AllyHitbox") continue;
@@ -202,11 +203,6 @@ public class playerController : MonoBehaviour
             if (intangibleStates.Contains(state))
             {
                 return;
-            }
-
-            if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && state == State.Broom)
-            {
-                other.SendMessage("OnBroomCollide");
             }
 
             if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && controller.collisions.tangible)
@@ -261,6 +257,14 @@ public class playerController : MonoBehaviour
         }
     }
 
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && state == State.Broom)
+        {
+            other.SendMessage("OnBroomCollide");
+        }
+    }
+
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.tag == "Tornado")
@@ -281,7 +285,7 @@ public class playerController : MonoBehaviour
         Vector2 input = new Vector2(0, 0);
         if (acceptInput)
         {
-            input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, Input.GetAxisRaw("Vertical"));
+            input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
         }
 
         if (isGrounded())
@@ -302,14 +306,13 @@ public class playerController : MonoBehaviour
         {
             if (canBroom && AtlasInputManager.getKeyPressed("Broom"))
             {
-                triggerBroomStart();
-                if (isWallSliding() && velocity.y < 0)
+                if (isWallSliding())
                 {
                     flipHorizontal();
-                }
-                else
+                    triggerBroomStart(fastBroom, facing);
+                } else
                 {
-                    faceDirection();
+                    triggerBroomStart(fastBroom, facing);
                 }
                 return;
             }
@@ -326,7 +329,12 @@ public class playerController : MonoBehaviour
             }
         }
 
-        float targetVelocityX = input.x * moveSpeed;
+        float currentMoveSpeed = moveSpeed;
+        if (anim.GetBool("isCrouching"))
+        {
+            currentMoveSpeed = 1.5f;
+        }
+        float targetVelocityX = input.x * currentMoveSpeed;
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
@@ -353,7 +361,7 @@ public class playerController : MonoBehaviour
     {
         if (AtlasInputManager.getKeyPressed("Attack"))
         {
-            if (state == State.Broom) { eventManager.Instance.BroomCancelEvent(); }
+            if (state == State.Broom) { endBroom(); }
             state = State.Attack;
             anim.SetTrigger("SelectAttack");
         }
@@ -397,7 +405,7 @@ public class playerController : MonoBehaviour
     #region Interact
     void canPickUp()
     {
-        if (Input.GetKeyDown(KeyCode.DownArrow) && isGrounded())
+        if (AtlasInputManager.getKeyPressed("Crouch") && isGrounded())
         {
             RaycastHit2D pickup = Physics2D.Raycast(transform.position, -Vector2.up, 0.5f, 1 << LayerMask.NameToLayer("Pickupable"));
             if (pickup.collider != null)
@@ -436,6 +444,7 @@ public class playerController : MonoBehaviour
             {
                 velocity.y /= 4;
                 i = variableJumpIncrements;
+                yield return 0;
             }
             yield return new WaitForSeconds(4 / 60.0f);
         }
@@ -470,7 +479,6 @@ public class playerController : MonoBehaviour
 
             if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
             {
-                faceDirection();
                 triggerBroomStart();
                 yield break;
             }
@@ -482,13 +490,21 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region One-offs
-    void canDoor()
+    void allowDoor()
     {
         if (currentDoor != null && AtlasInputManager.getKeyPressed("Interact"))
         {
             cutScenePrep();
             StartCoroutine(doDoor());
         }
+    }
+    void allowCrouch()
+    {
+        anim.SetBool("isCrouching", AtlasInputManager.getAxisState("Dpad").y < 0 && isGrounded());
+    }
+    public bool canMovingPlatform()
+    {
+        return moveableStates.Contains(state);
     }
     IEnumerator doDoor()
     {
@@ -543,7 +559,7 @@ public class playerController : MonoBehaviour
             currentTornado = null;
             //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow))
+        if (AtlasInputManager.getKeyPressed("Crouch"))
         {
             movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
             if (mp)
@@ -572,16 +588,44 @@ public class playerController : MonoBehaviour
     {
         //During Movement we can keep track of the direction the player is facing each frame
         if (vel == 0) return;
-        facing = (int)Mathf.Sign(vel);
-        sprite.localScale = new Vector3(facing, sprite.localScale.y, sprite.localScale.z);
+        if (facing != (int)Mathf.Sign(vel))
+        {
+            if (anim.GetBool("isCrouching"))
+            {
+            } else {
+                
+                anim.SetTrigger("turnAround");
+                facing = (int)Mathf.Sign(vel);
+            }
+        }
+        sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     }
     public void OnBonkCeiling(float vy)
     {
         if (state == State.Movement)
-        deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.2f, 0.25f);
+        deformer.startDeform(new Vector3(1.2f, 0.8f, 1.0f), 0.2f, 0.25f, 1.0f);
         gameManager.Instance.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
     }
-
+    public void OnLanding()
+    {
+        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f);
+        particleMaker.createDust(true);
+    }
+    public void hitLag(float duration = 0.1f)
+    {
+        StartCoroutine(doHitLag(duration));
+    }
+    IEnumerator doHitLag(float duration)
+    {
+        Vector3 oldVelocity = velocity;
+        velocity = Vector3.zero;
+        State oldState = state;
+        state = State.Wait;
+        deformer.flashWhite();
+        yield return new WaitForSeconds(duration);
+        state = oldState;
+        //velocity = oldVelocity;
+    }
     #endregion
 
     #region Jumps & WallJumps
@@ -604,31 +648,30 @@ public class playerController : MonoBehaviour
 
     void firstJump()
     {
-        deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
-        StartCoroutine(jumpCoroutine());
+        jumpCRVar = StartCoroutine(jumpCoroutine());
     }
 
     void doubleJump()
     {
-        //state = State.Movement;
         returnToMovement();
         resourceManager.Instance.usePlayerMana(1);
         canDoubleJump = false;
         anim.SetTrigger("doubleJump");
         velocity.y = doubleJumpVelocity;
         SoundManager.Instance.playClip("doubleJump");
-        StopCoroutine(jumpCoroutine());
+        if (jumpCRVar != null) StopCoroutine(jumpCRVar);
     }
 
-    public void bounce(float bounceVelocity, bool flash = true, string sound = "jump2")
+    public void bounce(float bounceVelocity, string sound = "jump2")
     {
-        deformer.startDeform(new Vector3(1.0f, 1.25f, 1.0f), 0.05f, 0.1f);
-        if (state == State.Broom) returnToMovement();
-        if (flash) deformer.flashWhite();
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
+        if (state == State.Broom) endBroom();
         velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
+        if (jumpCRVar != null)  StopCoroutine(jumpCRVar);
     }
     #endregion
 
@@ -636,7 +679,9 @@ public class playerController : MonoBehaviour
     //Popping a WooshBerry calls this.
     public void triggerBroomStart(bool fast = false, float dir = 0)
     {
-        faceDirection(dir);
+        if (resetPosition || !controller.collisions.tangible) return;
+        if (intangibleStates.Contains(state)) return;
+        setFacing(dir);
         state = State.BroomStart;
         fastBroom = fast;
         canBroom = false;
@@ -664,14 +709,12 @@ public class playerController : MonoBehaviour
     {
         if (AtlasInputManager.getKeyPressed("Broom"))
         {
-            anim.SetTrigger("broomEnd");
-            eventManager.Instance.BroomCancelEvent();
-            returnToMovement();
+            endBroom();
             return;
         }
         if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
-            eventManager.Instance.BroomCancelEvent();
+            endBroom();
             doubleJump();
             return;
         }
@@ -683,6 +726,13 @@ public class playerController : MonoBehaviour
         velocity.y = moveSpeed / 2.0f * vdir;
         velocity.x = moveSpeed * 2 * facing;
     }
+
+    void endBroom()
+    {
+        anim.SetTrigger("broomEnd");
+        eventManager.Instance.BroomCancelEvent();
+        returnToMovement();
+    }
     #endregion
 
     #region Damage, Bonking, and Reseting
@@ -690,6 +740,7 @@ public class playerController : MonoBehaviour
     //Set state to Hurt or Bonk
     public void startBonk(int damage = 0, bool reset = false)
     {
+        anim.SetBool("resetSpin", reset);
         if (!controller.collisions.tangible) { return; }
         controller.collisions.tangible = false;
         if (reset)
@@ -733,7 +784,6 @@ public class playerController : MonoBehaviour
     void handleReset(bool isSafe = false)
     {
         controller.collisions.tangible = false;
-        anim.SetBool("resetSpin", true);
         if (!starRotator)
         {
             starRotator = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarRotator"), transform);
@@ -747,7 +797,7 @@ public class playerController : MonoBehaviour
             StartCoroutine(flashEffect());
             Destroy(starRotator);
         }
-        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime * Time.deltaTime);
+        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime);
     }
 
     //Always turns off resetPosition
@@ -757,8 +807,7 @@ public class playerController : MonoBehaviour
     {
         if (state == State.ChargeAttack || state == State.Attack)
         {
-            resetAnimator();
-            anim.SetTrigger("Idle");
+            if (!anim.GetBool("isCrouching")) resetAnimator();
         }
         if (resetPosition && !controller.isSafePosition())
         {
@@ -767,7 +816,8 @@ public class playerController : MonoBehaviour
         {
             controller.collisions.tangible = true;
             state = State.Movement;
-            anim.SetTrigger("Idle");
+
+            if (!anim.GetBool("isCrouching")) anim.SetTrigger("Idle");
         }
         resetPosition = false;
         arialAttacking = false;
@@ -798,26 +848,17 @@ public class playerController : MonoBehaviour
         state = State.Wait;
     }
 
-    void faceDirection(float dir = 0)
-    {
-        if (dir == 0) dir = AtlasInputManager.getAxisState("Dpad").x;
-        if (dir != 0)
-        {
-            facing = (int)dir;
-            sprite.localScale = new Vector3(facing, 1, 1);
-        }
-    }
-
     void createStars(Vector3? position = null)
     {
         if (position == null) position = transform.position;
-        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((sprite.localScale.x == 1) ? 180 : 0, 90, 0));
+        Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((facing == 1) ? 180 : 0, 90, 0));
     }
 
+    //Flip horizontal without turn animation
     void flipHorizontal()
     {
-        facing = -(int)sprite.localScale.x;
-        sprite.localScale = new Vector3(facing, 1, 1);
+        facing = -(int)Mathf.Sign(sprite.localScale.x);
+        sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, 1, 1);
     }
 
     void checkRoomBoundaries()
