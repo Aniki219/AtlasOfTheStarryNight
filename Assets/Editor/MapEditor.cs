@@ -10,12 +10,15 @@ using UnityEditor.SceneManagement;
 [ExecuteInEditMode]
 public class MapEditor : Editor
 {
+    public static bool displayingNeighbors = false;
+
     [MenuItem("MapEditor/Display Neighbors")]
     public static void displayNeighbors()
     {
         AtlasSceneManager.getSceneData();
         AtlasSceneManager.getNeighbors();
         loadScene();
+        displayingNeighbors = true;
     }
 
     [MenuItem("MapEditor/Hide Neighbors")]
@@ -24,6 +27,18 @@ public class MapEditor : Editor
         for (int i = 1; i < SceneManager.sceneCount; i++)
         {
             SceneManager.UnloadSceneAsync(SceneManager.GetSceneAt(i));
+        }
+        displayingNeighbors = false;
+    }
+
+    public static void toggleNeighbors()
+    {
+        if (displayingNeighbors)
+        {
+            hideNeighbors();
+        } else
+        {
+            displayNeighbors();
         }
     }
 

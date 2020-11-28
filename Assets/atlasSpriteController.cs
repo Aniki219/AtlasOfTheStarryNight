@@ -5,10 +5,13 @@ using UnityEngine;
 public class atlasSpriteController : MonoBehaviour
 {
     playerController pc;
+    SpriteRenderer sprite;
     // Start is called before the first frame update
     void Start()
     {
         pc = transform.GetComponentInParent<playerController>();
+        sprite = GetComponent<SpriteRenderer>();
+        sprite.material = playerStatsManager.Instance.currentSkin;
     }
 
     // Update is called once per frame

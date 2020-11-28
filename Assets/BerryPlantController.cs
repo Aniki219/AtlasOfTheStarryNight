@@ -9,6 +9,8 @@ public class BerryPlantController : MonoBehaviour
     Animator anim;
     public float regrowTime = 5f;
     public bool canPick = true;
+    [Tooltip("Forces berry to launch objects forward only")]
+    public bool forwardLaunch;
 
     public PickEvent pickCallback;
     [System.Serializable]
@@ -24,6 +26,8 @@ public class BerryPlantController : MonoBehaviour
 
     Deformer deformer;
 
+    public bool sayFwd = false;
+
     private void Start()
     {
         anim = GetComponent<Animator>();
@@ -34,7 +38,7 @@ public class BerryPlantController : MonoBehaviour
     {
         if (hb != null && hb.name != "")
         {
-            gameManager.Instance.playerCtrl.bounce(9, true);
+            gameManager.Instance.playerCtrl.bounce(9);
         }
         StartCoroutine(Picked());
     }
@@ -53,8 +57,16 @@ public class BerryPlantController : MonoBehaviour
 
     public void wooshBerryOnBroom(bool player = false)
     {
-        if (player) gameManager.Instance.playerCtrl.triggerBroomStart(true, transform.localScale.x);
+        if (player)
+        {
+            gameManager.Instance.playerCtrl.hitLag();
+            Invoke("playerBroom", 0.12f);
+        }
         StartCoroutine(Picked());
+    }
+    public void playerBroom()
+    {
+        gameManager.Instance.playerCtrl.triggerBroomStart(true, transform.localScale.x);
     }
 
     public void bombBerryCallback(HitBox hb)
@@ -84,10 +96,19 @@ public class BerryPlantController : MonoBehaviour
 
     public Vector3 getDir()
     {
-        return transform.right * transform.localScale.x + transform.up * transform.localScale.y;
+        Vector2 fwd = getForward();
+        Vector2 upwd = new Vector2(Mathf.Round(transform.up.x), Mathf.Round(transform.up.y));
+        upwd *= Mathf.Round(transform.localScale.y);
+        if (forwardLaunch) return getForward();
+        return fwd + upwd;
+    }
+    public Vector3 getForward()
+    {
+        Vector2 fwd = new Vector2(Mathf.Round(transform.right.x), Mathf.Round(transform.right.y));
+        return fwd * Mathf.Round(transform.localScale.x);
     }
 
-    GameObject createBombBerry(bool atPlayer = true)
+    GameObject createBombBerry(bool atPlayer = false)
     {
         Vector3 at = transform.position;
         Transform parent = null;
@@ -105,6 +126,7 @@ public class BerryPlantController : MonoBehaviour
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
         {
+            gameManager.Instance.player.GetComponentInChildren<Deformer>().flashWhite();
             HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
             if (hb.broom)
             {

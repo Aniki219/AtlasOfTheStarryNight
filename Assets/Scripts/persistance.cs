@@ -25,9 +25,9 @@ public class persistance : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void OnDestroy()
-    {
-        if (persistant) gameManager.Instance.setObjectKey(uid, false);
-    }
+    //// Update is called once per frame
+    //void OnDestroy()
+    //{
+    //    if (persistant) gameManager.Instance.setObjectKey(uid, false);
+    //}
 }

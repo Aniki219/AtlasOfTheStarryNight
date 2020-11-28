@@ -11,7 +11,7 @@ public class characterController : MonoBehaviour
 
     public bool lockPosition = false;
 
-    public float safetyMargin = 1f;
+    float safetyMargin = 1;
     float skinWidth = 0.02f;
     int horizontalRayCount = 6;
     int verticalRayCount = 6;
@@ -35,6 +35,9 @@ public class characterController : MonoBehaviour
     [ConditionalField("bonkCeiling")] public BonkCeilingEvent OnBonkCeiling;
     [System.Serializable]
     public class BonkCeilingEvent : UnityEvent<float> { }
+
+    public bool hasLandingEvent = false;
+    [ConditionalField("bonkCeiling")] public UnityEvent OnLanding;
 
     void Start()
     {
@@ -226,16 +229,20 @@ public class characterController : MonoBehaviour
         { 
             Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
+            LayerMask platformMask = LayerMask.GetMask("Platform");
+            LayerMask vertColMask = collisionMask;
+            if (directionY == -1) vertColMask = collisionMask | platformMask;
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, vertColMask);
 
             if (hit)
             {
                 if (directionY == 1 && bonkCeiling) OnBonkCeiling.Invoke(velocity.y);
                 velocity.y = (hit.distance - skinWidth - 1/32.0f) * directionY;   
                 rayLength = hit.distance;
-                if (directionY == -1)
+                collisions.distanceToGround = Mathf.Min(collisions.distanceToGround, hit.distance);
+                if (hasLandingEvent && directionY == -1 && collisions.distanceToGround > 0.055f)
                 {
-                    collisions.distanceToGround = Mathf.Min(collisions.distanceToGround, hit.distance);
+                    OnLanding.Invoke();
                 }
 
                 if (collisions.climbingSlope)
@@ -339,26 +346,25 @@ public class characterController : MonoBehaviour
     {
         if (!collisions.tangible) { return false; }
         Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2;
-        RaycastHit2D dhit = Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, safetyMargin, dangerMask);
-        if (dhit)
-        {
-            return false;
-        }
+
+        if (Physics2D.Raycast(transform.position, Vector2.right, 0.4f, collisionMask)) return false;
+        if (Physics2D.Raycast(transform.position, -Vector2.right, 0.4f, collisionMask)) return false;
+        if (Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, safetyMargin, dangerMask)) return false;
+
         int rays = 0;
         for (int i = 0; i < verticalRayCount; i++)
         {
             Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
             float maxDistance = 1 / 32f + skinWidth;
 
-            LayerMask safetyMask = LayerMask.NameToLayer("Wall");
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, 1 << safetyMask);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, collisionMask);
 
             if (hit)
             {
                 rays++;
             }
         }
-        return rays > 1;
+        return rays > 2;
     }
 
     public void UpdateRaycastOrigins()
