@@ -15,7 +15,7 @@ public class MyAssetModificationProcessor : UnityEditor.AssetModificationProcess
 
         foreach (string path in paths)
         {
-            if (path != null && path.Contains(".unity"))
+            if (path.Contains(".unity"))
             {
                 scenePath = Path.GetDirectoryName(path);
                 sceneName = Path.GetFileNameWithoutExtension(path);

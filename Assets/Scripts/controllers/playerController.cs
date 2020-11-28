@@ -436,8 +436,6 @@ public class playerController : MonoBehaviour
             {
                 velocity.y /= 4;
                 i = variableJumpIncrements;
-                Debug.Log("boop");
-                yield return 0;
             }
             yield return new WaitForSeconds(4 / 60.0f);
         }
