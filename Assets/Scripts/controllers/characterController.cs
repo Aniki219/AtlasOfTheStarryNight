@@ -216,6 +216,7 @@ public class characterController : MonoBehaviour
                 collisions.wallRideLeft = collisions.left;
                 collisions.wallRideRight = collisions.right;
             }
+            Debug.DrawLine(rayOrigin, rayOrigin + Vector2.right * directionX * rayLength);
         }
     }
 
@@ -240,7 +241,7 @@ public class characterController : MonoBehaviour
                 velocity.y = (hit.distance - skinWidth - 1/32.0f) * directionY;   
                 rayLength = hit.distance;
                 collisions.distanceToGround = Mathf.Min(collisions.distanceToGround, hit.distance);
-                if (hasLandingEvent && directionY == -1 && collisions.distanceToGround > 0.055f)
+                if (hasLandingEvent && directionY == -1 && collisions.distanceToGround > 0.07f)
                 {
                     OnLanding.Invoke();
                 }
@@ -369,6 +370,7 @@ public class characterController : MonoBehaviour
 
     public void UpdateRaycastOrigins()
     {
+        CalculateRaySpacing();
         Bounds bounds = collider.bounds;
         bounds.Expand(skinWidth * -2);
 

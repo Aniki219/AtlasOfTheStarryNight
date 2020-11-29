@@ -1,52 +1,7 @@
 fileFormatVersion: 2
-guid: 041a8ebfe1157884685c7fe2e3879ace
+guid: 24a9f7461fcbb44459557b519fe9b189
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -2812400460386980935
-    second: upwardAirAttackSheet_0
-  - first:
-      213: 3699660724515376002
-    second: upwardAirAttackSheet_1
-  - first:
-      213: -9092371384581456482
-    second: upwardAirAttackSheet_2
-  - first:
-      213: 1556138153515630748
-    second: upwardAirAttackSheet_3
-  - first:
-      213: 4608209343277039452
-    second: upwardAirAttackSheet_4
-  - first:
-      213: -2647157780492594299
-    second: upwardAirAttackSheet_5
-  - first:
-      213: -3261378939388772454
-    second: upwardAirAttackSheet_6
-  - first:
-      213: 6775266552080787149
-    second: upwardAirAttackSheet_0
-  - first:
-      213: -752606751994315912
-    second: upwardAirAttackSheet_1
-  - first:
-      213: 3633316059709463342
-    second: upwardAirAttackSheet_2
-  - first:
-      213: 6044989392238364328
-    second: upwardAirAttackSheet_3
-  - first:
-      213: 6746480193919154888
-    second: upwardAirAttackSheet_4
-  - first:
-      213: 6812011717996480845
-    second: upwardAirAttackSheet_5
-  - first:
-      213: 3601720244392372663
-    second: upwardAirAttackSheet_6
-  - first:
-      213: -7717253661906961804
-    second: upwardAirAttackSheet_7
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -86,14 +41,14 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -104,14 +59,14 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -134,13 +89,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: upwardAirAttackSheet_0
+      name: standingAttack_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 64
-        height: 64
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -148,20 +103,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: dc66c5f3805960e50800000000000000
-      internalID: 6775266552080787149
+      spriteID: 64959021d151a20488713b63894488ca
+      internalID: 5330797490676991524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: upwardAirAttackSheet_1
+      name: standingAttack_1
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ca9aacfd0892ba14da8f105fc26e3bb8
+      internalID: 160683965571579817
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_2
       rect:
         serializedVersion: 2
         x: 64
         y: 0
-        width: 64
-        height: 64
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,20 +145,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 87b71d385243e85f0800000000000000
-      internalID: -752606751994315912
+      spriteID: 37de55b1bc9d8914d8330411f48f135d
+      internalID: 2631536187619123557
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: upwardAirAttackSheet_2
+      name: standingAttack_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08ef2e7b74506504b9abb82126b52667
+      internalID: 5520512823979852484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_4
       rect:
         serializedVersion: 2
         x: 128
         y: 0
-        width: 64
-        height: 64
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -190,20 +187,41 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2b54b7c4b12c6230800000000000000
-      internalID: 3633316059709463342
+      spriteID: 0091d2f5adf75854d86633a48db2998e
+      internalID: 1298031318081792752
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: upwardAirAttackSheet_3
+      name: standingAttack_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1f51a8a6652bce47828580c61a9d9a6
+      internalID: 5163103470228383543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_6
       rect:
         serializedVersion: 2
         x: 192
         y: 0
-        width: 64
-        height: 64
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -211,20 +229,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8a64f5313dd14e350800000000000000
-      internalID: 6044989392238364328
+      spriteID: 566af32ee7ad68445ac603f235f83c72
+      internalID: -1011162709639639857
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: upwardAirAttackSheet_4
+      name: standingAttack_7
       rect:
         serializedVersion: 2
-        x: 256
+        x: 224
         y: 0
-        width: 64
-        height: 64
+        width: 32
+        height: 32
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -232,71 +250,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8ca72c2fdff40ad50800000000000000
-      internalID: 6746480193919154888
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: upwardAirAttackSheet_5
-      rect:
-        serializedVersion: 2
-        x: 320
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d498af0e090298e50800000000000000
-      internalID: 6812011717996480845
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: upwardAirAttackSheet_6
-      rect:
-        serializedVersion: 2
-        x: 384
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7b92753ca71ebf130800000000000000
-      internalID: 3601720244392372663
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: upwardAirAttackSheet_7
-      rect:
-        serializedVersion: 2
-        x: 448
-        y: 0
-        width: 64
-        height: 64
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 47af378aeaec6e490800000000000000
-      internalID: -7717253661906961804
+      spriteID: ac43814ae1f1cc84b85cb87a1b504676
+      internalID: 2217835560214710280
       vertices: []
       indices: 
       edges: []

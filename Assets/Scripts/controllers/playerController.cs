@@ -50,6 +50,9 @@ public class playerController : MonoBehaviour
     BoxCollider2D boxCollider;
     Deformer deformer;
 
+    Vector3 colliderStartSize;
+    Vector3 colliderStartOffset;
+
     GameObject starRotator;
     Transform currentTornado;
 
@@ -110,6 +113,9 @@ public class playerController : MonoBehaviour
         particleMaker = GetComponent<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
 
+        colliderStartSize = boxCollider.size;
+        colliderStartOffset = boxCollider.offset;
+
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
@@ -126,6 +132,16 @@ public class playerController : MonoBehaviour
     void Update()
     {
         anim.speed = 1;
+        if (anim.GetBool("isCrouching"))
+        {
+            boxCollider.size = colliderStartSize * 0.5f;
+            boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
+        } else
+        {
+            boxCollider.size = colliderStartSize;
+            boxCollider.offset = colliderStartOffset;
+        }
+
         switch (state)
         {
             case State.Movement:
@@ -609,7 +625,7 @@ public class playerController : MonoBehaviour
     public void OnLanding()
     {
         deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f);
-        particleMaker.createDust(true);
+        //particleMaker.createDust(true);
     }
     public void hitLag(float duration = 0.1f)
     {

@@ -108,6 +108,7 @@ public class AtlasSceneManager : ScriptableObject
         }
         AtlasSceneData sceneData = getSceneData();
         AtlasScene currentScene = getScene();
+        if (currentScene == null) throw new Exception("Cannot get neighbors for scene: " + sceneName);
 
         List<AtlasScene> neighbors = new List<AtlasScene>();
         for (int x = 0; x < currentScene.size.x; x++)
@@ -183,6 +184,8 @@ public class AtlasSceneManager : ScriptableObject
         }
         AtlasSceneData sceneData = getSceneData();
         AtlasScene currentScene = sceneData.scenes.Find(s => s.scene == sceneName);
+
+        if (currentScene == null) throw new Exception("No Scene data found for scene: " + sceneName);
         return currentScene;
     }
 }

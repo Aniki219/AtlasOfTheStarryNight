@@ -25,13 +25,13 @@ AnimationClip:
     - time: 0.083333336
       value: {fileID: 3699660724515376002, guid: 041a8ebfe1157884685c7fe2e3879ace,
         type: 3}
-    - time: 0.21666667
+    - time: 0.18333334
       value: {fileID: -9092371384581456482, guid: 041a8ebfe1157884685c7fe2e3879ace,
         type: 3}
-    - time: 0.28333333
+    - time: 0.26666668
       value: {fileID: 1556138153515630748, guid: 041a8ebfe1157884685c7fe2e3879ace,
         type: 3}
-    - time: 0.36666667
+    - time: 0.35
       value: {fileID: 4608209343277039452, guid: 041a8ebfe1157884685c7fe2e3879ace,
         type: 3}
     - time: 0.43333334
@@ -39,6 +39,12 @@ AnimationClip:
         type: 3}
     - time: 0.5
       value: {fileID: -3261378939388772454, guid: 041a8ebfe1157884685c7fe2e3879ace,
+        type: 3}
+    - time: 0.56666666
+      value: {fileID: -7717253661906961804, guid: 041a8ebfe1157884685c7fe2e3879ace,
+        type: 3}
+    - time: 0.6166667
+      value: {fileID: -7717253661906961804, guid: 041a8ebfe1157884685c7fe2e3879ace,
         type: 3}
     attribute: m_Sprite
     path: 
@@ -66,12 +72,14 @@ AnimationClip:
     - {fileID: 4608209343277039452, guid: 041a8ebfe1157884685c7fe2e3879ace, type: 3}
     - {fileID: -2647157780492594299, guid: 041a8ebfe1157884685c7fe2e3879ace, type: 3}
     - {fileID: -3261378939388772454, guid: 041a8ebfe1157884685c7fe2e3879ace, type: 3}
+    - {fileID: -7717253661906961804, guid: 041a8ebfe1157884685c7fe2e3879ace, type: 3}
+    - {fileID: -7717253661906961804, guid: 041a8ebfe1157884685c7fe2e3879ace, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.51666665
+    m_StopTime: 0.6333333
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -91,7 +99,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.083333336
+  - time: 0.11666667
     functionName: createHitbox
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 79ee818d6be7d144e984e5669e95031d,
