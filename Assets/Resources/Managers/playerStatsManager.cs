@@ -8,12 +8,18 @@ public class playerStatsManager : ScriptableObject
     private static playerStatsManager instance;
     public static playerStatsManager Instance { get { return instance; } }
 
-    public Material[] playerSkins;
+    public List<Material> playerSkins;
     public Material currentSkin;
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         instance = Resources.LoadAll<playerStatsManager>("Managers")[0];
+    }
+
+    public void swapSkin(Material mat)
+    {
+        instance.currentSkin = mat;
+        gameManager.Instance.player.GetComponentInChildren<SpriteRenderer>().material = mat;
     }
 }

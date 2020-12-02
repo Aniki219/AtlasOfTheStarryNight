@@ -25,6 +25,8 @@ public class gameManager : ScriptableObject
 
     public string currentDoorLabel = "none";
 
+    public List<GameObject> pauseMenus;
+
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
@@ -33,7 +35,9 @@ public class gameManager : ScriptableObject
         instance.canSetPosition = false;
         instance.currentDoorLabel = "none";
         //Calls setPlayer
-        onSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single); 
+        onSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
+
+        instance.pauseMenus = new List<GameObject>();
     }
 
     public void setPlayer()

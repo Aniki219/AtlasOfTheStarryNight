@@ -12,5 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb5e357ea6d34424b912dfc8a1a70222, type: 3}
   m_Name: myStatsManager
   m_EditorClassIdentifier: 
-  playerSkins: []
-  currentSkin: {fileID: 2100000, guid: b63d5ef328d9a5542953ea7b23e5592c, type: 2}
+  playerSkins:
+  - {fileID: 2100000, guid: d38a3c7a3e2cee9419fcbd26718d2cbd, type: 2}
+  - {fileID: 2100000, guid: 0230071d5229d5c46889a1ede18e04f1, type: 2}
+  - {fileID: 2100000, guid: b63d5ef328d9a5542953ea7b23e5592c, type: 2}
+  - {fileID: 2100000, guid: 2e707f5d353aec34686dde11ed71a47b, type: 2}
+  - {fileID: 2100000, guid: 35615f8b473478b4d9d94ebdec031abc, type: 2}
+  - {fileID: 2100000, guid: 5f956f05641f57a4ba38a0a435ce82a3, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  currentSkin: {fileID: 2100000, guid: d38a3c7a3e2cee9419fcbd26718d2cbd, type: 2}

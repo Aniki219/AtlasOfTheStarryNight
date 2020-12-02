@@ -72,10 +72,12 @@ public class playerController : MonoBehaviour
 
     #region State
     public State state = State.Movement;
+    State prevState = State.Movement;
 
     public enum State
     {
         Wait,
+        Menu,
         Movement,
         BroomStart,
         Broom,
@@ -131,17 +133,8 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
-        anim.speed = 1;
-        if (anim.GetBool("isCrouching"))
-        {
-            boxCollider.size = colliderStartSize * 0.5f;
-            boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
-        } else
-        {
-            boxCollider.size = colliderStartSize;
-            boxCollider.offset = colliderStartOffset;
-        }
-
+        checkCrouchHitbox();
+        playerShouldWait();
         switch (state)
         {
             case State.Movement:
@@ -192,7 +185,7 @@ public class playerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (state == State.Reset) { return; }
+        if (state == State.Reset || state == State.Wait || state == State.Menu) { return; }
         controller.Move(velocity * Time.deltaTime);
         if (controller.collisions.above || controller.collisions.below)
         {
@@ -516,7 +509,26 @@ public class playerController : MonoBehaviour
     }
     void allowCrouch()
     {
-        anim.SetBool("isCrouching", AtlasInputManager.getAxisState("Dpad").y < 0 && isGrounded());
+        if (AtlasInputManager.getAxisState("Dpad").y < 0 && isGrounded())
+        {
+            anim.SetBool("isCrouching", true);
+        } else if (controller.checkVertDist(0.2f))
+        {
+            anim.SetBool("isCrouching", false);
+        }
+    }
+    void checkCrouchHitbox()
+    {
+        if (anim.GetBool("isCrouching"))
+        {
+            boxCollider.size = Vector2.Scale(colliderStartSize, new Vector3(1.0f, 0.5f));
+            boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
+        }
+        else
+        {
+            boxCollider.size = colliderStartSize;
+            boxCollider.offset = colliderStartOffset;
+        }
     }
     public bool canMovingPlatform()
     {
@@ -608,11 +620,14 @@ public class playerController : MonoBehaviour
         {
             if (anim.GetBool("isCrouching"))
             {
+                anim.SetFloat("animDir", -1.0f);
             } else {
-                
-                anim.SetTrigger("turnAround");
+                if (anim.GetBool("isRunning") && !anim.GetBool("cantTurnAround")) anim.SetTrigger("turnAround");
                 facing = (int)Mathf.Sign(vel);
             }
+        } else
+        {
+            anim.SetFloat("animDir", 1.0f);
         }
         sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     }
@@ -857,8 +872,28 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region Helpers
+    public void playerShouldWait()
+    {
+        if (gameManager.Instance.pauseMenus.Count > 0)
+        {
+            anim.speed = 0;
+            if (state != State.Menu) {
+                prevState = state;
+                state = State.Menu;
+            }
+        } else
+        {
+            if (state == State.Menu)
+            {
+                anim.speed = 1;
+                state = prevState;
+            }
+        }
+    }
+
     public void cutScenePrep()
     {
+        Debug.LogWarning("Don't use cutScenePrep. Switch to playerShouldWait!");
         velocity = Vector3.zero;
         resetAnimator();
         state = State.Wait;

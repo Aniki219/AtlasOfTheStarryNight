@@ -51,10 +51,10 @@ public class Deformer : MonoBehaviour
     {
         float startTime = Time.time;
         float elapsedTime = 0;
-        to.x *= Mathf.Sign(transform.localScale.x);
 
         do
         {
+            to.x = Mathf.Abs(to.x) * Mathf.Sign(transform.localScale.x);
             transform.localScale = Vector3.Lerp(transform.localScale, to, elapsedTime / timeTo);
             transform.localPosition = startTransform + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f-transform.localScale.y) * offsetDir;
             elapsedTime = Time.time - startTime;
