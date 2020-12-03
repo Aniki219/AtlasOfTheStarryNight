@@ -24,6 +24,7 @@ public class playerController : MonoBehaviour
     bool canDoubleJump = false;
     bool canTornado = true;
     bool arialAttacking = false;
+    bool fastFalling = false;
     public bool dropThroughPlatforms = false;
     [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
@@ -364,6 +365,11 @@ public class playerController : MonoBehaviour
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
         //anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding());
+        if (isWallSliding())
+        {
+            deformer.RemoveDeform("jump");
+            deformer.RemoveDeform("fastfall");
+        }
 
         if (canTurnAround) setFacing(velocity.x);
 
@@ -373,14 +379,25 @@ public class playerController : MonoBehaviour
         if (isWallSliding() && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
 
         float termVel;
-        if (AtlasInputManager.getAxisState("Dpad").y < 0 && !isGrounded() && velocity.y <= 0)
+        
+        if (fastFalling)
         {
+            if (AtlasInputManager.getAxisState("Dpad").y >=0 || isGrounded() || velocity.y > 0)
+            {
+                fastFalling = false;
+            }
             termVel = fastFallVel;
             velocity.y += gravity * Time.deltaTime;
         }
         else
         {
             termVel = maxFallVel;
+            deformer.RemoveDeform("fastfall");
+            if (AtlasInputManager.getKeyPressed("Crouch") && !isGrounded() && velocity.y <= 0)
+            {
+                fastFalling = true;
+                deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, -1.0f, "fastfall", true);
+            }
         }
         if (velocity.y < termVel) { velocity.y = termVel; }
 
@@ -670,7 +687,7 @@ public class playerController : MonoBehaviour
     }
     public void OnLanding()
     {
-        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f, true);
+        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f, "Landing", true);
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -711,7 +728,7 @@ public class playerController : MonoBehaviour
     {
         //Cancel jump if stuck under something while crawling
         if (isCrouching()) return;
-        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f, true);
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f, "jump", true);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
         jumpCRVar = StartCoroutine(jumpCoroutine());

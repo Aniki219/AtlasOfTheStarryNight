@@ -9,7 +9,6 @@ public class Deformer : MonoBehaviour
     public Material flashMaterial;
 
     Collider2D col;
-    Coroutine deformerCR = null;
 
     Vector3 startPosition;
     Vector3 startRotation;
@@ -133,13 +132,19 @@ public class Deformer : MonoBehaviour
             {
                 newScale = Vector3.Lerp(Vector3.one, d.to, elapsedTime / d.timeTo);
             }
-            else
+            else 
             {
-                newScale = Vector3.Lerp(d.to, Vector3.one, (elapsedTime - d.timeTo) / d.timeReturn);
+                if (d.timeReturn < 0)
+                {
+                    newScale = d.to;
+                } else
+                {
+                    newScale = Vector3.Lerp(d.to, Vector3.one, (elapsedTime - d.timeTo) / d.timeReturn);
+                }
             }
             newOffset = startPosition + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f - newScale.y) * d.offsetDir;
 
-            if (elapsedTime >= d.timeTo + d.timeReturn)
+            if (d.timeReturn > 0 && elapsedTime >= d.timeTo + d.timeReturn)
             {
                 d.enabled = false;
             }
@@ -154,21 +159,23 @@ public class Deformer : MonoBehaviour
         deforms.RemoveAll(d => !d.enabled);
     }
 
-    public void startDeform(Vector3 to, float timeTo, float timeReturn = 0.5f, float offsetDir = 0, bool useNew = true)
+    public void RemoveDeform(string tag)
     {
-        if (useNew)
+        deforms.RemoveAll(d => d.tag.Equals(tag));
+    }
+
+    public void startDeform(Vector3 to, float timeTo, float timeReturn = 0.5f, float offsetDir = 0, string tag = "default", bool unique = false)
+    {
+        Deformation newDeform = new Deformation(to, timeTo, timeReturn, offsetDir);
+        newDeform.tag = tag;
+        if (unique && tag != "default" && tag != null && tag != "")
         {
-            deforms.Add(new Deformation(to, timeTo, timeReturn, offsetDir));
-            return;
+            if (deforms.Find(d => d.tag.Equals(tag)) != null)
+            {
+                return;
+            }
         }
-        if (deformerCR != null)
-        {
-            StopCoroutine(deformerCR);
-            deformerCR = null;
-        }
-        transform.localScale = new Vector3(Mathf.Sign(transform.localScale.x), 1.0f, 1.0f);
-        transform.localPosition = startPosition;
-        deformerCR = StartCoroutine(deformAndReform(to, timeTo, timeReturn, offsetDir));
+        deforms.Add(newDeform);
     }
 
     public void flashWhite(float time = 0.1f)
@@ -187,34 +194,6 @@ public class Deformer : MonoBehaviour
         yield return new WaitForSeconds(time);
         sprite.material = playerStatsManager.Instance.currentSkin;
     }
-
-    public IEnumerator deformAndReform(Vector3 to, float timeTo, float timeReturn, float offsetDir)
-    {
-        float startTime = Time.time;
-        float elapsedTime = 0;
-
-        do
-        {
-            to.x = Mathf.Abs(to.x) * Mathf.Sign(transform.localScale.x);
-            transform.localScale = Vector3.Lerp(transform.localScale, to, elapsedTime / timeTo);
-            transform.localPosition = startPosition + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f-transform.localScale.y) * offsetDir;
-            elapsedTime = Time.time - startTime;
-            yield return new WaitForEndOfFrame();
-        } while (elapsedTime < timeTo);
-
-        startTime = Time.time;
-        elapsedTime = 0;
-
-        do
-        {
-            Vector3 returnScale = new Vector3(Mathf.Sign(transform.localScale.x), 1.0f, 1.0f);
-            transform.localScale = Vector3.Lerp(transform.localScale, returnScale, elapsedTime / timeReturn);
-            transform.localPosition = startPosition + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f - transform.localScale.y) * offsetDir;
-            elapsedTime = Time.time - startTime;
-            yield return new WaitForEndOfFrame();
-        } while (elapsedTime < timeReturn);
-        transform.localPosition = startPosition;
-    } 
 }
 
 [System.Serializable]
