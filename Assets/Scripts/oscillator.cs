@@ -27,6 +27,7 @@ public class oscillator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.LogWarning("Phasing out oscillator. Use Deformer instead. (" + gameObject.name + ")");
         //frameCount is to remain sync'd for all oscillators
         frameCount = (int)Random.Range(0, 100) * Time.deltaTime;
         oscillationDirection = Vector3.zero;
@@ -116,35 +117,5 @@ public class oscillator : MonoBehaviour
                 o.enabled = on;
             }
         }
-    }
-}
-
-[System.Serializable]
-public class Oscillator
-{
-    public string tag;
-    public bool enabled;
-    public float cyclesPerSecond;
-    public Axes axis;
-
-    public enum Axes
-    {
-        x = 0,
-        y = 1,
-        z = 2
-    }
-
-    public float oscillationSize;
-    [HideInInspector] public Vector3 oscillationDirection;
-    public bool rotational = false;
-
-    public Oscillator()
-    {
-        cyclesPerSecond = 1.0f;
-        axis = Axes.x;
-        oscillationSize = 5.0f;
-        rotational = false;
-        tag = "default";
-        enabled = true;
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4086491157713668456}
   - component: {fileID: 4086491157713668471}
   - component: {fileID: -1717526212303541566}
-  - component: {fileID: 2019911375}
   - component: {fileID: 2019911377}
   - component: {fileID: 2019911378}
   - component: {fileID: 5351596777942973678}
@@ -114,37 +113,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.7}
   m_EdgeRadius: 0
---- !u!114 &2019911375
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4086491157713668470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f30a9702705076a4f837163a335af8a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cyclesPerSecond: 0.5
-  axis: 0
-  oscillationSize: 0
-  rotational: 0
-  oscillators:
-  - tag: shake
-    enabled: 0
-    cyclesPerSecond: -2.5
-    axis: 2
-    oscillationSize: 7
-    oscillationDirection: {x: 0, y: 0, z: 0}
-    rotational: 1
-  - tag: default
-    enabled: 1
-    cyclesPerSecond: -0.5
-    axis: 2
-    oscillationSize: 3
-    oscillationDirection: {x: 0, y: 0, z: 0}
-    rotational: 1
 --- !u!114 &2019911377
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -174,6 +142,7 @@ MonoBehaviour:
   maxHitpoints: 1
   takeOneDamage: 0
   cantHitThroughWall: 0
+  flashWhiteOnHit: 1
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -230,3 +199,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  oscillators:
+  - tag: default
+    enabled: 1
+    axis: 2
+    rotational: 1
+    cyclesPerSecond: -0.5
+    oscillationSize: 3
+    oscillationDirection: {x: 0, y: 0, z: 0}
+  - tag: shake
+    enabled: 0
+    axis: 2
+    rotational: 1
+    cyclesPerSecond: -2.5
+    oscillationSize: 7
+    oscillationDirection: {x: 0, y: 0, z: 0}

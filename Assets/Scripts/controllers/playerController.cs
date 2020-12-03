@@ -34,6 +34,7 @@ public class playerController : MonoBehaviour
 
     float maxWallSlideVel = -5f;
     float maxFallVel = -15f;
+    float fastFallVel = -25f;
     float wallJumpVelocity = 7;
 
     float gravity;
@@ -370,7 +371,18 @@ public class playerController : MonoBehaviour
         velocity.y += gravity * Time.deltaTime;
 
         if (isWallSliding() && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
-        if (velocity.y < maxFallVel) { velocity.y = maxFallVel; }
+
+        float termVel;
+        if (AtlasInputManager.getAxisState("Dpad").y < 0 && !isGrounded() && velocity.y <= 0)
+        {
+            termVel = fastFallVel;
+            velocity.y += gravity * Time.deltaTime;
+        }
+        else
+        {
+            termVel = maxFallVel;
+        }
+        if (velocity.y < termVel) { velocity.y = termVel; }
 
         if (velocity.y <= 0 && controller.isSafePosition())
         {
@@ -653,12 +665,12 @@ public class playerController : MonoBehaviour
     public void OnBonkCeiling(float vy)
     {
         if (state == State.Movement)
-        deformer.startDeform(new Vector3(1.2f, 0.8f, 1.0f), 0.2f, 0.25f, 1.0f);
+        deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.15f, 0.25f, 1.0f);
         gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
     }
     public void OnLanding()
     {
-        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f);
+        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f, true);
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -699,7 +711,7 @@ public class playerController : MonoBehaviour
     {
         //Cancel jump if stuck under something while crawling
         if (isCrouching()) return;
-        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f, true);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
         jumpCRVar = StartCoroutine(jumpCoroutine());

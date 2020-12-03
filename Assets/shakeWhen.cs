@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(oscillator), typeof(Collider2D))]
+[RequireComponent(typeof(Deformer), typeof(Collider2D))]
 public class shakeWhen : MonoBehaviour
 {
-    oscillator oscillator;
+    Deformer deformer;
     public bool onTouch = true;
     public bool onHit = false;
     public bool onBonk = false;
@@ -13,7 +13,7 @@ public class shakeWhen : MonoBehaviour
 
     private void Start()
     {
-        oscillator = GetComponent<oscillator>();
+        deformer = GetComponent<Deformer>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -26,10 +26,10 @@ public class shakeWhen : MonoBehaviour
 
     IEnumerator Shake()
     {
-        oscillator.SetOscillatorActive("default", false);
-        oscillator.SetOscillatorActive("shake", true);
+        deformer.SetOscillatorActive("default", false);
+        deformer.SetOscillatorActive("shake", true);
         yield return new WaitForSeconds(shakeDuration);
-        oscillator.SetOscillatorActive("shake", false);
-        oscillator.SetOscillatorActive("default", true);
+        deformer.SetOscillatorActive("shake", false);
+        deformer.SetOscillatorActive("default", true);
     }
 }
