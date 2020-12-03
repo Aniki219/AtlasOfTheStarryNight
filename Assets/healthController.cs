@@ -20,11 +20,15 @@ public class healthController : MonoBehaviour
 
     public bool takeOneDamage = false;
     public bool cantHitThroughWall = false;
+    public bool flashWhiteOnHit = true;
 
     public bool hurtByPlayer = true;
     [ConditionalField("hurtByPlayer")] public HurtEvent hurtCallback;
     [System.Serializable]
     public class HurtEvent : UnityEvent<HitBox> {}
+
+    public bool deadCallback = false;
+    [ConditionalField("deadCallback")] public UnityEvent onDeath;
 
     [HideInInspector] public bool blocking = false;
     [HideInInspector] public HitBox lastHitBy = null;
@@ -70,26 +74,44 @@ public class healthController : MonoBehaviour
         }
     }
 
-    public void takeDamage(float amount)
+    public void takeDamage(float amount, HitBox hitbox = null, bool byPlayer = false)
     {
         hitpoints -= amount;
         timeSinceHit = 0;
+
+        if (flashWhiteOnHit)
+        {
+            Deformer deformer = GetComponent<Deformer>();
+            if (deformer != null) deformer.flashWhite();
+            if (byPlayer) gameManager.Instance.playerCtrl.hitLag(0);
+        }
+
+        //Remember to set the hurtCallback as Dynamic and not Static
+        //or it will user the Inspector HitBox (which shouldn't exist)
+        if (hurtCallback != null) hurtCallback.Invoke(hitbox);
+        if (hurtSound) SoundManager.Instance.playClip(hurtSound.name);
+
         if (!dead)
         {
             checkDead();
         }
     }
 
-    void checkDead()
+    void checkDead(float time = 0.25f)
     {
         if (hitpoints <= 0)
         {
+            if (deadCallback) onDeath.Invoke();
             dead = true;
-            gameManager.Instance.createInstance("Effects/EnemyPop", transform.position);
-            GameObject star = gameManager.Instance.createInstance("Effects/StarParticles", transform.position);
-            SoundManager.Instance.playClip("hurt");
-            Destroy(gameObject, 0.25f);
+            Destroy(gameObject, time);
         }
+    }
+
+    public void starPop()
+    {
+        gameManager.createInstance("Effects/EnemyPop", transform.position);
+        GameObject star = gameManager.createInstance("Effects/StarParticles", transform.position);
+        SoundManager.Instance.playClip("hurt");
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
@@ -118,12 +140,7 @@ public class healthController : MonoBehaviour
             if (!takeOneDamage) {
                 dmg = hitbox.damage;
             }
-            takeDamage(dmg);
-
-            //Remember to set the hurtCallback as Dynamic and not Static
-            //or it will user the Inspector HitBox (which shouldn't exist)
-            hurtCallback.Invoke(hitbox);
-            if (hurtSound) SoundManager.Instance.playClip(hurtSound.name);
+            takeDamage(dmg, hitbox, true);
         }
     }
 }

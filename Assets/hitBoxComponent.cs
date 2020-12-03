@@ -10,7 +10,7 @@ public class hitBoxComponent : MonoBehaviour
     void Start()
     {
         if (hitBox == null) { return; }
-        GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, transform.localScale));
+        GameObject hb = gameManager.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, transform.localScale));
         hb.transform.localScale = hitBox.size;
         hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
         Destroy(hb, hitBox.duration);

@@ -61,8 +61,6 @@ public class characterController : MonoBehaviour
 
         if (collisions.collidable)
         {
-            checkGrounded();
-
             if (velocity.y < 0)
             {
                 DescendSlope(ref velocity);
@@ -94,6 +92,8 @@ public class characterController : MonoBehaviour
         crushTest(true);
 
         additionalVelocity = Vector3.zero;
+
+        checkGrounded(velocity.y);
     }
 
     bool crushTest(bool vertical)
@@ -220,7 +220,7 @@ public class characterController : MonoBehaviour
         }
     }
 
-    void VerticalCollisions(ref Vector3 velocity)
+    public void VerticalCollisions(ref Vector3 velocity)
     {
        // UpdateRaycastOrigins();
         float directionY = Mathf.Sign(velocity.y);
@@ -232,7 +232,14 @@ public class characterController : MonoBehaviour
             rayOrigin += Vector2.right * (verticalRaySpacing * i + velocity.x);
             LayerMask platformMask = LayerMask.GetMask("Platform");
             LayerMask vertColMask = collisionMask;
-            if (directionY == -1) vertColMask = collisionMask | platformMask;
+            if (directionY == -1)
+            {
+                playerController pc = GetComponent<playerController>();
+                if (pc == null || pc != null && !pc.dropThroughPlatforms)
+                {
+                    vertColMask = collisionMask | platformMask;
+                }
+            }
             RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, vertColMask);
 
             if (hit)
@@ -278,24 +285,9 @@ public class characterController : MonoBehaviour
         }
     }
 
-    void checkGrounded()
+    public void checkGrounded(float vy)
     {
-        float directionY = -1;
-        float rayLength = skinWidth + 1 / 32f;
-
-        for (int i = 0; i < verticalRayCount; i++)
-        {
-            Vector2 rayOrigin = (directionY == -1) ? raycastOrigins.bottomLeft : raycastOrigins.topLeft;
-            rayOrigin += Vector2.right * (verticalRaySpacing * i);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
-
-            if (hit)
-            {
-                rayLength = hit.distance;
-                collisions.isGrounded = true;
-                break;
-            }
-        }
+        collisions.isGrounded = !(vy != 0 && !collisions.below);
     }
 
     public bool checkVertDist(float dist)

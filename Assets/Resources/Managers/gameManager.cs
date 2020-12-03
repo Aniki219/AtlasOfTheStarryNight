@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "Managers/GameManager")]
 public class gameManager : ScriptableObject
@@ -10,6 +11,7 @@ public class gameManager : ScriptableObject
     private static gameManager instance;
     public static gameManager Instance { get { return instance; } }
 
+    static bool isShuttingDown = false;
     static Dictionary<string, bool> objects = new Dictionary<string, bool>();
     public float gravity = -17.6f;
     public float maxFallVel = -15f;
@@ -30,6 +32,7 @@ public class gameManager : ScriptableObject
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
+        isShuttingDown = false;
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += onSceneLoad;
         instance.canSetPosition = false;
@@ -38,6 +41,8 @@ public class gameManager : ScriptableObject
         onSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
         instance.pauseMenus = new List<GameObject>();
+
+        Application.quitting += OnApplicationQuit;
     }
 
     public void setPlayer()
@@ -132,9 +137,22 @@ public class gameManager : ScriptableObject
         }
     }
 
-    public GameObject createInstance(string name, Vector3 at, Transform parent = null)
+    public static GameObject createInstance(string name, Vector3 at, Transform parent = null)
     {
+        if (isShuttingDown) return null;
         GameObject inst = Instantiate(Resources.Load<GameObject>("Prefabs/" + name), at, Quaternion.identity, parent);
         return inst;
+    }
+
+    public static GameObject createInstance(GameObject prefab, Vector3 at, Transform parent = null)
+    {
+        if (isShuttingDown) return null;
+        GameObject inst = Instantiate(prefab, at, Quaternion.identity, parent);
+        return inst;
+    }
+
+    public static void OnApplicationQuit()
+    {
+        isShuttingDown = true;
     }
 }

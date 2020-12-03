@@ -147,7 +147,7 @@ public class diveToadController : MonoBehaviour
         anim.SetTrigger("Attack");
     }
 
-    public void hurt(HitBox hitbox, bool left)
+    public void hurt(HitBox hitbox)
     {
         health.takeDamage(hitbox.damage);
         float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
@@ -168,7 +168,7 @@ public class diveToadController : MonoBehaviour
         if (hitbox.incendiary)
         {
             Vector3 rpos = new Vector3(Random.Range(-.25f, .25f), Random.Range(-.25f, .25f), 0);
-            gameManager.Instance.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
+            gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
         }
 
         deformer.flashWhite();
@@ -227,14 +227,14 @@ public class diveToadController : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.tag == "AllyHitbox")
-        {
-            HitBox hb = other.GetComponent<AllyHitBoxController>().hitbox;
-            hurt(hb, false);
-        }
-    }
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.tag == "AllyHitbox")
+    //    {
+    //        HitBox hb = other.GetComponent<AllyHitBoxController>().hitbox;
+    //        hurt(hb, false);
+    //    }
+    //}
 
     public bool isGrounded()
     {

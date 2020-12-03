@@ -1,7 +1,22 @@
 fileFormatVersion: 2
-guid: e52800e35b76e15448e0acf987c88b9a
+guid: 1c18c5f2d363b8b46bd2a96900e46801
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 4701186701353091356
+    second: spottyFlowerBits_0
+  - first:
+      213: 7133498694818263962
+    second: spottyFlowerBits_1
+  - first:
+      213: 4414138565122399527
+    second: spottyFlowerBits_2
+  - first:
+      213: -5844470715871848619
+    second: spottyFlowerBits_3
+  - first:
+      213: -6901898245719642486
+    second: spottyFlowerBits_4
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -41,14 +56,14 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 7
-  spritePivot: {x: 0.5, y: 0}
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -59,14 +74,14 @@ TextureImporter:
   compressionQualitySet: 0
   textureFormatSet: 0
   ignorePngGamma: 0
-  applyGammaDecoding: 1
+  applyGammaDecoding: 0
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -78,7 +93,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -89,7 +104,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: standingAttack_0
+      name: spottyFlowerBits_0
       rect:
         serializedVersion: 2
         x: 0
@@ -97,20 +112,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64959021d151a20488713b63894488ca
-      internalID: 5330797490676991524
+      spriteID: c1101fc9568fd3140800000000000000
+      internalID: 4701186701353091356
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_1
+      name: spottyFlowerBits_1
       rect:
         serializedVersion: 2
         x: 32
@@ -118,20 +133,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ca9aacfd0892ba14da8f105fc26e3bb8
-      internalID: 160683965571579817
+      spriteID: a93fa5e94474ff260800000000000000
+      internalID: 7133498694818263962
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_2
+      name: spottyFlowerBits_2
       rect:
         serializedVersion: 2
         x: 64
@@ -139,20 +154,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37de55b1bc9d8914d8330411f48f135d
-      internalID: 2631536187619123557
+      spriteID: 72d197b43ab224d30800000000000000
+      internalID: 4414138565122399527
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_3
+      name: spottyFlowerBits_3
       rect:
         serializedVersion: 2
         x: 96
@@ -160,20 +175,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08ef2e7b74506504b9abb82126b52667
-      internalID: 5520512823979852484
+      spriteID: 557194869d444eea0800000000000000
+      internalID: -5844470715871848619
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_4
+      name: spottyFlowerBits_4
       rect:
         serializedVersion: 2
         x: 128
@@ -181,77 +196,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0091d2f5adf75854d86633a48db2998e
-      internalID: 1298031318081792752
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: standingAttack_5
-      rect:
-        serializedVersion: 2
-        x: 160
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b1f51a8a6652bce47828580c61a9d9a6
-      internalID: 5163103470228383543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: standingAttack_6
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 566af32ee7ad68445ac603f235f83c72
-      internalID: -1011162709639639857
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: standingAttack_7
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac43814ae1f1cc84b85cb87a1b504676
-      internalID: 2217835560214710280
+      spriteID: a8e2df30d188730a0800000000000000
+      internalID: -6901898245719642486
       vertices: []
       indices: 
       edges: []

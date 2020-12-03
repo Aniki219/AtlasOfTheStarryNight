@@ -14,6 +14,9 @@ public class oscillator : MonoBehaviour
 
     float frameCount = 0.0f;
 
+    [SerializeField]
+    public List<Oscillator> oscillators;
+
     public enum Axes
     {
         x = 0,
@@ -24,8 +27,10 @@ public class oscillator : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        //frameCount is to remain sync'd for all oscillators
+        frameCount = (int)Random.Range(0, 100) * Time.deltaTime;
         oscillationDirection = Vector3.zero;
-        //oscillationDirection[(int)axis] = 1;
+
         switch ((int)axis)
         {
             case 0:
@@ -44,6 +49,27 @@ public class oscillator : MonoBehaviour
         }
         startPosition = transform.localPosition;
         startRotation = transform.localEulerAngles;
+
+        //Setup Oscillators
+        foreach (Oscillator o in oscillators)
+        {
+            switch ((int)o.axis)
+            {
+                case 0:
+                    o.oscillationDirection = transform.right;
+                    break;
+                case 1:
+                    o.oscillationDirection = transform.up;
+                    break;
+                case 2:
+                    o.oscillationDirection = transform.forward;
+                    break;
+            }
+            if (o.rotational)
+            {
+                transform.localEulerAngles -= o.oscillationDirection * o.oscillationSize * 0.5f;
+            }
+        }
     }
 
     // Update is called once per frame
@@ -58,5 +84,67 @@ public class oscillator : MonoBehaviour
         {
             transform.position = startPosition + oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI * cyclesPerSecond) * oscillationSize;
         }
+
+
+        //Update Oscillators
+        foreach (Oscillator o in oscillators)
+        {
+            if (!o.enabled) continue;
+            if (o.rotational)
+            {
+                float angle = Mathf.Sin(frameCount * 2.0f * Mathf.PI * o.cyclesPerSecond);
+                transform.localRotation = Quaternion.Euler(
+                    startRotation + 
+                    o.oscillationDirection * 
+                    angle * 
+                    o.oscillationSize * 
+                    transform.localScale.y); //Upside down switches CW to CCW
+            }
+            else
+            {
+                transform.position = startPosition + o.oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI * o.cyclesPerSecond) * o.oscillationSize;
+            }
+        }
+    }
+
+    public void SetOscillatorActive(string tag = "default", bool on = true)
+    {
+        foreach (Oscillator o in oscillators)
+        {
+            if (o.tag == tag)
+            {
+                o.enabled = on;
+            }
+        }
+    }
+}
+
+[System.Serializable]
+public class Oscillator
+{
+    public string tag;
+    public bool enabled;
+    public float cyclesPerSecond;
+    public Axes axis;
+
+    public enum Axes
+    {
+        x = 0,
+        y = 1,
+        z = 2
+    }
+
+    public float oscillationSize;
+    [HideInInspector] public Vector3 oscillationDirection;
+    public bool rotational = false;
+
+    public Oscillator()
+    {
+        cyclesPerSecond = 1.0f;
+        axis = Axes.x;
+        oscillationSize = 5.0f;
+        rotational = false;
+        tag = "default";
+        enabled = true;
     }
 }

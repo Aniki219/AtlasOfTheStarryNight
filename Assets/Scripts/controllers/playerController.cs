@@ -24,6 +24,7 @@ public class playerController : MonoBehaviour
     bool canDoubleJump = false;
     bool canTornado = true;
     bool arialAttacking = false;
+    public bool dropThroughPlatforms = false;
     [SerializeField] bool resetPosition = false;
     Vector3 lastSafePosition;
     float resetTime = 0.25f;
@@ -133,7 +134,8 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
-        checkCrouchHitbox();
+        
+        handleUncrouch();
         playerShouldWait();
         switch (state)
         {
@@ -180,11 +182,22 @@ public class playerController : MonoBehaviour
 
     private void LateUpdate()
     {
+
         checkRoomBoundaries();
     }
 
     private void FixedUpdate()
     {
+        if (!dropThroughPlatforms && AtlasInputManager.getKey("Jump") && isCrouching())
+        {
+            dropThroughPlatforms = true;
+            controller.collisions.Reset();
+            Vector3 downVec = Vector3.down;
+            controller.VerticalCollisions(ref downVec);
+            controller.checkGrounded(downVec.y);
+        }
+        anim.SetBool("isGrounded", isGrounded());
+
         if (state == State.Reset || state == State.Wait || state == State.Menu) { return; }
         controller.Move(velocity * Time.deltaTime);
         if (controller.collisions.above || controller.collisions.below)
@@ -339,7 +352,7 @@ public class playerController : MonoBehaviour
         }
 
         float currentMoveSpeed = moveSpeed;
-        if (anim.GetBool("isCrouching"))
+        if (isCrouching()   )
         {
             currentMoveSpeed = 1.5f;
         }
@@ -348,7 +361,7 @@ public class playerController : MonoBehaviour
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
-        anim.SetBool("isGrounded", isGrounded());
+        //anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding());
 
         if (canTurnAround) setFacing(velocity.x);
@@ -403,7 +416,7 @@ public class playerController : MonoBehaviour
 
     public void createHitbox(HitBox hitBox)
     {
-        GameObject hb = gameManager.Instance.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, sprite.localScale), transform);
+        GameObject hb = gameManager.createInstance("AllyHitbox", transform.position + Vector3.Scale(hitBox.position, sprite.localScale), transform);
         hitBox.kbDir.x = (sprite.localScale.x > 0) ? 1 : -1;
         hb.transform.localScale = hitBox.size;
         hb.GetComponent<AllyHitBoxController>().hitbox = hitBox;
@@ -461,7 +474,7 @@ public class playerController : MonoBehaviour
     IEnumerator WallJumpCoroutine()
     {
         state = State.WallJump;
-        GameObject explosion = gameManager.Instance.createInstance("Effects/Explosions/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
+        GameObject explosion = gameManager.createInstance("Effects/Explosions/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
         explosion.transform.localScale = sprite.localScale;
         if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
 
@@ -517,9 +530,17 @@ public class playerController : MonoBehaviour
             anim.SetBool("isCrouching", false);
         }
     }
+    void handleUncrouch()
+    {
+        checkCrouchHitbox();
+        if (dropThroughPlatforms && AtlasInputManager.getAxisState("Dpad").y >= 0 || isGrounded())
+        {
+            dropThroughPlatforms = false;
+        }
+    }
     void checkCrouchHitbox()
     {
-        if (anim.GetBool("isCrouching"))
+        if (isCrouching())
         {
             boxCollider.size = Vector2.Scale(colliderStartSize, new Vector3(1.0f, 0.5f));
             boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
@@ -576,7 +597,6 @@ public class playerController : MonoBehaviour
         {
             firstJump();
             anim.SetBool("inTornado", false);
-            //state = State.Movement;
             returnToMovement();
             Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
             if (nadoDeformer)
@@ -585,7 +605,6 @@ public class playerController : MonoBehaviour
                 SoundManager.Instance.playClip("LevelObjects/EnterTornado", 1);
             }
             currentTornado = null;
-            //SoundManager.Instance.playClip("LevelObjects/WindPuff");
         }
         if (AtlasInputManager.getKeyPressed("Crouch"))
         {
@@ -618,7 +637,7 @@ public class playerController : MonoBehaviour
         if (vel == 0) return;
         if (facing != (int)Mathf.Sign(vel))
         {
-            if (anim.GetBool("isCrouching"))
+            if (isCrouching())
             {
                 anim.SetFloat("animDir", -1.0f);
             } else {
@@ -635,12 +654,11 @@ public class playerController : MonoBehaviour
     {
         if (state == State.Movement)
         deformer.startDeform(new Vector3(1.2f, 0.8f, 1.0f), 0.2f, 0.25f, 1.0f);
-        gameManager.Instance.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
+        gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
     }
     public void OnLanding()
     {
         deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.125f, 0.125f, -1.0f);
-        //particleMaker.createDust(true);
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -679,6 +697,8 @@ public class playerController : MonoBehaviour
 
     void firstJump()
     {
+        //Cancel jump if stuck under something while crawling
+        if (isCrouching()) return;
         deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
         velocity.y = jumpVelocity;
         SoundManager.Instance.playClip("jump2");
@@ -712,6 +732,8 @@ public class playerController : MonoBehaviour
     {
         if (resetPosition || !controller.collisions.tangible) return;
         if (intangibleStates.Contains(state)) return;
+        //Cancel is ceiling above while crouching
+        if (isCrouching() && !controller.checkVertDist(0.2f)) return;
         setFacing(dir);
         state = State.BroomStart;
         fastBroom = fast;
@@ -838,7 +860,7 @@ public class playerController : MonoBehaviour
     {
         if (state == State.ChargeAttack || state == State.Attack)
         {
-            if (!anim.GetBool("isCrouching")) resetAnimator();
+            if (!isCrouching()) resetAnimator();
         }
         if (resetPosition && !controller.isSafePosition())
         {
@@ -848,7 +870,7 @@ public class playerController : MonoBehaviour
             controller.collisions.tangible = true;
             state = State.Movement;
 
-            if (!anim.GetBool("isCrouching")) anim.SetTrigger("Idle");
+            if (!isCrouching()) anim.SetTrigger("Idle");
         }
         resetPosition = false;
         arialAttacking = false;
@@ -947,7 +969,7 @@ public class playerController : MonoBehaviour
     #region isBools
     public bool isGrounded()
     {
-        return controller.collisions.below;
+        return controller.collisions.isGrounded;
     }
 
     bool isWallSliding()
@@ -960,6 +982,12 @@ public class playerController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public bool isCrouching()
+    {
+        if (!anim.GetBool("isCrouching")) return false;
+        return isGrounded();
     }
     #endregion
 }

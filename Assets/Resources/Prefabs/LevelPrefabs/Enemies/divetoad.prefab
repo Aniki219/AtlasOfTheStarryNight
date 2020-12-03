@@ -115,7 +115,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   flashMaterial: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
 --- !u!225 &1258055662
 CanvasGroup:
@@ -210,10 +209,13 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   lockPosition: 0
-  safetyMargin: 1
   cameraTarget: {x: 0, y: 0, z: 0}
   bonkCeiling: 0
   OnBonkCeiling:
+    m_PersistentCalls:
+      m_Calls: []
+  hasLandingEvent: 0
+  OnLanding:
     m_PersistentCalls:
       m_Calls: []
 --- !u!114 &6726984603581895702
@@ -251,7 +253,35 @@ MonoBehaviour:
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6726984603581895702}
+        m_TargetAssemblyTypeName: diveToadController, Assembly-CSharp
+        m_MethodName: hurt
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  deadCallback: 1
+  onDeath:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 8181496851768960744}
+        m_TargetAssemblyTypeName: healthController, Assembly-CSharp
+        m_MethodName: starPop
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   blocking: 0
   lastHitBy: {fileID: 0}
   blockInfront: 0

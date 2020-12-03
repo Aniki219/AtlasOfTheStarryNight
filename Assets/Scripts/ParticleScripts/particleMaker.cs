@@ -6,8 +6,8 @@ public class particleMaker : MonoBehaviour
 {
     public void createDust(bool small = false)
     {
-        GameObject left = gameManager.Instance.createInstance("Effects/dustCloud", transform.position + new Vector3(-0.20f, -0.3f, 0));
-        GameObject right = gameManager.Instance.createInstance("Effects/dustCloud", transform.position + new Vector3(0.20f, -0.3f, 0));
+        GameObject left = gameManager.createInstance("Effects/dustCloud", transform.position + new Vector3(-0.20f, -0.3f, 0));
+        GameObject right = gameManager.createInstance("Effects/dustCloud", transform.position + new Vector3(0.20f, -0.3f, 0));
         left.GetComponent<translator>().direction = Vector2.left;
 
         if (small)

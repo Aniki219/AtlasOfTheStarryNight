@@ -15,7 +15,7 @@ public class selectAttack : StateMachineBehaviour
         }
         animator.SetBool("Attacking", true);
         bool up = AtlasInputManager.getAxisState("Dpad").y > 0.1f;
-        bool down = AtlasInputManager.getAxisState("Dpad").y < -0.1f;
+        bool down = AtlasInputManager.getAxisState("Dpad").y < -0.1f || pc.isCrouching();
 
         bool falling = (pc.velocity.y < -0.1);
 

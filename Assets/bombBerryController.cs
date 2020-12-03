@@ -45,7 +45,7 @@ public class bombBerryController : MonoBehaviour
         anim.SetTrigger("Boom");
         SoundManager.Instance.playClip("Boom");
         GetComponent<selfDestruct>().destroyOnAnimEnd = true;
-        gameManager.Instance.createInstance("Effects/Explosions/64Explosion", transform.position);
+        gameManager.createInstance("Effects/Explosions/64Explosion", transform.position);
     }
 
     void Drop()

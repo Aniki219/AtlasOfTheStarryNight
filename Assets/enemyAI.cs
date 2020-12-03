@@ -80,7 +80,7 @@ public abstract class enemyAI : MonoBehaviour
         {
             Vector2 size = GetComponent<BoxCollider2D>().size/2.0f;
             Vector3 rpos = new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y), 0);
-            gameManager.Instance.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
+            gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
         }
 
         deformer.flashWhite();

@@ -119,7 +119,7 @@ public class BerryPlantController : MonoBehaviour
             at = hanger.position - Vector3.up * 0.15f;
         }
         
-        return gameManager.Instance.createInstance("LevelPrefabs/Level Objects/BombBerry", at, parent);
+        return gameManager.createInstance("LevelPrefabs/Level Objects/BombBerry", at, parent);
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
