@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(SpriteRenderer), typeof(Collider2D))]
+[RequireComponent(typeof(SpriteRenderer))]
 public class Deformer : MonoBehaviour
 {
     Material defaultMaterial;
@@ -142,7 +142,11 @@ public class Deformer : MonoBehaviour
                     newScale = Vector3.Lerp(d.to, Vector3.one, (elapsedTime - d.timeTo) / d.timeReturn);
                 }
             }
-            newOffset = startPosition + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f - newScale.y) * d.offsetDir;
+
+            if (col != null)
+            {
+                newOffset = startPosition + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f - newScale.y) * d.offsetDir;
+            }
 
             if (d.timeReturn > 0 && elapsedTime >= d.timeTo + d.timeReturn)
             {

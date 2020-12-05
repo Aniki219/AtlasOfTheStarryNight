@@ -25,6 +25,8 @@ public class BerryPlantController : MonoBehaviour
     public AudioClip regrowSound;
 
     Deformer deformer;
+    BoxCollider2D col;
+    [HideInInspector] public Vector3 center;
 
     public bool sayFwd = false;
 
@@ -32,6 +34,9 @@ public class BerryPlantController : MonoBehaviour
     {
         anim = GetComponent<Animator>();
         deformer = GetComponent<Deformer>();
+        col = GetComponent<BoxCollider2D>();
+        //Debug.Log(col.bounds.center);
+        center = col.bounds.center;//transform.position + Vector3.Scale(col.offset, transform.localScale);
     }
 
     public void bumpPlayer(HitBox hb)
@@ -83,7 +88,7 @@ public class BerryPlantController : MonoBehaviour
         canPick = false;
         deformer.flashWhite(0.2f);
         if (pickSound) SoundManager.Instance.playClip(pickSound.name);
-        if (pickParticle) Instantiate(pickParticle, transform.position, Quaternion.identity);
+        if (pickParticle) Instantiate(pickParticle, center, Quaternion.identity);
         yield return new WaitForSeconds(0.1f);
         anim.SetTrigger("Picked");
         yield return new WaitForSeconds(regrowTime);
@@ -110,7 +115,7 @@ public class BerryPlantController : MonoBehaviour
 
     GameObject createBombBerry(bool atPlayer = false)
     {
-        Vector3 at = transform.position;
+        Vector3 at = center;
         Transform parent = null;
         Transform hanger = gameManager.Instance.playerHanger;
         if (atPlayer)

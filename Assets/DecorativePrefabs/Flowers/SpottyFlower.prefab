@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 4086491157713668456}
   - component: {fileID: 4086491157713668471}
   - component: {fileID: -1717526212303541566}
-  - component: {fileID: 2019911377}
   - component: {fileID: 2019911378}
   - component: {fileID: 5351596777942973678}
   - component: {fileID: 526894291238655818}
+  - component: {fileID: -5807125436704189473}
   m_Layer: 0
   m_Name: SpottyFlower
   m_TagString: Untagged
@@ -113,19 +113,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.5, y: 0.7}
   m_EdgeRadius: 0
---- !u!114 &2019911377
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4086491157713668470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ea4d683f2e1fe694fa8c0119c5262ae4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bits: {fileID: 6517377595680698745, guid: 8255facd88c4133479e1bbb9f726c80e, type: 3}
 --- !u!114 &2019911378
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -147,9 +134,9 @@ MonoBehaviour:
   hurtCallback:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2019911377}
-        m_TargetAssemblyTypeName: createBitsOnDestroy, Assembly-CSharp
-        m_MethodName: destroySelf
+      - m_Target: {fileID: -5807125436704189473}
+        m_TargetAssemblyTypeName: createBitsAndDestroy, Assembly-CSharp
+        m_MethodName: createBits
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -214,3 +201,16 @@ MonoBehaviour:
     cyclesPerSecond: -2.5
     oscillationSize: 7
     oscillationDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &-5807125436704189473
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4086491157713668470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea4d683f2e1fe694fa8c0119c5262ae4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bits: {fileID: 6517377595680698745, guid: 8255facd88c4133479e1bbb9f726c80e, type: 3}

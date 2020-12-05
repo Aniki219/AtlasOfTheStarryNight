@@ -1,9 +1,27 @@
 fileFormatVersion: 2
 guid: dcfc4be414f9a1a438450327993a12da
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: 8929453985118626498
+    second: BombBerryPlantRegrow_0
+  - first:
+      213: 5942338047167339079
+    second: BombBerryPlantRegrow_1
+  - first:
+      213: -2262056796729600514
+    second: BombBerryPlantRegrow_2
+  - first:
+      213: -2072318057209409782
+    second: BombBerryPlantRegrow_3
+  - first:
+      213: -419931301541777263
+    second: BombBerryPlantRegrow_4
+  - first:
+      213: -6166247402067327214
+    second: BombBerryPlantRegrow_5
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -23,6 +41,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -57,6 +76,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -86,169 +107,127 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: standingAttack_0
+      name: BombBerryPlantRegrow_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 64959021d151a20488713b63894488ca
-      internalID: 5330797490676991524
+      spriteID: 2c22135d61bcbeb70800000000000000
+      internalID: 8929453985118626498
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_1
+      name: BombBerryPlantRegrow_1
       rect:
         serializedVersion: 2
         x: 32
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: ca9aacfd0892ba14da8f105fc26e3bb8
-      internalID: 160683965571579817
+      spriteID: 74a92b458fc677250800000000000000
+      internalID: 5942338047167339079
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_2
+      name: BombBerryPlantRegrow_2
       rect:
         serializedVersion: 2
         x: 64
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37de55b1bc9d8914d8330411f48f135d
-      internalID: 2631536187619123557
+      spriteID: ef59c29045f8b90e0800000000000000
+      internalID: -2262056796729600514
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_3
+      name: BombBerryPlantRegrow_3
       rect:
         serializedVersion: 2
         x: 96
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08ef2e7b74506504b9abb82126b52667
-      internalID: 5520512823979852484
+      spriteID: a0fc762e4b5ad33e0800000000000000
+      internalID: -2072318057209409782
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_4
+      name: BombBerryPlantRegrow_4
       rect:
         serializedVersion: 2
         x: 128
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0091d2f5adf75854d86633a48db2998e
-      internalID: 1298031318081792752
+      spriteID: 190f885c4ba1c2af0800000000000000
+      internalID: -419931301541777263
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: standingAttack_5
+      name: BombBerryPlantRegrow_5
       rect:
         serializedVersion: 2
         x: 160
         y: 0
         width: 32
         height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b1f51a8a6652bce47828580c61a9d9a6
-      internalID: 5163103470228383543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: standingAttack_6
-      rect:
-        serializedVersion: 2
-        x: 192
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 566af32ee7ad68445ac603f235f83c72
-      internalID: -1011162709639639857
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: standingAttack_7
-      rect:
-        serializedVersion: 2
-        x: 224
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: ac43814ae1f1cc84b85cb87a1b504676
-      internalID: 2217835560214710280
+      spriteID: 2170a9278a61d6aa0800000000000000
+      internalID: -6166247402067327214
       vertices: []
       indices: 
       edges: []

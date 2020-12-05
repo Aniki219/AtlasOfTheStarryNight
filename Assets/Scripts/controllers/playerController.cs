@@ -20,7 +20,7 @@ public class playerController : MonoBehaviour
 
     float moveSpeed = 4f;
     public int facing = 1;
-    bool canBroom = false;
+    public bool canBroom = false;
     bool canDoubleJump = false;
     bool canTornado = true;
     bool arialAttacking = false;
@@ -156,8 +156,8 @@ public class playerController : MonoBehaviour
                 handleAttackInput();
                 break;
             case State.Attack:
-                handleMovement(!isGrounded(), false, false);
                 handleAttack();
+                handleMovement(!isGrounded(), false, false);
                 break;
             //Hurt and Bonk look the same to the player, but have different effects
             case State.Bonk:
@@ -318,7 +318,11 @@ public class playerController : MonoBehaviour
             {
                 firstJump();
             }
-            canBroom = true;
+            if (!canBroom)
+            { 
+                Debug.Log("isgrounded?");
+                canBroom = true;
+            }
             canDoubleJump = true;
             resourceManager.Instance.restoreMana();
             if (AtlasInputManager.getKeyPressed("Broom"))
@@ -363,7 +367,6 @@ public class playerController : MonoBehaviour
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
         anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
-        //anim.SetBool("isGrounded", isGrounded());
         anim.SetBool("wallSlide", isWallSliding());
         if (isWallSliding())
         {
@@ -393,7 +396,7 @@ public class playerController : MonoBehaviour
         {
             termVel = maxFallVel;
             deformer.RemoveDeform("fastfall");
-            if (AtlasInputManager.getKeyPressed("Crouch") && !isGrounded() && velocity.y <= 0)
+            if (AtlasInputManager.getKeyPressed("Crouch") && !isGrounded() && (velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
             {
                 fastFalling = true;
                 deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, -1.0f, "fastfall", true);
@@ -421,6 +424,7 @@ public class playerController : MonoBehaviour
     void handleAttack()
     {
         anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        deformer.RemoveDeform("fastfall");
         
         if (AtlasInputManager.getKeyPressed("Attack"))
         {
@@ -434,10 +438,12 @@ public class playerController : MonoBehaviour
         {
             if (arialAttacking)
             {
+                if (fastFalling) {
+                    anim.SetTrigger("fastFall");
+                }
                 anim.SetTrigger("attackLand");
                 anim.SetBool("Attacking", false);
                 particleMaker.createDust();
-                
             }
             arialAttacking = false;
         }
@@ -974,22 +980,22 @@ public class playerController : MonoBehaviour
         //UP
         if (transform.position.y + boxCollider.size.y / 2.0f > bounds.max.y)
         {
-            AtlasSceneManager.switchScene(-Vector2.up);
+            AtlasSceneManager.switchScene(-Vector2.up, true);
         }
         //LEFT
         if (transform.position.x - boxCollider.size.x / 2.0f < bounds.min.x)
         {
-            AtlasSceneManager.switchScene(-Vector2.right);
+            AtlasSceneManager.switchScene(-Vector2.right, true);
         }
         //RIGHT
         if (transform.position.x + boxCollider.size.x / 2.0f > bounds.max.x)
         {
-            AtlasSceneManager.switchScene(Vector2.right);
+            AtlasSceneManager.switchScene(Vector2.right, true);
         }
         //DOWN
         if (transform.position.y - boxCollider.size.y / 2.0f < bounds.min.y)
         {
-            AtlasSceneManager.switchScene(Vector2.up);
+            AtlasSceneManager.switchScene(Vector2.up, true);
         }
         
     }

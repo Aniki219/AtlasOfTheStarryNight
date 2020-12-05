@@ -2194,14 +2194,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1279541667, guid: 799da0216f0b06448ad24ca01aefc934, type: 3}
-      propertyPath: oscillationSize
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5235961991136082181, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_Name
-      value: WooshBerryPlant (2)
+      value: WooshBerry
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
@@ -2226,7 +2222,7 @@ PrefabInstance:
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
@@ -2430,7 +2426,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &242473645
@@ -2441,7 +2437,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 242473643}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.66, y: 1.9593518, z: 0}
+  m_LocalPosition: {x: -4.75, y: 2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -2549,7 +2545,7 @@ PrefabInstance:
     - target: {fileID: 495180147399256996, guid: 70ee85c0bf519bd46be1ee54462b2962,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 4.5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 495180147399256996, guid: 70ee85c0bf519bd46be1ee54462b2962,
         type: 3}
@@ -2610,14 +2606,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1279541667, guid: 799da0216f0b06448ad24ca01aefc934, type: 3}
-      propertyPath: oscillationSize
-      value: 2
-      objectReference: {fileID: 0}
     - target: {fileID: 5235961991136082181, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_Name
-      value: WooshBerryPlant (1)
+      value: WooshBerry
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
@@ -2642,7 +2634,7 @@ PrefabInstance:
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
@@ -18592,12 +18584,12 @@ PrefabInstance:
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.17
+      value: -0.25
       objectReference: {fileID: 0}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -2.81
+      value: -2.75
       objectReference: {fileID: 0}
     - target: {fileID: 2445146216727810863, guid: 72cdd1024bb284c49823b858964f14db,
         type: 3}
@@ -18658,6 +18650,11 @@ PrefabInstance:
       propertyPath: m_SortingOrder
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6249957850551527285, guid: 12a955102f8bf3f429508ba978ab8249,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6249957850551527286, guid: 12a955102f8bf3f429508ba978ab8249,
         type: 3}
       propertyPath: m_Name
@@ -18701,12 +18698,12 @@ PrefabInstance:
     - target: {fileID: 6249957850551527290, guid: 12a955102f8bf3f429508ba978ab8249,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2
+      value: -1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6249957850551527290, guid: 12a955102f8bf3f429508ba978ab8249,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 6249957850551527290, guid: 12a955102f8bf3f429508ba978ab8249,
         type: 3}
@@ -18828,7 +18825,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1152863634
@@ -18839,7 +18836,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1152863632}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.04298, y: 0.49, z: 0}
+  m_LocalPosition: {x: 6, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -19001,7 +18998,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1450526817}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1, y: -2.7672806, z: 0}
+  m_LocalPosition: {x: -1, y: -2.75, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -19073,7 +19070,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!4 &1567959737
@@ -19084,7 +19081,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1567959735}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.75702, y: 3.54, z: 0}
+  m_LocalPosition: {x: -5.75, y: 3.5, z: 0}
   m_LocalScale: {x: 1, y: -1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -19145,7 +19142,7 @@ PrefabInstance:
     - target: {fileID: 6249957850551527290, guid: 12a955102f8bf3f429508ba978ab8249,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 6249957850551527290, guid: 12a955102f8bf3f429508ba978ab8249,
         type: 3}
@@ -19221,7 +19218,7 @@ PrefabInstance:
     - target: {fileID: 495180147399256996, guid: 70ee85c0bf519bd46be1ee54462b2962,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 495180147399256996, guid: 70ee85c0bf519bd46be1ee54462b2962,
         type: 3}
@@ -19263,6 +19260,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 495180147399256999, guid: 70ee85c0bf519bd46be1ee54462b2962,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 495180147399257001, guid: 70ee85c0bf519bd46be1ee54462b2962,
         type: 3}
       propertyPath: m_Name
@@ -19277,10 +19279,33 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1279541665, guid: 799da0216f0b06448ad24ca01aefc934, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1279541665, guid: 799da0216f0b06448ad24ca01aefc934, type: 3}
+      propertyPath: m_SpriteTilingProperty.newSize.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5235961991136082181, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_Name
       value: WooshBerryPlant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725521545624197208, guid: 799da0216f0b06448ad24ca01aefc934,
+        type: 3}
+      propertyPath: m_Size.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725521545624197208, guid: 799da0216f0b06448ad24ca01aefc934,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7725521545624197208, guid: 799da0216f0b06448ad24ca01aefc934,
+        type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
@@ -19290,12 +19315,12 @@ PrefabInstance:
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.79
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3
+      value: -3.5
       objectReference: {fileID: 0}
     - target: {fileID: 8306434797742626473, guid: 799da0216f0b06448ad24ca01aefc934,
         type: 3}

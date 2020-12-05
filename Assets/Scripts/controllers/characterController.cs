@@ -287,7 +287,7 @@ public class characterController : MonoBehaviour
 
     public void checkGrounded(float vy)
     {
-        collisions.isGrounded = !(vy != 0 && !collisions.below);
+        collisions.isGrounded = !(vy != 0 && !collisions.below) && collisions.below;
     }
 
     public bool checkVertDist(float dist)

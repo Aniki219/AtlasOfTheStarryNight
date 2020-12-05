@@ -8,7 +8,7 @@ public class diveToadController : MonoBehaviour
     Animator anim;
     Vector3 velocity;
     Deformer deformer;
-    int facing = 1;
+    int facing;
 
     float gravity;
     float maxFallVel;
@@ -46,6 +46,8 @@ public class diveToadController : MonoBehaviour
         controller = GetComponent<characterController>();
         deformer = GetComponentInChildren<Deformer>();
 
+        facing = (int)transform.localScale.x;
+        setFacing();
         gravity = gameManager.Instance.gravity;
         maxFallVel = gameManager.Instance.maxFallVel;
         state = State.Movement;
@@ -149,7 +151,6 @@ public class diveToadController : MonoBehaviour
 
     public void hurt(HitBox hitbox)
     {
-        health.takeDamage(hitbox.damage);
         float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
         float dx = hitbox.kbDir.x;
         float dy = hitbox.kbDir.y;

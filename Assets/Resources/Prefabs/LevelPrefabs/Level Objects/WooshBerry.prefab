@@ -13,8 +13,6 @@ GameObject:
   - component: {fileID: 5159769728767699135}
   - component: {fileID: 1279541665}
   - component: {fileID: 1279541664}
-  - component: {fileID: 1279541666}
-  - component: {fileID: 1279541667}
   - component: {fileID: -7325879653678202139}
   m_Layer: 17
   m_Name: WooshBerry
@@ -77,13 +75,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 5330797490676991524, guid: dcde64efa7ce81048b398462412e023b,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: 225bef176ab77ab4bbe1fee8f4f466d2, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 37.5, y: 18.75}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -121,12 +118,12 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.027128771, y: -0.097866535}
+  m_Offset: {x: 0.027128771, y: 0.32}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 1, y: 1}
-    newSize: {x: 1, y: 1}
+    newSize: {x: 37.5, y: 18.75}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -183,38 +180,7 @@ MonoBehaviour:
     type: 3}
   pickSound: {fileID: 8300000, guid: 4323f71ff1bc7114eb89fa3a57332a2b, type: 3}
   regrowSound: {fileID: 8300000, guid: 264b11552a1c6b243a5d3aa1f401389e, type: 3}
---- !u!114 &1279541666
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5235961991136082181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f30a9702705076a4f837163a335af8a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cyclesPerSecond: 0.5
-  axis: 0
-  oscillationSize: -0.015625
-  rotational: 0
---- !u!114 &1279541667
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5235961991136082181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f30a9702705076a4f837163a335af8a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cyclesPerSecond: 0.5
-  axis: 2
-  oscillationSize: 2
-  rotational: 1
+  sayFwd: 0
 --- !u!114 &-7325879653678202139
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,5 +193,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  defaultMaterial: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  oscillators:
+  - tag: default
+    enabled: 1
+    axis: 2
+    rotational: 1
+    cyclesPerSecond: -0.5
+    oscillationSize: 2
+    oscillationDirection: {x: 0, y: 0, z: 0}

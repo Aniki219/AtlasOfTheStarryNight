@@ -76,15 +76,16 @@ public class bombBerryController : MonoBehaviour
 
         if (collision.CompareTag("WooshBerryPlant"))
         {
-            if (!collision.GetComponent<BerryPlantController>().canPick) return;
-            StartCoroutine(BeginWoosh(collision.gameObject.transform.position, collision.transform.GetComponent<BerryPlantController>().getForward()));
+            BerryPlantController bc = collision.GetComponent<BerryPlantController>();
+            if (!bc || !bc.canPick) return;
+            StartCoroutine(BeginWoosh(bc.center, collision.transform.GetComponent<BerryPlantController>().getForward()));
             collision.GetComponent<BerryPlantController>().pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
         }
 
         if (collision.CompareTag("BumpBerryPlant"))
         {
             BerryPlantController bc = collision.GetComponent<BerryPlantController>();
-            if (!bc.canPick) return;
+            if (!bc || !bc.canPick) return;
             bc.pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
             isSimulated(true);
             anim.SetBool("Wings", false);

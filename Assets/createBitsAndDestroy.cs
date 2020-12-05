@@ -2,16 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class createBitsOnDestroy : MonoBehaviour
+public class createBitsAndDestroy : MonoBehaviour
 {
     public GameObject bits;
 
-    public void destroySelf()
-    {
-        Destroy(gameObject,  0.1f);
-    }
-
-    private void OnDestroy()
+    public void createBits()
     {
         gameManager.createInstance(bits, transform.position);
     }

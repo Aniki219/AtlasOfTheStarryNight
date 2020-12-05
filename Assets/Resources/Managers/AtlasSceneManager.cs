@@ -44,7 +44,7 @@ public class AtlasSceneManager : ScriptableObject
         getNeighbors();
     }
 
-    public static void switchScene(Vector2 dir)
+    public static void switchScene(Vector2 dir, bool clearDoorLabel = false)
     {
         GameObject player = gameManager.Instance.player;
         
@@ -67,7 +67,10 @@ public class AtlasSceneManager : ScriptableObject
             startx = player.transform.position.x + t.x;
             starty = (toScene.size.y * SCREEN_HEIGHT * 0.5f - 0.4f) * dir.y;
         }
-
+        if (clearDoorLabel)
+        {
+            gameManager.Instance.currentDoorLabel = "none";
+        }
         gameManager.Instance.switchScene(toScene.scene, startx, starty);
     }
 
