@@ -41,4 +41,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap/warpZone.unity
     guid: 62e8d724d42fab8499d567f6451e88e5
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/witchCanyon.unity
+    guid: ec94ed1d71cdc2842a38d99df840ee9b
   m_configObjects: {}

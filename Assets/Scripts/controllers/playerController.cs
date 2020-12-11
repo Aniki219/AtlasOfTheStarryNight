@@ -985,7 +985,7 @@ public class playerController : MonoBehaviour
         //LEFT
         if (transform.position.x - boxCollider.size.x / 2.0f < bounds.min.x)
         {
-            AtlasSceneManager.switchScene(-Vector2.right, true);
+            AtlasSceneManager.switchScene(-Vector2.right, true); //test
         }
         //RIGHT
         if (transform.position.x + boxCollider.size.x / 2.0f > bounds.max.x)

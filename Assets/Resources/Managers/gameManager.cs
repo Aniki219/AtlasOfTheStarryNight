@@ -11,8 +11,9 @@ public class gameManager : ScriptableObject
     private static gameManager instance;
     public static gameManager Instance { get { return instance; } }
 
-    static bool isShuttingDown = false;
-    static Dictionary<string, bool> objects = new Dictionary<string, bool>();
+    private static bool isShuttingDown = false;
+    private static Dictionary<string, bool> objects = new Dictionary<string, bool>();
+
     public float gravity = -17.6f;
     public float maxFallVel = -15f;
 
@@ -29,7 +30,7 @@ public class gameManager : ScriptableObject
 
     public List<GameObject> pauseMenus;
 
-    [RuntimeInitializeOnLoadMethod]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
     private static void Init()
     {
         isShuttingDown = false;
@@ -47,10 +48,18 @@ public class gameManager : ScriptableObject
 
     public void setPlayer()
     {
-        instance.player = GameObject.Find("Atlas");
+        GameObject atlas = GameObject.Find("Atlas");
+
+        if (atlas)
+        {
+            instance.player = atlas;
+        } else
+        {
+            atlas = instance.player = createInstance("RooomSetup/Atlas", Vector3.zero);
+        }
         instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<canvasController>();
-        instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
-        instance.playerCtrl = instance.player.GetComponent<playerController>();
+        instance.playerHanger = atlas.transform.Find("AtlasSprite/Hanger");
+        instance.playerCtrl = atlas.GetComponent<playerController>();
 
         if (instance.canSetPosition)
         {
