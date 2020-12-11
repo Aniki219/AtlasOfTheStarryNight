@@ -30,7 +30,7 @@ public class gameManager : ScriptableObject
 
     public List<GameObject> pauseMenus;
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+    [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         isShuttingDown = false;
@@ -55,11 +55,11 @@ public class gameManager : ScriptableObject
             instance.player = atlas;
         } else
         {
-            atlas = instance.player = createInstance("RooomSetup/Atlas", Vector3.zero);
+            instance.player = createInstance("RoomSetup/Atlas", Vector3.zero);
         }
         instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<canvasController>();
-        instance.playerHanger = atlas.transform.Find("AtlasSprite/Hanger");
-        instance.playerCtrl = atlas.GetComponent<playerController>();
+        instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
+        instance.playerCtrl = instance.player.GetComponent<playerController>();
 
         if (instance.canSetPosition)
         {

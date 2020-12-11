@@ -320,7 +320,6 @@ public class playerController : MonoBehaviour
             }
             if (!canBroom)
             { 
-                Debug.Log("isgrounded?");
                 canBroom = true;
             }
             canDoubleJump = true;
@@ -985,7 +984,7 @@ public class playerController : MonoBehaviour
         //LEFT
         if (transform.position.x - boxCollider.size.x / 2.0f < bounds.min.x)
         {
-            AtlasSceneManager.switchScene(-Vector2.right, true); //test
+            AtlasSceneManager.switchScene(-Vector2.right, true);
         }
         //RIGHT
         if (transform.position.x + boxCollider.size.x / 2.0f > bounds.max.x)

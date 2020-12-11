@@ -40,7 +40,7 @@ public class cameraController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (target == null)
+        if (target == null && gameManager.Instance.player != null)
         {
             target = gameManager.Instance.player.transform;
         }
