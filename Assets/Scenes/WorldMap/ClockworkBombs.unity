@@ -26827,6 +26827,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 102900000, guid: 62e8d724d42fab8499d567f6451e88e5,
         type: 3}
+    - target: {fileID: 4187545905090588180, guid: 392477ae64dc1444b9569f2ee344be98,
+        type: 3}
+      propertyPath: targetScene.scenePath
+      value: Assets/Scenes/WorldMap/warpZone.unity
+      objectReference: {fileID: 0}
+    - target: {fileID: 4187545905090588180, guid: 392477ae64dc1444b9569f2ee344be98,
+        type: 3}
+      propertyPath: targetScene.sceneAsset
+      value: 
+      objectReference: {fileID: 102900000, guid: 62e8d724d42fab8499d567f6451e88e5,
+        type: 3}
     - target: {fileID: 4187545905090588181, guid: 392477ae64dc1444b9569f2ee344be98,
         type: 3}
       propertyPath: m_Name

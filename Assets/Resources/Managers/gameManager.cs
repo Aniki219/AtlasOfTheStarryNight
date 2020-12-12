@@ -11,6 +11,8 @@ public class gameManager : ScriptableObject
     private static gameManager instance;
     public static gameManager Instance { get { return instance; } }
 
+    public static int numberOfStarts = 0;
+
     private static bool isShuttingDown = false;
     private static Dictionary<string, bool> objects = new Dictionary<string, bool>();
 
@@ -24,7 +26,7 @@ public class gameManager : ScriptableObject
 
     private float playerStartX;
     private float playerStartY;
-    private bool canSetPosition;
+    public bool canSetPosition;
 
     public string currentDoorLabel = "none";
 
@@ -33,6 +35,7 @@ public class gameManager : ScriptableObject
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
+        numberOfStarts = 0;
         isShuttingDown = false;
         instance = Resources.LoadAll<gameManager>("Managers")[0];
         SceneManager.sceneLoaded += onSceneLoad;
@@ -50,6 +53,8 @@ public class gameManager : ScriptableObject
     {
         GameObject atlas = GameObject.Find("Atlas");
 
+        if (SceneManager.GetActiveScene().name == "Main Menu") return;
+
         if (atlas)
         {
             instance.player = atlas;
@@ -57,11 +62,15 @@ public class gameManager : ScriptableObject
         {
             instance.player = createInstance("RoomSetup/Atlas", Vector3.zero);
         }
-        instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<canvasController>();
         instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
         instance.playerCtrl = instance.player.GetComponent<playerController>();
+        
+        if (GameObject.Find("GameCanvas"))
+        {
+            instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<canvasController>();
+        }
 
-        if (instance.canSetPosition)
+        if (instance.canSetPosition && instance.player)
         {
             instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
             Physics2D.SyncTransforms();
@@ -73,6 +82,7 @@ public class gameManager : ScriptableObject
             }
         }
         instance.canSetPosition = true;
+            
     }
 
     public void switchScene(string to, float startx, float starty)
@@ -80,6 +90,11 @@ public class gameManager : ScriptableObject
         playerStartX = startx;
         playerStartY = starty;
         playerCtrl.controller.setCollidable(false);
+        SceneManager.LoadScene(to);
+    }
+
+    public static void switchSceneButton(string to)
+    {
         SceneManager.LoadScene(to);
     }
 
@@ -111,6 +126,7 @@ public class gameManager : ScriptableObject
             }
         }
         instance.setPlayer();
+        if (instance.playerCtrl) instance.playerCtrl.setLastSafePosition();
     }
 
     public bool checkObjectKey(string key)
@@ -141,7 +157,6 @@ public class gameManager : ScriptableObject
             if (key.Contains(scene))
             {
                 objects[key] = true;
-                Debug.Log(objects[key]);
             }
         }
     }

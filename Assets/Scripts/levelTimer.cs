@@ -37,10 +37,6 @@ public class levelTimer : MonoBehaviour
             gameManager.Instance.clearPersistence(SceneManager.GetActiveScene().name);
             gameManager.Instance.switchScene(SceneManager.GetActiveScene().name, startx, starty);
         }
-        if (Input.GetKeyDown(KeyCode.Escape))
-        {
-            Application.Quit();
-        }
 
         int currentMars = MarsCounter.GetComponent<collectiblesUIController>().amountCollected;
         int currentStars = GameObject.FindGameObjectsWithTag("Star").Length;

@@ -21,10 +21,10 @@ public class AtlasSceneManager : ScriptableObject
 
     public static AtlasSceneData getSceneData(string sceneName = null)
     {
-        StreamReader reader = new StreamReader(path);
-        string json = reader.ReadToEnd();
-        reader.Close();
-        //string json = "{\"scenes\":[{\"scene\":\"2by2\",\"coords\":[{\"x\":3,\"y\":3},{\"x\":3,\"y\":4},{\"x\":4,\"y\":3},{\"x\":4,\"y\":4}],\"position\":{\"x\":3,\"y\":3},\"size\":{\"x\":2,\"y\":2}},{\"scene\":\"downGrass\",\"coords\":[{\"x\":0,\"y\":4}],\"position\":{\"x\":0,\"y\":4},\"size\":{\"x\":1,\"y\":1}},{\"scene\":\"grassArea\",\"coords\":[{\"x\":-1,\"y\":4}],\"position\":{\"x\":-1,\"y\":4},\"size\":{\"x\":1,\"y\":1}},{\"scene\":\"guidance\",\"coords\":[{\"x\":2,\"y\":3}],\"position\":{\"x\":2,\"y\":3},\"size\":{\"x\":1,\"y\":1}},{\"scene\":\"profession\",\"coords\":[{\"x\":0,\"y\":3}],\"position\":{\"x\":0,\"y\":3},\"size\":{\"x\":1,\"y\":1}},{\"scene\":\"ladder\",\"position\":{\"x\":5,\"y\":3},\"size\":{\"x\":1,\"y\":2},\"coords\":[{\"x\":5,\"y\":3},{\"x\":5,\"y\":4}]},{\"scene\":\"newScene\",\"position\":{\"x\":0,\"y\":2},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":0,\"y\":2}]},{\"scene\":\"bounceOnEnemies\",\"position\":{\"x\":1,\"y\":0},\"size\":{\"x\":3,\"y\":3},\"coords\":[{\"x\":1,\"y\":0},{\"x\":1,\"y\":1},{\"x\":1,\"y\":2},{\"x\":2,\"y\":0},{\"x\":2,\"y\":1},{\"x\":2,\"y\":2},{\"x\":3,\"y\":0},{\"x\":3,\"y\":1},{\"x\":3,\"y\":2}]},{\"scene\":\"AltairKettle\",\"position\":{\"x\":8,\"y\":0},\"size\":{\"x\":1,\"y\":5},\"coords\":[{\"x\":8,\"y\":0},{\"x\":8,\"y\":1},{\"x\":8,\"y\":2},{\"x\":8,\"y\":3},{\"x\":8,\"y\":4}]},{\"scene\":\"courage\",\"position\":{\"x\":1,\"y\":3},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":1,\"y\":3}]}]}";
+        //StreamReader reader = new StreamReader(path);
+        //string json = reader.ReadToEnd();
+        //reader.Close();
+        string json = "{\"scenes\":[{\"scene\":\"UndergroundFountain\",\"position\":{\"x\":5,\"y\":3},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":5,\"y\":3}]},{\"scene\":\"LandingSite\",\"position\":{\"x\":0,\"y\":2},\"size\":{\"x\":2,\"y\":2},\"coords\":[{\"x\":0,\"y\":2},{\"x\":0,\"y\":3},{\"x\":1,\"y\":2},{\"x\":1,\"y\":3}]},{\"scene\":\"CaveEntrance\",\"position\":{\"x\":4,\"y\":2},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":4,\"y\":2}]},{\"scene\":\"caveOpening\",\"position\":{\"x\":3,\"y\":2},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":3,\"y\":2}]},{\"scene\":\"plainsPath1\",\"position\":{\"x\":2,\"y\":2},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":2,\"y\":2}]},{\"scene\":\"UndergroundPath\",\"position\":{\"x\":4,\"y\":3},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":4,\"y\":3}]},{\"scene\":\"AltairKettle\",\"position\":{\"x\":11,\"y\":0},\"size\":{\"x\":1,\"y\":6},\"coords\":[{\"x\":11,\"y\":0},{\"x\":11,\"y\":1},{\"x\":11,\"y\":2},{\"x\":11,\"y\":3},{\"x\":11,\"y\":4},{\"x\":11,\"y\":5}]},{\"scene\":\"BamBerry Grotto Intro\",\"position\":{\"x\":4,\"y\":6},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":4,\"y\":6}]},{\"scene\":\"ClockworkBombs\",\"position\":{\"x\":5,\"y\":6},\"size\":{\"x\":2,\"y\":1},\"coords\":[{\"x\":5,\"y\":6},{\"x\":6,\"y\":6}]},{\"scene\":\"followTheBomb\",\"position\":{\"x\":2,\"y\":6},\"size\":{\"x\":1,\"y\":2},\"coords\":[{\"x\":2,\"y\":6},{\"x\":2,\"y\":7}]},{\"scene\":\"warpZone\",\"position\":{\"x\":6,\"y\":3},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":6,\"y\":3}]},{\"scene\":\"witchCanyon\",\"position\":{\"x\":7,\"y\":0},\"size\":{\"x\":2,\"y\":4},\"coords\":[{\"x\":7,\"y\":0},{\"x\":7,\"y\":1},{\"x\":7,\"y\":2},{\"x\":7,\"y\":3},{\"x\":8,\"y\":0},{\"x\":8,\"y\":1},{\"x\":8,\"y\":2},{\"x\":8,\"y\":3}]},{\"scene\":\"followStarChamber\",\"position\":{\"x\":3,\"y\":6},\"size\":{\"x\":1,\"y\":1},\"coords\":[{\"x\":3,\"y\":6}]}]}";
         AtlasSceneData sceneData = JsonUtility.FromJson<AtlasSceneData>(json);
         return sceneData;
     }
@@ -185,6 +185,7 @@ public class AtlasSceneManager : ScriptableObject
         {
             sceneName = SceneManager.GetActiveScene().name;
         }
+        if (sceneName == "Main Menu") return new AtlasScene();
         AtlasSceneData sceneData = getSceneData();
         AtlasScene currentScene = sceneData.scenes.Find(s => s.scene == sceneName);
 

@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2813803770792103969}
   - component: {fileID: 2813803770792103970}
   - component: {fileID: 2813803770792103971}
+  - component: {fileID: 5498981176609642927}
   m_Layer: 8
   m_Name: BombableWall
   m_TagString: Wall
@@ -48,10 +49,12 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80177cf875cd1794fab07b70194f9d45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -143,3 +146,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bits: {fileID: 4900241842141550807, guid: 26b7f564e6c65c441af9f0fe7f9a0923, type: 3}
+--- !u!114 &5498981176609642927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2813803770792103972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5921f24f71d9d604484f6b16c7e5a3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  persistant: 1

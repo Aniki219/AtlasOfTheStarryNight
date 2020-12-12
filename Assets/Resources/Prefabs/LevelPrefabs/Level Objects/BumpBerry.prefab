@@ -156,6 +156,7 @@ MonoBehaviour:
     type: 3}
   pickSound: {fileID: 8300000, guid: 86260936bdbfb8b4d856095f25bafe24, type: 3}
   regrowSound: {fileID: 8300000, guid: ac1b90a2da7146844b29c03077036f46, type: 3}
+  center: {x: 0, y: 0, z: 0}
   sayFwd: 0
 --- !u!61 &495180147399256995
 BoxCollider2D:

@@ -13,7 +13,6 @@ public class collectiblesController : MonoBehaviour
     GameObject uiElement;
 
     string uid;
-    public bool persistant = true;
 
     public string collectionClipPath = "collectCelestium2";
 
@@ -25,6 +24,11 @@ public class collectiblesController : MonoBehaviour
     public void collect()
     {
         collected = true;
+        persistance p = GetComponent<persistance>();
+        if (p != null)
+        {
+            p.MarkRemoved();
+        }
         SoundManager.Instance.playClip(collectionClipPath);
     }
 

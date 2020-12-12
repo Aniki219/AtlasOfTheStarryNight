@@ -16,10 +16,10 @@ public class canvasController : MonoBehaviour
 
     private void Start()
     {
-        if (created) Destroy(gameObject);
-        created = true;
+        //if (created) Destroy(gameObject);
+        //created = true;
 
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
         //blackoutPanel.color = new Vector4(0, 0, 0, 1.0f);
         //doBlackout(false);
     }

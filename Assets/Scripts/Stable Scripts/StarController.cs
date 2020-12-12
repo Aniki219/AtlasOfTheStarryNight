@@ -46,6 +46,8 @@ public class StarController : MonoBehaviour
         GetComponent<ParticleSystem>().Play();
         Destroy(gameObject, 1.0f);
         yield return 1.0;
+        GetComponent<persistance>().MarkRemoved();
+        gameManager.numberOfStarts++;
         pc.returnToMovement();
     }
 }

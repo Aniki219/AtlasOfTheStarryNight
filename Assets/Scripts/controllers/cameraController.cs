@@ -26,15 +26,19 @@ public class cameraController : MonoBehaviour
 
     void Start()
     {
-        target = gameManager.Instance.player.transform;
         cam = GetComponent<Camera>();
         bounds = GameObject.Find("RoomBounds").GetComponent<BoxCollider2D>().bounds;
         h = cam.orthographicSize;
         w = h * Screen.width / Screen.height;
-        Vector3 to = target.position;
-        to.x = Mathf.Clamp(to.x, bounds.min.x + w, bounds.max.x - w);
-        to.y = Mathf.Clamp(to.y, bounds.min.y + h, bounds.max.y - h);
-        transform.position = new Vector3(to.x, to.y, transform.position.z);
+
+        if (gameManager.Instance.player != null)
+        {
+            target = gameManager.Instance.player.transform;
+            Vector3 to = target.position;
+            to.x = Mathf.Clamp(to.x, bounds.min.x + w, bounds.max.x - w);
+            to.y = Mathf.Clamp(to.y, bounds.min.y + h, bounds.max.y - h);
+            transform.position = new Vector3(to.x, to.y, transform.position.z);
+        }
     }
 
     // Update is called once per frame
@@ -44,6 +48,7 @@ public class cameraController : MonoBehaviour
         {
             target = gameManager.Instance.player.transform;
         }
+        if (target == null) return;
 
         Vector3 targetVelocity = target.GetComponent<characterController>().cameraTarget;
         Vector3 targetPoint = target.transform.position;

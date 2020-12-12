@@ -66,7 +66,7 @@ public class playerController : MonoBehaviour
     Coroutine jumpCRVar;
     Coroutine turnAroundCRVar;
 
-    private static bool created = false;
+    public static bool created = false;
 
     //bool fastBroom = true;
     //bool screenShake = false;
@@ -125,7 +125,7 @@ public class playerController : MonoBehaviour
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
-        lastSafePosition = transform.position;
+        setLastSafePosition();
         warpToCurrentDoor();
 
         if (created) Destroy(gameObject);
@@ -251,6 +251,7 @@ public class playerController : MonoBehaviour
 
             if (other.CompareTag("Door"))
             {
+                if (other.GetComponent<doorController>().enterable)
                 currentDoor = other.GetComponent<doorController>();
             }
 
@@ -595,7 +596,7 @@ public class playerController : MonoBehaviour
         GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<canvasController>().doBlackout();
         yield return new WaitForSeconds(0.5f);
         gameManager.Instance.currentDoorLabel = currentDoor.label;
-        gameManager.Instance.switchScene(currentDoor.targetScene.name, 0, 0);
+        gameManager.Instance.switchScene(currentDoor.targetScene.ScenePath, 0, 0);
     }
     void warpToCurrentDoor()
     {
@@ -707,7 +708,7 @@ public class playerController : MonoBehaviour
         deformer.flashWhite();
         yield return new WaitForSeconds(duration);
         state = oldState;
-        //velocity = oldVelocity;
+        velocity = oldVelocity;
     }
     #endregion
 
@@ -928,6 +929,10 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region Helpers
+    public void setLastSafePosition()
+    {
+        lastSafePosition = transform.position;
+    }
     public void playerShouldWait()
     {
         if (gameManager.Instance.pauseMenus.Count > 0)
@@ -949,7 +954,7 @@ public class playerController : MonoBehaviour
 
     public void cutScenePrep()
     {
-        Debug.LogWarning("Don't use cutScenePrep. Switch to playerShouldWait!");
+        //Debug.LogWarning("Don't use cutScenePrep. Switch to playerShouldWait!");
         velocity = Vector3.zero;
         resetAnimator();
         state = State.Wait;

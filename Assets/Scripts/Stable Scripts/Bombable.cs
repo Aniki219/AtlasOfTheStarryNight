@@ -11,6 +11,7 @@ public class Bombable : MonoBehaviour
         if  (collision.CompareTag("BombExplosion"))
         {
             Instantiate(bits, transform.position, Quaternion.identity);
+            if (GetComponent<persistance>() != null) GetComponent<persistance>().MarkRemoved();
             Destroy(gameObject);
         }
     }

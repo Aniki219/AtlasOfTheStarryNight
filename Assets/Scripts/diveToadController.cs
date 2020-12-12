@@ -56,6 +56,7 @@ public class diveToadController : MonoBehaviour
 
     void Update()
     {
+        if (!gameManager.Instance.player) return;
         switch (state)
         {
             case State.Movement:
@@ -76,7 +77,6 @@ public class diveToadController : MonoBehaviour
         anim.SetBool("Jumping", !isGrounded() && (velocity.y > 0));
         anim.SetBool("Falling", !isGrounded() && (velocity.y < -0.5f));
 
-        
         float dx = gameManager.Instance.player.transform.position.x - transform.position.x;
         float dy = transform.position.y - gameManager.Instance.player.transform.position.y;
 

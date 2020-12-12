@@ -6,17 +6,23 @@ using UnityEngine.SceneManagement;
 public class doorController : MonoBehaviour
 {
     public string label = "A";
-    public Object targetScene;
+    public SceneReference targetScene;
+    public bool enterable = true;
 
-    // Start is called before the first frame update
-    void Start()
+    public GameObject lockedSprite;
+    public int numStars = 0;
+
+    public void setEnterable(bool open = true)
     {
-
+        enterable = open;
+        lockedSprite.SetActive(!open);
     }
 
-    // Update is called once per frame
-    void Update()
+    public void Start()
     {
-        
+        if (lockedSprite != null && gameManager.numberOfStarts >= numStars)
+        {
+            setEnterable();
+        }
     }
 }
