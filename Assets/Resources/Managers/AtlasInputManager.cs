@@ -69,7 +69,7 @@ public class AtlasInputManager : ScriptableObject
         return axisState.state;
     }
 
-    public static bool getKeyPressed(string keyName)
+    public static bool getKeyPressed(string keyName, bool clearBuffer = false)
     {
         KeyState keyState = getKeyState(keyName);
         return keyState.state && keyState.justPressed();

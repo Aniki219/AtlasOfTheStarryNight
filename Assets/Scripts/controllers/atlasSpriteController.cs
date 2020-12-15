@@ -6,6 +6,9 @@ public class atlasSpriteController : MonoBehaviour
 {
     playerController pc;
     SpriteRenderer sprite;
+
+    public GameObject dustTrail;
+    public ParticleSystem doubleJumpParticle;
     // Start is called before the first frame update
     void Start()
     {
@@ -39,4 +42,12 @@ public class atlasSpriteController : MonoBehaviour
     {
         pc.createHitbox(hitBox);
     }
+
+    public void takeStep(float stepSize)
+    {
+        stepSize = 0.175f;
+        Vector3 velocity = stepSize * pc.facing * Vector3.right  +  .01f * Vector3.down;
+        pc.controller.Move(velocity);
+    }
+
 }

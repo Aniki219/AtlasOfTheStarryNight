@@ -15,7 +15,7 @@ public class cameraParallax : MonoBehaviour
     void Start()
     {
         cc = Camera.main.GetComponent<cameraController>();
-        roomBounds = cc.roomBounds;
+        roomBounds = GameObject.Find("RoomBounds").GetComponent<BoxCollider2D>();
         col = GetComponent<BoxCollider2D>();
         minX = roomBounds.bounds.center.x - roomBounds.bounds.extents.x + col.bounds.extents.x;
         maxX = roomBounds.bounds.center.x + roomBounds.bounds.extents.x - col.bounds.extents.x;

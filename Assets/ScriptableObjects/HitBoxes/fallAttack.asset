@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: fallAttack
   m_EditorClassIdentifier: 
   position: {x: 0.5, y: 0, z: 0}
-  size: {x: 1.1, y: 1.2, z: 1}
-  kbDir: {x: -1, y: 1, z: 0}
-  duration: 0.083333336
+  size: {x: 1.1, y: 1, z: 1}
+  kbDir: {x: 1, y: 1, z: 0}
+  duration: 0.16666669
   damage: 1
   facing: 1
   knockback: 1

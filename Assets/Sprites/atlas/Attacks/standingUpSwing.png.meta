@@ -23,8 +23,38 @@ TextureImporter:
   - first:
       213: -6954021602640101094
     second: standingUpSwing_6
+  - first:
+      213: -8822718703156475193
+    second: standingUpSwing_0
+  - first:
+      213: -7541358037928895316
+    second: standingUpSwing_1
+  - first:
+      213: 1717451933775822321
+    second: standingUpSwing_2
+  - first:
+      213: 494394461800696738
+    second: standingUpSwing_3
+  - first:
+      213: -4362636016167502320
+    second: standingUpSwing_4
+  - first:
+      213: 4047532596858581845
+    second: standingUpSwing_5
+  - first:
+      213: -5366887426383417233
+    second: standingUpSwing_6
+  - first:
+      213: 702217181946358237
+    second: standingUpSwing_7
+  - first:
+      213: 4193960109122068660
+    second: standingUpSwing_7
+  - first:
+      213: -7780320228284185758
+    second: standingUpSwing_8
   externalObjects: {}
-  serializedVersion: 10
+  serializedVersion: 11
   mipmaps:
     mipMapMode: 0
     enableMipMap: 0
@@ -44,6 +74,7 @@ TextureImporter:
   isReadable: 0
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
+  vTOnly: 0
   grayScaleToAlpha: 0
   generateCubemap: 6
   cubemapConvolution: 0
@@ -78,6 +109,8 @@ TextureImporter:
   maxTextureSizeSet: 0
   compressionQualitySet: 0
   textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 1
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
@@ -121,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 270c80dbfba9e134ab3228ea36f4cf60
-      internalID: 6490687055555765347
+      spriteID: 7cac92195186f8580800000000000000
+      internalID: -8822718703156475193
       vertices: []
       indices: 
       edges: []
@@ -142,8 +175,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a2fa7efbb75111e4b8521c0d7de23b30
-      internalID: 1201542871362310804
+      spriteID: cac163102d6b75790800000000000000
+      internalID: -7541358037928895316
       vertices: []
       indices: 
       edges: []
@@ -163,8 +196,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: a240eedce55dddb448d3eb22d50a517e
-      internalID: -8520021250528890421
+      spriteID: 1fdf38f2f6d95d710800000000000000
+      internalID: 1717451933775822321
       vertices: []
       indices: 
       edges: []
@@ -184,8 +217,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1bded21e4b3045943b0744e2123194ec
-      internalID: 441512827271701661
+      spriteID: 2ab0d82c4217cd600800000000000000
+      internalID: 494394461800696738
       vertices: []
       indices: 
       edges: []
@@ -205,8 +238,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9527b77dc4571784d9f306a1cf7b0e7d
-      internalID: 5643801380395791092
+      spriteID: 01eb20458adc473c0800000000000000
+      internalID: -4362636016167502320
       vertices: []
       indices: 
       edges: []
@@ -226,8 +259,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 385fb5071b6ca834fada1d7d384a6d73
-      internalID: -2830699644110171083
+      spriteID: 553f19cb379bb2830800000000000000
+      internalID: 4047532596858581845
       vertices: []
       indices: 
       edges: []
@@ -247,8 +280,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d896322a166cac048ad3858da62d1624
-      internalID: -6954021602640101094
+      spriteID: f60f7e8125cf485b0800000000000000
+      internalID: -5366887426383417233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingUpSwing_7
+      rect:
+        serializedVersion: 2
+        x: 336
+        y: 0
+        width: 48
+        height: 32
+      alignment: 9
+      pivot: {x: 0.386, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4b0216aaf70f33a30800000000000000
+      internalID: 4193960109122068660
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingUpSwing_8
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 48
+        height: 32
+      alignment: 9
+      pivot: {x: 0.386, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 263c55a69ffb60490800000000000000
+      internalID: -7780320228284185758
       vertices: []
       indices: 
       edges: []

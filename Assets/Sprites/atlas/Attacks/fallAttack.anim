@@ -87,7 +87,7 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.083333336
+  - time: 0.05
     functionName: createHitbox
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 7b86ced6113ad3644b510fcc275f992b,

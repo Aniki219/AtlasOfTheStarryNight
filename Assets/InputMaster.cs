@@ -59,7 +59,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
-                    ""name"": ""Crouch"",
+                    ""name"": ""Down"",
                     ""type"": ""Button"",
                     ""id"": ""a557e63b-7d36-492e-b993-6197fed50141"",
                     ""expectedControlType"": ""Button"",
@@ -182,7 +182,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
-                    ""action"": ""Crouch"",
+                    ""action"": ""Down"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 },
@@ -221,7 +221,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Attack = m_Player.FindAction("Attack", throwIfNotFound: true);
         m_Player_Broom = m_Player.FindAction("Broom", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
-        m_Player_Crouch = m_Player.FindAction("Crouch", throwIfNotFound: true);
+        m_Player_Down = m_Player.FindAction("Down", throwIfNotFound: true);
         m_Player_DisplayEquipment = m_Player.FindAction("DisplayEquipment", throwIfNotFound: true);
     }
 
@@ -277,7 +277,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Attack;
     private readonly InputAction m_Player_Broom;
     private readonly InputAction m_Player_Interact;
-    private readonly InputAction m_Player_Crouch;
+    private readonly InputAction m_Player_Down;
     private readonly InputAction m_Player_DisplayEquipment;
     public struct PlayerActions
     {
@@ -288,7 +288,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Attack => m_Wrapper.m_Player_Attack;
         public InputAction @Broom => m_Wrapper.m_Player_Broom;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
-        public InputAction @Crouch => m_Wrapper.m_Player_Crouch;
+        public InputAction @Down => m_Wrapper.m_Player_Down;
         public InputAction @DisplayEquipment => m_Wrapper.m_Player_DisplayEquipment;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -314,9 +314,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Interact.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
                 @Interact.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnInteract;
-                @Crouch.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
-                @Crouch.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
-                @Crouch.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCrouch;
+                @Down.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDown;
+                @Down.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDown;
+                @Down.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDown;
                 @DisplayEquipment.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
                 @DisplayEquipment.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
                 @DisplayEquipment.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
@@ -339,9 +339,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Interact.started += instance.OnInteract;
                 @Interact.performed += instance.OnInteract;
                 @Interact.canceled += instance.OnInteract;
-                @Crouch.started += instance.OnCrouch;
-                @Crouch.performed += instance.OnCrouch;
-                @Crouch.canceled += instance.OnCrouch;
+                @Down.started += instance.OnDown;
+                @Down.performed += instance.OnDown;
+                @Down.canceled += instance.OnDown;
                 @DisplayEquipment.started += instance.OnDisplayEquipment;
                 @DisplayEquipment.performed += instance.OnDisplayEquipment;
                 @DisplayEquipment.canceled += instance.OnDisplayEquipment;
@@ -365,7 +365,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnAttack(InputAction.CallbackContext context);
         void OnBroom(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
-        void OnCrouch(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
         void OnDisplayEquipment(InputAction.CallbackContext context);
     }
 }

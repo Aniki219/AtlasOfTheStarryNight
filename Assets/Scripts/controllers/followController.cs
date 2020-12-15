@@ -43,7 +43,7 @@ public class followController : MonoBehaviour
     {
         //Here we trigger to resolve what happens when the player touches the ground
         //or gets hurt
-        if (!breakingChain && pc && followedBy && (pc.isGrounded() || pc.state == playerController.State.Hurt))
+        if (!breakingChain && pc && followedBy && (pc.isGrounded() || pc.resetPosition))
         {
             breakingChain = true;
 
@@ -53,7 +53,7 @@ public class followController : MonoBehaviour
             {
                 fc = fc.followedBy;
             }
-            StartCoroutine(callBreakChain(pc.state == playerController.State.Hurt, num));
+            StartCoroutine(callBreakChain(pc.resetPosition, num));
         }
 
         //Either we follow who we are following. Or we reset to the original position

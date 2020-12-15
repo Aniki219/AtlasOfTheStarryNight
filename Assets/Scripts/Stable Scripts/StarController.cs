@@ -21,6 +21,7 @@ public class StarController : MonoBehaviour
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         playerController pc = player.GetComponent<playerController>();
 
+        pc.pauseAnimator();
         pc.cutScenePrep();
 
 

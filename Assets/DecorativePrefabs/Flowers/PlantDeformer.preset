@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!181963792 &2655988077585873504
+Preset:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: PlantDeformer
+  m_TargetType:
+    m_NativeTypeID: 114
+    m_ManagedTypePPtr: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410,
+      type: 3}
+    m_ManagedTypeFallback: 
+  m_Properties:
+  - target: {fileID: 0}
+    propertyPath: m_Enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorHideFlags
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: m_EditorClassIdentifier
+    value: 
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: flashMaterial
+    value: 
+    objectReference: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.size
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].tag
+    value: default
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].enabled
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].axis
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].rotational
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].cyclesPerSecond
+    value: -0.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].oscillationSize
+    value: 3
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].oscillationDirection.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].oscillationDirection.y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[0].oscillationDirection.z
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].tag
+    value: shake
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].enabled
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].axis
+    value: 2
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].rotational
+    value: 1
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].cyclesPerSecond
+    value: -2.5
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].oscillationSize
+    value: 7
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].oscillationDirection.x
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].oscillationDirection.y
+    value: 0
+    objectReference: {fileID: 0}
+  - target: {fileID: 0}
+    propertyPath: oscillators.Array.data[1].oscillationDirection.z
+    value: 0
+    objectReference: {fileID: 0}
+  m_ExcludedProperties: []

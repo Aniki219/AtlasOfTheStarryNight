@@ -4,10 +4,18 @@ using UnityEngine;
 
 public class playlightattack : StateMachineBehaviour
 {
+    public bool heavy = false;
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        if (heavy)
+        {
+            SoundManager.Instance.playClip("BroomAttacks/HeavyAttack", 0);
+        }
+        else
+        {
+            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

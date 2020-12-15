@@ -79,7 +79,7 @@ public class BerryPlantController : MonoBehaviour
         GameObject bb = createBombBerry(false);
         bb.GetComponent<bombBerryController>().isSimulated();
         bb.GetComponent<Rigidbody2D>()
-            .AddForce(new Vector2(1.25f * hb.kbDir.x, 1) * 150.0f);
+            .AddForce(Vector2.Scale(new Vector2(1.25f, 1), hb.kbDir) * 150.0f);
         StartCoroutine(Picked());
     }
 
@@ -131,8 +131,11 @@ public class BerryPlantController : MonoBehaviour
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
         {
+            AllyHitBoxController hbc = collision.GetComponent<AllyHitBoxController>();
+            if (hbc.hasHit) return;
+            hbc.hasHit = true;
             gameManager.Instance.player.GetComponentInChildren<Deformer>().flashWhite();
-            HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
+            HitBox hb = hbc.hitbox;
             if (hb.broom)
             {
                 if (tag == "WooshBerryPlant")

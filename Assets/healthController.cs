@@ -83,7 +83,7 @@ public class healthController : MonoBehaviour
         {
             Deformer deformer = GetComponent<Deformer>();
             if (deformer != null) deformer.flashWhite();
-            if (byPlayer) gameManager.Instance.playerCtrl.hitLag(0);
+            //if (byPlayer) gameManager.Instance.playerCtrl.hitLag(0);
         }
 
         //Remember to set the hurtCallback as Dynamic and not Static
@@ -97,7 +97,7 @@ public class healthController : MonoBehaviour
         }
     }
 
-    void checkDead(float time = 0.25f)
+    void checkDead(float time = 0.2f)
     {
         if (hitpoints <= 0)
         {

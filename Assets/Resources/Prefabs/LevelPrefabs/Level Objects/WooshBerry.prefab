@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 1279541665}
   - component: {fileID: 1279541664}
   - component: {fileID: -7325879653678202139}
+  - component: {fileID: 7692689474575733362}
   m_Layer: 17
   m_Name: WooshBerry
   m_TagString: WooshBerryPlant
@@ -118,7 +119,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0.027128771, y: 0.32}
+  m_Offset: {x: 0.03, y: 0.4}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -129,7 +130,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 0.50222945, y: 0.5526085}
+  m_Size: {x: 0.6, y: 0.6}
   m_EdgeRadius: 0
 --- !u!114 &1279541664
 MonoBehaviour:
@@ -179,7 +180,8 @@ MonoBehaviour:
   pickParticle: {fileID: 7837217630231440469, guid: 052b3dd0aac0def40a4a3ad25e9c33dd,
     type: 3}
   pickSound: {fileID: 8300000, guid: 4323f71ff1bc7114eb89fa3a57332a2b, type: 3}
-  regrowSound: {fileID: 8300000, guid: 264b11552a1c6b243a5d3aa1f401389e, type: 3}
+  regrowSound: {fileID: 8300000, guid: d64126d5b1b42b54696a57b6de299fb4, type: 3}
+  center: {x: 0, y: 0, z: 0}
   sayFwd: 0
 --- !u!114 &-7325879653678202139
 MonoBehaviour:
@@ -200,5 +202,28 @@ MonoBehaviour:
     axis: 2
     rotational: 1
     cyclesPerSecond: -0.5
-    oscillationSize: 2
+    oscillationSize: 3
     oscillationDirection: {x: 0, y: 0, z: 0}
+  - tag: shake
+    enabled: 0
+    axis: 2
+    rotational: 1
+    cyclesPerSecond: -2.5
+    oscillationSize: 7
+    oscillationDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &7692689474575733362
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5235961991136082181}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee141122d46716469bab245ce5a95d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTouch: 1
+  onHit: 0
+  onBonk: 0
+  shakeDuration: 1

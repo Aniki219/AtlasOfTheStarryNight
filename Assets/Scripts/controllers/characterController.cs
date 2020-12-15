@@ -160,7 +160,7 @@ public class characterController : MonoBehaviour
     void HorizontalCollisions(ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
-        float rayLength = Mathf.Abs(velocity.x) + skinWidth;
+        float rayLength = Mathf.Abs(velocity.x) + skinWidth + 1/32.0f;
 
         int checkMidSection = 0;
         int numberofMidSegments = 2;
@@ -211,12 +211,46 @@ public class characterController : MonoBehaviour
                     checkMidSection++;
                 }
             }
+            Color c = Color.green;
             if (checkMidSection >= numberofMidSegments)
             {
                 collisions.wallRideLeft = collisions.left;
                 collisions.wallRideRight = collisions.right;
+                c = Color.red;
             }
-            Debug.DrawLine(rayOrigin, rayOrigin + Vector2.right * directionX * rayLength);
+            Debug.DrawLine(rayOrigin, rayOrigin + Vector2.right * directionX * rayLength, c);
+        }
+    }
+
+    public void checkWallSlide(float directionX)
+    {
+        float rayLength = skinWidth + 1 / 32.0f;
+
+        int checkMidSection = 0;
+        int numberofMidSegments = 2;
+        for (int i = 0; i < horizontalRayCount; i++)
+        {
+            Vector2 rayOrigin = (directionX == -1) ? raycastOrigins.bottomLeft : raycastOrigins.bottomRight;
+            rayOrigin += Vector2.up * (horizontalRaySpacing * i);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
+
+            Color c = Color.green;
+            if (hit)
+            {
+                collisions.left = directionX == -1;
+                collisions.right = directionX == 1;
+                c = Color.red;
+                if (i < 5)
+                {
+                    checkMidSection++;
+                }
+            }
+            Debug.DrawLine(rayOrigin, rayOrigin + Vector2.right * directionX * rayLength, c);
+        }
+        if (checkMidSection >= numberofMidSegments)
+        {
+            collisions.wallRideLeft = collisions.left;
+            collisions.wallRideRight = collisions.right;
         }
     }
 

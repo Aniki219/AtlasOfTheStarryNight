@@ -46,7 +46,7 @@
                     "interactions": ""
                 },
                 {
-                    "name": "Crouch",
+                    "name": "Down",
                     "type": "Button",
                     "id": "a557e63b-7d36-492e-b993-6197fed50141",
                     "expectedControlType": "Button",
@@ -169,7 +169,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Crouch",
+                    "action": "Down",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

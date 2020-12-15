@@ -87,25 +87,38 @@ public class bombBerryController : MonoBehaviour
             BerryPlantController bc = collision.GetComponent<BerryPlantController>();
             if (!bc || !bc.canPick) return;
             bc.pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
-            isSimulated(true);
-            anim.SetBool("Wings", false);
-            anim.SetTrigger("Idle");
-            flying = false;
-            rb.velocity = Vector2.zero;
-            rb.gravityScale = 1;
+            returnToRigidbody();
             Vector2 bumpDir = new Vector2(1.0f, 2.0f);
             rb.AddForce(Vector3.Scale(bc.getDir(), bumpDir * 150.0f));
         }
 
-        if (!flying && collision.CompareTag("AllyHitbox") && rb.velocity.magnitude < 1)
+        if (collision.CompareTag("AllyHitbox"))
         {
-            HitBox hb = collision.GetComponent<AllyHitBoxController>().hitbox;
+            AllyHitBoxController hbc = collision.GetComponent<AllyHitBoxController>();
+            if (hbc.hasHit) return;
+            hbc.hasHit = true;
+
+            HitBox hb = hbc.hitbox;
+
+            if (flying) returnToRigidbody();
+            
             if (hb.interactBroom)
             {
                 float dx = Vector3.Distance(gameManager.Instance.player.transform.position, transform.position);
-                rb.AddForce(new Vector2(1.25f * hb.kbDir.x, 1) * 150);
+                rb.velocity = Vector2.zero;
+                rb.AddForce(Vector2.Scale(new Vector2(1.25f, 1), hb.kbDir) * 150);
             }
         }
+    }
+
+    void returnToRigidbody()
+    {
+        isSimulated(true);
+        anim.SetBool("Wings", false);
+        anim.SetTrigger("Idle");
+        flying = false;
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 1;
     }
 
     IEnumerator BeginWoosh(Vector3 startPosition, Vector2 dir)
@@ -118,6 +131,7 @@ public class bombBerryController : MonoBehaviour
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
 
         transform.position = startPosition;
+        Physics2D.SyncTransforms();
         this.dir = dir;
         flying = true;
         yield return 0;

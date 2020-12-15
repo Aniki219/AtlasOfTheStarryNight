@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 6249957850551527287}
   - component: {fileID: 6249957850551527291}
   - component: {fileID: 8921165412249882944}
+  - component: {fileID: -5742997039664403436}
   m_Layer: 17
   m_Name: BombBerryPlant
   m_TagString: BombBerryPlant
@@ -201,5 +202,28 @@ MonoBehaviour:
     axis: 2
     rotational: 1
     cyclesPerSecond: -0.5
-    oscillationSize: 2
+    oscillationSize: 3
     oscillationDirection: {x: 0, y: 0, z: 0}
+  - tag: shake
+    enabled: 0
+    axis: 2
+    rotational: 1
+    cyclesPerSecond: -2.5
+    oscillationSize: 7
+    oscillationDirection: {x: 0, y: 0, z: 0}
+--- !u!114 &-5742997039664403436
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6249957850551527286}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cee141122d46716469bab245ce5a95d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTouch: 1
+  onHit: 0
+  onBonk: 0
+  shakeDuration: 1
