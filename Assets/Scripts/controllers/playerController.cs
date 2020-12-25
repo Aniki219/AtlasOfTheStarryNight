@@ -42,7 +42,7 @@ public class playerController : MonoBehaviour
     int maxCoyoteTime = 3;
     int coyoteTime = 0;
     public int graceFrames = 0;
-    int maxGraceFrames = 2;
+    int maxGraceFrames = 0;
 
     float gravity;
     float jumpVelocity;
@@ -65,6 +65,7 @@ public class playerController : MonoBehaviour
 
     GameObject starRotator;
     Transform currentTornado;
+    Transform heldObject;
 
     bool holdBroom = false;
     bool fastBroom = false;
@@ -149,6 +150,7 @@ public class playerController : MonoBehaviour
     void Update()
     {
         handleUncrouch();
+        handleHolding();
         playerShouldWait();
         handleParticles();
         switch (state)
@@ -318,6 +320,10 @@ public class playerController : MonoBehaviour
             other.SendMessage("OnBroomCollide");
         }
 
+        if (other.CompareTag("Liftable") && AtlasInputManager.getKeyPressed("Up", true)) {
+            liftObject(other);
+        }
+
         if (other.CompareTag("ResetDamaging") && !invulnerable)
         {
             if (graceFrames > 0)
@@ -360,6 +366,8 @@ public class playerController : MonoBehaviour
 
     void handleMovement(float msMod = 1.0f, bool canJump = true, bool canTurnAround = true)
     {
+        if (heldObject != null) msMod *= 0.5f;
+
         Vector2 input = new Vector2(0, 0);
 
         input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
@@ -670,6 +678,42 @@ public class playerController : MonoBehaviour
             boxCollider.offset = colliderStartOffset;
         }
     }
+    void liftObject(Collider2D other)
+    {
+        if (!isGrounded()) return;
+        if (state != State.Movement) return;
+        if (isCrouching()) return;
+        liftController lc = other.GetComponent<liftController>();
+        Rigidbody2D rb = other.GetComponentInChildren<Rigidbody2D>();
+        if (lc && rb)
+        {
+            float liftTime = 0.2f;
+            rb.simulated = false;
+            lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), sprite, liftTime);
+            resetAnimator();
+            resetVelocity();
+            anim.SetTrigger("Lift");
+            anim.SetBool("isHolding", true);
+            freezeForSeconds(liftTime);
+            heldObject = other.transform;
+        }
+    }
+    void handleHolding()
+    {
+        if (!anim.GetBool("isHolding")) return;
+        if ((state != State.Movement && state != State.Wait) || !isGrounded() || AtlasInputManager.getKeyPressed("Down"))
+        {
+            anim.SetBool("isHolding", false);
+            dropHolding();
+        }
+    }
+    void dropHolding()
+    {
+        heldObject.GetComponentInChildren<Rigidbody2D>().simulated = true;
+        heldObject.parent = null;
+        heldObject = null;
+    }
+
     public bool canMovingPlatform()
     {
         return moveableStates.Contains(state);
@@ -775,9 +819,10 @@ public class playerController : MonoBehaviour
         deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.15f, 0.25f, 1.0f);
         gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
     }
-    public void OnLanding()
+    public void OnLanding(bool squish = false)
     {
-        deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.1f, 0.125f, -1.0f, "Landing", true);
+        AtlasEventManager.Instance.PlayerLandEvent();
+        if (squish) deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.05f, 0.125f, -1.0f, "Landing", true);
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -908,7 +953,7 @@ public class playerController : MonoBehaviour
     void endBroom()
     {
         anim.SetTrigger("broomEnd");
-        eventManager.Instance.BroomCancelEvent();
+        AtlasEventManager.Instance.BroomCancelEvent();
         returnToMovement();
     }
     #endregion
@@ -942,7 +987,7 @@ public class playerController : MonoBehaviour
         anim.SetTrigger("bonk");
         velocity.y = 4f;
         state = (damage > 0) ? State.Hurt : State.Bonk;
-        eventManager.Instance.BonkEvent();
+        AtlasEventManager.Instance.BonkEvent();
         
         Camera.main.GetComponent<cameraController>().StartShake();
     }
@@ -1059,6 +1104,26 @@ public class playerController : MonoBehaviour
         velocity = Vector3.zero;
         resetAnimator();
         state = State.Wait;
+    }
+
+    public void freezeForSeconds(float time)
+    {
+        StartCoroutine(freezeCoroutine(time));
+    }
+
+    IEnumerator freezeCoroutine(float time)
+    {
+        State prevState = state;
+        Vector3 prevVel = velocity;
+        anim.SetBool("isRunning", false);
+
+        velocity = Vector3.zero;
+        state = State.Wait;
+
+        yield return new WaitForSeconds(time);
+
+        state = prevState;
+        velocity = prevVel;
     }
 
     void createStars(Vector3? position = null)

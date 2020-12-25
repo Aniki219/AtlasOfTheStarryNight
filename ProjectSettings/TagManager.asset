@@ -20,6 +20,8 @@ TagManager:
   - BombBerryPlant
   - BumpBerryPlant
   - BombExplosion
+  - Ribbon
+  - Liftable
   layers:
   - Default
   - TransparentFX

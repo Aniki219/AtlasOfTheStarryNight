@@ -16,8 +16,8 @@ public class bombBerryController : MonoBehaviour
     {
         if (transform.parent && transform.parent.name == "Hanger")
         {
-            eventManager.Instance.onBonkEvent += Boom;
-            eventManager.Instance.onBroomCancel += Drop;
+            AtlasEventManager.Instance.onBonkEvent += Boom;
+            AtlasEventManager.Instance.onBroomCancel += Drop;
             hasEvents = true;
         }
         anim = GetComponent<Animator>();
@@ -63,8 +63,8 @@ public class bombBerryController : MonoBehaviour
     void removeEvents()
     {
         if (!hasEvents) return;
-        eventManager.Instance.onBonkEvent -= Boom;
-        eventManager.Instance.onBroomCancel -= Drop;
+        AtlasEventManager.Instance.onBonkEvent -= Boom;
+        AtlasEventManager.Instance.onBroomCancel -= Drop;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

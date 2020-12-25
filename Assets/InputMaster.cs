@@ -67,6 +67,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""interactions"": """"
                 },
                 {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""0502b492-0981-4945-a995-2a180477f461"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
                     ""name"": ""DisplayEquipment"",
                     ""type"": ""Button"",
                     ""id"": ""8053b2f1-8296-4dbe-8447-b8e94ba9896a"",
@@ -196,6 +204,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""DisplayEquipment"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a3be7369-7f55-4778-8826-de9bfda18224"",
+                    ""path"": ""<Keyboard>/upArrow"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -222,6 +241,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Broom = m_Player.FindAction("Broom", throwIfNotFound: true);
         m_Player_Interact = m_Player.FindAction("Interact", throwIfNotFound: true);
         m_Player_Down = m_Player.FindAction("Down", throwIfNotFound: true);
+        m_Player_Up = m_Player.FindAction("Up", throwIfNotFound: true);
         m_Player_DisplayEquipment = m_Player.FindAction("DisplayEquipment", throwIfNotFound: true);
     }
 
@@ -278,6 +298,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Broom;
     private readonly InputAction m_Player_Interact;
     private readonly InputAction m_Player_Down;
+    private readonly InputAction m_Player_Up;
     private readonly InputAction m_Player_DisplayEquipment;
     public struct PlayerActions
     {
@@ -289,6 +310,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Broom => m_Wrapper.m_Player_Broom;
         public InputAction @Interact => m_Wrapper.m_Player_Interact;
         public InputAction @Down => m_Wrapper.m_Player_Down;
+        public InputAction @Up => m_Wrapper.m_Player_Up;
         public InputAction @DisplayEquipment => m_Wrapper.m_Player_DisplayEquipment;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
@@ -317,6 +339,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Down.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDown;
                 @Down.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDown;
                 @Down.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDown;
+                @Up.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUp;
+                @Up.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUp;
+                @Up.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnUp;
                 @DisplayEquipment.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
                 @DisplayEquipment.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
                 @DisplayEquipment.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
@@ -342,6 +367,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Down.started += instance.OnDown;
                 @Down.performed += instance.OnDown;
                 @Down.canceled += instance.OnDown;
+                @Up.started += instance.OnUp;
+                @Up.performed += instance.OnUp;
+                @Up.canceled += instance.OnUp;
                 @DisplayEquipment.started += instance.OnDisplayEquipment;
                 @DisplayEquipment.performed += instance.OnDisplayEquipment;
                 @DisplayEquipment.canceled += instance.OnDisplayEquipment;
@@ -366,6 +394,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnBroom(InputAction.CallbackContext context);
         void OnInteract(InputAction.CallbackContext context);
         void OnDown(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
         void OnDisplayEquipment(InputAction.CallbackContext context);
     }
 }

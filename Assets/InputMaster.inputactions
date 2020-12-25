@@ -54,6 +54,14 @@
                     "interactions": ""
                 },
                 {
+                    "name": "Up",
+                    "type": "Button",
+                    "id": "0502b492-0981-4945-a995-2a180477f461",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": ""
+                },
+                {
                     "name": "DisplayEquipment",
                     "type": "Button",
                     "id": "8053b2f1-8296-4dbe-8447-b8e94ba9896a",
@@ -181,6 +189,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "DisplayEquipment",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "a3be7369-7f55-4778-8826-de9bfda18224",
+                    "path": "<Keyboard>/upArrow",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Up",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

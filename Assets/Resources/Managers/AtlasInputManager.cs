@@ -69,10 +69,10 @@ public class AtlasInputManager : ScriptableObject
         return axisState.state;
     }
 
-    public static bool getKeyPressed(string keyName, bool clearBuffer = false)
+    public static bool getKeyPressed(string keyName, bool useDeltaTime = false)
     {
         KeyState keyState = getKeyState(keyName);
-        return keyState.state && keyState.justPressed();
+        return keyState.state && keyState.justPressed(useDeltaTime);
     }
 
     public static bool getKey(string keyName)
@@ -93,9 +93,10 @@ public class KeyState
         state = false;
     }
 
-    public bool justPressed()
+    //Using deltaTime allows this function to work even in async methods such as "onTrigger" 
+    public bool justPressed(bool useDeltaTime = false)
     {
-        return (Time.time - startTime <= 0);
+        return (Time.time - startTime <= (useDeltaTime?Time.deltaTime:0));
     }
 }
 
