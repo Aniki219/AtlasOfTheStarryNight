@@ -149,10 +149,16 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
-        handleUncrouch();
-        handleHolding();
+        
         playerShouldWait();
         handleParticles();
+
+        if (state != State.Wait)
+        {
+            handleUncrouch();
+            handleHolding();
+        }
+
         switch (state)
         {
             case State.Movement:
@@ -366,7 +372,11 @@ public class playerController : MonoBehaviour
 
     void handleMovement(float msMod = 1.0f, bool canJump = true, bool canTurnAround = true)
     {
-        if (heldObject != null) msMod *= 0.5f;
+        if (heldObject != null)
+        {
+            msMod *= 0.5f;
+            canJump = false;
+        }
 
         Vector2 input = new Vector2(0, 0);
 
@@ -684,33 +694,60 @@ public class playerController : MonoBehaviour
         if (state != State.Movement) return;
         if (isCrouching()) return;
         liftController lc = other.GetComponent<liftController>();
-        Rigidbody2D rb = other.GetComponentInChildren<Rigidbody2D>();
+        Rigidbody2D rb = other.GetComponentInParent<Rigidbody2D>();
         if (lc && rb)
         {
             float liftTime = 0.2f;
+            setFacing(Mathf.Sign(other.transform.position.x - transform.position.x));
+            rb.velocity = Vector2.zero;
             rb.simulated = false;
             lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), sprite, liftTime);
             resetAnimator();
             resetVelocity();
             anim.SetTrigger("Lift");
             anim.SetBool("isHolding", true);
-            freezeForSeconds(liftTime);
-            heldObject = other.transform;
+            freezeForSeconds(liftTime + 0.15f);
+            heldObject = other.transform.parent;
         }
     }
     void handleHolding()
     {
         if (!anim.GetBool("isHolding")) return;
-        if ((state != State.Movement && state != State.Wait) || !isGrounded() || AtlasInputManager.getKeyPressed("Down"))
+        if (!heldObject)
+        {
+            anim.SetBool("isHolding", false);
+            return;
+        }
+        if ((state != State.Movement && state != State.Wait) || (!isGrounded() && coyoteTime <= 0) || AtlasInputManager.getKeyPressed("Down"))
         {
             anim.SetBool("isHolding", false);
             dropHolding();
+        } else if (AtlasInputManager.getKeyPressed("Up") || AtlasInputManager.getKeyPressed("Jump")) {
+            anim.SetBool("isHolding", false);
+            anim.SetTrigger("Throw");
+            freezeForSeconds(0.4f);
+            Invoke("throwHolding", 0.15f);
         }
     }
-    void dropHolding()
+    void throwHolding()
     {
-        heldObject.GetComponentInChildren<Rigidbody2D>().simulated = true;
+        dropHolding(true);
+    }
+    void dropHolding(bool throwing = false)
+    {
+        Rigidbody2D rb = heldObject.GetComponent<Rigidbody2D>();
+        rb.simulated = true;
+
+        if (throwing)
+        {
+            rb.AddForce(new Vector2(200.0f * facing, 75.0f));
+        } else
+        {
+            rb.AddForce(new Vector2(0, 50.0f));
+        }
+
         heldObject.parent = null;
+        SceneManager.MoveGameObjectToScene(heldObject.gameObject, SceneManager.GetActiveScene());
         heldObject = null;
     }
 

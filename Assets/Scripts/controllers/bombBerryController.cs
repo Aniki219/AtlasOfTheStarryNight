@@ -34,6 +34,7 @@ public class bombBerryController : MonoBehaviour
         {
             transform.Translate(dir * flySpeed * Time.deltaTime, Space.World);
         }
+        transform.Find("handle").gameObject.SetActive(!flying);
     }
 
     void Boom()

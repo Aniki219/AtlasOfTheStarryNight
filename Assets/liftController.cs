@@ -14,17 +14,18 @@ public class liftController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (transform.parent == null)
-        {
-            transform.position = transform.position + isHandleOf.localPosition;
-            isHandleOf.localPosition = Vector3.zero;
-        }
+        //if (transform.parent == null)
+        //{
+        //    transform.position = transform.position + isHandleOf.localPosition;
+        //    isHandleOf.localPosition = Vector3.zero;
+        //    Physics2D.SyncTransforms();
+        //}
     }
 
     public void startLift(Vector3 m_CurvePosition, Vector3 m_TargetPosition, Transform parent, float duration = 0.25f)
     {
-        transform.parent = parent;
-        StartCoroutine(liftCoroutine(transform.localPosition, m_CurvePosition, m_TargetPosition, duration));
+        isHandleOf.parent = parent;
+        StartCoroutine(liftCoroutine(isHandleOf.localPosition, m_CurvePosition, m_TargetPosition, duration));
     }
 
     IEnumerator liftCoroutine(Vector3 m_StartPosition, Vector3 m_CurvePosition, Vector3 m_TargetPosition, float duration)
@@ -44,9 +45,11 @@ public class liftController : MonoBehaviour
         while (elapsedTime <= duration)
         {
             float timer = elapsedTime/duration;
-            transform.localPosition = (((1 - timer) * (1 - timer)) * m_StartPosition) + (((1 - timer) * 2.0f) * timer * m_CurvePosition) + ((timer * timer) * m_TargetPosition);
+            isHandleOf.localPosition = (((1 - timer) * (1 - timer)) * m_StartPosition) + (((1 - timer) * 2.0f) * timer * m_CurvePosition) + ((timer * timer) * m_TargetPosition);
             elapsedTime = Time.time - startTime;
             yield return new WaitForEndOfFrame();
         }
+
+        isHandleOf.localPosition = m_TargetPosition;
     }
 }
