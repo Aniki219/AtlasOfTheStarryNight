@@ -73,7 +73,6 @@ public class playerController : MonoBehaviour
     float wallBlastDelay = 0.2f;
 
     Coroutine jumpCRVar;
-    Coroutine turnAroundCRVar;
     Coroutine involnerableCRVar;
 
     public static bool created = false;
@@ -327,7 +326,7 @@ public class playerController : MonoBehaviour
         }
 
         if (other.CompareTag("Liftable") && AtlasInputManager.getKeyPressed("Up", true)) {
-            liftObject(other);
+            liftObject(other.gameObject);
         }
 
         if (other.CompareTag("ResetDamaging") && !invulnerable)
@@ -688,11 +687,16 @@ public class playerController : MonoBehaviour
             boxCollider.offset = colliderStartOffset;
         }
     }
-    void liftObject(Collider2D other)
+    public bool canLift()
     {
-        if (!isGrounded()) return;
-        if (state != State.Movement) return;
-        if (isCrouching()) return;
+        if (!isGrounded()) return false;
+        if (state != State.Movement) return false;
+        if (isCrouching()) return false;
+        return true;
+    }
+    public void liftObject(GameObject other)
+    {
+        if (!canLift()) return;
         liftController lc = other.GetComponent<liftController>();
         Rigidbody2D rb = other.GetComponentInParent<Rigidbody2D>();
         if (lc && rb)
@@ -701,7 +705,7 @@ public class playerController : MonoBehaviour
             setFacing(Mathf.Sign(other.transform.position.x - transform.position.x));
             rb.velocity = Vector2.zero;
             rb.simulated = false;
-            lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), sprite, liftTime);
+            lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), transform, liftTime);
             resetAnimator();
             resetVelocity();
             anim.SetTrigger("Lift");
@@ -718,6 +722,8 @@ public class playerController : MonoBehaviour
             anim.SetBool("isHolding", false);
             return;
         }
+        Debug.Log(heldObject.name);
+        heldObject.transform.localScale = new Vector3(facing, 1, 1);
         if ((state != State.Movement && state != State.Wait) || (!isGrounded() && coyoteTime <= 0) || AtlasInputManager.getKeyPressed("Down"))
         {
             anim.SetBool("isHolding", false);
@@ -735,6 +741,7 @@ public class playerController : MonoBehaviour
     }
     void dropHolding(bool throwing = false)
     {
+        if (!heldObject) return;
         Rigidbody2D rb = heldObject.GetComponent<Rigidbody2D>();
         rb.simulated = true;
 

@@ -14,10 +14,10 @@ public class preventDeform : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        transform.localScale = Vector3.one;
+        transform.localScale = new Vector3(transform.localScale.x < 0 ? -1 : 1, 1, 1);
         foreach (Transform t in transform)
         {
-            t.localScale = Vector3.one;
+            t.localScale = new Vector3(t.localScale.x < 0 ? 1 : 1, 1, 1);
         }
     }
 }

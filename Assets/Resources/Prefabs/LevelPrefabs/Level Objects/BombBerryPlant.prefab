@@ -159,6 +159,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  liftObject: {fileID: 5239513481117827986, guid: a36273336037fa84790d42ba942a8a63,
+    type: 3}
   pickParticle: {fileID: 0}
   pickSound: {fileID: 8300000, guid: 7447177e8b4e62d489d8d1c19b6b1cca, type: 3}
   regrowSound: {fileID: 8300000, guid: 5c614e38274be4a4fac9e881be4894ed, type: 3}

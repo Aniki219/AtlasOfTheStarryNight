@@ -10,15 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 5239513481117827983}
   - component: {fileID: 5239513481117827984}
-  - component: {fileID: 5239513481117827985}
   - component: {fileID: 536186993}
-  - component: {fileID: 536186995}
-  - component: {fileID: -1294715105371965222}
   - component: {fileID: 4288699081928761712}
-  - component: {fileID: -3215424939388391244}
-  - component: {fileID: 3120667046982961836}
+  - component: {fileID: 920326989966117514}
+  - component: {fileID: 4892613213012987240}
   m_Layer: 15
-  m_Name: BombBerry
+  m_Name: WooshBerryHeld
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,8 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 6
-  m_Sprite: {fileID: -2883004110092200887, guid: b4d41bb43a5d9ba41be7b939af646cbf,
-    type: 3}
+  m_Sprite: {fileID: 21300000, guid: e7dc002fb8472434e9a74ee5bb8cf42c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -91,25 +87,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!95 &5239513481117827985
-Animator:
-  serializedVersion: 3
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5239513481117827986}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 363c7ebe5c6782c42829f66f1119b335, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!50 &536186993
 Rigidbody2D:
   serializedVersion: 4
@@ -131,32 +108,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!114 &536186995
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5239513481117827986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 189024f15cfe9b64b9981cbb66fe234b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &-1294715105371965222
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5239513481117827986}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d10969f178800b4f8e4a84324f73a06, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  lifetime: Infinity
-  destroyOnAnimEnd: 0
 --- !u!58 &4288699081928761712
 CircleCollider2D:
   m_ObjectHideFlags: 0
@@ -173,7 +124,7 @@ CircleCollider2D:
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.171875
---- !u!114 &-3215424939388391244
+--- !u!114 &920326989966117514
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -182,26 +133,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5239513481117827986}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b86e3e3af9b0d7143aa0f0d4a0f96c05, type: 3}
+  m_Script: {fileID: 11500000, guid: 2477395a136fd3448996dc911ef57132, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startDelay: 0.1
-  bounceCallback:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 536186995}
-        m_TargetAssemblyTypeName: bombBerryController, Assembly-CSharp
-        m_MethodName: returnToRigidbody
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
---- !u!114 &3120667046982961836
+  pickParticle: {fileID: 7837217630231440469, guid: 052b3dd0aac0def40a4a3ad25e9c33dd,
+    type: 3}
+  pickSound: {fileID: 8300000, guid: 4323f71ff1bc7114eb89fa3a57332a2b, type: 3}
+  berryType: 1
+--- !u!114 &4892613213012987240
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -259,8 +198,8 @@ CapsuleCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.5, y: 0.35}
+  m_Offset: {x: 0, y: 0.025}
+  m_Size: {x: 0.5, y: 0.4}
   m_Direction: 1
 --- !u!114 &1751229454243229530
 MonoBehaviour:

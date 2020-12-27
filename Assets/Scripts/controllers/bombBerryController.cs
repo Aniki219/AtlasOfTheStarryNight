@@ -83,16 +83,6 @@ public class bombBerryController : MonoBehaviour
             collision.GetComponent<BerryPlantController>().pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
         }
 
-        if (collision.CompareTag("BumpBerryPlant"))
-        {
-            BerryPlantController bc = collision.GetComponent<BerryPlantController>();
-            if (!bc || !bc.canPick) return;
-            bc.pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
-            returnToRigidbody();
-            Vector2 bumpDir = new Vector2(1.0f, 2.0f);
-            rb.AddForce(Vector3.Scale(bc.getDir(), bumpDir * 150.0f));
-        }
-
         if (collision.CompareTag("AllyHitbox"))
         {
             AllyHitBoxController hbc = collision.GetComponent<AllyHitBoxController>();
@@ -112,7 +102,7 @@ public class bombBerryController : MonoBehaviour
         }
     }
 
-    void returnToRigidbody()
+    public void returnToRigidbody()
     {
         isSimulated(true);
         anim.SetBool("Wings", false);

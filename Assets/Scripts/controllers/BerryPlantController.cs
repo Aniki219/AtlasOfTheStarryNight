@@ -20,6 +20,7 @@ public class BerryPlantController : MonoBehaviour
     [System.Serializable]
     public class BroomEvent : UnityEvent<bool> { }
 
+    public GameObject liftObject;
     public GameObject pickParticle;
     public AudioClip pickSound;
     public AudioClip regrowSound;
@@ -36,7 +37,7 @@ public class BerryPlantController : MonoBehaviour
         deformer = GetComponent<Deformer>();
         col = GetComponent<BoxCollider2D>();
         //Debug.Log(col.bounds.center);
-        center = col.bounds.center;//transform.position + Vector3.Scale(col.offset, transform.localScale);
+        //transform.position + Vector3.Scale(col.offset, transform.localScale);
     }
 
     public void bumpPlayer(HitBox hb)
@@ -83,12 +84,16 @@ public class BerryPlantController : MonoBehaviour
         StartCoroutine(Picked());
     }
 
-    IEnumerator Picked()
+    IEnumerator Picked(bool playSound = true)
     {
         canPick = false;
         deformer.flashWhite(0.2f);
-        if (pickSound) SoundManager.Instance.playClip(pickSound.name);
-        if (pickParticle) Instantiate(pickParticle, center, Quaternion.identity);
+        if (playSound)
+        {
+            if (pickSound) SoundManager.Instance.playClip(pickSound.name);
+            if (pickParticle) Instantiate(pickParticle, center, Quaternion.identity);
+        }
+
         yield return new WaitForSeconds(0.1f);
         anim.SetTrigger("Picked");
         yield return new WaitForSeconds(regrowTime);
@@ -109,7 +114,8 @@ public class BerryPlantController : MonoBehaviour
     }
     public Vector3 getForward()
     {
-        Vector2 fwd = new Vector2(Mathf.Round(transform.right.x), Mathf.Round(transform.right.y));
+        Vector2 myRight = (transform.parent ? transform.parent.right : transform.right);
+        Vector2 fwd = new Vector2(Mathf.Round(myRight.x), Mathf.Round(myRight.y));
         return fwd * Mathf.Round(transform.localScale.x);
     }
 
@@ -127,13 +133,19 @@ public class BerryPlantController : MonoBehaviour
         return gameManager.createInstance("LevelPrefabs/Level Objects/BombBerry", at, parent);
     }
 
+    private void Update()
+    {
+        center = col.bounds.center;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
         {
             AllyHitBoxController hbc = collision.GetComponent<AllyHitBoxController>();
             if (hbc.hasHit) return;
-            hbc.hasHit = true;
+
+            hbc.hasHit = true && tag != "BombBerryPlant";
             gameManager.Instance.player.GetComponentInChildren<Deformer>().flashWhite();
             HitBox hb = hbc.hitbox;
             if (hb.broom)
@@ -153,6 +165,19 @@ public class BerryPlantController : MonoBehaviour
                 {
                     pickCallback.Invoke(hb);
                 }
+            }
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (!(transform.parent && transform.parent.name == "seed") && collision.CompareTag("Player") && canPick && AtlasInputManager.getKeyPressed("Up", true))
+        {
+            if (gameManager.Instance.playerCtrl.canLift())
+            {
+                GameObject berry = gameManager.createInstance(liftObject, center);
+                gameManager.Instance.playerCtrl.liftObject(berry.transform.Find("handle").gameObject);
+                StartCoroutine(Picked(false));
             }
         }
     }

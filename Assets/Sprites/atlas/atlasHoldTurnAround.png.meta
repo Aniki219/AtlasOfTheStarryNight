@@ -1,16 +1,13 @@
 fileFormatVersion: 2
-guid: b6f802459810fd245a15c9d5852668d8
+guid: 60d0feafb055c074ab1cc56c8f4d977e
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2588384255644500226
-    second: atlasTurnAroundRun_0
+      213: 7787234796730217483
+    second: atlasHoldTurnAround_0
   - first:
-      213: 8995623647710576443
-    second: atlasTurnAroundRun_1
-  - first:
-      213: 7679685359864080493
-    second: atlasTurnAroundRun_2
+      213: -5182665822841777854
+    second: atlasHoldTurnAround_1
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -98,7 +95,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: atlasTurnAroundRun_0
+      name: atlasHoldTurnAround_0
       rect:
         serializedVersion: 2
         x: 0
@@ -106,20 +103,20 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: efe781cbb36341cd0800000000000000
-      internalID: -2588384255644500226
+      spriteID: b047aa10ac0d11c60800000000000000
+      internalID: 7787234796730217483
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasTurnAroundRun_1
+      name: atlasHoldTurnAround_1
       rect:
         serializedVersion: 2
         x: 32
@@ -127,35 +124,14 @@ TextureImporter:
         width: 32
         height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b3f74e6fb00e6dc70800000000000000
-      internalID: 8995623647710576443
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: atlasTurnAroundRun_2
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 0
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d6867756529b39a60800000000000000
-      internalID: 7679685359864080493
+      spriteID: 24155ff94e87318b0800000000000000
+      internalID: -5182665822841777854
       vertices: []
       indices: 
       edges: []

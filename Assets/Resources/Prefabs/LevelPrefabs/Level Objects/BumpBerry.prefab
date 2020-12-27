@@ -75,7 +75,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 5136501148476419402, guid: 0f93082d714e5184b9f3edf9a1cc9001,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -153,6 +153,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  liftObject: {fileID: 5239513481117827986, guid: ff8a0ca7af08b6b47b32aea2274c91ac,
+    type: 3}
   pickParticle: {fileID: 7837217630231440469, guid: df65318db034fe74a8e686ed53a7b40d,
     type: 3}
   pickSound: {fileID: 8300000, guid: 86260936bdbfb8b4d856095f25bafe24, type: 3}

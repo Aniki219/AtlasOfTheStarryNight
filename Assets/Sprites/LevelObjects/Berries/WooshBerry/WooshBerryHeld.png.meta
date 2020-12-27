@@ -1,16 +1,7 @@
 fileFormatVersion: 2
-guid: b6f802459810fd245a15c9d5852668d8
+guid: e7dc002fb8472434e9a74ee5bb8cf42c
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -2588384255644500226
-    second: atlasTurnAroundRun_0
-  - first:
-      213: 8995623647710576443
-    second: atlasTurnAroundRun_1
-  - first:
-      213: 7679685359864080493
-    second: atlasTurnAroundRun_2
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -50,7 +41,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -98,7 +89,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: atlasTurnAroundRun_0
+      name: standingAttack_0
       rect:
         serializedVersion: 2
         x: 0
@@ -112,14 +103,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: efe781cbb36341cd0800000000000000
-      internalID: -2588384255644500226
+      spriteID: 64959021d151a20488713b63894488ca
+      internalID: 5330797490676991524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasTurnAroundRun_1
+      name: standingAttack_1
       rect:
         serializedVersion: 2
         x: 32
@@ -133,14 +124,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: b3f74e6fb00e6dc70800000000000000
-      internalID: 8995623647710576443
+      spriteID: ca9aacfd0892ba14da8f105fc26e3bb8
+      internalID: 160683965571579817
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: atlasTurnAroundRun_2
+      name: standingAttack_2
       rect:
         serializedVersion: 2
         x: 64
@@ -154,8 +145,113 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d6867756529b39a60800000000000000
-      internalID: 7679685359864080493
+      spriteID: 37de55b1bc9d8914d8330411f48f135d
+      internalID: 2631536187619123557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 08ef2e7b74506504b9abb82126b52667
+      internalID: 5520512823979852484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_4
+      rect:
+        serializedVersion: 2
+        x: 128
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0091d2f5adf75854d86633a48db2998e
+      internalID: 1298031318081792752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_5
+      rect:
+        serializedVersion: 2
+        x: 160
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1f51a8a6652bce47828580c61a9d9a6
+      internalID: 5163103470228383543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 566af32ee7ad68445ac603f235f83c72
+      internalID: -1011162709639639857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac43814ae1f1cc84b85cb87a1b504676
+      internalID: 2217835560214710280
       vertices: []
       indices: 
       edges: []
