@@ -177,6 +177,8 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  liftObject: {fileID: 5239513481117827986, guid: b53802d14d9a93d46b37fedbab7f147a,
+    type: 3}
   pickParticle: {fileID: 7837217630231440469, guid: 052b3dd0aac0def40a4a3ad25e9c33dd,
     type: 3}
   pickSound: {fileID: 8300000, guid: 4323f71ff1bc7114eb89fa3a57332a2b, type: 3}
