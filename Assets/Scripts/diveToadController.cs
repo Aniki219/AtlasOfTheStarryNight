@@ -166,14 +166,6 @@ public class diveToadController : MonoBehaviour
         act = Mathf.Max(actionCoolDown / 2.0f, act);
         anim.SetBool("Hurt", true);
 
-        if (hitbox.incendiary)
-        {
-            Vector3 rpos = new Vector3(Random.Range(-.25f, .25f), Random.Range(-.25f, .25f), 0);
-            gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
-        }
-
-        deformer.flashWhite();
-
         StartCoroutine(getHurt());
     }
 

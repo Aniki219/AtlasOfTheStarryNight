@@ -21,6 +21,8 @@ public class healthController : MonoBehaviour
     public bool takeOneDamage = false;
     public bool cantHitThroughWall = false;
     public bool flashWhiteOnHit = true;
+    public bool receivesHitStun = true;
+    [HideInInspector] public bool inHitStun = false;
 
     public bool hurtByPlayer = true;
     [ConditionalField("hurtByPlayer")] public HurtEvent hurtCallback;
@@ -37,6 +39,7 @@ public class healthController : MonoBehaviour
 
     Slider slider;
     CanvasGroup fillParent;
+    Deformer deformer;
 
     public AudioClip hurtSound;
 
@@ -46,6 +49,9 @@ public class healthController : MonoBehaviour
         fillParent = GetComponentInChildren<CanvasGroup>();
         if (fillParent) fillParent.alpha = 0;
         slider = GetComponentInChildren<Slider>();
+
+        deformer = GetComponent<Deformer>();
+        if (!deformer) deformer = GetComponentInChildren<Deformer>();
 
         hitpoints = maxHitpoints;
     }
@@ -81,14 +87,19 @@ public class healthController : MonoBehaviour
 
         if (flashWhiteOnHit)
         {
-            Deformer deformer = GetComponent<Deformer>();
             if (deformer != null) deformer.flashWhite();
             //if (byPlayer) gameManager.Instance.playerCtrl.hitLag(0);
         }
 
         //Remember to set the hurtCallback as Dynamic and not Static
         //or it will user the Inspector HitBox (which shouldn't exist)
+        if (receivesHitStun) hitStun();
         if (hurtCallback != null) hurtCallback.Invoke(hitbox);
+        if (hitbox && hitbox.incendiary)
+        {
+            Vector3 rpos = new Vector3(Random.Range(-.25f, .25f), Random.Range(-.25f, .25f), 0);
+            gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
+        }
         if (hurtSound) SoundManager.Instance.playClip(hurtSound.name);
 
         if (!dead)
@@ -114,11 +125,26 @@ public class healthController : MonoBehaviour
         SoundManager.Instance.playClip("hurt");
     }
 
+    public void hitStun()
+    {
+        StartCoroutine(startHitStun());
+    }
+
+    private IEnumerator startHitStun()
+    {
+        inHitStun = true;
+        yield return new WaitForSeconds(0.1f);
+        inHitStun = false;
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (hurtByPlayer && collision.CompareTag("AllyHitbox"))
         {
-            HitBox hitbox = collision.GetComponent<AllyHitBoxController>().hitbox;
+            AllyHitBoxController ac = collision.GetComponent<AllyHitBoxController>();
+            //if (ac.hasHit) return;
+            HitBox hitbox = ac.hitbox;
+            ac.hasHit = true;
             Vector3 origin = gameManager.Instance.player.transform.position;
             Vector3 dir = transform.position - origin;
             lastHitBy = hitbox;

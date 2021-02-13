@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/caveOpening.unity
     guid: 1668cd70c6d8d8741b6d36ebd28be529
   - enabled: 1
+    path: Assets/Scenes/WorldMap/climbpastbombers.unity
+    guid: df266257b2781894fb9227c101d30527
+  - enabled: 1
     path: Assets/Scenes/WorldMap/ClockworkBombs.unity
     guid: 6f10a969567aba54abb918c8b3b59cf1
   - enabled: 1
@@ -37,7 +40,7 @@ EditorBuildSettings:
     guid: 744ccae13177fb745ba953812d842315
   - enabled: 1
     path: Assets/Scenes/WorldMap/template 1.unity
-    guid: df266257b2781894fb9227c101d30527
+    guid: 7c6d20e458acaa8408d934014c262d2e
   - enabled: 1
     path: Assets/Scenes/WorldMap/template.unity
     guid: 9b012e3468256644a9a42318cb593740

@@ -39,6 +39,7 @@ public class bombBerryController : MonoBehaviour
 
     void Boom()
     {
+        if (hasBoomed) return;
         hasBoomed = true;
         flying = false;
         rb.velocity = Vector2.zero;
@@ -73,6 +74,7 @@ public class bombBerryController : MonoBehaviour
         if (collision.CompareTag("Enemy"))
         {
             Boom();
+            return;
         }
 
         if (collision.CompareTag("WooshBerryPlant"))
