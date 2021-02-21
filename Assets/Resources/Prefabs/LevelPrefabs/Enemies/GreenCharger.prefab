@@ -107,6 +107,9 @@ MonoBehaviour:
   maxHitpoints: 2
   takeOneDamage: 1
   cantHitThroughWall: 0
+  flashWhiteOnHit: 1
+  receivesHitStun: 1
+  inHitStun: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -179,7 +182,7 @@ MonoBehaviour:
   homeX: 0
   targetX: 0
   leashRange: 3
-  chargeVelocity: 3
+  chargeVelocity: 5
   chargeDuration: 1.5
   starOrigin: {fileID: 0}
 --- !u!50 &289941354
@@ -322,6 +325,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
+  oscillators: []
 --- !u!198 &6280628107221707840
 ParticleSystem:
   m_ObjectHideFlags: 0

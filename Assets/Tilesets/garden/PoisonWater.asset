@@ -1,0 +1,30 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 13b75c95f34a00d4e8c04f76b73312e6, type: 3}
+  m_Name: PoisonWater
+  m_EditorClassIdentifier: 
+  m_AnimatedSprites:
+  - {fileID: -2161939170770379694, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: -8016299433046214622, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: -2403373391169659219, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: -3717095939153277183, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: 8809431797519873093, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: -8443861298532582956, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: 8062341514389417766, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: -5147103333950909080, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: 8794727137154546584, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  - {fileID: 9098153503531240771, guid: 1ee09db1382703f49bcc0addcd8ee02a, type: 3}
+  m_MinSpeed: 6
+  m_MaxSpeed: 6
+  m_AnimationStartTime: 0
+  m_AnimationStartFrame: 0
+  m_TileColliderType: 1

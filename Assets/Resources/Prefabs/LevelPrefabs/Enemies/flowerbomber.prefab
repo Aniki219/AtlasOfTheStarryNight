@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hitpoints: 0
-  maxHitpoints: 1
+  maxHitpoints: 2
   takeOneDamage: 0
   cantHitThroughWall: 0
   flashWhiteOnHit: 1

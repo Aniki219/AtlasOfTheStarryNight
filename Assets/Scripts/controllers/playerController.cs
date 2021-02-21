@@ -722,7 +722,7 @@ public class playerController : MonoBehaviour
             anim.SetBool("isHolding", false);
             return;
         }
-        Debug.Log(heldObject.name);
+
         heldObject.transform.localScale = new Vector3(facing, 1, 1);
         if ((state != State.Movement && state != State.Wait) || (!isGrounded() && coyoteTime <= 0) || AtlasInputManager.getKeyPressed("Down"))
         {
