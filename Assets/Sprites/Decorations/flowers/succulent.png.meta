@@ -1,37 +1,7 @@
 fileFormatVersion: 2
-guid: 1ee09db1382703f49bcc0addcd8ee02a
+guid: b73b8208f9a58cd4289ba1c094f6d1e4
 TextureImporter:
-  internalIDToNameTable:
-  - first:
-      213: -2161939170770379694
-    second: poisonWater_0
-  - first:
-      213: -8016299433046214622
-    second: poisonWater_1
-  - first:
-      213: -2403373391169659219
-    second: poisonWater_2
-  - first:
-      213: -3717095939153277183
-    second: poisonWater_3
-  - first:
-      213: 8809431797519873093
-    second: poisonWater_4
-  - first:
-      213: -8443861298532582956
-    second: poisonWater_5
-  - first:
-      213: 8062341514389417766
-    second: poisonWater_6
-  - first:
-      213: -5147103333950909080
-    second: poisonWater_7
-  - first:
-      213: 8794727137154546584
-    second: poisonWater_8
-  - first:
-      213: 9098153503531240771
-    second: poisonWater_9
+  internalIDToNameTable: []
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -71,12 +41,12 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 1
-  alignment: 0
-  spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 16
+  alignment: 7
+  spritePivot: {x: 0.5, y: 0}
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -119,211 +89,169 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: poisonWater_0
+      name: standingAttack_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 25c9a3457cf3ff1e0800000000000000
-      internalID: -2161939170770379694
+      spriteID: 64959021d151a20488713b63894488ca
+      internalID: 5330797490676991524
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: poisonWater_1
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2287d18432260c090800000000000000
-      internalID: -8016299433046214622
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: poisonWater_2
+      name: standingAttack_1
       rect:
         serializedVersion: 2
         x: 32
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: daed4b462a085aed0800000000000000
-      internalID: -2403373391169659219
+      spriteID: ca9aacfd0892ba14da8f105fc26e3bb8
+      internalID: 160683965571579817
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: poisonWater_3
-      rect:
-        serializedVersion: 2
-        x: 48
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 10fc8b6ffe83a6cc0800000000000000
-      internalID: -3717095939153277183
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: poisonWater_4
+      name: standingAttack_2
       rect:
         serializedVersion: 2
         x: 64
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 544f334ab83614a70800000000000000
-      internalID: 8809431797519873093
+      spriteID: 37de55b1bc9d8914d8330411f48f135d
+      internalID: 2631536187619123557
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: poisonWater_5
-      rect:
-        serializedVersion: 2
-        x: 80
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4d9fb40f2e061da80800000000000000
-      internalID: -8443861298532582956
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: poisonWater_6
+      name: standingAttack_3
       rect:
         serializedVersion: 2
         x: 96
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 62fe01724e033ef60800000000000000
-      internalID: 8062341514389417766
+      spriteID: 08ef2e7b74506504b9abb82126b52667
+      internalID: 5520512823979852484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: poisonWater_7
-      rect:
-        serializedVersion: 2
-        x: 112
-        y: 0
-        width: 16
-        height: 16
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 86590adc9c0d198b0800000000000000
-      internalID: -5147103333950909080
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: poisonWater_8
+      name: standingAttack_4
       rect:
         serializedVersion: 2
         x: 128
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 89bb59a1cb52d0a70800000000000000
-      internalID: 8794727137154546584
+      spriteID: 0091d2f5adf75854d86633a48db2998e
+      internalID: 1298031318081792752
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: poisonWater_9
+      name: standingAttack_5
       rect:
         serializedVersion: 2
-        x: 144
+        x: 160
         y: 0
-        width: 16
-        height: 16
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 34d84f94862234e70800000000000000
-      internalID: 9098153503531240771
+      spriteID: b1f51a8a6652bce47828580c61a9d9a6
+      internalID: 5163103470228383543
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_6
+      rect:
+        serializedVersion: 2
+        x: 192
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 566af32ee7ad68445ac603f235f83c72
+      internalID: -1011162709639639857
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: standingAttack_7
+      rect:
+        serializedVersion: 2
+        x: 224
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac43814ae1f1cc84b85cb87a1b504676
+      internalID: 2217835560214710280
       vertices: []
       indices: 
       edges: []

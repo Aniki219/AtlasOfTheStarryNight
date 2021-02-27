@@ -23,6 +23,7 @@ TagManager:
   - Ribbon
   - Liftable
   - Projectile
+  - ResetDrown
   layers:
   - Default
   - TransparentFX

@@ -340,11 +340,18 @@ public class playerController : MonoBehaviour
             }
         };
 
+        if (other.CompareTag("ResetDrown"))
+        {
+            drown();
+        }
+
         if (intangibleStates.Contains(state)) return;
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && !invulnerable)
         {
             if (other.CompareTag("ResetDamaging") && graceFrames > 0) return;
-            startBonk(1, resetPosition);
+
+                startBonk(1, resetPosition);
+
             return;
         }
     }
@@ -1043,6 +1050,20 @@ public class playerController : MonoBehaviour
         {
             velocity.x = -moveSpeed/4f * sprite.localScale.x;
         }
+    }
+
+    public void drown()
+    {
+        if (!controller.collisions.tangible) { return; }
+        controller.collisions.tangible = false;
+        anim.SetBool("resetSpin", true);
+        resetPosition = true;
+        state = State.Wait;
+        AtlasEventManager.Instance.BonkEvent();
+
+        resetAnimator();
+        deformer.RemoveDeform("fastfall");
+        anim.SetTrigger("Drown");
     }
 
     //Activates on State.Reset

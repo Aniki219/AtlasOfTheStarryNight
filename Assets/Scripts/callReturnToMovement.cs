@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class callReturnToMovement : StateMachineBehaviour
 {
+    public bool waitTillEnd = false;
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
+        if (waitTillEnd) return;
         animator.SetBool("Attacking", false);
         animator.gameObject.SendMessage("returnToMovement");
     }
@@ -18,10 +20,11 @@ public class callReturnToMovement : StateMachineBehaviour
     //}
 
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
-    //override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    //{
-    //    
-    //}
+    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    {
+        if (!waitTillEnd) return;
+        animator.gameObject.SendMessage("returnToMovement");
+    }
 
     // OnStateMove is called right after Animator.OnAnimatorMove()
     //override public void OnStateMove(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
