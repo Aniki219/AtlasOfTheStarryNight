@@ -52,6 +52,7 @@ MonoBehaviour:
   maxHitpoints: 2
   takeOneDamage: 0
   cantHitThroughWall: 0
+  preventMultihit: 0
   flashWhiteOnHit: 1
   receivesHitStun: 1
   inHitStun: 0
@@ -223,7 +224,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 2
   m_Sprite: {fileID: -2868176649348418342, guid: 87afb0b27db23214d8d5ca59fd298516,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}

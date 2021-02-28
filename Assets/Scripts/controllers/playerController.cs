@@ -668,7 +668,7 @@ public class playerController : MonoBehaviour
         if (AtlasInputManager.getAxisState("Dpad").y < 0 && isGrounded())
         {
             anim.SetBool("isCrouching", true);
-        } else if (controller.checkVertDist(0.2f))
+        } else if (controller.checkVertDist(0.3f))
         {
             anim.SetBool("isCrouching", false);
         }
@@ -688,7 +688,7 @@ public class playerController : MonoBehaviour
             boxCollider.size = Vector2.Scale(colliderStartSize, new Vector3(1.0f, 0.5f));
             boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
         }
-        else
+        else if (controller.checkVertDist(0.3f))
         {
             boxCollider.size = colliderStartSize;
             boxCollider.offset = colliderStartOffset;

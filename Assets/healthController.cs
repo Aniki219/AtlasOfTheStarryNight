@@ -20,6 +20,7 @@ public class healthController : MonoBehaviour
 
     public bool takeOneDamage = false;
     public bool cantHitThroughWall = false;
+    public bool preventMultihit = false;
     public bool flashWhiteOnHit = true;
     public bool receivesHitStun = true;
     [HideInInspector] public bool inHitStun = false;
@@ -144,7 +145,7 @@ public class healthController : MonoBehaviour
             AllyHitBoxController ac = collision.GetComponent<AllyHitBoxController>();
             //if (ac.hasHit) return;
             HitBox hitbox = ac.hitbox;
-            ac.hasHit = true;
+            if (preventMultihit) ac.hasHit = true;
             Vector3 origin = gameManager.Instance.player.transform.position;
             Vector3 dir = transform.position - origin;
             lastHitBy = hitbox;

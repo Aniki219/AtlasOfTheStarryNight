@@ -26,9 +26,11 @@ public class chargerController : enemyAI
         state.addStates("Snarl", "Charge", "Slide", "Plop", "Bonk", "Pop", "Roll");
         intangibleStates.AddRange(state.findStates("Plop", "Bonk"));
 
-        actionCoolDown = 3.0f;
+        actionCoolDown = 1.5f;
         act = (readyToPounce) ? 0 : actionCoolDown;
         targetX = homeX = transform.position.x;
+
+        setFacing((int)transform.localScale.x);
 
         dustTrail = sprite.GetComponent<ParticleSystem>();
     }
