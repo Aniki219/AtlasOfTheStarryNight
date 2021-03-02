@@ -951,6 +951,10 @@ public class playerController : MonoBehaviour
         if (intangibleStates.Contains(state)) return;
         //Cancel is ceiling above while crouching
         if (isCrouching() && !controller.checkVertDist(0.2f)) return;
+        if (state == State.Attack)
+        {
+            dir = AtlasInputManager.getAxisState("Dpad").x;
+        }
         setFacing(dir);
         state = State.BroomStart;
         fastBroom = fast;
@@ -964,6 +968,11 @@ public class playerController : MonoBehaviour
         SoundManager.Instance.playClip("onBroom");
         deformer.RemoveDeform("fastfall");
         deformer.RemoveDeform("jump");
+        if (state == State.Attack)
+        {
+            setFacing(AtlasInputManager.getAxisState("Dpad").x);
+            Debug.Log(AtlasInputManager.getAxisState("Dpad").x);
+        }
         state = fastBroom ? State.Broom : State.Wait;
         fastBroom = false;
         velocity = Vector3.zero;

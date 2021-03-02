@@ -42,6 +42,9 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/followTheBomb.unity
     guid: d5f03f3e36f378d41bbdb1d5317a0abd
   - enabled: 1
+    path: Assets/Scenes/WorldMap/gardenBombPuzzle1.unity
+    guid: 5e067f363fd870b4c972455fc20c4e98
+  - enabled: 1
     path: Assets/Scenes/WorldMap/gardenEntrance.unity
     guid: dbdfa6eee924b0c4bb69e4f32c5ff3e8
   - enabled: 1
@@ -51,11 +54,20 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/gardenRampDown.unity
     guid: 759c8062beac4f4498511c542c244dab
   - enabled: 1
+    path: Assets/Scenes/WorldMap/gardenReturn.unity
+    guid: c671859527200004d862452062dc0dd9
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/gardenStairs.unity
+    guid: 6be108b1fbf77bf4d98a82d4aad5c3cb
+  - enabled: 1
     path: Assets/Scenes/WorldMap/gardenTemplate.unity
     guid: ef90213c352b6f4499912a1366151580
   - enabled: 1
     path: Assets/Scenes/WorldMap/LandingSite.unity
     guid: 7608997dc559be74eb90cceb5cab5508
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/movingUpToBumpBerry.unity
+    guid: e608e41ed44b5154dae28a476e524d83
   - enabled: 1
     path: Assets/Scenes/WorldMap/plainsPath1.unity
     guid: 744ccae13177fb745ba953812d842315

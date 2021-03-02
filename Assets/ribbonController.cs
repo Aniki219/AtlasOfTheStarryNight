@@ -37,7 +37,6 @@ public class ribbonController : MonoBehaviour
                 return;
             }
         }
-        Debug.Log("All ribbons collected");
         Destroy(gameObject);
     }
 

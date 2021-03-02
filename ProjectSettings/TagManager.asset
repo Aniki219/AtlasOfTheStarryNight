@@ -24,6 +24,7 @@ TagManager:
   - Liftable
   - Projectile
   - ResetDrown
+  - SecretPassage
   layers:
   - Default
   - TransparentFX
