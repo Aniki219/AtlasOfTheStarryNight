@@ -26,6 +26,8 @@ function mouseReleased() {
 }
 
 function mouseWheel(event) {
+  zooming = true;
+  
   let scaleStep = settings.scale.x/10;
   let ds = (event.delta >= 0) ? -1 : 1;
 
@@ -81,3 +83,10 @@ class ButtonState {
     return frameCount - this.time == 1;
   }
 }
+
+// document.addEventListener("DOMContentLoaded", function(event) {
+//   document.getElementsByTagName("BODY")[0].addEventListener("click", function(event){
+//     console.log("event")
+//     event.preventDefault();
+//   });
+// });

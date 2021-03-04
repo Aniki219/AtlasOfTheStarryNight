@@ -24,7 +24,7 @@ public class secretPassageController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("SecretCollider"))
         {
             color = new Color(1.0f, 1.0f, 1.0f, 0f);
         }
@@ -32,7 +32,7 @@ public class secretPassageController : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.CompareTag("Player"))
+        if (collision.CompareTag("SecretCollider"))
         {
             color = startColor;
         }

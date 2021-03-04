@@ -67,7 +67,7 @@ public class movingPlatform : MonoBehaviour
 
         //The box origin moves left/right so that it doesn't pull objects
         Vector2 origin = transform.position + Vector3.up * 1*px + Vector3.right * 1*px * Math.Sign(velocity.x);
-        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, Vector2.up, 5f * px,  ~(LayerMask.GetMask("Wall") | LayerMask.GetMask("Platform")));
+        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, Vector2.up, 5f * px,  ~(LayerMask.GetMask("Wall") | LayerMask.GetMask("Platform") | LayerMask.GetMask("IgnoreActors")));
 
         foreach (RaycastHit2D actor in actors)
         {

@@ -36,8 +36,14 @@ public class BerryPlantController : MonoBehaviour
         anim = GetComponent<Animator>();
         deformer = GetComponent<Deformer>();
         col = GetComponent<BoxCollider2D>();
-        //Debug.Log(col.bounds.center);
-        //transform.position + Vector3.Scale(col.offset, transform.localScale);
+
+        Vector2 scenePos = AtlasSceneManager.getPlayerCoords();
+        if (scenePos.x >= 7 && scenePos.x <= 12 && scenePos.y >= -1 && scenePos.y <= 4)
+        {
+            setDry();
+        }
+
+        AtlasEventManager.Instance.onFlagSet += setDry;
     }
 
     public void bumpPlayer(HitBox hb)
@@ -138,6 +144,23 @@ public class BerryPlantController : MonoBehaviour
         center = col.bounds.center;
     }
 
+    private void setDry()
+    {
+        if (
+                CompareTag("BombBerryPlant") && !gameFlagsManager.Instance.checkFlag("GardenBombs") ||
+                CompareTag("BumpBerryPlant") && !gameFlagsManager.Instance.checkFlag("GardenBumps") ||
+                CompareTag("WooshBerryPlant") && !gameFlagsManager.Instance.checkFlag("GardenWoosh"))
+        {
+            anim.SetBool("Dry", true);
+            col.enabled = false;
+        }
+        else
+        {
+            anim.SetBool("Dry", false);
+            col.enabled = true;
+        }
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
@@ -180,5 +203,10 @@ public class BerryPlantController : MonoBehaviour
                 StartCoroutine(Picked(false));
             }
         }
+    }
+
+    private void OnDestroy()
+    {
+        AtlasEventManager.Instance.onFlagSet -= setDry;
     }
 }

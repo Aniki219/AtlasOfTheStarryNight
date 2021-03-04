@@ -23,4 +23,7 @@ public class AtlasEventManager : ScriptableObject
     
     public event Action onPlayerLand;
     public void PlayerLandEvent() { onPlayerLand?.Invoke(); }
+
+    public event Action onFlagSet;
+    public void FlagSetEvent() { onFlagSet?.Invoke(); }
 }

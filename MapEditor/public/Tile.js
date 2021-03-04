@@ -3,15 +3,19 @@ const tiles = [];
 class Tile {
   constructor(scene = null, x = 0, y = 0, w = 1, h = 1) {
     this.scene = scene;
+    this.img = getImage(this.scene + ".png")
+
     this.x = x;
     this.y = y;
     this.w = w;
     this.h = h;
+
     this.setVerticies();
     this.dragStart = {x, y};
     this.setStretchInfo();
     this.dragging = false;
     this.stretching = false;
+
     tiles.push(this);
   }
 
@@ -102,8 +106,9 @@ class Tile {
     let y = grid.toWorldCoord(this.y);
     let w = this.w * grid.gridSize;
     let h = this.h * grid.gridSize;
-    if (getImage(this.scene + ".png") != null) {
-      image(getImage(this.scene + ".png"), x, y, w, h);
+    if (this.img != null && !(register["mousecenter"] && register["mousecenter"].state) && !zooming
+  && !(!this.dragging && isTileDragged())) {
+      image(this.img, x, y, w, h);
     } else {
       rect(x, y, w, h);
       fill(50);
@@ -182,7 +187,11 @@ class Tile {
 }
 
 function drawTiles() {
-  tiles.forEach(t => t.update())
+  let minX = (GRID_MARGIN + -settings.translate.x) / grid.gridSize - 1;
+  let minY = (GRID_MARGIN + -settings.translate.y) / grid.gridSize - 1;
+  let maxX = minX + (GRID_MARGIN + width) / (grid.gridSize * settings.scale.x) + 1;
+  let maxY = minY + (GRID_MARGIN + height) / (grid.gridSize * settings.scale.y) + 1;
+  tiles.forEach(t => {if (t.y + t.h >= minY && t.y <= maxY && t.x <= maxX && t.x + t.w >= minX) t.update()})
 }
 
 class Vertex {
@@ -286,6 +295,10 @@ function warnOverlapTiles() {
       }
     }
   }
+}
+
+function isTileDragged() {
+  return tiles.filter((t) => t.dragging).length > 0;
 }
 
 class TileCoord {

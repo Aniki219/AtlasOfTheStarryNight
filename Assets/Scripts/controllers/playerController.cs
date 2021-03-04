@@ -43,6 +43,7 @@ public class playerController : MonoBehaviour
     int coyoteTime = 0;
     public int graceFrames = 0;
     int maxGraceFrames = 0;
+    int sortingOrder;
 
     float gravity;
     float jumpVelocity;
@@ -59,6 +60,7 @@ public class playerController : MonoBehaviour
     atlasSpriteController spriteController;
     BoxCollider2D boxCollider;
     Deformer deformer;
+    public Collider2D secretCollider;
 
     Vector3 colliderStartSize;
     Vector3 colliderStartOffset;
@@ -132,6 +134,8 @@ public class playerController : MonoBehaviour
 
         colliderStartSize = boxCollider.size;
         colliderStartOffset = boxCollider.offset;
+
+        sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
 
         gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
@@ -1080,6 +1084,8 @@ public class playerController : MonoBehaviour
     //Returnns to movement after reaching lastSafePosition
     void handleReset(bool isSafe = false)
     {
+        secretCollider.enabled = false;
+        sprite.GetComponent<SpriteRenderer>().sortingOrder = 25;
         controller.collisions.tangible = false;
         if (!starRotator)
         {
@@ -1119,6 +1125,8 @@ public class playerController : MonoBehaviour
         resetPosition = false;
         arialAttacking = false;
         anim.speed = 1;
+        secretCollider.enabled = true;
+        sprite.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
     }
 
     public void resetAnimator()

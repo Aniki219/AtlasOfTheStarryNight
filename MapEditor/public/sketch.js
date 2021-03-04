@@ -1,6 +1,7 @@
 const $ = require('jquery');
 const fs = require('fs');
 
+var zooming = false;
 var val;
 var dataObj;
 var settings = {
@@ -15,7 +16,7 @@ function setup() {
   getDataObj();
   getSceneNames();
 
-  let cnv = createCanvas(1000, 750);
+  let cnv = createCanvas(950, 750);
   cnv.parent("canvas")
   cnv.mouseOut(() => mouse.in = false);
   cnv.mouseOver(() => mouse.in = true);
@@ -58,6 +59,7 @@ function draw() {
     saveData();
     console.log("Saved!");
   }
+    zooming = false;
 }
 
 function cameraUpdate() {

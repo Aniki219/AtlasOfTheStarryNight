@@ -25,6 +25,7 @@ TagManager:
   - Projectile
   - ResetDrown
   - SecretPassage
+  - SecretCollider
   layers:
   - Default
   - TransparentFX
