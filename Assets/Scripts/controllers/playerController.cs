@@ -79,6 +79,9 @@ public class playerController : MonoBehaviour
 
     public static bool created = false;
 
+    public bool hasDoubleJump = false;
+    public bool hasWallJump = false;
+
     //bool fastBroom = true;
     //bool screenShake = false;
     //float wallBlastDelay = 0f;
@@ -152,7 +155,12 @@ public class playerController : MonoBehaviour
 
     void Update()
     {
-        
+        if (AtlasInputManager.getKeyPressed("Cheat"))
+        {
+            hasDoubleJump = true;
+            hasWallJump = true;
+            SoundManager.Instance.playClip("jump2");
+        }
         playerShouldWait();
         handleParticles();
 
@@ -295,6 +303,7 @@ public class playerController : MonoBehaviour
                 currentDoor = other.GetComponent<doorController>();
             }
 
+
             if (other.tag == "Follower")
             {
                 followController other_fc = other.GetComponent<followController>();
@@ -354,7 +363,13 @@ public class playerController : MonoBehaviour
         {
             if (other.CompareTag("ResetDamaging") && graceFrames > 0) return;
 
-                startBonk(1, resetPosition);
+            if (other.CompareTag("Projectile"))
+            {
+                projectile p = other.GetComponent<projectile>();
+                if (p.hurtPlayer) p.hit();
+            }
+
+            startBonk(1, resetPosition);
 
             return;
         }
@@ -427,13 +442,13 @@ public class playerController : MonoBehaviour
                 return;
             }
 
-            if (wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
+            if (hasWallJump && wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
             {
                 state = State.WallJumpInit;
                 return;
             }
 
-            if (AtlasInputManager.getKeyPressed("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+            if (hasDoubleJump && AtlasInputManager.getKeyPressed("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
             {
                 doubleJump();
             }
@@ -999,7 +1014,7 @@ public class playerController : MonoBehaviour
             endBroom();
             return;
         }
-        if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+        if (hasDoubleJump && AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
             endBroom();
             doubleJump();

@@ -81,6 +81,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Cheat"",
+                    ""type"": ""Button"",
+                    ""id"": ""a7af950a-f991-4fde-b288-45b063472fe4"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -215,6 +223,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""action"": ""Up"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""594ab810-d4ba-40f8-b6ef-e0dc4025f06b"",
+                    ""path"": ""<Keyboard>/numpadMultiply"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cheat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -243,6 +262,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Player_Down = m_Player.FindAction("Down", throwIfNotFound: true);
         m_Player_Up = m_Player.FindAction("Up", throwIfNotFound: true);
         m_Player_DisplayEquipment = m_Player.FindAction("DisplayEquipment", throwIfNotFound: true);
+        m_Player_Cheat = m_Player.FindAction("Cheat", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -300,6 +320,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Player_Down;
     private readonly InputAction m_Player_Up;
     private readonly InputAction m_Player_DisplayEquipment;
+    private readonly InputAction m_Player_Cheat;
     public struct PlayerActions
     {
         private @InputMaster m_Wrapper;
@@ -312,6 +333,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @Down => m_Wrapper.m_Player_Down;
         public InputAction @Up => m_Wrapper.m_Player_Up;
         public InputAction @DisplayEquipment => m_Wrapper.m_Player_DisplayEquipment;
+        public InputAction @Cheat => m_Wrapper.m_Player_Cheat;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -345,6 +367,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @DisplayEquipment.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
                 @DisplayEquipment.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
                 @DisplayEquipment.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnDisplayEquipment;
+                @Cheat.started -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCheat;
+                @Cheat.performed -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCheat;
+                @Cheat.canceled -= m_Wrapper.m_PlayerActionsCallbackInterface.OnCheat;
             }
             m_Wrapper.m_PlayerActionsCallbackInterface = instance;
             if (instance != null)
@@ -373,6 +398,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @DisplayEquipment.started += instance.OnDisplayEquipment;
                 @DisplayEquipment.performed += instance.OnDisplayEquipment;
                 @DisplayEquipment.canceled += instance.OnDisplayEquipment;
+                @Cheat.started += instance.OnCheat;
+                @Cheat.performed += instance.OnCheat;
+                @Cheat.canceled += instance.OnCheat;
             }
         }
     }
@@ -396,5 +424,6 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnDown(InputAction.CallbackContext context);
         void OnUp(InputAction.CallbackContext context);
         void OnDisplayEquipment(InputAction.CallbackContext context);
+        void OnCheat(InputAction.CallbackContext context);
     }
 }

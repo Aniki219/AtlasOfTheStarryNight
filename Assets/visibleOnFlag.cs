@@ -3,18 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-[RequireComponent(typeof(Tilemap))]
 public class visibleOnFlag : MonoBehaviour
 {
     public bool visibleOn = true;
     public string flagName;
 
     TilemapRenderer tilemap;
+    TilemapCollider2D col;
 
     void Start()
     {
         AtlasEventManager.Instance.onFlagSet += onFlagSet;
         tilemap = GetComponent<TilemapRenderer>();
+        col = GetComponent<TilemapCollider2D>();
         setVisible();
     }
 
@@ -25,7 +26,10 @@ public class visibleOnFlag : MonoBehaviour
 
     void setVisible()
     {
-        tilemap.enabled = (gameFlagsManager.Instance.checkFlag(flagName) == visibleOn);
+        bool active = (gameFlagsManager.Instance.checkFlag(flagName) == visibleOn);
+        if (tilemap) tilemap.enabled = active;
+        if (col) col.enabled = tilemap.enabled;
+        if (!tilemap && !col && !active) Destroy(gameObject);
     }
 
     private void OnDestroy()

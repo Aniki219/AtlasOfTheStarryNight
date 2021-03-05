@@ -182,7 +182,7 @@ GameObject:
   - component: {fileID: 7049648788283265815}
   - component: {fileID: 7049648788283265814}
   - component: {fileID: 7049648788283265813}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: flowerBomberSeed
   m_TagString: Projectile
   m_Icon: {fileID: 0}
