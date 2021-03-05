@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79d0827baad511545ae76d0dcd92e9d3, type: 3}
   m_Name: myGameFlagsManager
   m_EditorClassIdentifier: 
-  flags:
+  initflags:
   - name: GardenBombs
     set: 0
   - name: GardenBumps

@@ -46,6 +46,7 @@ public class atlasSpriteController : MonoBehaviour
     public void takeStep(float stepSize)
     {
         stepSize = 0.175f;
+        if (Mathf.Ceil(AtlasInputManager.getAxisState("Dpad").x) != pc.facing) return;
         Vector3 velocity = stepSize * pc.facing * Vector3.right  +  .01f * Vector3.down;
         pc.controller.Move(velocity);
     }

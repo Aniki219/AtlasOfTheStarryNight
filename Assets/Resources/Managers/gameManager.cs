@@ -142,6 +142,7 @@ public class gameManager : ScriptableObject
 
     public void setObjectKey(string key, bool value)
     {
+        if (key == null) return;
         if (objects.ContainsKey(key)) {
             objects[key] = value;
         } else {

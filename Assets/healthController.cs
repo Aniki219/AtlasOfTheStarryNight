@@ -18,6 +18,7 @@ public class healthController : MonoBehaviour
 
     bool dead = false;
 
+    public bool takeNoDamage = false;
     public bool takeOneDamage = false;
     public bool cantHitThroughWall = false;
     public bool preventMultihit = false;
@@ -83,7 +84,7 @@ public class healthController : MonoBehaviour
 
     public void takeDamage(float amount, HitBox hitbox = null, bool byPlayer = false)
     {
-        hitpoints -= amount;
+        if (!takeNoDamage) hitpoints -= amount;
         timeSinceHit = 0;
 
         if (flashWhiteOnHit)

@@ -8,6 +8,7 @@ public class persistance : MonoBehaviour
 {
     string uid;
     public bool persistant = true;
+    public bool markRemovedOnDestroy = true;
     
     // Start is called before the first frame update
     void Start()
@@ -17,7 +18,7 @@ public class persistance : MonoBehaviour
             persistant = false;
         }
         if (!persistant) return;
-        uid = string.Concat(SceneManager.GetActiveScene().name, transform.position.ToString());
+        uid = string.Concat(SceneManager.GetActiveScene().name, gameObject.name, transform.position.ToString());
         if (!gameManager.Instance.checkObjectKey(uid))
         {
             Destroy(gameObject);
@@ -28,5 +29,13 @@ public class persistance : MonoBehaviour
     public void MarkRemoved()
     {
         if (persistant) gameManager.Instance.setObjectKey(uid, false);
+    }
+
+    private void OnDestroy()
+    {
+        if (markRemovedOnDestroy && gameObject.scene.isLoaded) //Was Deleted
+        {
+            MarkRemoved();
+        }
     }
 }

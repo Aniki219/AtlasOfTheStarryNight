@@ -38,7 +38,7 @@ public class BerryPlantController : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
 
         Vector2 scenePos = AtlasSceneManager.getPlayerCoords();
-        if (scenePos.x >= 7 && scenePos.x <= 12 && scenePos.y >= -1 && scenePos.y <= 4)
+        if (scenePos.x >= 6 && scenePos.x <= 12 && scenePos.y >= -1 && scenePos.y <= 4)
         {
             setDry();
         }

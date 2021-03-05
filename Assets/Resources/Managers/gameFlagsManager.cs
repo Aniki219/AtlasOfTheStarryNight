@@ -21,16 +21,28 @@ public class gameFlagsManager : ScriptableObject
         }
     }
 
-    public Flag[] flags = new Flag[] {
+    public Flag[] initflags = new Flag[] {
         new Flag("GardenBombs"),
         new Flag("GardenBumps"),
         new Flag("GardenWoosh")
     };
 
+    private static Flag[] flags;
+
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {
         instance = Resources.LoadAll<gameFlagsManager>("Managers")[0];
+        resetFlags();
+    }
+
+    public static void resetFlags()
+    {
+        flags = new Flag[instance.initflags.Length];
+        for (int i = 0; i < instance.initflags.Length; i++)
+        {
+            flags[i] = new Flag(instance.initflags[i].name, instance.initflags[i].set);
+        }
     }
 
     public void setFlag(string name, bool set = true)
