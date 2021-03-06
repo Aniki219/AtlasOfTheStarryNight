@@ -61,6 +61,7 @@ public abstract class enemyAI : MonoBehaviour
 
     public void hurt(HitBox hitbox)
     {
+        if (!hitbox) return;
         float kbStrength = (hitbox.knockback ? 2.5f : 1.5f) / weight;
         float dx = hitbox.kbDir.x;
         float dy = hitbox.kbDir.y;

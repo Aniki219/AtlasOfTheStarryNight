@@ -67,7 +67,7 @@ public class movingPlatform : MonoBehaviour
 
         //The box origin moves left/right so that it doesn't pull objects
         Vector2 origin = transform.position + Vector3.up * 1*px + Vector3.right * 1*px * Math.Sign(velocity.x);
-        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, Vector2.up, 5f * px,  ~(LayerMask.GetMask("Wall") | LayerMask.GetMask("Platform") | LayerMask.GetMask("IgnoreActors")));
+        RaycastHit2D[] actors = Physics2D.BoxCastAll(origin, boxSize, 0, Vector2.up, 1f * px,  ~(LayerMask.GetMask("Wall") | LayerMask.GetMask("Platform") | LayerMask.GetMask("IgnoreActors")));
 
         foreach (RaycastHit2D actor in actors)
         {
@@ -83,13 +83,12 @@ public class movingPlatform : MonoBehaviour
                 Rigidbody2D rb = actor.transform.GetComponent<Rigidbody2D>();
                 Collider2D other = actor.transform.GetComponent<Collider2D>();
                 if (rb &&
-                    rb.velocity.y <= Mathf.Max(0, velocity.y) &&
                     other &&
-                    other.bounds.min.y >= col.bounds.max.y)
+                    other.bounds.min.y > col.bounds.max.y)
                 {
                     rb.velocity = Vector2.zero;
-                    rb.AddRelativeForce(-Physics2D.gravity);
-                    rb.transform.Translate(velocity);
+                    rb.AddForce(-Physics2D.gravity);
+                    rb.transform.Translate(velocity, Space.World);
                 }
             }
         }

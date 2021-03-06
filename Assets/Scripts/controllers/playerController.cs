@@ -66,6 +66,7 @@ public class playerController : MonoBehaviour
     Vector3 colliderStartOffset;
 
     GameObject starRotator;
+    Transform hanger;
     Transform currentTornado;
     Transform heldObject;
 
@@ -94,6 +95,7 @@ public class playerController : MonoBehaviour
     public enum State
     {
         Wait,
+        WaitMoveable,
         Menu,
         Movement,
         BroomStart,
@@ -118,7 +120,7 @@ public class playerController : MonoBehaviour
     //Moving Platform States
     List<State> moveableStates = new List<State>
     {
-        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat
+        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat, State.WaitMoveable
     };
     #endregion
     
@@ -134,6 +136,7 @@ public class playerController : MonoBehaviour
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
+        hanger = transform.Find("AtlasSprite/Hanger");
 
         colliderStartSize = boxCollider.size;
         colliderStartOffset = boxCollider.offset;
@@ -164,7 +167,7 @@ public class playerController : MonoBehaviour
         playerShouldWait();
         handleParticles();
 
-        if (state != State.Wait)
+        if (state != State.Wait && state != State.WaitMoveable)
         {
             handleUncrouch();
             handleHolding();
@@ -197,6 +200,9 @@ public class playerController : MonoBehaviour
                 break;
             case State.Reset:
                 handleReset();
+                break;
+            case State.WaitMoveable:
+                handleMovement(1, false, false);
                 break;
             case State.WallJumpInit:
                 wallJumpInit();
@@ -328,6 +334,13 @@ public class playerController : MonoBehaviour
                 }
                 SoundManager.Instance.playClip("Collectibles/starShard", numFollowers);
             }
+
+            if (other.CompareTag("BroomCollectible") && state == State.Broom && hanger.childCount == 0)
+            {
+                other.transform.parent = hanger;
+                other.transform.position = hanger.position - Vector3.up * 0.15f;
+                other.SendMessage("BroomPickUp");
+            }
         }
     }
 
@@ -342,7 +355,7 @@ public class playerController : MonoBehaviour
             liftObject(other.gameObject);
         }
 
-        if (other.CompareTag("ResetDamaging") && !invulnerable)
+        if (other.CompareTag("ResetDamaging"))
         {
             if (graceFrames > 0)
             {
@@ -359,7 +372,7 @@ public class playerController : MonoBehaviour
         }
 
         if (intangibleStates.Contains(state)) return;
-        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && !invulnerable)
+        if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && (!invulnerable || other.CompareTag("ResetDamaging")))
         {
             if (other.CompareTag("ResetDamaging") && graceFrames > 0) return;
 
@@ -405,6 +418,7 @@ public class playerController : MonoBehaviour
 
         Vector2 input = new Vector2(0, 0);
 
+        if (!(state == State.WaitMoveable && isGrounded()))
         input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
 
         if (isGrounded() || coyoteTime > 0)
@@ -463,7 +477,7 @@ public class playerController : MonoBehaviour
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
-        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope);
+        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope && !heldObject);
         anim.SetBool("wallSlide", wallRiding);
         if (wallRiding)
         {
@@ -656,6 +670,7 @@ public class playerController : MonoBehaviour
     }
     IEnumerator invulnerableCoroutine(float invulnTime)
     {
+        StartCoroutine(flashEffect(invulnTime));
         invulnerable = true;
         yield return new WaitForSeconds(invulnTime);
         invulnerable = false;
@@ -736,7 +751,7 @@ public class playerController : MonoBehaviour
             resetVelocity();
             anim.SetTrigger("Lift");
             anim.SetBool("isHolding", true);
-            freezeForSeconds(liftTime + 0.15f);
+            freezeForSeconds(liftTime + 0.15f, true);
             heldObject = other.transform.parent;
         }
     }
@@ -750,14 +765,14 @@ public class playerController : MonoBehaviour
         }
 
         heldObject.transform.localScale = new Vector3(facing, 1, 1);
-        if ((state != State.Movement && state != State.Wait) || (!isGrounded() && coyoteTime <= 0) || AtlasInputManager.getKeyPressed("Down"))
+        if ((state != State.Movement && state != State.WaitMoveable) || AtlasInputManager.getKeyPressed("Down"))
         {
             anim.SetBool("isHolding", false);
             dropHolding();
         } else if (AtlasInputManager.getKeyPressed("Up") || AtlasInputManager.getKeyPressed("Jump")) {
             anim.SetBool("isHolding", false);
             anim.SetTrigger("Throw");
-            freezeForSeconds(0.4f);
+            freezeForSeconds(0.4f, true);
             Invoke("throwHolding", 0.15f);
         }
     }
@@ -969,7 +984,7 @@ public class playerController : MonoBehaviour
         if (resetPosition || !controller.collisions.tangible) return;
         if (intangibleStates.Contains(state)) return;
         //Cancel is ceiling above while crouching
-        if (isCrouching() && !controller.checkVertDist(0.2f)) return;
+        if (isCrouching() && !controller.checkVertDist(0.3f)) return;
         if (state == State.Attack)
         {
             dir = AtlasInputManager.getAxisState("Dpad").x;
@@ -1053,6 +1068,7 @@ public class playerController : MonoBehaviour
             if (damage > 0)
             {
                 SoundManager.Instance.playClip("hurt");
+                setInvulnerable(2.0f);
             } else
             {
                 SoundManager.Instance.playClip("bonk");
@@ -1203,24 +1219,24 @@ public class playerController : MonoBehaviour
         state = State.Wait;
     }
 
-    public void freezeForSeconds(float time)
+    public void freezeForSeconds(float time, bool moveable = false)
     {
-        StartCoroutine(freezeCoroutine(time));
+        StartCoroutine(freezeCoroutine(time, moveable));
     }
 
-    IEnumerator freezeCoroutine(float time)
+    IEnumerator freezeCoroutine(float time, bool moveable)
     {
         State prevState = state;
         Vector3 prevVel = velocity;
         anim.SetBool("isRunning", false);
 
-        velocity = Vector3.zero;
-        state = State.Wait;
+        if (!moveable) velocity = Vector3.zero;
+        state = moveable ? State.WaitMoveable : State.Wait;
 
         yield return new WaitForSeconds(time);
 
         state = prevState;
-        velocity = prevVel;
+        if (!moveable) velocity = prevVel;
     }
 
     void createStars(Vector3? position = null)

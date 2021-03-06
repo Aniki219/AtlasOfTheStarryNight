@@ -24,7 +24,8 @@ public class healthController : MonoBehaviour
     public bool preventMultihit = false;
     public bool flashWhiteOnHit = true;
     public bool receivesHitStun = true;
-    [HideInInspector] public bool inHitStun = false;
+    public float hitStunDuration = 0.1f;
+    public bool inHitStun = false;
 
     public bool hurtByPlayer = true;
     [ConditionalField("hurtByPlayer")] public HurtEvent hurtCallback;
@@ -95,7 +96,7 @@ public class healthController : MonoBehaviour
 
         //Remember to set the hurtCallback as Dynamic and not Static
         //or it will user the Inspector HitBox (which shouldn't exist)
-        if (receivesHitStun) hitStun();
+        if (receivesHitStun) hitStun(hitStunDuration);
         if (hurtCallback != null) hurtCallback.Invoke(hitbox);
         if (hitbox && hitbox.incendiary)
         {
@@ -127,15 +128,15 @@ public class healthController : MonoBehaviour
         SoundManager.Instance.playClip("hurt");
     }
 
-    public void hitStun()
+    public void hitStun(float duration = 0.1f)
     {
-        StartCoroutine(startHitStun());
+        StartCoroutine(startHitStun(duration));
     }
 
-    private IEnumerator startHitStun()
+    private IEnumerator startHitStun(float duration)
     {
         inHitStun = true;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(duration);
         inHitStun = false;
     }
 

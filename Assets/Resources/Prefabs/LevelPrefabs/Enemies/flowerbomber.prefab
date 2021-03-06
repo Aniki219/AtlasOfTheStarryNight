@@ -50,16 +50,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 2
+  takeNoDamage: 0
   takeOneDamage: 0
   cantHitThroughWall: 0
   preventMultihit: 0
   flashWhiteOnHit: 1
   receivesHitStun: 1
+  hitStunDuration: 0.5
   inHitStun: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 6340982575938527095}
+        m_TargetAssemblyTypeName: flowerBomberController, Assembly-CSharp
+        m_MethodName: Hurt
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
   deadCallback: 1
   onDeath:
     m_PersistentCalls:

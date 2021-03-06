@@ -5,7 +5,6 @@ using UnityEngine;
 public class bombBerryController : MonoBehaviour
 {
     Animator anim;
-    bool hasEvents = false;
     bool hasBoomed = false;
     bool flying = false;
     Vector3 dir;
@@ -18,7 +17,6 @@ public class bombBerryController : MonoBehaviour
         {
             AtlasEventManager.Instance.onBonkEvent += Boom;
             AtlasEventManager.Instance.onBroomCancel += Drop;
-            hasEvents = true;
         }
         anim = GetComponent<Animator>();
         rb = GetComponent<Rigidbody2D>();
@@ -40,6 +38,7 @@ public class bombBerryController : MonoBehaviour
     void Boom()
     {
         if (hasBoomed) return;
+        removeEvents();
         hasBoomed = true;
         flying = false;
         rb.velocity = Vector2.zero;
@@ -64,7 +63,6 @@ public class bombBerryController : MonoBehaviour
 
     void removeEvents()
     {
-        if (!hasEvents) return;
         AtlasEventManager.Instance.onBonkEvent -= Boom;
         AtlasEventManager.Instance.onBroomCancel -= Drop;
     }
@@ -141,5 +139,13 @@ public class bombBerryController : MonoBehaviour
     public void isSimulated(bool isTrue = true)
     {
         GetComponent<Rigidbody2D>().simulated = isTrue;
+    }
+
+    public void BroomPickUp()
+    {
+        isSimulated(false);
+        removeEvents();
+        AtlasEventManager.Instance.onBonkEvent += Boom;
+        AtlasEventManager.Instance.onBroomCancel += Drop;
     }
 }

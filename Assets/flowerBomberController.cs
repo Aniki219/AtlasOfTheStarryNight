@@ -6,6 +6,9 @@ public class flowerBomberController : MonoBehaviour
 {
     characterController cc;
     healthController hc;
+    Animator anim;
+    Deformer deformer;
+
     Vector3 velocity;
 
     public float startDir = 1;
@@ -19,6 +22,8 @@ public class flowerBomberController : MonoBehaviour
     {
         cc = GetComponent<characterController>();
         hc = GetComponent<healthController>();
+        anim = GetComponentInChildren<Animator>();
+        deformer = GetComponentInChildren<Deformer>();
 
         while (startDir == 0)
         {
@@ -46,5 +51,11 @@ public class flowerBomberController : MonoBehaviour
             timer = 0;
             gameManager.createInstance("LevelPrefabs/Enemies/Projectiles/flowerBomberSeed", transform.position);
         }
+    }
+
+    public void Hurt()
+    {
+        anim.SetTrigger("Hurt");
+        deformer.flashWhite(0.2f);
     }
 }
