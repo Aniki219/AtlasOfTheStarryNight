@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 6172398128550943667}
   - component: {fileID: 6172398128550943666}
   - component: {fileID: 1955821922894580502}
+  - component: {fileID: 1192842827013696237}
+  - component: {fileID: 8518535542732930049}
   m_Layer: 0
   m_Name: RibbonLock
   m_TagString: Untagged
@@ -25,7 +27,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6172398128550943628}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
@@ -102,3 +104,29 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1192842827013696237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172398128550943628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f446629ca764c2f478824f53c926a86a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8518535542732930049
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6172398128550943628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5921f24f71d9d604484f6b16c7e5a3cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  persistant: 1
+  markRemovedOnDestroy: 1

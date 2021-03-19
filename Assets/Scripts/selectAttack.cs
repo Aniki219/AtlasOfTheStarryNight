@@ -14,8 +14,21 @@ public class selectAttack : StateMachineBehaviour
             animator.ResetTrigger(key.name);
         }
         animator.SetBool("Attacking", true);
-        bool up = AtlasInputManager.getAxisState("Dpad").y > 0.1f;
-        bool down = AtlasInputManager.getAxisState("Dpad").y < -0.1f || pc.isCrouching();
+
+        bool up = false;
+        bool down = false;
+
+        if (AtlasInputManager.Instance.aimAtMouse())
+        {
+            Vector2 aim = AtlasInputManager.Instance.getPlayerAim(true);
+            up = aim.y > 0;
+            down = pc.isGrounded() ? pc.isCrouching() : aim.y < 0;
+            if (aim.x != 0) pc.setFacing(aim.x);
+        } else
+        {
+            up = AtlasInputManager.getAxisState("Dpad").y > 0.1f;
+            down = AtlasInputManager.getAxisState("Dpad").y < -0.1f || pc.isCrouching();
+        }
 
         bool falling = (pc.velocity.y < -0.1);
 

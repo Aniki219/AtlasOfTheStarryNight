@@ -18,7 +18,7 @@ public class MenuController : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (AtlasInputManager.getKeyPressed("Escape"))
         {
             if (SceneManager.GetActiveScene().name == "Main Menu")
             {

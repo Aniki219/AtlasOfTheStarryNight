@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 [CreateAssetMenu(menuName = "Managers/AtlasInputManager")]
 public class AtlasInputManager : ScriptableObject
@@ -13,7 +14,21 @@ public class AtlasInputManager : ScriptableObject
     public static List<KeyState> keyStates;
     public static List<AxisState> axisStates;
 
-    public InputMaster controls;
+    InputMaster controls;
+    public bool holdBroom;
+
+    public enum actionMapNames
+    {
+        ZXCArrows,
+        WASDMouse,
+        PS4,
+        Custom
+    }
+    public actionMapNames actionMap = actionMapNames.ZXCArrows;
+    List<actionMapNames> aimAtMouseMaps = new List<actionMapNames>()
+    {
+        actionMapNames.WASDMouse
+    };
 
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
@@ -21,22 +36,27 @@ public class AtlasInputManager : ScriptableObject
         instance = Resources.LoadAll<AtlasInputManager>("Managers")[0];
         instance.controls = new InputMaster();
         instance.controls.Enable();
-        InputMaster.PlayerActions input = instance.controls.Player;
+
+        InputActionMap input = instance.controls.asset.FindActionMap(instance.actionMap.ToString());
+
+        foreach(InputActionMap map in instance.controls.asset.actionMaps)
+        {
+            Debug.Log(map.name);
+        }
 
         axisStates = new List<AxisState>();
         axisStates.Add(new AxisState("Dpad"));
 
-        InputActionMap actionMap = instance.controls.Player;
         keyStates = new List<KeyState>();
-        foreach (InputAction action in actionMap.actions) {
+        foreach (InputAction action in input.actions) {
             string key = action.name;
             keyStates.Add(new KeyState(key));
-            action.started += ctx => { setKeyState(key, true); };
+            action.performed += ctx => { setKeyState(key, true); };
             action.canceled += ctx => { setKeyState(key, false); };
         }
-        input.Movement.started += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
-        input.Movement.performed += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
-        input.Movement.canceled += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
+        input.FindAction("Movement").started += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
+        input.FindAction("Movement").performed += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
+        input.FindAction("Movement").canceled += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
     }
 
     static void setKeyState(string keyName, bool state)
@@ -78,6 +98,38 @@ public class AtlasInputManager : ScriptableObject
     public static bool getKey(string keyName)
     {
         return getKeyState(keyName).state;
+    }
+
+    public bool aimAtMouse()
+    {
+        return aimAtMouseMaps.Contains(instance.actionMap);
+    }
+
+    public Vector2 getPlayerAim(bool fourDirectional = false)
+    {
+        Vector2 direction = Camera.main.ScreenToWorldPoint(Input.mousePosition) - gameManager.Instance.player.transform.position;
+
+        if (fourDirectional)
+        {
+            int angle = (int)Vector2.SignedAngle(Vector2.right, direction.normalized);
+            if (angle < 0) angle += 360;
+            int vthreshold = 50;
+            if (angle > vthreshold && angle < 180 - vthreshold) {
+                return Vector2.up;
+            } else if (angle >= 180 - vthreshold && angle <= 180 + vthreshold)
+            {
+                return Vector2.left;
+            } else if (angle > 180 + vthreshold && angle < 360 - vthreshold)
+            {
+                return Vector2.down;
+            } else
+            {
+                return Vector2.right;
+            }
+        } else
+        {
+            return direction.normalized;
+        }
     }
 }
 

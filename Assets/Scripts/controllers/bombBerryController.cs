@@ -35,7 +35,7 @@ public class bombBerryController : MonoBehaviour
         transform.Find("handle").gameObject.SetActive(!flying);
     }
 
-    void Boom()
+    public void Boom()
     {
         if (hasBoomed) return;
         removeEvents();

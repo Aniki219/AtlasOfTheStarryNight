@@ -70,7 +70,6 @@ public class playerController : MonoBehaviour
     Transform currentTornado;
     Transform heldObject;
 
-    bool holdBroom = false;
     bool fastBroom = false;
     bool screenShake = false;
     float wallBlastDelay = 0.2f;
@@ -433,7 +432,7 @@ public class playerController : MonoBehaviour
             }
             if (isGrounded())
             {
-                if (!canBroom)
+                if (!canBroom && state == State.Movement)
                 {
                     canBroom = true;
                 }
@@ -1005,7 +1004,10 @@ public class playerController : MonoBehaviour
         if (state == State.Attack)
         {
             setFacing(AtlasInputManager.getAxisState("Dpad").x);
-            Debug.Log(AtlasInputManager.getAxisState("Dpad").x);
+        }
+        if (AtlasInputManager.Instance.aimAtMouse())
+        {
+            setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
         }
         state = fastBroom ? State.Broom : State.Wait;
         fastBroom = false;
@@ -1024,15 +1026,16 @@ public class playerController : MonoBehaviour
     {
         if (AtlasInputManager.getKeyPressed("Broom") || 
             AtlasInputManager.getKeyPressed("Down") ||
-            (!AtlasInputManager.getKey("Broom") && holdBroom))
+            (!AtlasInputManager.getKey("Broom") && 
+            AtlasInputManager.Instance.holdBroom))
         {
             endBroom();
             return;
         }
-        if (hasDoubleJump && AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+        if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
         {
             endBroom();
-            doubleJump();
+            if (hasDoubleJump) doubleJump();
             return;
         }
         if ((facing == -1) ? controller.collisions.left : controller.collisions.right) {
