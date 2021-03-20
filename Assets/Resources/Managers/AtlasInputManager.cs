@@ -14,17 +14,17 @@ public class AtlasInputManager : ScriptableObject
     public static List<KeyState> keyStates;
     public static List<AxisState> axisStates;
 
-    InputMaster controls;
+    public InputMaster controls;
     public bool holdBroom;
 
     public enum actionMapNames
     {
-        ZXCArrows,
+        Keyboard,
         WASDMouse,
         PS4,
         Custom
     }
-    public actionMapNames actionMap = actionMapNames.ZXCArrows;
+    public actionMapNames actionMap = actionMapNames.Keyboard;
     List<actionMapNames> aimAtMouseMaps = new List<actionMapNames>()
     {
         actionMapNames.WASDMouse
@@ -35,20 +35,30 @@ public class AtlasInputManager : ScriptableObject
     {
         instance = Resources.LoadAll<AtlasInputManager>("Managers")[0];
         instance.controls = new InputMaster();
-        instance.controls.Enable();
 
-        InputActionMap input = instance.controls.asset.FindActionMap(instance.actionMap.ToString());
+        setControlScheme(instance.actionMap.ToString());
+    }
 
-        foreach(InputActionMap map in instance.controls.asset.actionMaps)
+    public static void setControlScheme(string name)
+    {
+        instance.actionMap = (actionMapNames)Enum.Parse(typeof(actionMapNames), name);
+        if (instance.controls.asset != null)
         {
-            Debug.Log(map.name);
+            foreach (InputActionMap actionMap in instance.controls.asset.actionMaps)
+            {
+                actionMap.Disable();
+            }
         }
+
+        InputActionMap input = instance.controls.asset.FindActionMap(name);
+        input.Enable();
 
         axisStates = new List<AxisState>();
         axisStates.Add(new AxisState("Dpad"));
 
         keyStates = new List<KeyState>();
-        foreach (InputAction action in input.actions) {
+        foreach (InputAction action in input.actions)
+        {
             string key = action.name;
             keyStates.Add(new KeyState(key));
             action.performed += ctx => { setKeyState(key, true); };

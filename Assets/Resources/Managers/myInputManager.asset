@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 45b67a9de57d53a47b79322b115236d6, type: 3}
   m_Name: myInputManager
   m_EditorClassIdentifier: 
-  holdBroom: 1
-  actionMap: 1
+  holdBroom: 0
+  actionMap: 0

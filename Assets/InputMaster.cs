@@ -15,7 +15,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     ""name"": ""InputMaster"",
     ""maps"": [
         {
-            ""name"": ""ZXCArrows"",
+            ""name"": ""Keyboard"",
             ""id"": ""b4fb1bdf-43b4-4b2b-83a0-7c11ecf2e2b8"",
             ""actions"": [
                 {
@@ -1122,18 +1122,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     ]
 }");
-        // ZXCArrows
-        m_ZXCArrows = asset.FindActionMap("ZXCArrows", throwIfNotFound: true);
-        m_ZXCArrows_Movement = m_ZXCArrows.FindAction("Movement", throwIfNotFound: true);
-        m_ZXCArrows_Jump = m_ZXCArrows.FindAction("Jump", throwIfNotFound: true);
-        m_ZXCArrows_Attack = m_ZXCArrows.FindAction("Attack", throwIfNotFound: true);
-        m_ZXCArrows_Broom = m_ZXCArrows.FindAction("Broom", throwIfNotFound: true);
-        m_ZXCArrows_Interact = m_ZXCArrows.FindAction("Interact", throwIfNotFound: true);
-        m_ZXCArrows_Down = m_ZXCArrows.FindAction("Down", throwIfNotFound: true);
-        m_ZXCArrows_Up = m_ZXCArrows.FindAction("Up", throwIfNotFound: true);
-        m_ZXCArrows_DisplayEquipment = m_ZXCArrows.FindAction("DisplayEquipment", throwIfNotFound: true);
-        m_ZXCArrows_Cheat = m_ZXCArrows.FindAction("Cheat", throwIfNotFound: true);
-        m_ZXCArrows_Escape = m_ZXCArrows.FindAction("Escape", throwIfNotFound: true);
+        // Keyboard
+        m_Keyboard = asset.FindActionMap("Keyboard", throwIfNotFound: true);
+        m_Keyboard_Movement = m_Keyboard.FindAction("Movement", throwIfNotFound: true);
+        m_Keyboard_Jump = m_Keyboard.FindAction("Jump", throwIfNotFound: true);
+        m_Keyboard_Attack = m_Keyboard.FindAction("Attack", throwIfNotFound: true);
+        m_Keyboard_Broom = m_Keyboard.FindAction("Broom", throwIfNotFound: true);
+        m_Keyboard_Interact = m_Keyboard.FindAction("Interact", throwIfNotFound: true);
+        m_Keyboard_Down = m_Keyboard.FindAction("Down", throwIfNotFound: true);
+        m_Keyboard_Up = m_Keyboard.FindAction("Up", throwIfNotFound: true);
+        m_Keyboard_DisplayEquipment = m_Keyboard.FindAction("DisplayEquipment", throwIfNotFound: true);
+        m_Keyboard_Cheat = m_Keyboard.FindAction("Cheat", throwIfNotFound: true);
+        m_Keyboard_Escape = m_Keyboard.FindAction("Escape", throwIfNotFound: true);
         // PS4
         m_PS4 = asset.FindActionMap("PS4", throwIfNotFound: true);
         m_PS4_Movement = m_PS4.FindAction("Movement", throwIfNotFound: true);
@@ -1216,74 +1216,74 @@ public class @InputMaster : IInputActionCollection, IDisposable
         asset.Disable();
     }
 
-    // ZXCArrows
-    private readonly InputActionMap m_ZXCArrows;
-    private IZXCArrowsActions m_ZXCArrowsActionsCallbackInterface;
-    private readonly InputAction m_ZXCArrows_Movement;
-    private readonly InputAction m_ZXCArrows_Jump;
-    private readonly InputAction m_ZXCArrows_Attack;
-    private readonly InputAction m_ZXCArrows_Broom;
-    private readonly InputAction m_ZXCArrows_Interact;
-    private readonly InputAction m_ZXCArrows_Down;
-    private readonly InputAction m_ZXCArrows_Up;
-    private readonly InputAction m_ZXCArrows_DisplayEquipment;
-    private readonly InputAction m_ZXCArrows_Cheat;
-    private readonly InputAction m_ZXCArrows_Escape;
-    public struct ZXCArrowsActions
+    // Keyboard
+    private readonly InputActionMap m_Keyboard;
+    private IKeyboardActions m_KeyboardActionsCallbackInterface;
+    private readonly InputAction m_Keyboard_Movement;
+    private readonly InputAction m_Keyboard_Jump;
+    private readonly InputAction m_Keyboard_Attack;
+    private readonly InputAction m_Keyboard_Broom;
+    private readonly InputAction m_Keyboard_Interact;
+    private readonly InputAction m_Keyboard_Down;
+    private readonly InputAction m_Keyboard_Up;
+    private readonly InputAction m_Keyboard_DisplayEquipment;
+    private readonly InputAction m_Keyboard_Cheat;
+    private readonly InputAction m_Keyboard_Escape;
+    public struct KeyboardActions
     {
         private @InputMaster m_Wrapper;
-        public ZXCArrowsActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
-        public InputAction @Movement => m_Wrapper.m_ZXCArrows_Movement;
-        public InputAction @Jump => m_Wrapper.m_ZXCArrows_Jump;
-        public InputAction @Attack => m_Wrapper.m_ZXCArrows_Attack;
-        public InputAction @Broom => m_Wrapper.m_ZXCArrows_Broom;
-        public InputAction @Interact => m_Wrapper.m_ZXCArrows_Interact;
-        public InputAction @Down => m_Wrapper.m_ZXCArrows_Down;
-        public InputAction @Up => m_Wrapper.m_ZXCArrows_Up;
-        public InputAction @DisplayEquipment => m_Wrapper.m_ZXCArrows_DisplayEquipment;
-        public InputAction @Cheat => m_Wrapper.m_ZXCArrows_Cheat;
-        public InputAction @Escape => m_Wrapper.m_ZXCArrows_Escape;
-        public InputActionMap Get() { return m_Wrapper.m_ZXCArrows; }
+        public KeyboardActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_Keyboard_Movement;
+        public InputAction @Jump => m_Wrapper.m_Keyboard_Jump;
+        public InputAction @Attack => m_Wrapper.m_Keyboard_Attack;
+        public InputAction @Broom => m_Wrapper.m_Keyboard_Broom;
+        public InputAction @Interact => m_Wrapper.m_Keyboard_Interact;
+        public InputAction @Down => m_Wrapper.m_Keyboard_Down;
+        public InputAction @Up => m_Wrapper.m_Keyboard_Up;
+        public InputAction @DisplayEquipment => m_Wrapper.m_Keyboard_DisplayEquipment;
+        public InputAction @Cheat => m_Wrapper.m_Keyboard_Cheat;
+        public InputAction @Escape => m_Wrapper.m_Keyboard_Escape;
+        public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
         public bool enabled => Get().enabled;
-        public static implicit operator InputActionMap(ZXCArrowsActions set) { return set.Get(); }
-        public void SetCallbacks(IZXCArrowsActions instance)
+        public static implicit operator InputActionMap(KeyboardActions set) { return set.Get(); }
+        public void SetCallbacks(IKeyboardActions instance)
         {
-            if (m_Wrapper.m_ZXCArrowsActionsCallbackInterface != null)
+            if (m_Wrapper.m_KeyboardActionsCallbackInterface != null)
             {
-                @Movement.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnMovement;
-                @Movement.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnMovement;
-                @Movement.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnMovement;
-                @Jump.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnJump;
-                @Jump.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnJump;
-                @Jump.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnJump;
-                @Attack.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnAttack;
-                @Attack.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnAttack;
-                @Attack.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnAttack;
-                @Broom.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnBroom;
-                @Broom.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnBroom;
-                @Broom.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnBroom;
-                @Interact.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnInteract;
-                @Interact.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnInteract;
-                @Interact.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnInteract;
-                @Down.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnDown;
-                @Down.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnDown;
-                @Down.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnDown;
-                @Up.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnUp;
-                @Up.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnUp;
-                @Up.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnUp;
-                @DisplayEquipment.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnDisplayEquipment;
-                @DisplayEquipment.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnDisplayEquipment;
-                @DisplayEquipment.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnDisplayEquipment;
-                @Cheat.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnCheat;
-                @Cheat.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnCheat;
-                @Cheat.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnCheat;
-                @Escape.started -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnEscape;
-                @Escape.performed -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnEscape;
-                @Escape.canceled -= m_Wrapper.m_ZXCArrowsActionsCallbackInterface.OnEscape;
+                @Movement.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnMovement;
+                @Jump.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnJump;
+                @Attack.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnAttack;
+                @Broom.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnBroom;
+                @Broom.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnBroom;
+                @Broom.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnBroom;
+                @Interact.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnInteract;
+                @Down.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnDown;
+                @Down.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnDown;
+                @Down.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnDown;
+                @Up.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnUp;
+                @Up.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnUp;
+                @Up.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnUp;
+                @DisplayEquipment.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnDisplayEquipment;
+                @DisplayEquipment.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnDisplayEquipment;
+                @DisplayEquipment.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnDisplayEquipment;
+                @Cheat.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnCheat;
+                @Cheat.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnCheat;
+                @Cheat.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnCheat;
+                @Escape.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnEscape;
+                @Escape.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnEscape;
+                @Escape.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnEscape;
             }
-            m_Wrapper.m_ZXCArrowsActionsCallbackInterface = instance;
+            m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
             {
                 @Movement.started += instance.OnMovement;
@@ -1319,7 +1319,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
             }
         }
     }
-    public ZXCArrowsActions @ZXCArrows => new ZXCArrowsActions(this);
+    public KeyboardActions @Keyboard => new KeyboardActions(this);
 
     // PS4
     private readonly InputActionMap m_PS4;
@@ -1653,7 +1653,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
             return asset.controlSchemes[m_Newcontrolscheme1SchemeIndex];
         }
     }
-    public interface IZXCArrowsActions
+    public interface IKeyboardActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);

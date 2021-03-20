@@ -26,7 +26,7 @@ public class playerController : MonoBehaviour
     bool arialAttacking = false;
     bool fastFalling = false;
     bool wallRiding = false;
-    bool invulnerable = false;
+    public bool invulnerable = false;
     public bool dropThroughPlatforms = false;
     public bool resetPosition = false;
     Vector3 lastSafePosition;
@@ -1005,10 +1005,10 @@ public class playerController : MonoBehaviour
         {
             setFacing(AtlasInputManager.getAxisState("Dpad").x);
         }
-        if (AtlasInputManager.Instance.aimAtMouse())
-        {
-            setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
-        }
+        //if (AtlasInputManager.Instance.aimAtMouse())
+        //{
+        //    setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
+        //}
         state = fastBroom ? State.Broom : State.Wait;
         fastBroom = false;
         velocity = Vector3.zero;

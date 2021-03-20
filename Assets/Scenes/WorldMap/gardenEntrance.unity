@@ -32834,14 +32834,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1067700970, guid: be6afd84baf07254283ef52ba588e651, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1067700970, guid: be6afd84baf07254283ef52ba588e651, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 22661670111606257, guid: be6afd84baf07254283ef52ba588e651,
         type: 3}
       propertyPath: m_Pivot.x
@@ -32952,15 +32944,25 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameCanvas
       objectReference: {fileID: 0}
-    - target: {fileID: 8219281695436334567, guid: be6afd84baf07254283ef52ba588e651,
+    - target: {fileID: 387611514688443518, guid: be6afd84baf07254283ef52ba588e651,
         type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
+      propertyPath: m_AnchoredPosition.x
+      value: 2.2399902
       objectReference: {fileID: 0}
-    - target: {fileID: 8219281695436334567, guid: be6afd84baf07254283ef52ba588e651,
+    - target: {fileID: 387611514688443518, guid: be6afd84baf07254283ef52ba588e651,
         type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
+      propertyPath: m_AnchoredPosition.y
+      value: 28.29004
+      objectReference: {fileID: 0}
+    - target: {fileID: 2977527158820473788, guid: be6afd84baf07254283ef52ba588e651,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -49.999756
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353986626826744018, guid: be6afd84baf07254283ef52ba588e651,
+        type: 3}
+      propertyPath: m_Name
+      value: PausePanel
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be6afd84baf07254283ef52ba588e651, type: 3}

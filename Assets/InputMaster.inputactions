@@ -2,7 +2,7 @@
     "name": "InputMaster",
     "maps": [
         {
-            "name": "ZXCArrows",
+            "name": "Keyboard",
             "id": "b4fb1bdf-43b4-4b2b-83a0-7c11ecf2e2b8",
             "actions": [
                 {
