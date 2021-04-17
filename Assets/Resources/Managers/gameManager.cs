@@ -11,6 +11,8 @@ public class gameManager : ScriptableObject
     private static gameManager instance;
     public static gameManager Instance { get { return instance; } }
 
+    public pauseManager pause_manager;
+
     public static int numberOfStarts = 0;
 
     private static bool isShuttingDown = false;
@@ -45,6 +47,8 @@ public class gameManager : ScriptableObject
         onSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
         instance.pauseMenus = new List<GameObject>();
+        instance.pause_manager = (pauseManager)ScriptableObject.CreateInstance("pauseManager");
+        instance.pause_manager.Init();
 
         Application.quitting += OnApplicationQuit;
     }

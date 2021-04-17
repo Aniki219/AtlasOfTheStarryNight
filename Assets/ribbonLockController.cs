@@ -15,9 +15,9 @@ public class ribbonLockController : MonoBehaviour
         AtlasEventManager.Instance.onPlayerLand += OnLanding;
     }
 
-    void OnLanding()
+    void OnLanding(bool hurt)
     {
-        if (dead) return;
+        if (dead || hurt) return;
 
         GameObject[] ribbons = GameObject.FindGameObjectsWithTag("Ribbon");
         foreach (GameObject r in ribbons)
@@ -37,13 +37,14 @@ public class ribbonLockController : MonoBehaviour
 
     public void selfDestruct()
     {
+        healthController hc = GetComponentInParent<healthController>();
+        if (hc) hc.takeNoDamage = false;
         Destroy(gameObject);
     }
 
     private void OnDestroy()
     {
-        healthController hc = GetComponentInParent<healthController>();
-        if (hc) hc.takeNoDamage = false;
+        
         AtlasEventManager.Instance.onPlayerLand -= OnLanding;
     }
 }

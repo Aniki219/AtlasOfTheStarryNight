@@ -25,9 +25,13 @@ public class ribbonController : MonoBehaviour
         }
     }
 
-    void OnLanding()
+    void OnLanding(bool hurt)
     {
         if (!collected) return;
+        if (hurt) {
+            resetRibbon();
+            return;
+        }
         GameObject[] ribbons = GameObject.FindGameObjectsWithTag("Ribbon");
         foreach (GameObject r in ribbons)
         {

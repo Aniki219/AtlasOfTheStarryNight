@@ -126,6 +126,10 @@ public class healthController : MonoBehaviour
         gameManager.createInstance("Effects/EnemyPop", transform.position);
         GameObject star = gameManager.createInstance("Effects/StarParticles", transform.position);
         SoundManager.Instance.playClip("hurt");
+        foreach (Collider2D c in GetComponents<Collider2D>())
+        {
+            c.enabled = false;
+        }
     }
 
     public void hitStun(float duration = 0.1f)

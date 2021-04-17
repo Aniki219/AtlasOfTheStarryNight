@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5351596777942973678}
   - component: {fileID: 526894291238655818}
   - component: {fileID: -5807125436704189473}
+  - component: {fileID: -7701548531025585646}
   m_Layer: 0
   m_Name: redSucculent
   m_TagString: Untagged
@@ -103,7 +104,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0.4}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
+    pivot: {x: 0.5, y: 0}
     oldSize: {x: 1, y: 1}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
@@ -127,10 +128,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
+  takeNoDamage: 0
   takeOneDamage: 0
   cantHitThroughWall: 0
+  preventMultihit: 0
   flashWhiteOnHit: 1
   receivesHitStun: 1
+  hitStunDuration: 0.1
   inHitStun: 0
   hurtByPlayer: 1
   hurtCallback:
@@ -216,3 +220,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bits: {fileID: 6517377595680698745, guid: 8255facd88c4133479e1bbb9f726c80e, type: 3}
+--- !u!114 &-7701548531025585646
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4086491157713668470}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0

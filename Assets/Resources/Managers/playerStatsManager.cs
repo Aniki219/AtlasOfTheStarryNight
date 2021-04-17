@@ -11,6 +11,7 @@ public class playerStatsManager : ScriptableObject
     public List<Material> playerSkins;
     public Material currentSkin;
 
+
     [RuntimeInitializeOnLoadMethod]
     private static void Init()
     {

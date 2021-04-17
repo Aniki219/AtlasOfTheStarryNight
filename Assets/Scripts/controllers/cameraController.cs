@@ -50,7 +50,6 @@ public class cameraController : MonoBehaviour
         }
         if (target == null) return;
 
-        Vector3 targetVelocity = target.GetComponent<characterController>().cameraTarget;
         Vector3 targetPoint = target.transform.position;
         Vector3 to;
 
@@ -62,7 +61,7 @@ public class cameraController : MonoBehaviour
             transform.position = new Vector3(to.x, to.y, transform.position.z);
             return;
         }
-        Vector3 focusTarget = targetPoint + Vector3.up * Mathf.Min(0,targetVelocity.y / 10.0f);
+        Vector3 focusTarget = targetPoint + Vector3.up;
         focusPoint = Vector3.SmoothDamp(focusPoint, focusTarget, ref focusVelocity, smoothingTime/200.0f);
         to = new Vector3(focusPoint.x, focusPoint.y, transform.position.z);
 

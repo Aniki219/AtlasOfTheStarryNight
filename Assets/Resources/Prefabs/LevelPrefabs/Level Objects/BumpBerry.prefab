@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 495180147399256995}
   - component: {fileID: 3993322642314714489}
   - component: {fileID: 2504759639435150705}
+  - component: {fileID: -6848792699289931890}
   m_Layer: 17
   m_Name: BumpBerry
   m_TagString: BumpBerryPlant
@@ -231,3 +232,17 @@ MonoBehaviour:
   onHit: 0
   onBonk: 0
   shakeDuration: 1
+--- !u!114 &-6848792699289931890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 495180147399257001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0

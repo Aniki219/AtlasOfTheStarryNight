@@ -12,7 +12,8 @@ GameObject:
   - component: {fileID: 3078999529948033051}
   - component: {fileID: 3078999529948033050}
   - component: {fileID: 3078999529948033053}
-  m_Layer: 8
+  - component: {fileID: 8639239868557815262}
+  m_Layer: 18
   m_Name: MedStarBlock
   m_TagString: Wall
   m_Icon: {fileID: 0}
@@ -124,9 +125,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 1
+  takeNoDamage: 0
   takeOneDamage: 1
   cantHitThroughWall: 1
+  preventMultihit: 0
   flashWhiteOnHit: 1
+  receivesHitStun: 1
+  hitStunDuration: 0.1
+  inHitStun: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -154,3 +160,17 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   hurtSound: {fileID: 0}
+--- !u!114 &8639239868557815262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3078999529948033052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0

@@ -395,10 +395,15 @@ public class characterController : MonoBehaviour
     public bool isSafePosition()
     {
         if (!collisions.tangible) { return false; }
-        Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2;
+        Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2 - collider.size.y/2 * Vector3.up;
 
-        if (Physics2D.Raycast(transform.position, Vector2.right, 0.4f, collisionMask)) return false;
-        if (Physics2D.Raycast(transform.position, -Vector2.right, 0.4f, collisionMask)) return false;
+        //Debug.DrawLine((Vector2)boxCastOrigin + collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right - collider.size.y / 2 * Vector2.up);
+        //Debug.DrawLine((Vector2)boxCastOrigin - collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right + collider.size.y / 2 * Vector2.up);
+
+        LayerMask safeGroundMask = collisionMask & ~(LayerMask.GetMask("DesctructibleBlock"));
+
+        if (Physics2D.Raycast(transform.position, Vector2.right, 0.4f, safeGroundMask)) return false;
+        if (Physics2D.Raycast(transform.position, -Vector2.right, 0.4f, safeGroundMask)) return false;
         if (Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, safetyMargin, dangerMask)) return false;
 
         int rays = 0;
@@ -407,7 +412,7 @@ public class characterController : MonoBehaviour
             Vector2 rayOrigin = raycastOrigins.bottomLeft + (Vector2.right * verticalRaySpacing * i);
             float maxDistance = 1 / 32f + skinWidth;
 
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, collisionMask);
+            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, safeGroundMask);
 
             if (hit)
             {

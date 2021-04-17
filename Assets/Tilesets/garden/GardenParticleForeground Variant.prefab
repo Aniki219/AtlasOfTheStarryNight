@@ -1,5 +1,19 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-8221616972876770334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812216251952341756}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0
 --- !u!1001 &7081083556174448064
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -10,7 +24,7 @@ PrefabInstance:
     - target: {fileID: 6242755999710865212, guid: 82a1e38b4cb83d847bd27897ae8a9ab2,
         type: 3}
       propertyPath: m_Name
-      value: GardenParticleForeground
+      value: GardenParticleForeground Variant
       objectReference: {fileID: 0}
     - target: {fileID: 6242755999710865214, guid: 82a1e38b4cb83d847bd27897ae8a9ab2,
         type: 3}
@@ -246,3 +260,9 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 82a1e38b4cb83d847bd27897ae8a9ab2, type: 3}
+--- !u!1 &3812216251952341756 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6242755999710865212, guid: 82a1e38b4cb83d847bd27897ae8a9ab2,
+    type: 3}
+  m_PrefabInstance: {fileID: 7081083556174448064}
+  m_PrefabAsset: {fileID: 0}

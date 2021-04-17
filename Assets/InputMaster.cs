@@ -97,6 +97,14 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""expectedControlType"": ""Button"",
                     ""processors"": """",
                     ""interactions"": """"
+                },
+                {
+                    ""name"": ""Scout"",
+                    ""type"": ""Button"",
+                    ""id"": ""643fe10a-ab1f-4ab5-8a01-138e2502d007"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
                 }
             ],
             ""bindings"": [
@@ -471,6 +479,17 @@ public class @InputMaster : IInputActionCollection, IDisposable
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""82519da2-8060-4e9c-81bb-b24b7dec11a8"",
+                    ""path"": ""<Keyboard>/shift"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Scout"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -1134,6 +1153,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Keyboard_DisplayEquipment = m_Keyboard.FindAction("DisplayEquipment", throwIfNotFound: true);
         m_Keyboard_Cheat = m_Keyboard.FindAction("Cheat", throwIfNotFound: true);
         m_Keyboard_Escape = m_Keyboard.FindAction("Escape", throwIfNotFound: true);
+        m_Keyboard_Scout = m_Keyboard.FindAction("Scout", throwIfNotFound: true);
         // PS4
         m_PS4 = asset.FindActionMap("PS4", throwIfNotFound: true);
         m_PS4_Movement = m_PS4.FindAction("Movement", throwIfNotFound: true);
@@ -1229,6 +1249,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
     private readonly InputAction m_Keyboard_DisplayEquipment;
     private readonly InputAction m_Keyboard_Cheat;
     private readonly InputAction m_Keyboard_Escape;
+    private readonly InputAction m_Keyboard_Scout;
     public struct KeyboardActions
     {
         private @InputMaster m_Wrapper;
@@ -1243,6 +1264,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         public InputAction @DisplayEquipment => m_Wrapper.m_Keyboard_DisplayEquipment;
         public InputAction @Cheat => m_Wrapper.m_Keyboard_Cheat;
         public InputAction @Escape => m_Wrapper.m_Keyboard_Escape;
+        public InputAction @Scout => m_Wrapper.m_Keyboard_Scout;
         public InputActionMap Get() { return m_Wrapper.m_Keyboard; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1282,6 +1304,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Escape.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnEscape;
                 @Escape.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnEscape;
                 @Escape.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnEscape;
+                @Scout.started -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnScout;
+                @Scout.performed -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnScout;
+                @Scout.canceled -= m_Wrapper.m_KeyboardActionsCallbackInterface.OnScout;
             }
             m_Wrapper.m_KeyboardActionsCallbackInterface = instance;
             if (instance != null)
@@ -1316,6 +1341,9 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 @Escape.started += instance.OnEscape;
                 @Escape.performed += instance.OnEscape;
                 @Escape.canceled += instance.OnEscape;
+                @Scout.started += instance.OnScout;
+                @Scout.performed += instance.OnScout;
+                @Scout.canceled += instance.OnScout;
             }
         }
     }
@@ -1665,6 +1693,7 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnDisplayEquipment(InputAction.CallbackContext context);
         void OnCheat(InputAction.CallbackContext context);
         void OnEscape(InputAction.CallbackContext context);
+        void OnScout(InputAction.CallbackContext context);
     }
     public interface IPS4Actions
     {

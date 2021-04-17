@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4288699081928761712}
   - component: {fileID: 920326989966117514}
   - component: {fileID: 4892613213012987240}
+  - component: {fileID: -7364977639573585460}
   m_Layer: 15
   m_Name: WooshBerryHeld
   m_TagString: Untagged
@@ -153,6 +154,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   childrenToo: 1
+--- !u!114 &-7364977639573585460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5239513481117827986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0
 --- !u!1 &5827581029950719793
 GameObject:
   m_ObjectHideFlags: 0

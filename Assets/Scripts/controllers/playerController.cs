@@ -170,6 +170,7 @@ public class playerController : MonoBehaviour
         {
             handleUncrouch();
             handleHolding();
+            handleScout();
         }
 
         switch (state)
@@ -450,7 +451,7 @@ public class playerController : MonoBehaviour
                     triggerBroomStart(fastBroom, facing);
                 } else
                 {
-                    triggerBroomStart(fastBroom, facing);
+                    triggerBroomStart(fastBroom);
                 }
                 return;
             }
@@ -798,6 +799,24 @@ public class playerController : MonoBehaviour
         heldObject = null;
     }
 
+    public void handleScout()
+    {
+        if (AtlasInputManager.getKeyPressed("Scout"))
+        {
+            //pauseUntilCondition();
+            gameManager.Instance.pause_manager.addPause(pauseManager.PauseType.Scouter);
+            GameObject scouter = gameManager.createInstance("UI/ScouterTarget", transform.position);
+            Camera.main.GetComponent<cameraController>().target = scouter.transform;
+        }
+    }
+
+    public void cutScenePrep()
+    {
+        state = State.Wait;
+        velocity = Vector2.zero;
+        resetAnimator();
+    }
+
     public bool canMovingPlatform()
     {
         return moveableStates.Contains(state);
@@ -905,7 +924,7 @@ public class playerController : MonoBehaviour
     }
     public void OnLanding(bool squish = false)
     {
-        AtlasEventManager.Instance.PlayerLandEvent();
+        AtlasEventManager.Instance.PlayerLandEvent(resetPosition);
         if (squish) deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.05f, 0.125f, -1.0f, "Landing", true);
     }
     public void hitLag(float duration = 0.1f)
@@ -984,7 +1003,7 @@ public class playerController : MonoBehaviour
         if (intangibleStates.Contains(state)) return;
         //Cancel is ceiling above while crouching
         if (isCrouching() && !controller.checkVertDist(0.3f)) return;
-        if (state == State.Attack)
+        if (dir == 0 && !wallRiding)
         {
             dir = AtlasInputManager.getAxisState("Dpad").x;
         }
@@ -1214,12 +1233,30 @@ public class playerController : MonoBehaviour
         }
     }
 
-    public void cutScenePrep()
+    public void pauseUntilCondition()
     {
-        //Debug.LogWarning("Don't use cutScenePrep. Switch to playerShouldWait!");
+        StartCoroutine(pauseCoroutine());
+    }
+
+    //Ideally we can find a way to pause until  a certain condition is met
+    //But what do we do about multiple pauseCoroutines?
+    IEnumerator pauseCoroutine() { 
+        Vector2 prevVelocity = velocity;
+        State prevState = state;
+        float prevAnimSpeed = anim.speed;
+
         velocity = Vector3.zero;
-        resetAnimator();
         state = State.Wait;
+        anim.speed = 0;
+
+        while (AtlasInputManager.getKey("Scout"))
+        {
+            yield return new WaitForEndOfFrame();
+        }
+
+        state = prevState;
+        velocity = prevVelocity;
+        anim.speed = prevAnimSpeed;
     }
 
     public void freezeForSeconds(float time, bool moveable = false)

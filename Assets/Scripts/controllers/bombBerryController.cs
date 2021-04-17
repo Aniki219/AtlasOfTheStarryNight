@@ -79,7 +79,7 @@ public class bombBerryController : MonoBehaviour
         {
             BerryPlantController bc = collision.GetComponent<BerryPlantController>();
             if (!bc || !bc.canPick) return;
-            StartCoroutine(BeginWoosh(bc.center, collision.transform.GetComponent<BerryPlantController>().getForward()));
+            BeginWoosh(bc.center, collision.transform.GetComponent<BerryPlantController>().getForward());
             collision.GetComponent<BerryPlantController>().pickCallback.Invoke(ScriptableObject.CreateInstance<HitBox>());
         }
 
@@ -112,7 +112,7 @@ public class bombBerryController : MonoBehaviour
         rb.gravityScale = 1;
     }
 
-    IEnumerator BeginWoosh(Vector3 startPosition, Vector2 dir)
+    void BeginWoosh(Vector3 startPosition, Vector2 dir)
     {
         anim.SetBool("Wings", true);
         rb.gravityScale = 0;
@@ -120,12 +120,10 @@ public class bombBerryController : MonoBehaviour
         rb.angularVelocity = 0;
         rb.rotation = 0;
         transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, 0f));
-
         transform.position = startPosition;
         Physics2D.SyncTransforms();
         this.dir = dir;
         flying = true;
-        yield return 0;
     }
 
     public void OnCollisionEnter2D(Collision2D collision)

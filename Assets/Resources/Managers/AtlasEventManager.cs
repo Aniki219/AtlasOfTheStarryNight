@@ -21,8 +21,8 @@ public class AtlasEventManager : ScriptableObject
     public event Action onBroomCancel;
     public void BroomCancelEvent() { onBroomCancel?.Invoke(); }
     
-    public event Action onPlayerLand;
-    public void PlayerLandEvent() { onPlayerLand?.Invoke(); }
+    public event Action<bool> onPlayerLand;
+    public void PlayerLandEvent(bool hurt = false) { onPlayerLand?.Invoke(hurt); }
 
     public event Action onFlagSet;
     public void FlagSetEvent() { onFlagSet?.Invoke(); }

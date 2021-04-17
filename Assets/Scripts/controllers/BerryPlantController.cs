@@ -78,7 +78,7 @@ public class BerryPlantController : MonoBehaviour
     }
     public void playerBroom()
     {
-        gameManager.Instance.playerCtrl.triggerBroomStart(true, transform.localScale.x);
+        gameManager.Instance.playerCtrl.triggerBroomStart(true, transform.localScale.x * transform.right.x);
     }
 
     public void bombBerryCallback(HitBox hb)

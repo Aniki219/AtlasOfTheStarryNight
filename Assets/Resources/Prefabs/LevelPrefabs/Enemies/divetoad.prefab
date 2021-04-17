@@ -142,6 +142,7 @@ GameObject:
   - component: {fileID: 6726984603581895700}
   - component: {fileID: 6726984603581895702}
   - component: {fileID: 8181496851768960744}
+  - component: {fileID: -7825777750473659352}
   m_Layer: 10
   m_Name: divetoad
   m_TagString: Enemy
@@ -205,7 +206,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 256
+    m_Bits: 262400
   dangerMask:
     serializedVersion: 2
     m_Bits: 0
@@ -249,9 +250,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 0
   maxHitpoints: 3
+  takeNoDamage: 0
   takeOneDamage: 0
   cantHitThroughWall: 0
+  preventMultihit: 0
   flashWhiteOnHit: 1
+  receivesHitStun: 1
+  hitStunDuration: 0.1
+  inHitStun: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -291,6 +297,20 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   hurtSound: {fileID: 8300000, guid: a62717d3930a2674e9bc3f89b8bac6a9, type: 3}
+--- !u!114 &-7825777750473659352
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6726984603581895696}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0
 --- !u!1001 &1381473423557012512
 PrefabInstance:
   m_ObjectHideFlags: 0
