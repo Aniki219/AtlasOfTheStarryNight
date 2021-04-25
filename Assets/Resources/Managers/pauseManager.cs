@@ -45,8 +45,7 @@ public class pauseManager : ScriptableObject
 
     public void unpause(PauseType type)
     {
-
-        if (pauseStack.Peek() == type)
+        if (pauseStack.Count > 0 && pauseStack.Peek() == type)
         {
             pauseStack.Pop();
             unpauseEvent.Invoke(getPriority());

@@ -17,6 +17,10 @@ public class Bombable : MonoBehaviour
             }
             Instantiate(bits, transform.position, Quaternion.identity);
             if (GetComponent<persistance>() != null) GetComponent<persistance>().MarkRemoved();
+            if (GetComponentInParent<selfDestruct>())
+            {
+                GetComponentInParent<selfDestruct>().destructSelf();
+            }
             Destroy(gameObject);
         }
     }

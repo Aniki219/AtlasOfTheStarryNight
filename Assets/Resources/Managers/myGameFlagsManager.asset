@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initflags:
   - name: GardenBombs
-    set: 1
+    set: 0
   - name: GardenBumps
-    set: 1
+    set: 0
   - name: GardenWoosh
-    set: 1
+    set: 0

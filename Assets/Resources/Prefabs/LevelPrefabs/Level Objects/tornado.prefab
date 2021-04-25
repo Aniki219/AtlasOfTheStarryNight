@@ -75,6 +75,7 @@ GameObject:
   - component: {fileID: 3651724148441579793}
   - component: {fileID: 1782002806}
   - component: {fileID: 1782002811}
+  - component: {fileID: -746179904205589926}
   m_Layer: 0
   m_Name: tornado
   m_TagString: Tornado
@@ -112,10 +113,12 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80177cf875cd1794fab07b70194f9d45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -220,6 +223,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 0}
+  oscillators: []
+--- !u!114 &-746179904205589926
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3651724148441579821}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0
+  scoutMessage: You csan safely ride inside of this miniature tornado. \nJump or
+    drop to get out.\n Restores your ability to broom.
 --- !u!1 &3651724148731290292
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,6 +287,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:

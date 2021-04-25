@@ -130,7 +130,7 @@ public class chargerController : enemyAI
     {
         float rspeed = -getFacing() * velocity.x * Time.deltaTime * 180.0f/Mathf.PI;
         sprite.Rotate(new Vector3(0, 0, rspeed));
-        velocity.x *= 0.98f;
+        velocity.x = Mathf.Lerp(velocity.x, 0, 1*Time.deltaTime);
         if (Time.time - rollStartTime > 3.0f)
         {
             endRoll();

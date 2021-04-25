@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -152,12 +153,12 @@ public class BerryPlantController : MonoBehaviour
                 CompareTag("WooshBerryPlant") && !gameFlagsManager.Instance.checkFlag("GardenWoosh"))
         {
             anim.SetBool("Dry", true);
-            col.enabled = false;
+            GetComponentInChildren<pauseController>().scoutMessage = "Dried Berry Plant\n\nRestore water to this berries tree to rejuvenate.";
         }
         else
         {
             anim.SetBool("Dry", false);
-            col.enabled = true;
+            GetComponentInChildren<pauseController>().scoutMessage = "Berry Plant -\nWack this plant too cause a unique effect.";
         }
     }
 
@@ -165,6 +166,7 @@ public class BerryPlantController : MonoBehaviour
     {
         if (collision.CompareTag("AllyHitbox") && canPick)
         {
+            if (anim.GetBool("Dry")) return;
             AllyHitBoxController hbc = collision.GetComponent<AllyHitBoxController>();
             if (hbc.hasHit) return;
 

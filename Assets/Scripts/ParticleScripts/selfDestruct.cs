@@ -6,6 +6,8 @@ public class selfDestruct : MonoBehaviour
 {
     public float lifetime = Mathf.Infinity;
     public bool destroyOnAnimEnd = false;
+    public bool destroyIfNoChildren = false;
+
     public void destructSelf()
     {
         Destroy(gameObject);
@@ -26,6 +28,10 @@ public class selfDestruct : MonoBehaviour
             {
                 destructSelf();
             }
+        }
+        if (destroyIfNoChildren && transform.childCount == 0)
+        {
+            destructSelf();
         }
     }
 }

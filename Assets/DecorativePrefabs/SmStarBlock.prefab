@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 1117449773608995915}
   - component: {fileID: 1117449773608995912}
   - component: {fileID: 1117449773608995913}
+  - component: {fileID: 5955452062868533275}
   m_Layer: 8
   m_Name: SmStarBlock
   m_TagString: Wall
@@ -52,7 +53,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80177cf875cd1794fab07b70194f9d45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -101,7 +102,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.0625, y: 1.0625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -124,9 +125,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hitpoints: 1
   maxHitpoints: 1
+  takeNoDamage: 0
   takeOneDamage: 1
   cantHitThroughWall: 1
+  preventMultihit: 0
   flashWhiteOnHit: 1
+  receivesHitStun: 1
+  hitStunDuration: 0.1
+  inHitStun: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -154,3 +160,18 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls: []
   hurtSound: {fileID: 0}
+--- !u!114 &5955452062868533275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117449773608996022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0
+  scoutMessage: Destructible Block

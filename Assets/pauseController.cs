@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Experimental.Rendering.Universal;
 
 public class pauseController : MonoBehaviour
 {
@@ -150,6 +151,8 @@ public class pauseController : MonoBehaviour
             switch (component) {
                 case pauseController p:
                     continue;
+                case Light2D l:
+                    continue;
                 case MonoBehaviour mono:
                     addComponentState(new ScriptState(mono));
                     break;
@@ -186,5 +189,21 @@ public class pauseController : MonoBehaviour
         if (state.getComponent() == null) return;
         state.disable();
         prevComponentStates.Add(state);
+    }
+
+    public void scouterSelect()
+    {
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+        {
+            r.material.SetFloat("Boolean_31EED191", 1);
+        }
+    }
+
+    public void scouterDeselect()
+    {
+        foreach (Renderer r in GetComponentsInChildren<Renderer>())
+        {
+            r.material.SetFloat("Boolean_31EED191", 0);
+        }
     }
 }

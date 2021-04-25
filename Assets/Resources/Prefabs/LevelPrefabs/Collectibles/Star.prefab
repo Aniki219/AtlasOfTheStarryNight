@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 925558094326964008}
   - component: {fileID: 430593993585502720}
   - component: {fileID: 305024568665393730}
+  - component: {fileID: 4937101472998664753}
   m_Layer: 0
   m_Name: Star
   m_TagString: Star
@@ -57,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80177cf875cd1794fab07b70194f9d45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4930,6 +4931,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   persistant: 1
+  markRemovedOnDestroy: 1
+  onceEnemiesDefeated: 0
+--- !u!114 &4937101472998664753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3189420415222163093}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isPaused: 0
+  priority: 0
+  scoutMessage: A Fallen Star -\n\nCollect this to return it to the Atlas and restore
+    the starry sky!
 --- !u!1 &7106190968190934352
 GameObject:
   m_ObjectHideFlags: 0

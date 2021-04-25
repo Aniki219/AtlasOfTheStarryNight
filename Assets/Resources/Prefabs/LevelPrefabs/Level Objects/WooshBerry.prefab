@@ -56,7 +56,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 80177cf875cd1794fab07b70194f9d45, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -244,3 +244,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   priority: 0
+  scoutMessage: Woosh Berry -\n\nBursting this berry forces you onto your broom.
+    Even if you've already used it once.

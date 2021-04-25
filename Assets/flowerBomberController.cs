@@ -25,6 +25,8 @@ public class flowerBomberController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         deformer = GetComponentInChildren<Deformer>();
 
+        
+
         while (startDir == 0)
         {
             startDir = Random.Range(-1, 1);
