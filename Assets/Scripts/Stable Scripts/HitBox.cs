@@ -8,7 +8,10 @@ public class HitBox : ScriptableObject
 {
     public Vector3 position;
     public Vector3 size = new Vector3(1.0f, 1.0f, 1.0f);
-    public Vector3 kbDir = new Vector3(1.0f, 1.0f);
+    //For fancy knockback arcs
+    public Vector3 kbDir = new Vector3(1.0f, 1.0f); 
+    //Is this left/right/up/down? z = 1 for omnidirectional
+    public Vector3 direction = new Vector3(1.0f, 0, 0); 
     public float duration = 5.0f/60.0f;
     public float damage = 1.0f;
     public int facing = 1;

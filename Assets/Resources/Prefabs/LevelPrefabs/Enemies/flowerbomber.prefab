@@ -59,6 +59,7 @@ MonoBehaviour:
   receivesHitStun: 1
   hitStunDuration: 0.5
   inHitStun: 0
+  deathPause: 0.25
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -66,7 +67,7 @@ MonoBehaviour:
       - m_Target: {fileID: 6340982575938527095}
         m_TargetAssemblyTypeName: flowerBomberController, Assembly-CSharp
         m_MethodName: Hurt
-        m_Mode: 1
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -300,6 +301,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
   oscillators: []
+  deforms: []
 --- !u!1001 &6340982576114233980
 PrefabInstance:
   m_ObjectHideFlags: 0

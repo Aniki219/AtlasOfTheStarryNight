@@ -26,6 +26,7 @@ TagManager:
   - ResetDrown
   - SecretPassage
   - SecretCollider
+  - Water
   layers:
   - Default
   - TransparentFX

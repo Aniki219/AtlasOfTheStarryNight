@@ -21,12 +21,13 @@ public class Deformer : MonoBehaviour
 
     [SerializeField]
     public List<Oscillator> oscillators;
+    [SerializeField]
     public List<Deformation> deforms;
 
     public void Start()
     {
         col = GetComponentInParent<Collider2D>();
-        deforms = new List<Deformation>();
+        //deforms = new List<Deformation>();
 
         //frameCount is to remain sync'd for all oscillators
         frameCount = (int)Random.Range(0, 100) * Time.deltaTime;
@@ -34,6 +35,12 @@ public class Deformer : MonoBehaviour
         startPosition = transform.localPosition;
         startRotation = transform.localEulerAngles;
         startScale = transform.localScale;
+
+        //Setup Deformers
+        foreach (Deformation d in deforms)
+        {
+            d.startTime += Time.time;
+        }
 
         //Setup Oscillators
         foreach (Oscillator o in oscillators)
@@ -80,12 +87,14 @@ public class Deformer : MonoBehaviour
                 Mathf.Sign(transform.localScale.y),
                 Mathf.Sign(transform.localScale.z)
             ));
+
         transform.localScale = Vector3.Scale(startScale, totalScale);
-        transform.localPosition = startPosition + totalOffset;
+        transform.localPosition = totalOffset;
     }
 
     void UpdateOscillators()
     {
+        totalOffset = startPosition;
         foreach (Oscillator o in oscillators)
         {
             if (!o.enabled) continue;
@@ -101,7 +110,7 @@ public class Deformer : MonoBehaviour
             }
             else
             {
-                transform.position = startPosition + o.oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI * o.cyclesPerSecond) * o.oscillationSize;
+                totalOffset += o.oscillationDirection * Mathf.Sin(frameCount * 2.0f * Mathf.PI * o.cyclesPerSecond) * o.oscillationSize;
             }
         }
     }
@@ -229,6 +238,7 @@ public class Oscillator
     }
 }
 
+[System.Serializable]
 public class Deformation
 {
     public string tag = "default";

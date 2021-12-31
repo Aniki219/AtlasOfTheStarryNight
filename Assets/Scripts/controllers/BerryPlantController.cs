@@ -58,7 +58,7 @@ public class BerryPlantController : MonoBehaviour
 
     public void OnBroomCollide()
     {
-        if (!canPick) return;
+        if (!canPick || anim.GetBool("Dry")) return;
         broomCallback.Invoke(true);
     }
 

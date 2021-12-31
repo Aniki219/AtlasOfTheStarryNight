@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2824805249446906740}
   - component: {fileID: 2824805249446906741}
   - component: {fileID: -8986808783019047533}
+  - component: {fileID: -6575242008766572015}
   m_Layer: 0
   m_Name: EnemyPop
   m_TagString: Untagged
@@ -48,6 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   lifetime: Infinity
   destroyOnAnimEnd: 0
+  destroyIfNoChildren: 0
 --- !u!212 &2824805249446906740
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -133,3 +135,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   priority: 0
+  scoutMessage: 
+--- !u!114 &-6575242008766572015
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2824805249446906738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9fd3e9db7b22a1243b649c796e32e410, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  oscillators: []
+  deforms:
+  - tag: default
+    enabled: 1
+    to: {x: 2, y: 2, z: 2}
+    timeTo: 0.5
+    timeReturn: -1
+    offsetDir: 0
+    startTime: 0

@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Main Menu.unity
+    guid: e455277f710f8364abf7b886ddfb2b39
+  - enabled: 1
     path: Assets/Scenes/WorldMap/AltairKettle.unity
     guid: c5166b6e87659cd40b8885062af19a2b
   - enabled: 1

@@ -26,6 +26,7 @@ public class healthController : MonoBehaviour
     public bool receivesHitStun = true;
     public float hitStunDuration = 0.1f;
     public bool inHitStun = false;
+    public float deathPause = 0;
 
     public bool hurtByPlayer = true;
     [ConditionalField("hurtByPlayer")] public HurtEvent hurtCallback;
@@ -111,13 +112,12 @@ public class healthController : MonoBehaviour
         }
     }
 
-    void checkDead(float time = 0.2f)
+    void checkDead()
     {
         if (hitpoints <= 0)
         {
-            if (deadCallback) onDeath.Invoke();
             dead = true;
-            Destroy(gameObject, time);
+            Destroy(gameObject, deathPause);
         }
     }
 
@@ -175,5 +175,10 @@ public class healthController : MonoBehaviour
             }
             takeDamage(dmg, hitbox, true);
         }
+    }
+
+    private void OnDestroy()
+    {
+        if (dead && deadCallback) onDeath.Invoke();
     }
 }

@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5146442039508135951}
   - component: {fileID: 5146442039508135945}
   - component: {fileID: 5146442039508135944}
-  - component: {fileID: 5146442039508135946}
   - component: {fileID: 4701322283546827898}
   - component: {fileID: 8794442034249287618}
   m_Layer: 0
@@ -29,7 +28,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5146442039508135950}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.95, y: -0.26, z: -18.96875}
+  m_LocalPosition: {x: -3.95, y: -0.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -49,6 +48,8 @@ SpriteRenderer:
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 0
+  m_RayTraceProcedural: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -104,21 +105,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &5146442039508135946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5146442039508135950}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f30a9702705076a4f837163a335af8a5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cyclesPerSecond: 1.5
-  axis: 1
-  oscillationSize: 0.25
 --- !u!61 &4701322283546827898
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -162,3 +148,5 @@ MonoBehaviour:
   following: {fileID: 0}
   followedBy: {fileID: 0}
   canMoveParent: 1
+  canCollect: 1
+  groundAction: 1

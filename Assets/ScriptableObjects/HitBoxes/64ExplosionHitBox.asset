@@ -15,10 +15,14 @@ MonoBehaviour:
   position: {x: 0, y: 0, z: 0}
   size: {x: 1.5, y: 1.5, z: 1.5}
   kbDir: {x: 0, y: 0, z: 0}
+  direction: {x: 0, y: 0, z: 1}
   duration: 0.11666667
   damage: 2
+  facing: 1
   knockback: 1
-  explosive: 1
   spike: 0
   bounce: 0
+  broom: 0
+  interactBroom: 0
+  explosive: 1
   incendiary: 1

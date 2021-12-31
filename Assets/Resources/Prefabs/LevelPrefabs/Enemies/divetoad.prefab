@@ -258,6 +258,7 @@ MonoBehaviour:
   receivesHitStun: 1
   hitStunDuration: 0.1
   inHitStun: 0
+  deathPause: 0.2
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -311,6 +312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   priority: 0
+  scoutMessage: 
 --- !u!1001 &1381473423557012512
 PrefabInstance:
   m_ObjectHideFlags: 0

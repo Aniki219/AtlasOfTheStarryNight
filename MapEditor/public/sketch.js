@@ -123,5 +123,5 @@ function saveData() {
   }
   //put 2 for pretty print 0 for copypaste-able
   jsondata = JSON.stringify(dataObj, null, 0);
-  fs.writeFileSync(`${__dirname}/../data/test.json`, jsondata);
+  fs.writeFileSync(`${__dirname}/../../Assets/StreamingAssets/WorldMapData.json`, jsondata);
 }

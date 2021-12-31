@@ -79,14 +79,14 @@ public class gameManager : ScriptableObject
             instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
             Physics2D.SyncTransforms();
             instance.player.GetComponent<characterController>().setCollidable(true);
+            playerController.State playerState = playerCtrl.state;
             if (instance.playerCtrl.state == playerController.State.Wait)
             {
-                playerCtrl.returnToMovement();
+                playerCtrl.returnToMovement(playerState);
                 canvasCtrl.doBlackout(false);
             }
         }
-        instance.canSetPosition = true;
-            
+        instance.canSetPosition = true;   
     }
 
     public void switchScene(string to, float startx, float starty)

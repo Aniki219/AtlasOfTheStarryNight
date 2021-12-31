@@ -298,6 +298,17 @@ public class characterController : MonoBehaviour
                 collisions.below = directionY == -1;
                 collisions.above = directionY == 1;
 
+                if (collisions.below && GetComponentInChildren<stepSounds>())
+                {
+                    stepSounds.TerrainType type = stepSounds.TerrainType.Smooth;
+
+                    if (hit.transform.TryGetComponent(out terrainTypeHolder t))
+                    {
+                        type = t.terrainType;
+                    }
+                    GetComponentInChildren<stepSounds>().terrainType = type;
+                }
+
                 break;
             }
             //Debug.DrawLine(rayOrigin, rayOrigin + Vector2.up * directionY * rayLength);

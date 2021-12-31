@@ -5053,6 +5053,7 @@ GameObject:
   - component: {fileID: 1908161219}
   - component: {fileID: 1908161221}
   - component: {fileID: 425218680454007812}
+  - component: {fileID: 3056712456514079565}
   m_Layer: 9
   m_Name: AtlasSprite
   m_TagString: Untagged
@@ -5176,6 +5177,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
   oscillators: []
+--- !u!114 &3056712456514079565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908161217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cf5e3c09557b37d40911a74ed6fcd9e9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainType: 0
+  isSubmerged: 0
 --- !u!1 &1384023053744668337
 GameObject:
   m_ObjectHideFlags: 0
@@ -10288,6 +10303,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   priority: 0
+  scoutMessage: 
 --- !u!1 &7396073080978170267
 GameObject:
   m_ObjectHideFlags: 0

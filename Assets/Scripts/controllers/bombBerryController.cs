@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class bombBerryController : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class bombBerryController : MonoBehaviour
     Vector3 dir;
     float flySpeed = 5.0f;
     Rigidbody2D rb;
+    public GameObject messageBubble;
 
     void Start()
     {
@@ -30,7 +32,13 @@ public class bombBerryController : MonoBehaviour
         }
         if (flying)
         {
+            messageBubble.SetActive(false);
             transform.Translate(dir * flySpeed * Time.deltaTime, Space.World);
+        }
+        if (messageBubble && !hasBoomed && !flying)
+        {
+            Image timer = messageBubble.GetComponentInChildren<Image>();
+            timer.fillAmount = 1.0f - anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
         transform.Find("handle").gameObject.SetActive(!flying);
     }
@@ -38,6 +46,7 @@ public class bombBerryController : MonoBehaviour
     public void Boom()
     {
         if (hasBoomed) return;
+        messageBubble.SetActive(false);
         removeEvents();
         hasBoomed = true;
         flying = false;
@@ -105,6 +114,7 @@ public class bombBerryController : MonoBehaviour
     public void returnToRigidbody()
     {
         isSimulated(true);
+        messageBubble.SetActive(true);
         anim.SetBool("Wings", false);
         anim.SetTrigger("Idle");
         flying = false;

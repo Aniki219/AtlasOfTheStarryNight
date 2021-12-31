@@ -38,7 +38,7 @@ public class flowerBomberController : MonoBehaviour
     void FixedUpdate()
     {
         //Movement and turning
-        if (hc.inHitStun) return;
+        //if (hc.inHitStun) return;
         if (cc.collisions.right && velocity.x > 0 ||
             cc.collisions.left && velocity.x < 0)
         {
@@ -55,8 +55,15 @@ public class flowerBomberController : MonoBehaviour
         }
     }
 
-    public void Hurt()
+    public void Hurt(HitBox hitbox)
     {
+        if (!hitbox) return;
+        float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
+        float dx = hitbox.kbDir.x;
+        float dy = hitbox.kbDir.y;
+        velocity.x = kbStrength * dx;
+        velocity.y = kbStrength * 1.5f * dy;
+
         anim.SetTrigger("Hurt");
         deformer.flashWhite(0.2f);
     }

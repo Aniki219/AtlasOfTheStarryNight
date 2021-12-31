@@ -60,6 +60,7 @@ public class playerController : MonoBehaviour
     atlasSpriteController spriteController;
     BoxCollider2D boxCollider;
     Deformer deformer;
+    stepSounds steps;
     public Collider2D secretCollider;
 
     Vector3 colliderStartSize;
@@ -121,8 +122,14 @@ public class playerController : MonoBehaviour
     {
         State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat, State.WaitMoveable
     };
+
+    //States that can be returned to in resetPosition
+    List<State> returnableStates = new List<State>
+    {
+        State.Broom
+    };
     #endregion
-    
+
     #region Unity functions
     void Start()
     {
@@ -135,6 +142,7 @@ public class playerController : MonoBehaviour
         controller = GetComponent<characterController>();
         particleMaker = GetComponent<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
+        steps = GetComponentInChildren<stepSounds>();
         hanger = transform.Find("AtlasSprite/Hanger");
 
         colliderStartSize = boxCollider.size;
@@ -165,7 +173,6 @@ public class playerController : MonoBehaviour
         }
         playerShouldWait();
         handleParticles();
-
         if (state != State.Wait && state != State.WaitMoveable)
         {
             handleUncrouch();
@@ -191,7 +198,7 @@ public class playerController : MonoBehaviour
                 break;
             case State.Attack:
                 handleAttack();
-                handleMovement(isGrounded() ? 0 : 1.0f, false, false);
+                handleMovement(isGrounded() ? 0f : 1.0f, false, false);
                 break;
             //Hurt and Bonk look the same to the player, but have different effects
             case State.Bonk:
@@ -341,6 +348,11 @@ public class playerController : MonoBehaviour
                 other.transform.position = hanger.position - Vector3.up * 0.15f;
                 other.SendMessage("BroomPickUp");
             }
+
+            if (other.CompareTag("Water"))
+            {
+                steps.isSubmerged = true;
+            }
         }
     }
 
@@ -404,6 +416,11 @@ public class playerController : MonoBehaviour
         if (other.CompareTag("ResetDamaging"))
         {
             graceFrames = maxGraceFrames;
+        }
+
+        if (other.CompareTag("Water"))
+        {
+            steps.isSubmerged = false;
         }
     }
     #endregion
@@ -1028,6 +1045,7 @@ public class playerController : MonoBehaviour
         //{
         //    setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
         //}
+
         state = fastBroom ? State.Broom : State.Wait;
         fastBroom = false;
         velocity = Vector3.zero;
@@ -1103,6 +1121,7 @@ public class playerController : MonoBehaviour
         resetAnimator();
         anim.SetTrigger("bonk");
         velocity.y = 4f;
+
         state = (damage > 0) ? State.Hurt : State.Bonk;
         AtlasEventManager.Instance.BonkEvent();
         
@@ -1159,7 +1178,7 @@ public class playerController : MonoBehaviour
     //Always turns off resetPosition
     //If not in a safe spot and resetPosition is true, sets state to reset
     //Otherwise sets state to movement and sets tangible to true
-    public void returnToMovement()
+    public void returnToMovement(State returnState = State.Movement)
     {
         if (state == State.ChargeAttack || state == State.Attack)
         {
@@ -1168,10 +1187,17 @@ public class playerController : MonoBehaviour
         if (resetPosition && !controller.isSafePosition())
         {
             state = State.Reset;
-        } else
+        }
+        else
         {
             controller.collisions.tangible = true;
-            state = State.Movement;
+            if (returnableStates.Contains(returnState))
+            {
+                state = returnState;
+            } else
+            {
+                state = State.Movement;
+            }
 
             if (!isCrouching()) anim.SetTrigger("Idle");
         }
@@ -1274,7 +1300,6 @@ public class playerController : MonoBehaviour
         state = moveable ? State.WaitMoveable : State.Wait;
 
         yield return new WaitForSeconds(time);
-
         state = prevState;
         if (!moveable) velocity = prevVel;
     }

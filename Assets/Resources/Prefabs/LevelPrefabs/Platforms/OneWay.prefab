@@ -71,6 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3416689656805370191}
   - component: {fileID: 8876929995308146782}
+  - component: {fileID: 6038493020052010823}
   m_Layer: 11
   m_Name: OneWay
   m_TagString: Untagged
@@ -108,6 +109,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPaused: 0
   priority: 0
+  scoutMessage: 
+--- !u!114 &6038493020052010823
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3416689656805370186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f646a79d16c2ab847b821ffaebda5a1d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  terrainType: 0
 --- !u!1 &8378860214319344559
 GameObject:
   m_ObjectHideFlags: 0

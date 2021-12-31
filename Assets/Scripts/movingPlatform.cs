@@ -23,11 +23,15 @@ public class movingPlatform : MonoBehaviour
         velocity = Vector3.zero;
         lastPosition = transform.position;
         nodePositions = new List<Vector3>();
-        nodes = transform.parent.Find("Nodes");
+        nodes = (transform.parent) ? transform.parent.Find("Nodes") : transform.Find("Nodes");
         calculateNodePositions();
         if (!nodes || nodes.childCount > 0)
         {
             transform.position = nodePositions[currentNode];
+        }
+        if (currentNode >= nodes.childCount)
+        {
+            currentNode = 0;
         }
     }
 
@@ -51,7 +55,8 @@ public class movingPlatform : MonoBehaviour
             }
         }
 
-        checkForActors();
+
+        if(GetComponent<Collider2D>()) checkForActors();
         transform.position += velocity;
     }
 

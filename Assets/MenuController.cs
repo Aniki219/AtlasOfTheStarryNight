@@ -37,7 +37,7 @@ public class MenuController : MonoBehaviour
 
     void Start()
     {
-        togglePauseMenu(false);
+        //togglePauseMenu(false);
         state = MenuState.Closed;
         toggleBroomStyle(false);
     }
@@ -74,6 +74,7 @@ public class MenuController : MonoBehaviour
     {
         if (open) prevState = playerController.State.Movement;
         if (open) gameManager.Instance.playerCtrl.cutScenePrep();
+
         gameManager.Instance.playerCtrl.state = open ? playerController.State.Wait : prevState;
 
         PausePanel.SetActive(open);

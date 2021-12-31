@@ -14,7 +14,7 @@ public class AtlasSceneManager : ScriptableObject
     private static AtlasSceneManager instance;
     public static AtlasSceneManager Instance { get { return instance; } }
 
-    private static string path = "MapEditor/data/test.json";
+    private static string path = Application.streamingAssetsPath + "/WorldMapData.json";
     AtlasSceneData sceneData;
     public AtlasScene currentScene;
     public List<AtlasScene> neighbors;
