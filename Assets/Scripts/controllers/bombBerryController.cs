@@ -41,6 +41,8 @@ public class bombBerryController : MonoBehaviour
             timer.fillAmount = 1.0f - anim.GetCurrentAnimatorStateInfo(0).normalizedTime;
         }
         transform.Find("handle").gameObject.SetActive(!flying);
+
+        gameObject.layer = (rb.velocity.y > 0) ? LayerMask.NameToLayer("IgnoreOneWays") : LayerMask.NameToLayer("IgnorePlayer");
     }
 
     public void Boom()
@@ -113,6 +115,7 @@ public class bombBerryController : MonoBehaviour
 
     public void returnToRigidbody()
     {
+        Debug.Log("return to rigidbody");
         isSimulated(true);
         messageBubble.SetActive(true);
         anim.SetBool("Wings", false);

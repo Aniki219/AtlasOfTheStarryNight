@@ -47,7 +47,7 @@ TagManager:
   - BackgroundTexture
   - BroomTrigger
   - DesctructibleBlock
-  - 
+  - IgnoreOneWays
   - 
   - 
   - 

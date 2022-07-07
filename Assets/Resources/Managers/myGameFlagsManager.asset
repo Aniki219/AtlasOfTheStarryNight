@@ -18,4 +18,4 @@ MonoBehaviour:
   - name: GardenBumps
     set: 0
   - name: GardenWoosh
-    set: 0
+    set: 1

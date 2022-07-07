@@ -22,6 +22,7 @@ public class AtlasInputManager : ScriptableObject
         Keyboard,
         WASDMouse,
         PS4,
+        XBOX,
         Custom
     }
     public actionMapNames actionMap = actionMapNames.Keyboard;

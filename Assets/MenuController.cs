@@ -132,7 +132,7 @@ public class MenuController : MonoBehaviour
 
     public void toggleBroomStyle(bool swap = true)
     {
-        if (swap) AtlasInputManager.Instance.holdBroom ^= true;
+        if (swap) AtlasInputManager.Instance.holdBroom = !AtlasInputManager.Instance.holdBroom;
         broomStyle.text = "Broom Style: " + 
             (AtlasInputManager.Instance.holdBroom ? "Hold" : "Toggle");
     }

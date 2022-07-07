@@ -1120,6 +1120,336 @@ public class @InputMaster : IInputActionCollection, IDisposable
                 }
             ],
             ""bindings"": []
+        },
+        {
+            ""name"": ""XBOX"",
+            ""id"": ""f1cb1cf5-d069-44ce-be2b-d3fff596d829"",
+            ""actions"": [
+                {
+                    ""name"": ""Movement"",
+                    ""type"": ""Value"",
+                    ""id"": ""40307c4b-0446-4a31-a251-5f904f65b7d2"",
+                    ""expectedControlType"": ""Axis"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""699a0855-0b77-4dd8-8a0e-7cee78f8e6c0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Attack"",
+                    ""type"": ""Button"",
+                    ""id"": ""c0076da5-dbff-4af8-aae4-321c8512aa72"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Broom"",
+                    ""type"": ""Button"",
+                    ""id"": ""7b209121-aa89-4fe1-b3ad-98c53f79506f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Interact"",
+                    ""type"": ""Button"",
+                    ""id"": ""56156929-cc94-408c-97b9-dec5358717ad"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Down"",
+                    ""type"": ""Button"",
+                    ""id"": ""e8f266d1-cd00-41fe-b2dc-a15197960b69"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Up"",
+                    ""type"": ""Button"",
+                    ""id"": ""3aa1fc76-6c1a-4335-b395-f2c4ab0a8154"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""DisplayEquipment"",
+                    ""type"": ""Button"",
+                    ""id"": ""9d46d1b3-ee6d-426a-98b7-2c411c1cfcb6"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Cheat"",
+                    ""type"": ""Button"",
+                    ""id"": ""e742fb3f-09b6-4fc2-97ea-8ffdd82000e8"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                },
+                {
+                    ""name"": ""Escape"",
+                    ""type"": ""Button"",
+                    ""id"": ""8cb05b9b-6ffc-450f-b425-f3574ef7e4af"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """"
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": ""Dpad"",
+                    ""id"": ""b19ded56-b34c-4e11-a5e8-4a94b32175d1"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""aa4d4260-66d9-4371-a926-1b74fa659b8c"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""119a1ece-593c-47d7-be8c-450443a77fd4"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""4936937c-5f9d-4c6f-8014-03fb81171bc9"",
+                    ""path"": ""<Gamepad>/dpad/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""68c1d10f-3231-4646-b89f-b61156966a86"",
+                    ""path"": ""<Gamepad>/dpad/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""LeftStick"",
+                    ""id"": ""933e5732-a2fa-4e69-8170-e9014450fcf0"",
+                    ""path"": ""2DVector"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": true,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": ""up"",
+                    ""id"": ""a0e7fb1c-f34e-48cb-bbef-f986532b774d"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""down"",
+                    ""id"": ""51022fb8-ee56-420b-8b3a-9a938a29eefb"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""left"",
+                    ""id"": ""91f09eb4-11cd-4966-9fa6-c07c682561fc"",
+                    ""path"": ""<Gamepad>/leftStick/left"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": ""right"",
+                    ""id"": ""9c81983c-f881-46b2-9633-72249315e0eb"",
+                    ""path"": ""<Gamepad>/leftStick/right"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Movement"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": true
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d0e82abb-2ce6-4862-9d13-e628e851efa8"",
+                    ""path"": ""<Gamepad>/buttonSouth"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""19f06eda-816c-41f3-bf68-bc387da05f1c"",
+                    ""path"": ""<Gamepad>/buttonWest"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Attack"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""35132c77-38c9-417c-8fa0-4c41bbfb73cf"",
+                    ""path"": ""<Gamepad>/rightShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Broom"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d9820124-7b3d-45a5-98c0-ca2c6dee70dd"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""334a9c39-52d0-47d4-a75f-3a5eab03c063"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Interact"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a395ac87-1211-46e9-8266-399c965382d9"",
+                    ""path"": ""<Gamepad>/dpad/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e7b3e31a-4d36-4a3f-97e5-cf0a962a6200"",
+                    ""path"": ""<Gamepad>/leftStick/down"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Down"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""cf8cef4e-f4f8-43d7-ade8-89dd8686cdb5"",
+                    ""path"": ""<Gamepad>/dpad/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""783250ce-cc57-47ce-b068-c047a21d40f6"",
+                    ""path"": ""<Gamepad>/leftStick/up"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Up"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""320f4f35-71fb-4d87-b779-3bd7273b3749"",
+                    ""path"": ""<Gamepad>/leftShoulder"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""DisplayEquipment"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ab41fe89-cff8-44d3-a502-8e3ffc8d7416"",
+                    ""path"": ""<Gamepad>/select"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Cheat"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1186a16e-bbbd-4a44-b89d-38ff7d5b020f"",
+                    ""path"": ""<Gamepad>/start"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Escape"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": [
@@ -1190,6 +1520,18 @@ public class @InputMaster : IInputActionCollection, IDisposable
         m_Template_DisplayEquipment = m_Template.FindAction("DisplayEquipment", throwIfNotFound: true);
         m_Template_Cheat = m_Template.FindAction("Cheat", throwIfNotFound: true);
         m_Template_Escape = m_Template.FindAction("Escape", throwIfNotFound: true);
+        // XBOX
+        m_XBOX = asset.FindActionMap("XBOX", throwIfNotFound: true);
+        m_XBOX_Movement = m_XBOX.FindAction("Movement", throwIfNotFound: true);
+        m_XBOX_Jump = m_XBOX.FindAction("Jump", throwIfNotFound: true);
+        m_XBOX_Attack = m_XBOX.FindAction("Attack", throwIfNotFound: true);
+        m_XBOX_Broom = m_XBOX.FindAction("Broom", throwIfNotFound: true);
+        m_XBOX_Interact = m_XBOX.FindAction("Interact", throwIfNotFound: true);
+        m_XBOX_Down = m_XBOX.FindAction("Down", throwIfNotFound: true);
+        m_XBOX_Up = m_XBOX.FindAction("Up", throwIfNotFound: true);
+        m_XBOX_DisplayEquipment = m_XBOX.FindAction("DisplayEquipment", throwIfNotFound: true);
+        m_XBOX_Cheat = m_XBOX.FindAction("Cheat", throwIfNotFound: true);
+        m_XBOX_Escape = m_XBOX.FindAction("Escape", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -1663,6 +2005,111 @@ public class @InputMaster : IInputActionCollection, IDisposable
         }
     }
     public TemplateActions @Template => new TemplateActions(this);
+
+    // XBOX
+    private readonly InputActionMap m_XBOX;
+    private IXBOXActions m_XBOXActionsCallbackInterface;
+    private readonly InputAction m_XBOX_Movement;
+    private readonly InputAction m_XBOX_Jump;
+    private readonly InputAction m_XBOX_Attack;
+    private readonly InputAction m_XBOX_Broom;
+    private readonly InputAction m_XBOX_Interact;
+    private readonly InputAction m_XBOX_Down;
+    private readonly InputAction m_XBOX_Up;
+    private readonly InputAction m_XBOX_DisplayEquipment;
+    private readonly InputAction m_XBOX_Cheat;
+    private readonly InputAction m_XBOX_Escape;
+    public struct XBOXActions
+    {
+        private @InputMaster m_Wrapper;
+        public XBOXActions(@InputMaster wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Movement => m_Wrapper.m_XBOX_Movement;
+        public InputAction @Jump => m_Wrapper.m_XBOX_Jump;
+        public InputAction @Attack => m_Wrapper.m_XBOX_Attack;
+        public InputAction @Broom => m_Wrapper.m_XBOX_Broom;
+        public InputAction @Interact => m_Wrapper.m_XBOX_Interact;
+        public InputAction @Down => m_Wrapper.m_XBOX_Down;
+        public InputAction @Up => m_Wrapper.m_XBOX_Up;
+        public InputAction @DisplayEquipment => m_Wrapper.m_XBOX_DisplayEquipment;
+        public InputAction @Cheat => m_Wrapper.m_XBOX_Cheat;
+        public InputAction @Escape => m_Wrapper.m_XBOX_Escape;
+        public InputActionMap Get() { return m_Wrapper.m_XBOX; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(XBOXActions set) { return set.Get(); }
+        public void SetCallbacks(IXBOXActions instance)
+        {
+            if (m_Wrapper.m_XBOXActionsCallbackInterface != null)
+            {
+                @Movement.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnMovement;
+                @Movement.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnMovement;
+                @Movement.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnMovement;
+                @Jump.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnJump;
+                @Jump.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnJump;
+                @Jump.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnJump;
+                @Attack.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnAttack;
+                @Attack.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnAttack;
+                @Attack.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnAttack;
+                @Broom.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnBroom;
+                @Broom.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnBroom;
+                @Broom.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnBroom;
+                @Interact.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnInteract;
+                @Interact.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnInteract;
+                @Interact.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnInteract;
+                @Down.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnDown;
+                @Down.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnDown;
+                @Down.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnDown;
+                @Up.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnUp;
+                @Up.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnUp;
+                @Up.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnUp;
+                @DisplayEquipment.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnDisplayEquipment;
+                @DisplayEquipment.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnDisplayEquipment;
+                @DisplayEquipment.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnDisplayEquipment;
+                @Cheat.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnCheat;
+                @Cheat.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnCheat;
+                @Cheat.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnCheat;
+                @Escape.started -= m_Wrapper.m_XBOXActionsCallbackInterface.OnEscape;
+                @Escape.performed -= m_Wrapper.m_XBOXActionsCallbackInterface.OnEscape;
+                @Escape.canceled -= m_Wrapper.m_XBOXActionsCallbackInterface.OnEscape;
+            }
+            m_Wrapper.m_XBOXActionsCallbackInterface = instance;
+            if (instance != null)
+            {
+                @Movement.started += instance.OnMovement;
+                @Movement.performed += instance.OnMovement;
+                @Movement.canceled += instance.OnMovement;
+                @Jump.started += instance.OnJump;
+                @Jump.performed += instance.OnJump;
+                @Jump.canceled += instance.OnJump;
+                @Attack.started += instance.OnAttack;
+                @Attack.performed += instance.OnAttack;
+                @Attack.canceled += instance.OnAttack;
+                @Broom.started += instance.OnBroom;
+                @Broom.performed += instance.OnBroom;
+                @Broom.canceled += instance.OnBroom;
+                @Interact.started += instance.OnInteract;
+                @Interact.performed += instance.OnInteract;
+                @Interact.canceled += instance.OnInteract;
+                @Down.started += instance.OnDown;
+                @Down.performed += instance.OnDown;
+                @Down.canceled += instance.OnDown;
+                @Up.started += instance.OnUp;
+                @Up.performed += instance.OnUp;
+                @Up.canceled += instance.OnUp;
+                @DisplayEquipment.started += instance.OnDisplayEquipment;
+                @DisplayEquipment.performed += instance.OnDisplayEquipment;
+                @DisplayEquipment.canceled += instance.OnDisplayEquipment;
+                @Cheat.started += instance.OnCheat;
+                @Cheat.performed += instance.OnCheat;
+                @Cheat.canceled += instance.OnCheat;
+                @Escape.started += instance.OnEscape;
+                @Escape.performed += instance.OnEscape;
+                @Escape.canceled += instance.OnEscape;
+            }
+        }
+    }
+    public XBOXActions @XBOX => new XBOXActions(this);
     private int m_NewcontrolschemeSchemeIndex = -1;
     public InputControlScheme NewcontrolschemeScheme
     {
@@ -1722,6 +2169,19 @@ public class @InputMaster : IInputActionCollection, IDisposable
         void OnEscape(InputAction.CallbackContext context);
     }
     public interface ITemplateActions
+    {
+        void OnMovement(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnAttack(InputAction.CallbackContext context);
+        void OnBroom(InputAction.CallbackContext context);
+        void OnInteract(InputAction.CallbackContext context);
+        void OnDown(InputAction.CallbackContext context);
+        void OnUp(InputAction.CallbackContext context);
+        void OnDisplayEquipment(InputAction.CallbackContext context);
+        void OnCheat(InputAction.CallbackContext context);
+        void OnEscape(InputAction.CallbackContext context);
+    }
+    public interface IXBOXActions
     {
         void OnMovement(InputAction.CallbackContext context);
         void OnJump(InputAction.CallbackContext context);

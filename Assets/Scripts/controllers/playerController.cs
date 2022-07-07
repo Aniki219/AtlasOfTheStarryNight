@@ -15,7 +15,7 @@ public class playerController : MonoBehaviour
 
     int variableJumpIncrements = 6;
 
-    float airAccelerationTime = 0.1f;
+    public float airAccelerationTime = 1.1f;
     float groundAccelerationTime = 0f;
 
     float moveSpeed = 4f;
@@ -45,11 +45,9 @@ public class playerController : MonoBehaviour
     int maxGraceFrames = 0;
     int sortingOrder;
 
-    float gravity;
-    float jumpVelocity;
+    public float jumpVelocity;
     float doubleJumpVelocity;
 
-    public Vector3 velocity;
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
 
@@ -76,7 +74,7 @@ public class playerController : MonoBehaviour
     float wallBlastDelay = 0.2f;
 
     Coroutine jumpCRVar;
-    Coroutine involnerableCRVar;
+    Coroutine invulnerableCRVar;
 
     public static bool created = false;
 
@@ -150,8 +148,8 @@ public class playerController : MonoBehaviour
 
         sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
 
-        gravity = gameManager.Instance.gravity; //-(2 * jumpHeight) / Mathf.Pow(timeToJumpApex, 2);
-        jumpVelocity = Mathf.Abs(gravity) * timeToJumpApex;
+        jumpVelocity = Mathf.Abs(gameManager.Instance.gravity) * timeToJumpApex;
+        Debug.Log(gameManager.Instance.gravity + " times " + timeToJumpApex + " is " + jumpVelocity);
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
         setLastSafePosition();
@@ -238,9 +236,7 @@ public class playerController : MonoBehaviour
         {
             dropThroughPlatforms = true;
             controller.collisions.Reset();
-            Vector3 downVec = Vector3.down;
-            controller.VerticalCollisions(ref downVec);
-            controller.checkGrounded(downVec.y);
+            controller.checkGrounded();
         }
         anim.SetBool("isGrounded", isGrounded());
         if (isGrounded())
@@ -251,14 +247,15 @@ public class playerController : MonoBehaviour
             coyoteTime--;
         }
 
-        if (state == State.Reset || state == State.Wait || state == State.Menu) { return; }
-        controller.Move(velocity * Time.deltaTime);
-        controller.checkWallSlide(facing);
-        isWallSliding();
-        if (controller.collisions.above || controller.collisions.below)
+        if (state == State.Reset || state == State.Wait || state == State.Menu) {
+            controller.canMove = false;
+            controller.canGravity = false;
+        } else
         {
-            velocity.y = 0;
+            controller.canMove = true;
+            controller.canGravity = true;
         }
+
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -427,6 +424,7 @@ public class playerController : MonoBehaviour
 
     void handleMovement(float msMod = 1.0f, bool canJump = true, bool canTurnAround = true)
     {
+        //TODO: this should not be here
         if (heldObject != null)
         {
             msMod *= 0.5f;
@@ -435,6 +433,7 @@ public class playerController : MonoBehaviour
 
         Vector2 input = new Vector2(0, 0);
 
+        //TODO we need a separate input method
         if (!(state == State.WaitMoveable && isGrounded()))
         input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
 
@@ -455,7 +454,6 @@ public class playerController : MonoBehaviour
                     canBroom = true;
                 }
                 canDoubleJump = true;
-                resourceManager.Instance.restoreMana();
             }
         }
         else
@@ -465,6 +463,7 @@ public class playerController : MonoBehaviour
                 if (wallRiding)
                 {
                     flipHorizontal();
+                    //TODO: we need to investigate facing i think
                     triggerBroomStart(fastBroom, facing);
                 } else
                 {
@@ -493,8 +492,8 @@ public class playerController : MonoBehaviour
         float targetVelocityX = input.x * currentMoveSpeed * msMod;
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
-        anim.SetBool("isJumping", !isGrounded() && (velocity.y > 0) && canDoubleJump);
-        anim.SetBool("isFalling", !isGrounded() && (velocity.y < -0.5f) && !controller.collisions.descendingSlope && !heldObject);
+        anim.SetBool("isJumping", !isGrounded() && (controller.velocity.y > 0) && canDoubleJump);
+        anim.SetBool("isFalling", !isGrounded() && (controller.velocity.y < -0.5f) && !controller.collisions.descendingSlope && !heldObject);
         anim.SetBool("wallSlide", wallRiding);
         if (wallRiding)
         {
@@ -502,37 +501,38 @@ public class playerController : MonoBehaviour
             deformer.RemoveDeform("fastfall");
         }
 
-        if (canTurnAround) setFacing(velocity.x);
+        if (canTurnAround) setFacing(controller.velocity.x);
 
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
-        velocity.y += gravity * Time.deltaTime * ((wallRiding && velocity.y <= 0) ? 0.5f : 1.0f);
+        //controller.velocity.x = Mathf.SmoothDamp(controller.velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
+        controller.velocity.x = targetVelocityX;
+        controller.gravityMod = ((wallRiding && controller.velocity.y <= 0) ? 0.5f : 1.0f);
 
-        if (wallRiding && velocity.y < maxWallSlideVel) { velocity.y = maxWallSlideVel; }
+        if (wallRiding && controller.velocity.y < maxWallSlideVel) { controller.velocity.y = maxWallSlideVel; }
 
-        float termVel;
+
         
         if (fastFalling)
         {
-            if (AtlasInputManager.getAxisState("Dpad").y >=0 || isGrounded() || velocity.y > 0)
+            if (AtlasInputManager.getAxisState("Dpad").y >=0 || isGrounded() || controller.velocity.y > 0)
             {
                 fastFalling = false;
             }
-            termVel = fastFallVel;
-            velocity.y += gravity * Time.deltaTime;
+            controller.termVel = fastFallVel;
+            controller.gravityMod = 2.0f;
         }
         else
         {
-            termVel = maxFallVel;
+            controller.termVel = maxFallVel;
             deformer.RemoveDeform("fastfall");
-            if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
+            if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (controller.velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
             {
                 fastFalling = true;
                 deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, -1.0f, "fastfall", true);
             }
         }
-        if (velocity.y < termVel) { velocity.y = termVel; }
 
-        if (velocity.y <= 0 && controller.isSafePosition())
+
+        if (controller.velocity.y <= 0 && controller.isSafePosition())
         {
             lastSafePosition = transform.position;
         }
@@ -579,7 +579,7 @@ public class playerController : MonoBehaviour
 
     void handleParticles()
     {
-        spriteController.dustTrail.SetActive(wallRiding && velocity.y < 0);
+        spriteController.dustTrail.SetActive(wallRiding && controller.velocity.y < 0);
     }
 
     public void createHitbox(HitBox hitBox)
@@ -608,6 +608,7 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region Enumerators
+    //TODO: Look up UniTask to find cancellable async methods that we can replace coroutines with
     IEnumerator LerpToPosition(Vector3 pos, float time = 0.5f)
     {
         while (Vector3.SqrMagnitude(transform.position - pos) > 0.005f)
@@ -629,17 +630,20 @@ public class playerController : MonoBehaviour
     }
     IEnumerator jumpCoroutine(bool dj = false)
     {
+        controller.velocity.y = dj ? doubleJumpVelocity : jumpVelocity;
+        controller.resetGravity();
+
         for (int i = 0; i < variableJumpIncrements; i++)
         {
             if (!AtlasInputManager.getKey("Jump"))
             {
                 if (dj)
                 {
-                    velocity.y = Mathf.Min(velocity.y, doubleJumpVelocity/2.0f);
+                    controller.velocity.y = Mathf.Min(controller.velocity.y, doubleJumpVelocity/2.0f);
                 }
                 else
                 {
-                    velocity.y /= 4;
+                    controller.velocity.y /= 4;
                 }
                 i = variableJumpIncrements;
                 yield return 0;
@@ -667,13 +671,13 @@ public class playerController : MonoBehaviour
 
         flipHorizontal();
 
-        velocity.y = wallJumpVelocity;
+        controller.velocity.y = wallJumpVelocity;
 
         float startTime = Time.time;
         while (Time.time - startTime < 0.1f)
         {
-            velocity.x = wallJumpVelocity * facing;
-            velocity.y += gravity * Time.deltaTime;
+            controller.velocity.x = wallJumpVelocity * facing;
+            controller.doGravity();
 
             if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
             {
@@ -691,7 +695,7 @@ public class playerController : MonoBehaviour
         invulnerable = true;
         yield return new WaitForSeconds(invulnTime);
         invulnerable = false;
-        involnerableCRVar = null;
+        invulnerableCRVar = null;
     }
     #endregion
 
@@ -699,11 +703,11 @@ public class playerController : MonoBehaviour
 
     public void setInvulnerable(float time)
     {
-        if (involnerableCRVar != null)
+        if (invulnerableCRVar != null)
         {
-            StopCoroutine(involnerableCRVar);
+            StopCoroutine(invulnerableCRVar);
         }
-        involnerableCRVar = StartCoroutine(invulnerableCoroutine(time));
+        invulnerableCRVar = StartCoroutine(invulnerableCoroutine(time));
     }
 
     void allowDoor()
@@ -830,7 +834,7 @@ public class playerController : MonoBehaviour
     public void cutScenePrep()
     {
         state = State.Wait;
-        velocity = Vector2.zero;
+        controller.velocity = Vector2.zero;
         resetAnimator();
     }
 
@@ -873,7 +877,7 @@ public class playerController : MonoBehaviour
         canBroom = true;
         canDoubleJump = true;
         anim.SetBool("inTornado", true);
-        velocity = Vector3.zero;
+        controller.velocity = Vector3.zero;
         transform.position = Vector3.SmoothDamp(transform.position, currentTornado.position, ref velocitySmoothing, 0.05f);
 
         if (AtlasInputManager.getKeyPressed("Jump"))
@@ -894,7 +898,7 @@ public class playerController : MonoBehaviour
             movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
             if (mp)
             {
-                velocity.x = mp.getVelocity().x;
+                controller.velocity.x = mp.getVelocity().x;
             }
             Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
             if (nadoDeformer)
@@ -910,7 +914,7 @@ public class playerController : MonoBehaviour
     public void startEat()
     {
         state = State.Eat;
-        velocity = new Vector3(0, 0, 0);
+        controller.velocity = new Vector3(0, 0, 0);
         resetAnimator();
         anim.SetBool("eat", true);
     }
@@ -950,14 +954,14 @@ public class playerController : MonoBehaviour
     }
     IEnumerator doHitLag(float duration)
     {
-        Vector3 oldVelocity = velocity;
-        velocity = Vector3.zero;
+        Vector3 oldVelocity = controller.velocity;
+        controller.velocity = Vector3.zero;
         State oldState = state;
         state = State.Wait;
         deformer.flashWhite();
         yield return new WaitForSeconds(duration);
         state = oldState;
-        velocity = oldVelocity;
+        controller.velocity = oldVelocity;
     }
     #endregion
 
@@ -971,7 +975,7 @@ public class playerController : MonoBehaviour
             return;
         }
         resourceManager.Instance.usePlayerMana(2);
-        velocity.y = 0;
+        controller.velocity.y = 0;
         StartCoroutine(WallJumpCoroutine());
     }
 
@@ -983,21 +987,23 @@ public class playerController : MonoBehaviour
     {
         //Cancel jump if stuck under something while crawling
         if (isCrouching()) return;
-        deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, 1.0f, "jump", true);
-        velocity.y = jumpVelocity;
+
         SoundManager.Instance.playClip("jump2");
+        deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, 1.0f, "jump", true);
+
         jumpCRVar = StartCoroutine(jumpCoroutine());
     }
 
     void doubleJump()
     {
         returnToMovement();
-        resourceManager.Instance.usePlayerMana(1);
+
         canDoubleJump = false;
         anim.SetTrigger("doubleJump");
-        velocity.y = doubleJumpVelocity;
+
         SoundManager.Instance.playClip("doubleJump");
         spriteController.doubleJumpParticle.Play();
+
         if (jumpCRVar != null) StopCoroutine(jumpCRVar);
         jumpCRVar = StartCoroutine(jumpCoroutine(true));
     }
@@ -1006,7 +1012,7 @@ public class playerController : MonoBehaviour
     {
         deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
         if (state == State.Broom) endBroom();
-        velocity.y = bounceVelocity;
+        controller.velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
         if (jumpCRVar != null)  StopCoroutine(jumpCRVar);
     }
@@ -1048,7 +1054,7 @@ public class playerController : MonoBehaviour
 
         state = fastBroom ? State.Broom : State.Wait;
         fastBroom = false;
-        velocity = Vector3.zero;
+        controller.velocity = Vector3.zero;
     }
 
     //Called by animator after hopping on broom
@@ -1080,8 +1086,8 @@ public class playerController : MonoBehaviour
             return;
         }
         float vdir = 0 * AtlasInputManager.getAxisState("Dpad").y;
-        velocity.y = moveSpeed / 2.0f * vdir;
-        velocity.x = moveSpeed * 2 * facing;
+        controller.velocity.y = moveSpeed / 2.0f * vdir;
+        controller.velocity.x = moveSpeed * 2 * facing;
     }
 
     void endBroom()
@@ -1120,7 +1126,7 @@ public class playerController : MonoBehaviour
 
         resetAnimator();
         anim.SetTrigger("bonk");
-        velocity.y = 4f;
+        controller.velocity.y = 4f;
 
         state = (damage > 0) ? State.Hurt : State.Bonk;
         AtlasEventManager.Instance.BonkEvent();
@@ -1130,10 +1136,10 @@ public class playerController : MonoBehaviour
 
     void bonk()
     {
-        velocity.y += gravity * Time.deltaTime;
+        controller.doGravity();
         if (!isGrounded())
         {
-            velocity.x = -moveSpeed/4f * sprite.localScale.x;
+            controller.velocity.x = -moveSpeed/4f * sprite.localScale.x;
         }
     }
 
@@ -1166,7 +1172,7 @@ public class playerController : MonoBehaviour
         if (Vector3.SqrMagnitude(lastSafePosition - transform.position) < 0.01f)
         {
             transform.position = lastSafePosition;
-            velocity = Vector3.zero;
+            controller.velocity = Vector3.zero;
             returnToMovement();
             anim.SetBool("resetSpin", false);
             StartCoroutine(flashEffect());
@@ -1231,7 +1237,7 @@ public class playerController : MonoBehaviour
 
     public void resetVelocity()
     {
-        velocity = Vector2.zero;
+        controller.velocity = Vector2.zero;
     }
     #endregion
 
@@ -1267,11 +1273,11 @@ public class playerController : MonoBehaviour
     //Ideally we can find a way to pause until  a certain condition is met
     //But what do we do about multiple pauseCoroutines?
     IEnumerator pauseCoroutine() { 
-        Vector2 prevVelocity = velocity;
+        Vector2 prevVelocity = controller.velocity;
         State prevState = state;
         float prevAnimSpeed = anim.speed;
 
-        velocity = Vector3.zero;
+        controller.velocity = Vector3.zero;
         state = State.Wait;
         anim.speed = 0;
 
@@ -1281,7 +1287,7 @@ public class playerController : MonoBehaviour
         }
 
         state = prevState;
-        velocity = prevVelocity;
+        controller.velocity = prevVelocity;
         anim.speed = prevAnimSpeed;
     }
 
@@ -1293,15 +1299,15 @@ public class playerController : MonoBehaviour
     IEnumerator freezeCoroutine(float time, bool moveable)
     {
         State prevState = state;
-        Vector3 prevVel = velocity;
+        Vector3 prevVel = controller.velocity;
         anim.SetBool("isRunning", false);
 
-        if (!moveable) velocity = Vector3.zero;
+        if (!moveable) controller.velocity = Vector3.zero;
         state = moveable ? State.WaitMoveable : State.Wait;
 
         yield return new WaitForSeconds(time);
         state = prevState;
-        if (!moveable) velocity = prevVel;
+        if (!moveable) controller.velocity = prevVel;
     }
 
     void createStars(Vector3? position = null)

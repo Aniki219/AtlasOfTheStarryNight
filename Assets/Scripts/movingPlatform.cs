@@ -44,6 +44,7 @@ public class movingPlatform : MonoBehaviour
             if (Vector3.Distance(transform.position, targetPos) > maxDistanceDelta)
             {
                 velocity = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime) - transform.position;
+                Physics.SyncTransforms();
             }
             else
             {
@@ -83,32 +84,41 @@ public class movingPlatform : MonoBehaviour
                 {
                     if (velocity.y > 0 && !actor.transform.GetComponent<characterController>().checkVertDist(velocity.y))
                     {
-                        actor.transform.Translate(velocity.x, velocity.y, 0);
                         pc.dropThroughPlatforms = true;
                         return;
                     };
                     actor.transform.Translate(velocity);
                 }
             }
-            else
-            {
+            //else
+            //{
                 
-                Rigidbody2D rb = actor.transform.GetComponent<Rigidbody2D>();
-                Collider2D other = actor.transform.GetComponent<Collider2D>();
-                if (rb &&
-                    other &&
-                    other.bounds.min.y > col.bounds.max.y)
-                {
-                    if (other.GetComponent<CrushTest>())
-                    {
-                        other.GetComponent<CrushTest>().test(velocity.y);
-                    }
-                    rb.velocity = Vector2.zero;
-                    rb.AddForce(-Physics2D.gravity);
-                    rb.transform.Translate(velocity, Space.World);
-                }
-            }
+            //    Rigidbody2D rb = actor.transform.GetComponent<Rigidbody2D>();
+            //    Collider2D other = actor.transform.GetComponent<Collider2D>();
+            //    if (rb &&
+            //        other &&
+            //        other.bounds.min.y > col.bounds.max.y)
+            //    {
+            //        if (other.GetComponent<CrushTest>())
+            //        {
+            //            other.GetComponent<CrushTest>().test(velocity.y);
+            //        }
+            //        rb.velocity = Vector2.zero;
+            //        rb.AddForce(-Physics2D.gravity);
+            //        rb.transform.Translate(velocity, Space.World);
+            //    }
+            //}
         }
+    }
+
+    void OnCollisionEnter2D(Collision2D other)
+    {
+        other.transform.parent = transform.parent;
+    }
+
+    private void OnCollisionExit2D(Collision2D other)
+    {
+        other.transform.parent = null;
     }
 
     void calculateNodePositions()

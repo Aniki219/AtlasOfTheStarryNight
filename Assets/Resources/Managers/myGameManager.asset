@@ -12,9 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b9eceee577d9544d988c95da82f9c13, type: 3}
   m_Name: myGameManager
   m_EditorClassIdentifier: 
+  pause_manager: {fileID: 0}
   gravity: -17.6
-  maxFallVel: -15
-  player: {fileID: 6349184747420119991, guid: 72cdd1024bb284c49823b858964f14db, type: 3}
+  maxFallVel: -17.6
+  canvasCtrl: {fileID: 0}
+  player: {fileID: 0}
   playerCtrl: {fileID: 0}
   playerHanger: {fileID: 0}
+  canSetPosition: 1
   currentDoorLabel: none
+  pauseMenus: []

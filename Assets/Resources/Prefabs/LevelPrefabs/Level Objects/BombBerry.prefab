@@ -126,7 +126,7 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
+  m_LinearDrag: 0.2
   m_AngularDrag: 10
   m_GravityScale: 1
   m_Material: {fileID: 0}
@@ -219,6 +219,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   childrenToo: 1
+  revertParentScale: 1
   preventFlip: 0
 --- !u!114 &5636067223678466786
 MonoBehaviour:
@@ -309,6 +310,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   childrenToo: 1
+  revertParentScale: 1
   preventFlip: 1
 --- !u!114 &7887443625416142779
 MonoBehaviour:
@@ -384,7 +386,7 @@ GameObject:
   - component: {fileID: 944922635059973844}
   - component: {fileID: 9177176828864154726}
   - component: {fileID: 1751229454243229530}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: handle
   m_TagString: Liftable
   m_Icon: {fileID: 0}
@@ -456,6 +458,11 @@ PrefabInstance:
       propertyPath: oscillators.Array.data[0].oscillationSize
       value: 0.05
       objectReference: {fileID: 0}
+    - target: {fileID: 1366517017461633733, guid: c5e70ec88873a944fb49394131744999,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
+      objectReference: {fileID: 0}
     - target: {fileID: 1748890562221191205, guid: c5e70ec88873a944fb49394131744999,
         type: 3}
       propertyPath: m_SortingOrder
@@ -470,6 +477,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: messageBubbleCentered
+      objectReference: {fileID: 0}
+    - target: {fileID: 4614155178914685532, guid: c5e70ec88873a944fb49394131744999,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7230467792819334554, guid: c5e70ec88873a944fb49394131744999,
         type: 3}
@@ -556,6 +568,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: TimerCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 3348256576575941299, guid: e41c87d9130a00e4584fb2572278c74d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6977729246090453917, guid: e41c87d9130a00e4584fb2572278c74d,
         type: 3}
@@ -661,6 +678,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7874632163176683436, guid: e41c87d9130a00e4584fb2572278c74d,
+        type: 3}
+      propertyPath: m_Layer
+      value: 15
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e41c87d9130a00e4584fb2572278c74d, type: 3}

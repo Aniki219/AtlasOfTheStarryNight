@@ -30,7 +30,7 @@ public class selectAttack : StateMachineBehaviour
             down = AtlasInputManager.getAxisState("Dpad").y < -0.1f || pc.isCrouching();
         }
 
-        bool falling = (pc.velocity.y < -0.1);
+        bool falling = (pc.controller.velocity.y < -0.1);
 
         if (up)
         {
