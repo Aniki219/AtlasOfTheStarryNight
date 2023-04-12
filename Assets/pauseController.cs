@@ -125,8 +125,8 @@ public class pauseController : MonoBehaviour
 
     private void OnDestroy()
     {
-        gameManager.Instance.pause_manager.pauseEvent.RemoveListener(pause);
-        gameManager.Instance.pause_manager.unpauseEvent.RemoveListener(unpause);
+        gameManager.Instance.pause_manager.pauseEvent.RemoveAllListeners();
+        gameManager.Instance.pause_manager.unpauseEvent.RemoveAllListeners();
     }
 
     public void pause(int pausePriority)

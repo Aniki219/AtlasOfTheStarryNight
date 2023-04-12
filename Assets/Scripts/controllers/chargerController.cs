@@ -153,8 +153,8 @@ public class chargerController : enemyAI
             chargeStart = Mathf.Infinity;
         }
 
-        if ((controller.collisions.left && getFacing() == -1) ||
-            (controller.collisions.right && getFacing() == 1))
+        if ((controller.collisions.getLeft() && getFacing() == -1) ||
+            (controller.collisions.getRight() && getFacing() == 1))
         {
             wallBonk();
             triggerState("Bonk");
@@ -192,7 +192,7 @@ public class chargerController : enemyAI
     void FixedUpdate()
     {
         controller.Move(velocity * Time.deltaTime);
-        if (controller.collisions.above || controller.collisions.below)
+        if (controller.collisions.getAbove() || controller.collisions.getBelow())
         {
             if (anim.GetBool("isFalling"))
             {
@@ -212,13 +212,13 @@ public class chargerController : enemyAI
                     returnToMovement();
                 }
             }
-            if ((controller.collisions.above && velocity.y > 0) ||
-                (controller.collisions.below && velocity.y < 0))
+            if ((controller.collisions.getAbove() && velocity.y > 0) ||
+                (controller.collisions.getBelow() && velocity.y < 0))
             {
                 velocity.y = 0;
             }
         }
-        if ((controller.collisions.right && velocity.x > 0) || (controller.collisions.left && velocity.x < 0))
+        if ((controller.collisions.getRight() && velocity.x > 0) || (controller.collisions.getLeft() && velocity.x < 0))
         {
             velocity.x = 0;
             if (velocity.y > 0)

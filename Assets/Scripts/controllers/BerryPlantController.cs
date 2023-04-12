@@ -94,7 +94,7 @@ public class BerryPlantController : MonoBehaviour
     IEnumerator Picked(bool playSound = true)
     {
         canPick = false;
-        deformer.flashWhite(0.2f);
+        deformer.flashColor();
         if (playSound)
         {
             if (pickSound) SoundManager.Instance.playClip(pickSound.name);
@@ -171,7 +171,7 @@ public class BerryPlantController : MonoBehaviour
             if (hbc.hasHit) return;
 
             hbc.hasHit = true && tag != "BombBerryPlant";
-            gameManager.Instance.player.GetComponentInChildren<Deformer>().flashWhite();
+            gameManager.Instance.player.GetComponentInChildren<Deformer>().flashColor();
             HitBox hb = hbc.hitbox;
             if (hb.broom)
             {

@@ -39,8 +39,8 @@ public class flowerBomberController : MonoBehaviour
     {
         //Movement and turning
         //if (hc.inHitStun) return;
-        if (cc.collisions.right && velocity.x > 0 ||
-            cc.collisions.left && velocity.x < 0)
+        if (cc.collisions.getRight() && velocity.x > 0 ||
+            cc.collisions.getLeft() && velocity.x < 0)
         {
             velocity *= -1;
         }
@@ -65,6 +65,6 @@ public class flowerBomberController : MonoBehaviour
         velocity.y = kbStrength * 1.5f * dy;
 
         anim.SetTrigger("Hurt");
-        deformer.flashWhite(0.2f);
+        deformer.flashColor();
     }
 }

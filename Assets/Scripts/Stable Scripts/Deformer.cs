@@ -1,5 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using System;
+using System.Threading;
+
 using UnityEngine;
 
 [RequireComponent(typeof(SpriteRenderer))]
@@ -7,6 +11,7 @@ public class Deformer : MonoBehaviour
 {
     Material defaultMaterial;
     public Material flashMaterial;
+    public SpriteRenderer sprite;
 
     Collider2D col;
 
@@ -24,13 +29,18 @@ public class Deformer : MonoBehaviour
     [SerializeField]
     public List<Deformation> deforms;
 
+    public FlashColor flashColorRef;
+
     public void Start()
     {
+        //TODO: uhhhh really?
         col = GetComponentInParent<Collider2D>();
+
+        sprite = GetComponent<SpriteRenderer>();
         //deforms = new List<Deformation>();
 
         //frameCount is to remain sync'd for all oscillators
-        frameCount = (int)Random.Range(0, 100) * Time.deltaTime;
+        frameCount = (int)UnityEngine.Random.Range(0, 100) * Time.deltaTime;
 
         startPosition = transform.localPosition;
         startRotation = transform.localEulerAngles;
@@ -94,7 +104,7 @@ public class Deformer : MonoBehaviour
 
     void UpdateOscillators()
     {
-        totalOffset = startPosition;
+        //totalOffset = startPosition;
         foreach (Oscillator o in oscillators)
         {
             if (!o.enabled) continue;
@@ -191,21 +201,134 @@ public class Deformer : MonoBehaviour
         deforms.Add(newDeform);
     }
 
-    public void flashWhite(float time = 0.1f)
-    {
-        StartCoroutine(flashCoroutine(time));
+    public void flashColor(FlashColor _flashColor = null) {
+        if (flashColorRef != null && flashColorRef.Equals(_flashColor)) return;
+        endFlashColor();
+        if (_flashColor == null) {
+            flashColorRef = FlashColor.builder
+                .withColor(Color.white)
+                .withTimeUnits(TimeUnits.COUNTS)
+                .withCycleCount(1)
+                .build();
+        } else {
+            flashColorRef = _flashColor;
+        }
+        flashColorRef.task = StartCoroutine(nameof(performFlashColor));
     }
 
-    private IEnumerator flashCoroutine(float time)
-    {
-        SpriteRenderer sprite = GetComponent<SpriteRenderer>();
-        if (sprite == null)
-        {
-            sprite = GetComponentInChildren<SpriteRenderer>();
-        }
-        sprite.material = flashMaterial;
-        yield return new WaitForSeconds(time);
+    public void endFlashColor() {
+        if (flashColorRef == null) return;
+        StopCoroutine(flashColorRef.task);
         sprite.material = playerStatsManager.Instance.currentSkin;
+        sprite.color = Color.white;
+        flashColorRef = null;
+    }
+
+    private IEnumerator performFlashColor() {
+        int counts = 0;
+        float startTime = Time.time;
+        if (!flashColorRef.tint) sprite.material = flashMaterial;
+        while(condition()) {
+            counts++;
+            sprite.color = flashColorRef.color;
+            Debug.Log(sprite.transform.name);
+            if (flashColorRef.timeUnits == TimeUnits.SECONDS) {
+                yield return new WaitForSeconds(flashColorRef.effectDuration);
+                break;
+            }
+            yield return new WaitForSeconds(0.2f);
+        }
+        
+        endFlashColor();
+
+        bool condition() {
+            if (flashColorRef.timeUnits.Equals(TimeUnits.COUNTS)) {
+                return counts < flashColorRef.effectDuration;
+            }
+            if (flashColorRef.timeUnits.Equals(TimeUnits.SECONDS)) {
+                return startTime + flashColorRef.effectDuration < Time.time;
+            }
+            //Continous
+            return true;
+        }
+    }
+
+    
+}
+
+public enum TimeUnits {
+    SECONDS,
+    COUNTS,
+    CONTINUOUS
+}
+
+public class FlashColor {
+    public TimeUnits timeUnits { get; private set; }
+    public float effectDuration { get; private set; }
+    public float cycleDuration { get; private set; }
+    public int cycleCount { get; private set; }
+    public Color color { get; private set; }
+    public bool tint { get; private set; }
+
+    public Coroutine task;
+
+    private FlashColor(FlashColorRequest fcrb) {
+        timeUnits = fcrb.timeUnits;
+        effectDuration = fcrb.effectDuration;
+        cycleDuration = fcrb.cycleDuration;
+        cycleCount = fcrb.cycleCount;
+        color = fcrb.color;
+        tint = fcrb.tint;
+    }
+
+    public bool Equals(FlashColor other) {
+        if (other == null) return false;
+        return color.Equals(other.color);
+    }
+
+    public static FlashColorRequest builder;
+
+    public struct FlashColorRequest {
+        public TimeUnits timeUnits;
+        public float effectDuration;
+        public float cycleDuration;
+        public int cycleCount;
+        public Color color;
+        public bool tint;
+
+        public FlashColorRequest withTimeUnits(TimeUnits timeUnitsToUse) {
+            timeUnits = timeUnitsToUse;
+            return this;
+        }
+
+        public FlashColorRequest withEffectDuration(float effectDurationToUse) {
+            effectDuration = effectDurationToUse;
+            return this;
+        }
+
+        public FlashColorRequest withCycleDuration(float cycleDurationToUse) {
+            cycleDuration = cycleDurationToUse;
+            return this;
+        }
+
+        public FlashColorRequest withCycleCount(int cycleCountToUse) {
+            cycleCount = cycleCountToUse;
+            return this;
+        }
+
+        public FlashColorRequest withColor(Color colorToUse) {
+            color = colorToUse;
+            return this;
+        }
+
+        public FlashColorRequest withTint(bool isTint) {
+            tint = isTint;
+            return this;
+        }
+
+        public FlashColor build() {
+            return new FlashColor(this);
+        }
     }
 }
 

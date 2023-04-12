@@ -1,8 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
+
+using MyBox;
 
 [RequireComponent (typeof (characterController))]
 public class playerController : MonoBehaviour
@@ -15,22 +18,15 @@ public class playerController : MonoBehaviour
 
     int variableJumpIncrements = 6;
 
-    public float airAccelerationTime = 1.1f;
-    float groundAccelerationTime = 0f;
+    [Foldout("Acceleration Constants", true)]
+    public float airAccelerationTime = 0.1f;
+    public float airDeccelerationTime = 0.2f;
+    public float groundAccelerationTime = 0.1f;
+    [Foldout("Acceleration Constants")]
+    public float groundDeccelerationTime = 0f;
 
-    float moveSpeed = 4f;
-    public int facing = 1;
-    public bool canBroom = false;
-    bool canDoubleJump = false;
-    bool canTornado = true;
-    bool arialAttacking = false;
-    bool fastFalling = false;
-    bool wallRiding = false;
-    public bool invulnerable = false;
-    public bool dropThroughPlatforms = false;
-    public bool resetPosition = false;
-    Vector3 lastSafePosition;
     float resetTime = 0.25f;
+    [HideInInspector] public Vector3 lastSafePosition;
 
     doorController currentDoor = null;
     string currentDoorLabel = "none";
@@ -38,15 +34,32 @@ public class playerController : MonoBehaviour
     float maxWallSlideVel = -3.5f;
     float maxFallVel = -15f;
     float fastFallVel = -25f;
-    float wallJumpVelocity = 7;
+    float wallJumpVelocity = 6;
     int maxCoyoteTime = 3;
     int coyoteTime = 0;
-    public int graceFrames = 0;
+    int graceFrames = 0;
     int maxGraceFrames = 0;
     int sortingOrder;
 
-    public float jumpVelocity;
-    float doubleJumpVelocity;
+    [Foldout("Movement Stats", true)]
+    public float moveSpeed = 5f;
+    public float jumpVelocity = 8.8f;
+    public float doubleJumpVelocity;
+    public float wallBlastDelay = 0.2f;
+
+    [Foldout("State Info", true)]
+    public bool hasDoubleJump = false;
+    public bool hasWallJump = false;
+    public bool canDoubleJump = false;
+    public bool canTornado = true;
+    [SerializeField] bool arialAttacking = false;
+    [SerializeField] bool fastFalling = false;
+    [SerializeField] bool wallRiding = false;
+    public int facing = 1;
+    public bool canBroom = false;
+    public bool invulnerable = false;
+    public bool dropThroughPlatforms = false;
+    public bool resetPosition = false;
 
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
@@ -59,6 +72,8 @@ public class playerController : MonoBehaviour
     BoxCollider2D boxCollider;
     Deformer deformer;
     stepSounds steps;
+
+    [Foldout("Object References")]
     public Collider2D secretCollider;
 
     Vector3 colliderStartSize;
@@ -71,19 +86,11 @@ public class playerController : MonoBehaviour
 
     bool fastBroom = false;
     bool screenShake = false;
-    float wallBlastDelay = 0.2f;
 
     Coroutine jumpCRVar;
     Coroutine invulnerableCRVar;
 
-    public static bool created = false;
-
-    public bool hasDoubleJump = false;
-    public bool hasWallJump = false;
-
-    //bool fastBroom = true;
-    //bool screenShake = false;
-    //float wallBlastDelay = 0f;
+    [HideInInspector] public static bool created = false;
     #endregion
 
     #region State
@@ -106,7 +113,8 @@ public class playerController : MonoBehaviour
         Tornado,
         Eat,
         Attack,
-        ChargeAttack
+        ChargeAttack,
+        Sliding
     }
 
     //Any state thatcannot receive damage or interact with triggers
@@ -118,7 +126,7 @@ public class playerController : MonoBehaviour
     //Moving Platform States
     List<State> moveableStates = new List<State>
     {
-        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat, State.WaitMoveable
+        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat, State.WaitMoveable, State.Sliding
     };
 
     //States that can be returned to in resetPosition
@@ -148,8 +156,7 @@ public class playerController : MonoBehaviour
 
         sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
 
-        jumpVelocity = Mathf.Abs(gameManager.Instance.gravity) * timeToJumpApex;
-        Debug.Log(gameManager.Instance.gravity + " times " + timeToJumpApex + " is " + jumpVelocity);
+        //jumpVelocity = Mathf.Abs(gameManager.Instance.gravity) * timeToJumpApex;
         float djgravity = -(2 * doubleJumpHeight) / Mathf.Pow(timeToJumpApex, 2);
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
         setLastSafePosition();
@@ -185,6 +192,11 @@ public class playerController : MonoBehaviour
                 handleAttackInput();
                 canPickUp();
                 allowDoor();
+                allowCrouch();
+                break;
+            case State.Sliding:
+                handleSlide();
+                handleAttackInput();
                 allowCrouch();
                 break;
             case State.BroomStart:
@@ -226,8 +238,28 @@ public class playerController : MonoBehaviour
 
     private void LateUpdate()
     {
-
         checkRoomBoundaries();
+
+        if (controller.debug) {
+            if (controller.highlightGrounded) {
+                if (isGrounded()) {
+                    FlashColor flashColor = FlashColor.builder
+                                                        .withColor(Color.green)
+                                                        .withTimeUnits(TimeUnits.CONTINUOUS)
+                                                        .build();
+                    deformer.flashColor(flashColor);
+                } else {
+                    FlashColor flashColor = FlashColor.builder
+                                                        .withColor(Color.red)
+                                                        .withTimeUnits(TimeUnits.CONTINUOUS)
+                                                        .build();
+                    deformer.flashColor(flashColor);
+                }
+            } else {
+            //TODO: NO
+            deformer.endFlashColor();
+            }
+        }
     }
 
     private void FixedUpdate()
@@ -439,6 +471,12 @@ public class playerController : MonoBehaviour
 
         if (isGrounded() || coyoteTime > 0)
         {
+            if (isGrounded() && controller.collisions.getGroundSlope().y < 0.5f && controller.velocity.y < -0.5f) {
+                resetAnimator();
+                anim.SetTrigger("sliding");
+                state = State.Sliding;
+                return;
+            }
             if (AtlasInputManager.getKeyPressed("Jump") && canJump)
             {
                 firstJump();
@@ -455,6 +493,7 @@ public class playerController : MonoBehaviour
                 }
                 canDoubleJump = true;
             }
+            wallRiding = false;
         }
         else
         {
@@ -471,6 +510,7 @@ public class playerController : MonoBehaviour
                 }
                 return;
             }
+            isWallSliding();
 
             if (hasWallJump && wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
             {
@@ -493,7 +533,7 @@ public class playerController : MonoBehaviour
 
         anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
         anim.SetBool("isJumping", !isGrounded() && (controller.velocity.y > 0) && canDoubleJump);
-        anim.SetBool("isFalling", !isGrounded() && (controller.velocity.y < -0.5f) && !controller.collisions.descendingSlope && !heldObject);
+        anim.SetBool("isFalling", !isGrounded() && (controller.velocity.y < -0.5f) && !heldObject);
         anim.SetBool("wallSlide", wallRiding);
         if (wallRiding)
         {
@@ -503,8 +543,24 @@ public class playerController : MonoBehaviour
 
         if (canTurnAround) setFacing(controller.velocity.x);
 
-        //controller.velocity.x = Mathf.SmoothDamp(controller.velocity.x, targetVelocityX, ref velocityXSmoothing, (controller.collisions.below) ? groundAccelerationTime : airAccelerationTime);
-        controller.velocity.x = targetVelocityX;
+        float smoothTime = 0;
+        if (controller.collisions.getBelow()) {
+            if (AtlasHelpers.Sign(controller.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 
+            Mathf.Abs(targetVelocityX) >= Mathf.Abs(controller.velocity.x)) {
+                smoothTime = groundAccelerationTime;
+            } else {
+                smoothTime = groundDeccelerationTime;
+            }
+        }  else {
+            if (AtlasHelpers.Sign(controller.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 
+            Mathf.Abs(targetVelocityX) >= Mathf.Abs(controller.velocity.x)) {
+                smoothTime = airAccelerationTime;
+            } else {
+                smoothTime = airDeccelerationTime;
+            }
+        }
+        controller.velocity.x = Mathf.SmoothDamp(controller.velocity.x, targetVelocityX, ref velocityXSmoothing, smoothTime);
+        //controller.velocity.x = targetVelocityX;
         controller.gravityMod = ((wallRiding && controller.velocity.y <= 0) ? 0.5f : 1.0f);
 
         if (wallRiding && controller.velocity.y < maxWallSlideVel) { controller.velocity.y = maxWallSlideVel; }
@@ -517,12 +573,12 @@ public class playerController : MonoBehaviour
             {
                 fastFalling = false;
             }
-            controller.termVel = fastFallVel;
+            //controller.termVel = fastFallVel;
             controller.gravityMod = 2.0f;
         }
         else
         {
-            controller.termVel = maxFallVel;
+            //controller.termVel = maxFallVel;
             deformer.RemoveDeform("fastfall");
             if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (controller.velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
             {
@@ -536,6 +592,24 @@ public class playerController : MonoBehaviour
         {
             lastSafePosition = transform.position;
         }
+    }
+
+    void handleSlide() {
+        controller.velocity.x = 0;
+        setFacing(AtlasHelpers.Sign(controller.collisions.getGroundSlope().x));
+        if (AtlasInputManager.getKeyPressed("Jump"))
+        {
+            novahop();
+        }
+        if (controller.collisions.getGroundSlope().y > 0.5f || !isGrounded()) {
+            resetAnimator();
+            returnToMovement();
+        }
+    }
+
+    async void novahop() {
+        controller.velocity = new Vector2(facing * 8, 5);
+        returnToMovement();
     }
 
     #region Attacking
@@ -677,7 +751,6 @@ public class playerController : MonoBehaviour
         while (Time.time - startTime < 0.1f)
         {
             controller.velocity.x = wallJumpVelocity * facing;
-            controller.doGravity();
 
             if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
             {
@@ -921,7 +994,7 @@ public class playerController : MonoBehaviour
     public void setFacing(float vel)
     {
         //During Movement we can keep track of the direction the player is facing each frame
-        if (vel == 0) return;
+        if (Mathf.Abs(vel) < 0.01f) return;
         if (facing != (int)Mathf.Sign(vel))
         {
             if (isCrouching())
@@ -937,16 +1010,23 @@ public class playerController : MonoBehaviour
         }
         sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     }
-    public void OnBonkCeiling(float vy)
+    public void OnBonkCeiling()
     {
-        if (state == State.Movement)
-        deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.15f, 0.25f, 1.0f);
-        gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
+        if (controller.velocity.y <= 0) return;
+        if (state == State.Movement) {
+            deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.05f, 0.35f, 1.0f);
+            gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
+            controller.velocity.y = Mathf.Min(0, controller.velocity.y);
+            controller.resetGravity();
+        }
     }
-    public void OnLanding(bool squish = false)
+    public void OnLanding()
     {
         AtlasEventManager.Instance.PlayerLandEvent(resetPosition);
-        if (squish) deformer.startDeform(new Vector3(1.15f, 0.85f, 1.0f), 0.05f, 0.125f, -1.0f, "Landing", true);
+        if (controller.velocity.y < -10) {
+            deformer.startDeform(new Vector3(1.25f, 0.90f, 1.0f), 0.05f, 0.15f, -1.0f, "Landing", true);
+            particleMaker.createDust(true);
+        }
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -958,7 +1038,7 @@ public class playerController : MonoBehaviour
         controller.velocity = Vector3.zero;
         State oldState = state;
         state = State.Wait;
-        deformer.flashWhite();
+        deformer.flashColor();
         yield return new WaitForSeconds(duration);
         state = oldState;
         controller.velocity = oldVelocity;
@@ -968,13 +1048,13 @@ public class playerController : MonoBehaviour
     #region Jumps & WallJumps
     void wallJumpInit()
     {
-        if (resourceManager.Instance.getPlayerMana() < 2)
-        {
-            //state = State.Movement;
-            returnToMovement();
-            return;
-        }
-        resourceManager.Instance.usePlayerMana(2);
+        // if (resourceManager.Instance.getPlayerMana() < 2)
+        // {
+        //     //state = State.Movement;
+        //     returnToMovement();
+        //     return;
+        // }
+        // resourceManager.Instance.usePlayerMana(2);
         controller.velocity.y = 0;
         StartCoroutine(WallJumpCoroutine());
     }
@@ -990,6 +1070,7 @@ public class playerController : MonoBehaviour
 
         SoundManager.Instance.playClip("jump2");
         deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, 1.0f, "jump", true);
+        particleMaker.createDust(true);
 
         jumpCRVar = StartCoroutine(jumpCoroutine());
     }
@@ -1022,7 +1103,7 @@ public class playerController : MonoBehaviour
     //Popping a WooshBerry calls this.
     public void triggerBroomStart(bool fast = false, float dir = 0)
     {
-        if (resetPosition || !controller.collisions.tangible) return;
+        if (resetPosition || !controller.collisions.isTangible()) return;
         if (intangibleStates.Contains(state)) return;
         //Cancel is ceiling above while crouching
         if (isCrouching() && !controller.checkVertDist(0.3f)) return;
@@ -1063,6 +1144,7 @@ public class playerController : MonoBehaviour
         resetAnimator();
         state = State.Broom;
         SoundManager.Instance.playClip("broomLaunch");
+        controller.canGravity = false;
     }
 
     void handleBroom()
@@ -1081,17 +1163,20 @@ public class playerController : MonoBehaviour
             if (hasDoubleJump) doubleJump();
             return;
         }
-        if ((facing == -1) ? controller.collisions.left : controller.collisions.right) {
-            startBonk();
+        if ((facing == -1) ? controller.collisions.getLeft() : controller.collisions.getRight()) {
+            if (Mathf.Abs(Vector2.Dot(controller.collisions.getNorm(), Vector2.right)) > 0.8f) {
+                startBonk();
+            }
             return;
         }
-        float vdir = 0 * AtlasInputManager.getAxisState("Dpad").y;
+        float vdir = AtlasInputManager.getAxisState("Dpad").y;
         controller.velocity.y = moveSpeed / 2.0f * vdir;
         controller.velocity.x = moveSpeed * 2 * facing;
     }
 
     void endBroom()
     {
+        controller.canGravity = true;
         anim.SetTrigger("broomEnd");
         AtlasEventManager.Instance.BroomCancelEvent();
         returnToMovement();
@@ -1101,11 +1186,14 @@ public class playerController : MonoBehaviour
     #region Damage, Bonking, and Reseting
     //Take whether to set resetPos or not
     //Set state to Hurt or Bonk
-    public void startBonk(int damage = 0, bool reset = false)
+    public async void startBonk(int damage = 0, bool reset = false)
     {
         anim.SetBool("resetSpin", reset);
-        if (!controller.collisions.tangible) { return; }
-        controller.collisions.tangible = false;
+        if (!controller.collisions.isTangible()) { return; }
+        controller.collisions.setTangible(false);
+
+
+   
         if (reset)
         {
             resetPosition = true;
@@ -1122,13 +1210,21 @@ public class playerController : MonoBehaviour
             createStars(transform.position);
         }
 
-        if (damage > 0) { resourceManager.Instance.takeDamage(damage); }
-
+        state = (damage > 0) ? State.Hurt : State.Bonk;
         resetAnimator();
         anim.SetTrigger("bonk");
-        controller.velocity.y = 4f;
+        controller.lockPosition = true;
+        deformer.startDeform(new Vector3(.25f, 1.1f, 1), 0.1f);
+        await Task.Delay(100);
+        controller.lockPosition = false;
 
-        state = (damage > 0) ? State.Hurt : State.Bonk;
+        if (damage > 0) { resourceManager.Instance.takeDamage(damage); }
+
+        
+        controller.velocity.y = 4f;
+        
+
+        
         AtlasEventManager.Instance.BonkEvent();
         
         Camera.main.GetComponent<cameraController>().StartShake();
@@ -1136,7 +1232,6 @@ public class playerController : MonoBehaviour
 
     void bonk()
     {
-        controller.doGravity();
         if (!isGrounded())
         {
             controller.velocity.x = -moveSpeed/4f * sprite.localScale.x;
@@ -1145,8 +1240,8 @@ public class playerController : MonoBehaviour
 
     public void drown()
     {
-        if (!controller.collisions.tangible) { return; }
-        controller.collisions.tangible = false;
+        if (!controller.collisions.isTangible()) { return; }
+        controller.collisions.setTangible(false);
         anim.SetBool("resetSpin", true);
         resetPosition = true;
         state = State.Wait;
@@ -1164,7 +1259,7 @@ public class playerController : MonoBehaviour
     {
         secretCollider.enabled = false;
         sprite.GetComponent<SpriteRenderer>().sortingOrder = 25;
-        controller.collisions.tangible = false;
+        controller.collisions.setTangible(false);
         if (!starRotator)
         {
             starRotator = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarRotator"), transform);
@@ -1196,7 +1291,7 @@ public class playerController : MonoBehaviour
         }
         else
         {
-            controller.collisions.tangible = true;
+            controller.collisions.setTangible();
             if (returnableStates.Contains(returnState))
             {
                 state = returnState;
@@ -1214,7 +1309,7 @@ public class playerController : MonoBehaviour
         sprite.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
     }
 
-    public void resetAnimator()
+    public void resetAnimator(bool returnToIdle = false)
     {
         foreach (AnimatorControllerParameter parameter in anim.parameters)
         {
@@ -1330,7 +1425,7 @@ public class playerController : MonoBehaviour
 
         Bounds bounds = roomBounds.GetComponent<BoxCollider2D>().bounds;
 
-        AtlasSceneManager.getPlayerCoords();
+        //AtlasSceneManager.getPlayerCoords();
         //UP
         if (transform.position.y + boxCollider.size.y / 2.0f > bounds.max.y)
         {
@@ -1358,30 +1453,32 @@ public class playerController : MonoBehaviour
     #region isBools
     public bool isGrounded()
     {
-        return controller.collisions.isGrounded;
+        return controller.collisions.isGrounded();
     }
 
     void isWallSliding()
     {
-        if (isGrounded() || state == State.Attack) {
-            wallRiding = false;
-            return;
-        }
         float hdir = AtlasInputManager.getAxisState("Dpad").x;
+        wallRiding = controller.checkWallSlide(hdir);
+        // if (controller.collisions.getBelow() || controller.collisions.getAbove() || state == State.Attack) {
+        //     wallRiding = false;
+        //     return;
+        // }
+        // float hdir = AtlasInputManager.getAxisState("Dpad").x;
 
-        if (!wallRiding)
-        {
-            if (controller.collisions.wallRideLeft && hdir == -1 || controller.collisions.wallRideRight && hdir == 1)
-            {
-                wallRiding = true;
-                return;
-            }
-        } else
-        {
-            wallRiding = controller.collisions.wallRideLeft || controller.collisions.wallRideRight;
-            return;
-        }
-        wallRiding = false;
+        // if (!wallRiding)
+        // {
+        //     if (controller.collisions.getLeft() && hdir == -1 || controller.collisions.getRight() && hdir == 1)
+        //     {
+        //         wallRiding = true;
+        //         return;
+        //     }
+        // } else
+        // {
+        //     wallRiding = controller.collisions.getLeft() || controller.collisions.getRight();
+        //     return;
+        // }
+        // wallRiding = false;
     }
 
     public bool isCrouching()

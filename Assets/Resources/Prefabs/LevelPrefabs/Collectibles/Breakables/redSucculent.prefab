@@ -136,6 +136,7 @@ MonoBehaviour:
   receivesHitStun: 1
   hitStunDuration: 0.1
   inHitStun: 0
+  deathPause: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -207,6 +208,7 @@ MonoBehaviour:
     cyclesPerSecond: -2.5
     oscillationSize: 7
     oscillationDirection: {x: 0, y: 0, z: 0}
+  deforms: []
 --- !u!114 &-5807125436704189473
 MonoBehaviour:
   m_ObjectHideFlags: 0

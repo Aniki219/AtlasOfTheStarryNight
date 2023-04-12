@@ -50,8 +50,8 @@ public abstract class enemyAI : MonoBehaviour
         healthCtrl = GetComponent<healthController>();
         sprite = transform.Find("sprite");
 
-        gravity = gameManager.Instance.gravity;
-        maxFallVel = gameManager.Instance.maxFallVel;
+        // gravity = gameManager.Instance.gravity;
+        // maxFallVel = gameManager.Instance.maxFallVel;
 
         state = new StateMachine("Movement");
         state.addStates("Hurt", "Wait", "Attack");
@@ -84,7 +84,7 @@ public abstract class enemyAI : MonoBehaviour
             gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
         }
 
-        deformer.flashWhite();
+        deformer.flashColor();
 
         StartCoroutine(getHurt());
     }
@@ -156,7 +156,7 @@ public abstract class enemyAI : MonoBehaviour
 
     protected bool isGrounded()
     {
-        return controller.collisions.isGrounded;
+        return controller.collisions.getBelow();
     }
 
     protected void createStars(Vector3 position)

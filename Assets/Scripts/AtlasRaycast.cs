@@ -66,7 +66,7 @@ class AtlasRaycast : IComparable<AtlasRaycast>
              * If !canSlide we want to ignore the surface normal and just move backwards
              * */
         floatVector = Vector2.Dot(originOffset, surfaceNormal) * surfaceNormal;
-        if (slide != Slide.ALL)
+        if (slide == Slide.NOT_DOWN && surfaceNormal.y > 0)
         {
             penetrant = new Vector2(penetrant.x, Mathf.Max(penetrant.y, 0));
 
@@ -96,6 +96,21 @@ class AtlasRaycast : IComparable<AtlasRaycast>
     public void setCastVectorLength(float length)
     {
         castVector = castVector.normalized * length;
+    }
+
+    public void decrementHorizontalComponent(float dx = AtlasConstants.StepSize)
+    {
+        // if (castVector.x > 0) {
+        //     castVector = new Vector2(
+        //         Mathf.Max(castVector.x - dx, 0),
+        //         castVector.y);
+        // }
+        // if (castVector.x < 0) {
+        //     castVector = new Vector2(
+        //         Mathf.Min(castVector.x + dx, 0),
+        //         castVector.y);
+        // }
+        castVector = new Vector2(0, castVector.y);
     }
 
     public static AtlasRaycastBuilder builder() { return new AtlasRaycastBuilder(); }

@@ -32,4 +32,5 @@ public static class AtlasHelpers
 public static class AtlasConstants
 {
     public const float StepSize = 1.0f / 32.0f;
+    public const float SkinWidth = 0.006f;
 }

@@ -20,10 +20,10 @@ public class floatingStoneController : MonoBehaviour
     {
         if (isMoving)
         {
-            if (velocity.x > 0 && controller.collisions.right ||
-                velocity.x < 0 && controller.collisions.left ||
-                velocity.y > 0 && controller.collisions.above ||
-                velocity.y < 0 && controller.collisions.below)
+            if (velocity.x > 0 && controller.collisions.getRight() ||
+                velocity.x < 0 && controller.collisions.getLeft() ||
+                velocity.y > 0 && controller.collisions.getAbove() ||
+                velocity.y < 0 && controller.collisions.getBelow())
             {
                 velocity = Vector2.zero;
                 isMoving = false;

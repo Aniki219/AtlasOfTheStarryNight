@@ -96,6 +96,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  sprite: {fileID: 0}
   oscillators:
   - tag: default
     enabled: 1
@@ -104,6 +105,7 @@ MonoBehaviour:
     cyclesPerSecond: 1.5
     oscillationSize: 30
     oscillationDirection: {x: 0, y: 0, z: 0}
+  deforms: []
 --- !u!1 &1381289503
 GameObject:
   m_ObjectHideFlags: 0
@@ -5024,7 +5026,7 @@ BoxCollider:
   m_GameObject: {fileID: 1790538844}
   m_Material: {fileID: 0}
   m_IsTrigger: 1
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 0.33, y: 0.64, z: 0.01}
   m_Center: {x: 0, y: -0.15, z: 0.005}
@@ -5176,7 +5178,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  sprite: {fileID: 0}
   oscillators: []
+  deforms: []
 --- !u!114 &3056712456514079565
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10104,10 +10108,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2445146216727810863}
-  - component: {fileID: 917463010}
-  - component: {fileID: 1721639757}
   - component: {fileID: 1721639753}
   - component: {fileID: 1721639758}
+  - component: {fileID: 917463010}
+  - component: {fileID: 1721639757}
   - component: {fileID: 2076921580}
   - component: {fileID: 1546510147449307897}
   - component: {fileID: -7415741619892973089}
@@ -10135,6 +10139,106 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1721639753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349184747420119991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46801972acfa702428cda0aea1cbfe12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  airAccelerationTime: 0.1
+  airDeccelerationTime: 0.2
+  groundAccelerationTime: 0.075
+  groundDeccelerationTime: 0.05
+  lastSafePosition: {x: 0, y: 0, z: 0}
+  moveSpeed: 4.5
+  jumpVelocity: 8.8
+  doubleJumpVelocity: 0
+  wallBlastDelay: 0.2
+  hasDoubleJump: 1
+  hasWallJump: 1
+  canDoubleJump: 0
+  canTornado: 1
+  arialAttacking: 0
+  fastFalling: 0
+  wallRiding: 0
+  facing: -1
+  canBroom: 1
+  invulnerable: 0
+  dropThroughPlatforms: 0
+  resetPosition: 0
+  controller: {fileID: 1721639758}
+  secretCollider: {fileID: 6115427779737381630}
+  state: 3
+--- !u!114 &1721639758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6349184747420119991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d44b605d00cbb5c4ab9861895c72f515, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  collisionMask:
+    serializedVersion: 2
+    m_Bits: 262400
+  dangerMask:
+    serializedVersion: 2
+    m_Bits: 5120
+  lockPosition: 0
+  termVel: -12
+  gravityMod: 1
+  maxSlope: 0.5
+  test: 0
+  testRayAngle: 0
+  testRayMag: 0
+  velocity: {x: 0, y: 0, z: 0}
+  cameraTarget: {x: 0, y: 0, z: 0}
+  canMove: 1
+  canGravity: 1
+  bonkCeiling: 1
+  OnBonkCeiling:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1721639753}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
+        m_MethodName: OnBonkCeiling
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  hasLandingEvent: 1
+  OnLanding:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1721639753}
+        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
+        m_MethodName: OnLanding
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+  debug: 0
+  slopeDetectRange: 5
+  groundedCheckRange: 0.008
 --- !u!61 &917463010
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -10182,82 +10286,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 1
   m_Constraints: 0
---- !u!114 &1721639753
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349184747420119991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 46801972acfa702428cda0aea1cbfe12, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  facing: 1
-  canBroom: 0
-  invulnerable: 0
-  dropThroughPlatforms: 0
-  resetPosition: 0
-  graceFrames: 0
-  velocity: {x: 0, y: 0, z: 0}
-  controller: {fileID: 0}
-  secretCollider: {fileID: 6115427779737381630}
-  hasDoubleJump: 0
-  hasWallJump: 0
-  state: 2
---- !u!114 &1721639758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349184747420119991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d44b605d00cbb5c4ab9861895c72f515, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  collisionMask:
-    serializedVersion: 2
-    m_Bits: 262400
-  dangerMask:
-    serializedVersion: 2
-    m_Bits: 5120
-  lockPosition: 0
-  cameraTarget: {x: 0, y: 0, z: 0}
-  bonkCeiling: 1
-  OnBonkCeiling:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1721639753}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: OnBonkCeiling
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  hasLandingEvent: 1
-  OnLanding:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1721639753}
-        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
-        m_MethodName: OnLanding
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!114 &2076921580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10342,7 +10370,7 @@ BoxCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7396073080978170267}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 1

@@ -91,7 +91,7 @@ public class healthController : MonoBehaviour
 
         if (flashWhiteOnHit)
         {
-            if (deformer != null) deformer.flashWhite();
+            if (deformer != null) deformer.flashColor();
             //if (byPlayer) gameManager.Instance.playerCtrl.hitLag(0);
         }
 

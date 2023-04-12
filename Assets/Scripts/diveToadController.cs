@@ -187,7 +187,7 @@ public class diveToadController : MonoBehaviour
     private void FixedUpdate()
     {
         controller.Move(velocity * Time.deltaTime);
-        if (controller.collisions.above || controller.collisions.below)
+        if (controller.collisions.getAbove() || controller.collisions.getBelow())
         {
             if (anim.GetBool("Falling"))
             {
@@ -210,7 +210,7 @@ public class diveToadController : MonoBehaviour
             }
             velocity.y = 0;
         }
-        if ((controller.collisions.right && velocity.x > 0) || (controller.collisions.left && velocity.x < 0))
+        if ((controller.collisions.getRight() && velocity.x > 0) || (controller.collisions.getLeft() && velocity.x < 0))
         {
             velocity.x = 0;
             if (velocity.y > 0)
@@ -231,6 +231,6 @@ public class diveToadController : MonoBehaviour
 
     public bool isGrounded()
     {
-        return controller.collisions.below;
+        return controller.collisions.getBelow();
     }
 }

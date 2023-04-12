@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using MyBox;
 using UnityEngine.Events;
@@ -9,50 +10,66 @@ using System.Linq;
 public class characterController : MonoBehaviour
 {
     #region Defs
-    public LayerMask collisionMask;
-    public LayerMask dangerMask;
+    [Foldout("Debug", true)] public bool debug = false;
+    [ConditionalField(nameof(debug))] public bool showNormal = true;
+    [ConditionalField(nameof(debug))] public bool showVelocityNormal = false;
+    [ConditionalField(nameof(debug))] public bool showCollisionResolution = false;
+    [ConditionalField(nameof(debug))] public bool  highlightGrounded = false;
+    #if UNITY_EDITOR // conditional compilation is not mandatory
+    [ButtonMethod]
+    private void ToggleDebug()
+    {
+        debug = !debug;
+    }
+    #endif
 
-    public bool lockPosition = false;
+
+    [Foldout("Velocity")] public Vector3 velocity;
+    [Foldout("Velocity")] [SerializeField] Vector3 additionalVelocity;
+    [Foldout("Velocity")] public bool lockPosition = false;
+    [Foldout("Velocity")] public bool canMove = true;
+    [Foldout("Velocity")] public bool canGravity = true;
+
+    [Foldout("Collision Info")] public CollisionState collisions;
+
+    [Foldout("Collision Info")] public LayerMask collisionMask;
+    [Foldout("Collision Info")] public LayerMask dangerMask;
 
     //TODO: wtf is this?
     private float safetyMargin = 1;
 
-    private int horizontalRayCount = 6;
-    private int verticalRayCount = 6;
+    private int horizontalRayCount = 15;
+    private int verticalRayCount = 8;
 
     private float horizontalRaySpacing;
     private float verticalRaySpacing;
 
-    public float termVel = -10;
-    public float gravityMod = 1.0f;
+    
+    [Foldout("Gravity")] public float termVel = -10;
+    [Foldout("Gravity")] public float gravityMod = 1.0f;
     private float gravity;
-    private float currentGravity = 0;
-    private float maxGravity = 10.0f;
+    [Foldout("Gravity")] [SerializeField] private float currentGravity = 0;
+    [Foldout("Gravity")] public float maxGravity = 8.0f;
+    private float gravitySmoothing = 0;
+
+    [SerializeField]
+    [Foldout("Gravity")] private float maxSlope = 0.5f;
 
     new BoxCollider2D collider;
     BoundaryPoints boundaryPoints;
-    
-    Vector3 additionalVelocity;
 
-    public CollisionInfo collisions;
-    public Vector3 velocity;
-    public Vector3 cameraTarget;
+    [HideInInspector] public Vector3 cameraTarget;
 
-    public bool canMove = true;
-    public bool canGravity = true;
     #endregion
 
     #region Events
-    public bool bonkCeiling = false;
-    [ConditionalField("bonkCeiling")] public BonkCeilingEvent OnBonkCeiling;
-    [System.Serializable]
-    public class BonkCeilingEvent : UnityEvent<float> { }
+    [Foldout("Events")] public bool bonkCeiling = false;
+    [Foldout("Events")] [ConditionalField("bonkCeiling")] public UnityEvent OnBonkCeiling;
 
-    public bool hasLandingEvent = false;
-    [ConditionalField("bonkCeiling")] public MyBoolEvent OnLanding;
 
-    [System.Serializable]
-    public class MyBoolEvent : UnityEvent<bool> {}
+    [Foldout("Events")] public bool hasLandingEvent = false;
+    [Foldout("Events")] [ConditionalField("hasLandingEvent")] public UnityEvent OnLanding;
+
     #endregion
 
     void Start()
@@ -60,14 +77,15 @@ public class characterController : MonoBehaviour
         gravity = gameManager.Instance.gravity;
         collider = GetComponent<BoxCollider2D>();
         collisions.Init();
-        CalculateRaySpacing();
     }
 
     private void FixedUpdate()
     {
+        //Keep track of "justLanded" and "justHeadBonked"
+        UpdateBoundaryPoints();
         if (canMove)
         {
-            Move();
+            Move(velocity);
 
             if (canGravity)
             {
@@ -77,24 +95,31 @@ public class characterController : MonoBehaviour
                 resetGravity();
             }
         }
-        doMove(Vector2.right, true, true);
-        //doMove(Vector2.left * AtlasConstants.StepSize * 5, true, false);
     }
 
-    public void doGravity()
+    private void LateUpdate() {
+        if (debug) {
+            UpdateBoundaryPoints();
+            GetComponentInChildren<SpriteRenderer>().material.color = Color.white.WithAlphaSetTo(0.75f);
+            debugBoundaryCollisions();
+            if (showNormal) Debug.DrawLine(collider.bounds.center, collider.bounds.center + (Vector3)collisions.getNorm(), Color.magenta);
+            if (showVelocityNormal) Debug.DrawLine(collider.bounds.center, collider.bounds.center + velocity.normalized, Color.white);
+        }
+    }
+
+    private void doGravity()
     {
-        if (collisions.isGrounded)
+        if (collisions.isGrounded() && collisions.getGroundSlope().y >= maxSlope)
         {
             currentGravity = 0;
             velocity.y = Mathf.Max(velocity.y, 0);
-            
         } else
         {
-            currentGravity = gravity * Time.fixedDeltaTime * gravityMod  * (velocity.y > 0 ? 1 : 1.5f);
+            currentGravity = gravity * Time.fixedDeltaTime * gravityMod  * (velocity.y > 0 ? 1 : 1.25f);
             velocity.y = Mathf.Max(velocity.y, termVel);
         }
 
-        velocity.y += currentGravity;    
+        velocity.y += currentGravity;
     }
 
     public void resetGravity()
@@ -102,267 +127,144 @@ public class characterController : MonoBehaviour
         currentGravity = 0;
     }
 
-    public void Move(Vector3 vel, bool canSlide = true)
-    {
-        doMove(vel * Time.fixedDeltaTime, canSlide);
-    }
+    public void Move(Vector3 vel) {
+        vel *= Time.deltaTime;
 
-    public void Move(bool canSlide = true)
-    {
-        doMove(velocity * Time.fixedDeltaTime, canSlide);
-    }
+        if (collisions.getNorm().y > 0 && collisions.getNorm().y < 0.75f && vel.y <= 0) {
+            vel *= 0.8f;
+        }
 
-    bool test = false;
-    private void doMove(Vector3 vel, bool canSlide, bool test = false) {
         if (lockPosition) { return; }
 
-        //These should maybe be in Update()/FixedUpdate()
-        UpdateBoundaryPoints();
         collisions.Reset();
-        collisions.velocityOld = vel; // I dont know if we need this
 
-        /* We can get the slope of the ground we are standing on while
-         * checking if we even are grounded
-         * */
-        Vector2? groundSlope = checkGrounded();
-
-        if (test)
-        {
-            //canSlide = false;
-            vel = new Vector2(0, -2);
-        }
-
-        #region Modulate speed when walking up/down slopes and prevent steep slopes
-
-        // If groundSlope has no value then we arent grounded
-        if (groundSlope.HasValue && groundSlope.Value.y > 0)
-        {
-            Vector2 slope = groundSlope.Value;
-
-            //I used Sign here to figure out if we are walking up a slope or down
-            if (AtlasHelpers.Sign(slope.x) == AtlasHelpers.Sign(vel.x))
-            {
-                //We increase speed up slopes to keep movement feeling smooth and constant
-                vel.x *= Vector2.Dot(slope, Vector2.up);
-            } else
-            {
-                float dot = Vector2.Dot(slope, -vel.normalized);
-
-                //This is probably wrong. Hand-waived guess at maximizing slope angle
-                if (dot < 0.8f)
-                {
-                    vel /= Mathf.Sin(Mathf.Acos(dot));
-                } else
-                {
-                    vel.x = 0;
-                }
-            }
-        }
-        #endregion
-
-        #region Initialize desired and resulting vectors
-        Vector2 desiredDisplacementVector = vel + additionalVelocity;
-        Vector2 desiredDirection = desiredDisplacementVector.normalized;
-        Vector2 resultingDisplacementVector = new Vector2(desiredDisplacementVector.x, desiredDisplacementVector.y);
-
-        //Vector2 slopeOffset = Vector2.zero;
-        #endregion
-
-        #region Initialize all origins and thier offsets
-        /*We need to figure out which sides of the collider should cast rays
-         * We could use every side, but I think we can save on computation and just
-         * use the sides that correspond to the x and y directions
-         */
-        List<AtlasRaycast> raycasts = calculateRaycastOrigins(desiredDisplacementVector);
-
-        if (raycasts.Count == 0) return;
-        #endregion
-
-        /* Now we:
-         * fire out the raycast
-         * find the smallest ray
-         * perform a slide calculation if allowed
-         * do a step up check if for corners
-         * perform another check for walking down slopes
-         * translate the character
-         */
-        int tries = 0;
-        float desiredDistance = desiredDisplacementVector.magnitude;
-        while (desiredDistance > 0 && tries < 100) {
-
-            #region Prevent infinite loop
-            tries++;
-            if (tries == 99)
-            {
-                Debug.LogError("max tries reached");
-                break;
-            }
-            #endregion
-
-            #region Find minimum distance raycast and record hit meta data in the ARC
-
-            foreach (AtlasRaycast raycast in raycasts)
-            {
-                raycast.setCastVectorLength(desiredDistance);
-                raycast.cast();
-            }
-            raycasts.Sort();
-            AtlasRaycast minRaycast = raycasts[0];
-            #endregion
-
-
-            //Now we can use the meta data within the ARC to calculate a resulting vector
-            resultingDisplacementVector = minRaycast.calcResultant();
-
-            minRaycast.drawVectors();
-
-            /*Here we perform a boxcast to check if the resulting location is free
-             * This collider is halfway between the full box collider and the box emitting the
-             * ARCs.
-             * We may perform some correction logic if the location is invalid, otherwise
-             * we repeat this entire process again with a AtlasConstants.StepSize shorter desiredVector
-             */
-            Vector2 desiredPosition = (Vector2)transform.position + resultingDisplacementVector;
-            Vector2 colliderDesiredPosition = desiredPosition + collider.offset;
-
-            RaycastHit2D boxHit = Physics2D.BoxCast(colliderDesiredPosition, 
-                                                    collider.size - Vector2.one * AtlasConstants.StepSize, 
-                                                    0, Vector2.zero, 0, collisionMask);
-
-            //If the boxcast didnt hit anything we're good to go, we can exit the loop
-                //AtlasHelperFunctions.DebugDrawBox(colliderDesiredPosition, collider.size - Vector2.one * AtlasConstants.StepSize, Color.green);
-            if (!boxHit)
-            {
-                break;
-            }
-            //If we are just barely clipped by a collider such that oour raycast offset prevents us from seeing it
-            //we can try to step up a tiny bit and see if that fixes the issue
-            //Also if Our ray isn't long enough to detect a slope we are colliding with, we can just try to move up
-            if (minRaycast.isCorner && minRaycast.incident.magnitude > AtlasConstants.StepSize && resultingDisplacementVector.y >= 0)
-            {
-                Vector2 o = minRaycast.originOffset;
-                Vector2 v = minRaycast.incident;
-                Vector2 v_hat = v.normalized;
-                Vector2 o_parallel = Vector2.Dot(o, v) * -v_hat;
-                Vector2 perpendicular = o - o_parallel;
-                RaycastHit2D adjustmentHit = Physics2D.Raycast(minRaycast.origin + resultingDisplacementVector, -perpendicular.normalized, perpendicular.magnitude, collisionMask);
-                if (adjustmentHit.collider != null || true)
-                {
-                    Vector2 a = -perpendicular.normalized * adjustmentHit.distance;
-                    Vector2 stepUp = perpendicular + a;
-                    Vector2 stepBack = v - Mathf.Sqrt(v.sqrMagnitude - stepUp.sqrMagnitude) * v_hat;
-                    if (!Physics2D.BoxCast(colliderDesiredPosition + stepUp + stepBack, collider.size - Vector2.one * AtlasConstants.StepSize, 0, Vector2.zero, 0, collisionMask))
-                    {
-                        resultingDisplacementVector += stepUp + stepBack;
-                        break;
-                    }
-                }
-            }
-
-            //If we made it this far without hitting a break, then we failed to find a safe spot and must try again
-            //with a shorter desired displacement
-            resultingDisplacementVector = Vector2.zero;
-            desiredDistance = Mathf.Max(desiredDistance - AtlasConstants.StepSize, 0);
-        }
-
-        if (!test)
-        {
-            transform.Translate(resultingDisplacementVector);
-
-            //After moving, if we were on the ground then we can try to follow a slope downwards up to ~45 degrees
-            //TODO: Maybe we can put logic in here to look at the ground slope and determine how far to check
-            if (collisions.isGrounded && canSlide)
-            {
-                //Maybe you have to hit something? I think you dont get to just go down for free
-                //Seems okay for now though...
-                doMove(Vector2.down * (resultingDisplacementVector.magnitude + AtlasConstants.StepSize*2), false);
-            }
-        }
-
-        //I have no idea if this is correct at all
-        cameraTarget = velocity/Time.deltaTime;
-
-        if ((additionalVelocity.y != 0 && crushTest(true)) || (additionalVelocity.x != 0 && crushTest(false)))
-        {
-            playerController pc = GetComponent<playerController>();
-            if (pc)
-            {
-                pc.startBonk(1, true);
-            }
-        }
-
-        additionalVelocity = Vector3.zero;
-
+        resolveCollision(vel + additionalVelocity);
         checkGrounded();
+
+        if (collisions.wasGrounded && !collisions.isGrounded() && vel.y <= 0) {
+            CollisionData checkDown = detectCollision(slopeDetectRange * Time.deltaTime * Vector2.down); 
+            if (checkDown.hit) {
+                float dist = Mathf.Abs(checkDown.distance);
+                resolveCollision(dist * Vector3.down, false);
+                checkGrounded();
+            }
+
+        }
+    }
+    [Range(5, 100)]
+    public float slopeDetectRange = 5;
+
+    public void resolveCollision(Vector2 vel, bool canSlide = true) {
+        Vector2 dp = vel;
+
+        int tries = 0;
+        while(tries <= 8) {
+            
+            CollisionData collisionData = detectCollision(dp);
+
+            if (!canSlide) {
+                collisionData.normal = Vector2.up;
+            }
+
+            if (collisionData.hit) {
+                dp += collisionData.normal * (Mathf.Abs(collisionData.distance) + 0.002f);
+                if (Vector2.Dot(vel, collisionData.normal) > 0) {
+                    dp = collisionData.normal * vel.magnitude;
+                }
+            } else {
+                transform.position += (Vector3)dp;
+                break;
+            }
+            tries++;
+        }
     }
 
-    private List<AtlasRaycast> calculateRaycastOrigins(Vector2 cast)
+    public struct CollisionData {
+        public bool hit;
+        public Vector2 normal;
+        public float distance;
+        public Collider2D collider;
+        public Collider2D otherCollider;
+    }
+
+    public CollisionData detectCollision(Vector2 dp) {
+        Vector2 originalOffset = collider.offset;
+        collider.offset = originalOffset + dp;
+
+        Collider2D boxhitCollider = Physics2D.OverlapBox(
+            (Vector2)transform.position + collider.offset, 
+            Vector2.Scale(collider.size, (Vector2)transform.localScale), 
+            0, 
+            collisionMask
+        );
+
+        CollisionData returnData = new CollisionData();
+
+        if (boxhitCollider) {
+            ColliderDistance2D colliderDistance = boxhitCollider.Distance(collider);
+            
+            returnData.hit = true;
+            returnData.distance = colliderDistance.distance;
+            returnData.normal = new Vector2(Mathf.Round(colliderDistance.normal.x * 100f)/100f, Mathf.Round(colliderDistance.normal.y * 100f)/100f);
+            
+            returnData.collider = collider;
+            returnData.otherCollider = boxhitCollider;
+
+            if (Mathf.Approximately(collisions.getNorm().y, -1) && returnData.normal.y == -1 && velocity.y > 0) OnBonkCeiling.Invoke();
+
+            collisions.setCollisionInfo(returnData);
+
+            //Land on slopes as if they were horizontal
+            if (returnData.normal.y >= maxSlope) {
+                returnData.normal = Vector2.up;
+            }
+
+            //Walk into steep walls as if they were vertical ->/ => ->|
+            if (collisions.wasGrounded && returnData.normal.y < maxSlope && Mathf.Sign(returnData.normal.x) != Mathf.Sign(velocity.x) ) {
+                returnData.normal.y = 0;
+                returnData.normal.Normalize();
+            }
+
+        }
+
+        collider.offset = originalOffset;
+        return returnData;
+    }
+
+    public CollisionData checkGrounded()
     {
-        List<AtlasRaycast> raycasts = new List<AtlasRaycast>();
+        CollisionData data = detectCollision(Vector2.up * ( - groundedCheckRange));
+        if (!collisions.isGrounded() && data.hit) OnLanding.Invoke();
+        if (velocity.y <= 0) collisions.setGroundSlope(data.normal);
+        collisions.setGrounded(velocity.y <= 0 && data.hit);
 
-        if (cast.x != 0)
-        {
-            //Get all of the raycast origins on the left or right side of the collider
-            Vector2 origin = (cast.x > 0) ? boundaryPoints.bottomRight : boundaryPoints.bottomLeft;
-            for (int i = 0; i < horizontalRayCount; i++)
-            {
-                bool isCorner = false;
-                Vector2 originOffset = new Vector2(-AtlasConstants.StepSize * Mathf.Sign(cast.x), 0);
-                if (i == 0 || i == horizontalRayCount - 1)
-                {
-                    //Corners are able to try for a "step up" correction so we mark them here
-                    isCorner = true;
-                    originOffset = new Vector2(-AtlasConstants.StepSize * Mathf.Sign(cast.x),
-                                                (i == 0) ? AtlasConstants.StepSize : -AtlasConstants.StepSize);
-                }
-
-                AtlasRaycast raycast = AtlasRaycast.builder()
-                    .withCastVector(cast)
-                    .withOrigin(origin + i * horizontalRaySpacing * Vector2.up)
-                    .withOriginOffset(originOffset)
-                    .withIsCorner(isCorner)
-                    .withCollisionMask(collisionMask)
-                    .build();
-                
-                raycasts.Add(raycast);
-            }
-        }
-        if (cast.y != 0)
-        {
-            //Get all of the raycast origins on the left or right side of the collider
-            Vector2 origin = (cast.y > 0) ? boundaryPoints.topLeft : boundaryPoints.bottomLeft;
-            for (int i = 0; i < verticalRayCount; i++)
-            {
-                bool isCorner = false;
-                Vector2 originOffset = new Vector2(0, -AtlasConstants.StepSize * Mathf.Sign(cast.y));
-                if (i == 0 || i == verticalRayCount - 1)
-                {
-                    //Corners are able to try for a "step up" correction so we mark them here
-                    isCorner = true;
-                    originOffset = new Vector2((i == 0) ? AtlasConstants.StepSize : -AtlasConstants.StepSize,
-                                            -AtlasConstants.StepSize * Mathf.Sign(cast.y));
-                }
-                AtlasRaycast raycast = AtlasRaycast.builder()
-                    .withCastVector(cast)
-                    .withOrigin(origin + i * verticalRaySpacing * Vector2.right)
-                    .withOriginOffset(originOffset)
-                    .withIsCorner(isCorner)
-                    .withCollisionMask(collisionMask)
-                    .build();
-
-                raycasts.Add(raycast);
-            }
-
-        }
-        return raycasts;
+        return data;
     }
+    [Range(0.002f, 0.020f)]
+    public float groundedCheckRange = 0.008f;
 
     public void AddVelocity(Vector3 amount)
     {
-        if (!collisions.tangible) { return; }
+        if (!collisions.isTangible()) { return; }
         additionalVelocity += amount;
     }
 
+    public bool checkWallSlide(float directionX)
+    {
+        Vector2 midRay = collisions.getMidPoint() - (Vector2)collider.bounds.center;
+        Vector2 footRay = collisions.getFootPoint() - ((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
+
+        return directionX != 0 &&
+            Vector2.Dot(directionX * Vector2.right, collisions.getNorm()) == -1
+            && Mathf.Abs(Vector2.Dot(midRay.normalized, footRay.normalized)) >= 0.8f;
+    }
+
+    public bool checkVertDist(float dist)
+    {
+        return !detectCollision(Vector2.up * dist).hit;
+    }
+
+#region Rework needed
     bool crushTest(bool vertical)
     {
         float rayLength = 4.0f / 32.0f;
@@ -424,88 +326,9 @@ public class characterController : MonoBehaviour
         return false;
     }
 
-    public void checkWallSlide(float directionX)
-    {
-        float rayLength = 1 / 32.0f;//skinWidth + 1 / 32.0f;
-
-        int checkMidSection = 0;
-        int numberofMidSegments = 2;
-        for (int i = 0; i < horizontalRayCount; i++)
-        {
-            Vector2 rayOrigin = (directionX == -1) ? boundaryPoints.bottomLeft : boundaryPoints.bottomRight;
-            rayOrigin += Vector2.up * (horizontalRaySpacing * i);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.right * directionX, rayLength, collisionMask);
-
-            Color c = Color.green;
-            if (hit)
-            {
-                collisions.left = directionX == -1;
-                collisions.right = directionX == 1;
-                c = Color.red;
-                if (i < 5)
-                {
-                    checkMidSection++;
-                }
-            }
-            //Debug.DrawLine(rayOrigin, rayOrigin + Vector2.right * directionX * rayLength, c);
-        }
-        if (checkMidSection >= numberofMidSegments)
-        {
-            collisions.wallRideLeft = collisions.left;
-            collisions.wallRideRight = collisions.right;
-        }
-    }
-
-    /* Checks if the collider is grounded and returns the slope of the ground if it is.
-     * if not grounded, returns null */
-    public Vector2? checkGrounded()
-    {
-        collisions.isGrounded = false;
-
-        //If moving upwards we aren't grounded
-        if (velocity.y > 0) return null;
-
-        /* We cast a bunch of rays down and see if any are within 2 AtlasConstants.StepSizes
-         * The reason for 2 is to account for the raycast offset */
-        for (int i = 0; i < verticalRayCount; i++)
-        {
-            Vector2 origin = boundaryPoints.bottomLeft + i * verticalRaySpacing * Vector2.right + Vector2.up * AtlasConstants.StepSize;
-            if (i == 0) origin += AtlasConstants.StepSize * Vector2.right;
-            if (i == verticalRayCount-1) origin -= AtlasConstants.StepSize * Vector2.right;
-            RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, AtlasConstants.StepSize*3, collisionMask);
-            if (hit)
-            {
-                collisions.isGrounded = true;
-                return hit.normal;
-            }
-        }
-        return null;
-    }
-
-    //I hope we dont need this..
-    public bool checkVertDist(float dist)
-    {
-        float directionY = Mathf.Sign(dist);
-        float rayLength = Mathf.Abs(dist);
-
-        for (int i = 0; i < verticalRayCount; i++)
-        {
-            Vector2 rayOrigin = (directionY == 1.0f) ? boundaryPoints.topLeft : boundaryPoints.bottomLeft;
-            rayOrigin += Vector2.right * (verticalRaySpacing * i);
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.up * directionY, rayLength, collisionMask);
-
-            if (hit)
-            {
-                rayLength = hit.distance;
-                return false;
-            }
-        }
-        return true;
-    }
-
     public bool isSafePosition()
     {
-        if (!collisions.tangible) { return false; }
+        if (!collisions.isTangible()) { return false; }
         Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2 - collider.size.y/2 * Vector3.up;
 
         //Debug.DrawLine((Vector2)boxCastOrigin + collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right - collider.size.y / 2 * Vector2.up);
@@ -532,35 +355,17 @@ public class characterController : MonoBehaviour
         }
         return rays > 2;
     }
+#endregion
 
     public void UpdateBoundaryPoints()
     {
-        CalculateRaySpacing();
         Bounds bounds = collider.bounds;
 
         boundaryPoints.bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
         boundaryPoints.bottomRight = new Vector2(bounds.max.x, bounds.min.y);
         boundaryPoints.topLeft = new Vector2(bounds.min.x, bounds.max.y);
         boundaryPoints.topRight = new Vector2(bounds.max.x, bounds.max.y);
-
-        //Debug.DrawLine(raycastOrigins.bottomLeft, raycastOrigins.bottomLeft + Vector2.down * 0.25f, Color.blue);
     }
-
-    void CalculateRaySpacing()
-    {
-        Bounds bounds = collider.bounds;
-
-        horizontalRayCount = Mathf.Clamp(horizontalRayCount, 2, int.MaxValue);
-        verticalRayCount = Mathf.Clamp(verticalRayCount, 2, int.MaxValue);
-
-        horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
-        verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
-    }
-
-    public void setCollidable(bool on = true)
-    {
-        collisions.collidable = on;
-    } 
 
     struct BoundaryPoints
     {
@@ -568,36 +373,35 @@ public class characterController : MonoBehaviour
         public Vector2 bottomLeft, bottomRight;
     }
 
-    public struct CollisionInfo
+    [Serializable]
+    public struct CollisionState
     {
-        public bool above, below;
-        public bool left, right;
+        private bool above, below;
+        private bool left, right;
 
-        public bool climbingSlope;
-        public bool descendingSlope;
-        public float slopeAngle, slopeAngleOld;
-        public Vector3 velocityOld;
-        public float distanceToGround;
-        public bool isGrounded;
+        [SerializeField] private Vector2 normal;
+        [SerializeField] private Vector2 groundSlope;
+        private Vector2 closestMidPoint;
+        private Vector2 closestFootPoint;
+        private Vector2 closestHeadPoint;
+        [SerializeField] private bool grounded;
+        public bool wasGrounded {get; private set;}
 
-        public bool wallRideRight;
-        public bool wallRideLeft;
+        [SerializeField] private bool tangible;
+        [SerializeField] private bool collidable;
 
-        public bool tangible;
-        public bool collidable;
-
-        public void Reset()
+        public void Reset(bool resetBelow = true)
         {
-            above = below = false;
-            left = right = false;
-            wallRideLeft = wallRideRight = false;
-            climbingSlope = false;
-            descendingSlope = false;
-            distanceToGround = 50;
-            isGrounded = false;
-
-            slopeAngleOld = slopeAngle;
-            slopeAngle = 0;
+            above = false;
+            below = false;
+            left = false;
+            right = false;
+            normal = Vector2.zero;
+            closestMidPoint = Vector2.zero;
+            closestFootPoint = Vector2.zero;
+            closestHeadPoint = Vector2.zero;
+            wasGrounded = grounded;
+            grounded = false;
         }
 
         public void Init()
@@ -606,5 +410,93 @@ public class characterController : MonoBehaviour
             tangible = true;
             collidable = true;
         }
+
+        public void setCollisionInfo(CollisionData collisionData) {
+            this.normal = collisionData.normal;
+            if (normal.x > 0) left = true;
+            if (normal.x < 0) right = true;
+            if (normal.y > 0) below = true;
+            if (normal.y < 0) above = true;
+
+            Collider2D collider = collisionData.collider;
+            closestMidPoint = collisionData.otherCollider.ClosestPoint(collider.bounds.center);
+            closestHeadPoint = collisionData.otherCollider.ClosestPoint((Vector2)collider.bounds.max + collider.bounds.extents.x * Vector2.left);
+            closestFootPoint = collisionData.otherCollider.ClosestPoint((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
+        }
+
+        public bool isGrounded() {
+            return grounded;
+        }
+
+        public void setGrounded(bool isGrounded) {
+            grounded = isGrounded;
+        }
+
+        public void setGroundSlope(Vector2 slopeNormal) {
+            groundSlope = slopeNormal;
+        }
+
+        public Vector2 getGroundSlope() {
+            return groundSlope;
+        }
+
+        public Vector2 getPoint() {
+            return closestMidPoint;
+        }
+
+        public bool getLeft() {
+            return left;
+        }
+
+        public bool getRight() {
+            return right;
+        }
+
+        public bool getAbove() {
+            return above;
+        }
+
+        public bool getBelow() {
+            return below;
+        }
+
+        public Vector2 getNorm() {
+            return normal;
+        }
+
+        public void setCollidable(bool on = true) {
+            collidable = on;
+        }
+
+        public void setTangible(bool on = true) {
+            tangible = on;
+        }
+
+        public bool isCollidable() {
+            return collidable;
+        }
+
+        public bool isTangible() {
+            return tangible;
+        }
+
+        public Vector2 getHeadPoint() {
+            return closestHeadPoint;
+        }
+
+        public Vector2 getMidPoint() {
+            return closestMidPoint;
+        }
+
+        public Vector2 getFootPoint() {
+            return closestFootPoint;
+        }
+    }
+
+    public void debugBoundaryCollisions() {
+        Debug.DrawLine(boundaryPoints.bottomLeft, boundaryPoints.bottomRight, collisions.getBelow() ? Color.green : Color.white);
+        Debug.DrawLine(boundaryPoints.bottomLeft, boundaryPoints.topLeft, collisions.getLeft() ? Color.green : Color.white);
+        Debug.DrawLine(boundaryPoints.bottomRight, boundaryPoints.topRight, collisions.getRight() ? Color.green : Color.white);
+        Debug.DrawLine(boundaryPoints.topLeft, boundaryPoints.topRight, collisions.getAbove() ? Color.green : Color.white);
     }
 }
