@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.mackysoft.serializereference-extensions": "https://github.com/mackysoft/Unity-SerializeReferenceExtensions.git?path=Assets/MackySoft/MackySoft.SerializeReferenceExtensions",
     "com.mybox": "https://github.com/Deadcows/MyBox.git",
     "com.unity.2d.pixel-perfect": "3.0.2",
     "com.unity.2d.sprite": "1.0.0",
@@ -51,5 +52,6 @@
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
     "com.unity.modules.xr": "1.0.0"
-  }
+  },
+  "scopedRegistries": []
 }

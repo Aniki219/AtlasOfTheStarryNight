@@ -1,14 +1,15 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StateObject : ScriptableObject
+public class StateObject : MonoBehaviour
 {
+    [SerializeReference, SubclassSelector]
     public List<IStateBehavior> stateBehaviors;
     public List<Allowances> allowances;
     public List<Resetters> resetters;
 
-    void Reset() {
+    public StateObject() {
         stateBehaviors = new List<IStateBehavior>();
         
         allowances = new  List<Allowances>() {

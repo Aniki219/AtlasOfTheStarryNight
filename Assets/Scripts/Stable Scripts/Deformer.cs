@@ -231,7 +231,6 @@ public class Deformer : MonoBehaviour
         while(condition()) {
             counts++;
             sprite.color = flashColorRef.color;
-            Debug.Log(sprite.transform.name);
             if (flashColorRef.timeUnits == TimeUnits.SECONDS) {
                 yield return new WaitForSeconds(flashColorRef.effectDuration);
                 break;

@@ -114,7 +114,9 @@ public class playerController : MonoBehaviour
         Eat,
         Attack,
         ChargeAttack,
-        Sliding
+        Slide,
+        Sliding,
+        Slip
     }
 
     //Any state thatcannot receive damage or interact with triggers
@@ -126,7 +128,7 @@ public class playerController : MonoBehaviour
     //Moving Platform States
     List<State> moveableStates = new List<State>
     {
-        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat, State.WaitMoveable, State.Sliding
+        State.Movement, State.Attack, State.Bonk, State.Hurt, State.Eat, State.WaitMoveable, State.Slide, State.Slip
     };
 
     //States that can be returned to in resetPosition
@@ -194,10 +196,13 @@ public class playerController : MonoBehaviour
                 allowDoor();
                 allowCrouch();
                 break;
-            case State.Sliding:
-                handleSlide();
+            case State.Slip:
+                handleSlip();
                 handleAttackInput();
                 allowCrouch();
+                break;
+            case State.Slide:
+                handleSlide();
                 break;
             case State.BroomStart:
                 handleBroomStart();
@@ -473,8 +478,8 @@ public class playerController : MonoBehaviour
         {
             if (isGrounded() && controller.collisions.getGroundSlope().y < 0.5f && controller.velocity.y < -0.5f) {
                 resetAnimator();
-                anim.SetTrigger("sliding");
-                state = State.Sliding;
+                anim.SetTrigger("slip");
+                state = State.Slip;
                 return;
             }
             if (AtlasInputManager.getKeyPressed("Jump") && canJump)
@@ -594,7 +599,15 @@ public class playerController : MonoBehaviour
         }
     }
 
-    void handleSlide() {
+    async void handleSlide() {
+        state = State.Sliding;
+        await Task.Delay(300);
+        resetVelocity();
+        resetAnimator();
+        returnToMovement();
+    }
+
+    void handleSlip() {
         controller.velocity.x = 0;
         setFacing(AtlasHelpers.Sign(controller.collisions.getGroundSlope().x));
         if (AtlasInputManager.getKeyPressed("Jump"))
@@ -1023,10 +1036,10 @@ public class playerController : MonoBehaviour
     public void OnLanding()
     {
         AtlasEventManager.Instance.PlayerLandEvent(resetPosition);
-        if (controller.velocity.y < -10) {
-            deformer.startDeform(new Vector3(1.25f, 0.90f, 1.0f), 0.05f, 0.15f, -1.0f, "Landing", true);
-            particleMaker.createDust(true);
-        }
+        // if (controller.velocity.y < -10) {
+        //     deformer.startDeform(new Vector3(1.25f, 0.90f, 1.0f), 0.05f, 0.15f, -1.0f, "Landing", true);
+        //     particleMaker.createDust(true);
+        // }
     }
     public void hitLag(float duration = 0.1f)
     {
@@ -1066,7 +1079,12 @@ public class playerController : MonoBehaviour
     void firstJump()
     {
         //Cancel jump if stuck under something while crawling
-        if (isCrouching()) return;
+        if (isCrouching()) {
+            state = State.Slide;
+            anim.SetTrigger("slide");
+            controller.velocity.x = facing * 6;
+            return;
+        }
 
         SoundManager.Instance.playClip("jump2");
         deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, 1.0f, "jump", true);

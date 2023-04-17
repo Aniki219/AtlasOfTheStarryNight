@@ -101,4 +101,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap/witchCanyon.unity
     guid: ec94ed1d71cdc2842a38d99df840ee9b
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.addressableassets: {fileID: 11400000, guid: 3f9e00d659e61034d8aed833d2097897,
+      type: 2}
