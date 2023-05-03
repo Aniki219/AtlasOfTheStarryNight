@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3456519b6b735c47ae9dabc34513c73, type: 3}
+  m_Name: AnimMapper
+  m_EditorClassIdentifier: 
+  stateAnims:
+  - state:
+      _classRef: States.AirialAttacks.RisingFair, Assembly-CSharp
+    startAnim: {fileID: 0}
+    updateAnim: {fileID: 0}
+  - state:
+      _classRef: States.AirialAttacks.FallingFair, Assembly-CSharp
+    startAnim: {fileID: 0}
+    updateAnim: {fileID: 0}
+  - state:
+      _classRef: States.Broom, Assembly-CSharp
+    startAnim: {fileID: 7400000, guid: 2657944651b85d346b3812fdbdf2e3a2, type: 2}
+    updateAnim: {fileID: 7400000, guid: 475f6c4390f26b64db985d936723fee9, type: 2}
+  - state:
+      _classRef: States.AttackLand, Assembly-CSharp
+    startAnim: {fileID: 7400000, guid: 17d87f6d29be01047b394267a133f4bf, type: 2}
+    updateAnim: {fileID: 0}
+  - state:
+      _classRef: States.DoubleJump, Assembly-CSharp
+    startAnim: {fileID: 7400000, guid: 562b0c21adf44cd42985941bb6a284d3, type: 2}
+    updateAnim: {fileID: 0}
+  - state:
+      _classRef: States.Crouch, Assembly-CSharp
+    startAnim: {fileID: 7400000, guid: d6bd6d6da6b8975429e19c6f1f4df8ed, type: 2}
+    updateAnim: {fileID: 7400000, guid: 9bbf89857fd4c3f47918b310b8850363, type: 2}
+  - state:
+      _classRef: States.Bonk, Assembly-CSharp
+    startAnim: {fileID: 7400000, guid: 98579da4b3ccb7746b22788cdfbd2c7e, type: 2}
+    updateAnim: {fileID: 0}

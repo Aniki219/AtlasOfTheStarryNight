@@ -13,10 +13,10 @@ public abstract class enemyAI : MonoBehaviour
     protected BoxCollider2D boxCollider;
     protected healthController healthCtrl;
 
-    protected StateMachine state;
+    protected DeprecatedStateMachine state;
     public string currentState;
     //A List of States where the enemy cannot be hit by hitboxes
-    protected List<State> intangibleStates;
+    protected List<DeprecatedState> intangibleStates;
 
     public float weight = 1.0f;
     public float visionRange = 5.0f;
@@ -53,7 +53,7 @@ public abstract class enemyAI : MonoBehaviour
         // gravity = gameManager.Instance.gravity;
         // maxFallVel = gameManager.Instance.maxFallVel;
 
-        state = new StateMachine("Movement");
+        state = new DeprecatedStateMachine("Movement");
         state.addStates("Hurt", "Wait", "Attack");
         intangibleStates = state.findStates("Hurt", "Wait");
         state.setState("Movement");

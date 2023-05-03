@@ -1,69 +1,35 @@
-﻿using System;
+using UnityEngine;
 using System.Collections.Generic;
+using System;
+using TMPro;
 
-public class StateMachine
-{
-    List<State> stateList;
-    State currentState;
+public abstract class StateMachine : MonoBehaviour {
+  public State state { get; private set; }
+  public State startState;
 
-    public StateMachine(string entryState)
-    {
-        stateList = new List<State>();
-        addStates(entryState);
-        currentState = findState(entryState);
-    }
+  public TextMeshProUGUI stateDisplay;
 
-    public void addStates(params string[] statenames)
-    {
-        for (int i = 0; i < statenames.Length; i++)
-        {
-            stateList.Add(new State(statenames[i]));
-        }
-    }
+  public virtual void Start() {
+    changeState(startState);
+  }
 
-    //Get the name of the currentState as a string
-    public string getState()
-    {
-        return currentState.getName();
-    }
+  public virtual void Update() {
+    if (!state.hasStarted) return;
+    state.UpdateState();
+  }
 
-    //Search the StateMachine for a state with the given name
-    //and assign that State as the currentState
-    public void setState(string statename)
-    {
-        currentState = findState(statename);
-    }
+  public async void changeState(State newState) {
 
-    //Searches the StateList for a State with a given name
-    public State findState(string statename)
-    {
-        State rtnState = stateList.Find(s => s.getName() == statename);
-        if (rtnState == null) throw new Exception("State: " + statename + " not found!");
-        return rtnState;
-    }
+    bool sameState = false; //checkState(newState);
+  
+    if (state != null) await state.ExitState();
+    state = newState;
+    await state.StartState(this, sameState);
 
-    public List<State> findStates(params string[] statenames)
-    {
-        List<State> rtnStates = new List<State>();
-        for (int i = 0; i < statenames.Length; i++)
-        {
-            string statename = statenames[i];
-            State foundState = stateList.Find(s => s.getName() == statename);
-            if (foundState == null) throw new Exception("State: " + statename + " not found!");
-            rtnStates.Add(foundState);
-        }
-        return rtnStates;
-    }
-}
+    if (stateDisplay) stateDisplay.text = state.GetType().ToString();
+  }
 
-public class State
-{
-    private string name;
-
-    public State(string name)
-    {
-        this.name = name;
-    }
-
-    public string getName() { return name; }
+  public bool checkState(State other) {
+    return state.GetType().Equals(other.GetType());
+  }
 }

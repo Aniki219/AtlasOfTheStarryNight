@@ -38,7 +38,7 @@ public class treeCollisionBox : MonoBehaviour
         if (collision.tag == "Player")
         {
             playerController pc = collision.GetComponent<playerController>();
-            if (pc.state == playerController.State.Broom)
+            if (pc.depState == playerController.State.Broom)
             {
                 StartCoroutine(shake());
                 foreach (Transform t in transform)

@@ -1,0 +1,8 @@
+@startuml Atlas State DAG
+class Move {}
+class Jump {}
+class Fall {}
+class Broom {}
+class Attack {}
+class Wait {}
+@enduml

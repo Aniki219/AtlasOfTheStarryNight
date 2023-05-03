@@ -37,6 +37,9 @@ AnimationClip:
     - time: 0.35
       value: {fileID: 678770445720487146, guid: 2b699c5962de0fe4ab45ccf111313c35,
         type: 3}
+    - time: 0.41666666
+      value: {fileID: 678770445720487146, guid: 2b699c5962de0fe4ab45ccf111313c35,
+        type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -62,12 +65,13 @@ AnimationClip:
     - {fileID: -1945440411289371704, guid: 2b699c5962de0fe4ab45ccf111313c35, type: 3}
     - {fileID: 3069819105187449067, guid: 2b699c5962de0fe4ab45ccf111313c35, type: 3}
     - {fileID: 678770445720487146, guid: 2b699c5962de0fe4ab45ccf111313c35, type: 3}
+    - {fileID: 678770445720487146, guid: 2b699c5962de0fe4ab45ccf111313c35, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.45
+    m_StopTime: 0.43333334
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -89,13 +93,6 @@ AnimationClip:
   m_Events:
   - time: 0
     functionName: resetAnimator
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.45
-    functionName: startBroom
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0

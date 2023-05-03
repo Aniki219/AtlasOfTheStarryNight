@@ -16,4 +16,9 @@ public class particleMaker : MonoBehaviour
             right.transform.localScale = Vector3.one * 0.75f;
         }
     }
+
+    public void createStars(Vector2 location)
+    {
+        gameManager.createInstance("Effects/StarParticleSpread", location);
+    }
 }

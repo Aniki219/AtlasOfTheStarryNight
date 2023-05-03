@@ -25,6 +25,7 @@ public class characterController : MonoBehaviour
 
 
     [Foldout("Velocity")] public Vector3 velocity;
+    public Vector3 velocityOut { get; private set;}
     [Foldout("Velocity")] [SerializeField] Vector3 additionalVelocity;
     [Foldout("Velocity")] public bool lockPosition = false;
     [Foldout("Velocity")] public bool canMove = true;
@@ -34,6 +35,8 @@ public class characterController : MonoBehaviour
 
     [Foldout("Collision Info")] public LayerMask collisionMask;
     [Foldout("Collision Info")] public LayerMask dangerMask;
+
+    [Foldout("Special")] public bool canCrouch = false;
 
     //TODO: wtf is this?
     private float safetyMargin = 1;
@@ -52,8 +55,7 @@ public class characterController : MonoBehaviour
     [Foldout("Gravity")] public float maxGravity = 8.0f;
     private float gravitySmoothing = 0;
 
-    [SerializeField]
-    [Foldout("Gravity")] private float maxSlope = 0.5f;
+    [Foldout("Gravity")] public float maxSlope = 0.5f;
 
     new BoxCollider2D collider;
     BoundaryPoints boundaryPoints;
@@ -63,12 +65,12 @@ public class characterController : MonoBehaviour
     #endregion
 
     #region Events
-    [Foldout("Events")] public bool bonkCeiling = false;
-    [Foldout("Events")] [ConditionalField("bonkCeiling")] public UnityEvent OnBonkCeiling;
+     public bool bonkCeiling = false;
+     [ConditionalField("bonkCeiling")] public UnityEvent OnBonkCeiling;
 
 
-    [Foldout("Events")] public bool hasLandingEvent = false;
-    [Foldout("Events")] [ConditionalField("hasLandingEvent")] public UnityEvent OnLanding;
+     public bool hasLandingEvent = false;
+     [ConditionalField("hasLandingEvent")] public UnityEvent OnLanding;
 
     #endregion
 
@@ -98,12 +100,26 @@ public class characterController : MonoBehaviour
     }
 
     private void LateUpdate() {
+        if (Input.GetKeyDown(KeyCode.F1)) debug = !debug;
+        if (Input.GetKeyDown(KeyCode.F2)) showNormal = !showNormal;
+        if (Input.GetKeyDown(KeyCode.F3)) showVelocityNormal = !showVelocityNormal;
+        if (Input.GetKeyDown(KeyCode.F4)) showCollisionResolution = !showCollisionResolution;
+        if (Input.GetKeyDown(KeyCode.F5)) highlightGrounded = !highlightGrounded;
+
         if (debug) {
             UpdateBoundaryPoints();
             GetComponentInChildren<SpriteRenderer>().material.color = Color.white.WithAlphaSetTo(0.75f);
-            debugBoundaryCollisions();
-            if (showNormal) Debug.DrawLine(collider.bounds.center, collider.bounds.center + (Vector3)collisions.getNorm(), Color.magenta);
-            if (showVelocityNormal) Debug.DrawLine(collider.bounds.center, collider.bounds.center + velocity.normalized, Color.white);
+            if (showCollisionResolution) debugBoundaryCollisions();
+            if (showNormal) {
+                foreach(Vector2 normal in collisions.getNorms()) {
+                    Debug.DrawLine(collider.bounds.center, collider.bounds.center + (Vector3)normal, Color.magenta);
+                }
+                Debug.DrawLine(collider.bounds.center, collider.bounds.center + (Vector3)collisions.getAverageNorm(), Color.red);
+            }
+            if (showVelocityNormal) {
+                Debug.DrawLine(collider.bounds.center, collider.bounds.center + velocity.normalized, Color.grey);
+                Debug.DrawLine(collider.bounds.center, collider.bounds.center + velocityOut.normalized, Color.white);
+            }
         }
     }
 
@@ -128,9 +144,12 @@ public class characterController : MonoBehaviour
     }
 
     public void Move(Vector3 vel) {
-        vel *= Time.deltaTime;
+        vel = (vel + additionalVelocity) * Time.deltaTime;
 
-        if (collisions.getNorm().y > 0 && collisions.getNorm().y < 0.75f && vel.y <= 0) {
+        if (collisions.hasNormWhere(norm => norm.y > 0) && 
+            collisions.hasNormWhere(norm => norm.y < 0.75f) && 
+            vel.y <= 0) 
+        {
             vel *= 0.8f;
         }
 
@@ -138,28 +157,30 @@ public class characterController : MonoBehaviour
 
         collisions.Reset();
 
-        resolveCollision(vel + additionalVelocity);
+        Vector3 oldPosition = transform.position * 1.0f;
+
+        transform.position += (Vector3)resolveCollision(vel);
         checkGrounded();
 
         if (collisions.wasGrounded && !collisions.isGrounded() && vel.y <= 0) {
             CollisionData checkDown = detectCollision(slopeDetectRange * Time.deltaTime * Vector2.down); 
             if (checkDown.hit) {
                 float dist = Mathf.Abs(checkDown.distance);
-                resolveCollision(dist * Vector3.down, false);
+                transform.position += (Vector3)resolveCollision(dist * Vector3.down, false);
                 checkGrounded();
             }
-
         }
+
+        velocityOut = transform.position - oldPosition;
     }
     [Range(5, 100)]
     public float slopeDetectRange = 5;
 
-    public void resolveCollision(Vector2 vel, bool canSlide = true) {
+    private Vector2 resolveCollision(Vector2 vel, bool canSlide = true) {
         Vector2 dp = vel;
 
         int tries = 0;
-        while(tries <= 8) {
-            
+        while(tries <= 8) { 
             CollisionData collisionData = detectCollision(dp);
 
             if (!canSlide) {
@@ -172,11 +193,11 @@ public class characterController : MonoBehaviour
                     dp = collisionData.normal * vel.magnitude;
                 }
             } else {
-                transform.position += (Vector3)dp;
-                break;
+                return dp;
             }
             tries++;
         }
+        return Vector2.zero;
     }
 
     public struct CollisionData {
@@ -188,6 +209,7 @@ public class characterController : MonoBehaviour
     }
 
     public CollisionData detectCollision(Vector2 dp) {
+        
         Vector2 originalOffset = collider.offset;
         collider.offset = originalOffset + dp;
 
@@ -210,9 +232,12 @@ public class characterController : MonoBehaviour
             returnData.collider = collider;
             returnData.otherCollider = boxhitCollider;
 
-            if (Mathf.Approximately(collisions.getNorm().y, -1) && returnData.normal.y == -1 && velocity.y > 0) OnBonkCeiling.Invoke();
 
             collisions.setCollisionInfo(returnData);
+
+            if (Mathf.Approximately(returnData.normal.y, -1) && velocity.y > 0) {
+                OnBonkCeiling.Invoke();
+            } 
 
             //Land on slopes as if they were horizontal
             if (returnData.normal.y >= maxSlope) {
@@ -243,6 +268,10 @@ public class characterController : MonoBehaviour
     [Range(0.002f, 0.020f)]
     public float groundedCheckRange = 0.008f;
 
+    public bool isGrounded() {
+        return collisions.isGrounded();
+    }
+
     public void AddVelocity(Vector3 amount)
     {
         if (!collisions.isTangible()) { return; }
@@ -251,12 +280,13 @@ public class characterController : MonoBehaviour
 
     public bool checkWallSlide(float directionX)
     {
-        Vector2 midRay = collisions.getMidPoint() - (Vector2)collider.bounds.center;
-        Vector2 footRay = collisions.getFootPoint() - ((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
+        // Vector2 midRay = collisions.getMidPoint() - (Vector2)collider.bounds.center;
+        // Vector2 footRay = collisions.getFootPoint() - ((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
 
-        return directionX != 0 &&
-            Vector2.Dot(directionX * Vector2.right, collisions.getNorm()) == -1
-            && Mathf.Abs(Vector2.Dot(midRay.normalized, footRay.normalized)) >= 0.8f;
+        // return directionX != 0 &&
+        //     Vector2.Dot(directionX * Vector2.right, collisions.getNorm()) == -1
+        //     && Mathf.Abs(Vector2.Dot(midRay.normalized, footRay.normalized)) >= 0.8f;
+        return false;
     }
 
     public bool checkVertDist(float dist)
@@ -379,7 +409,7 @@ public class characterController : MonoBehaviour
         private bool above, below;
         private bool left, right;
 
-        [SerializeField] private Vector2 normal;
+        [SerializeField] private List<Vector2> normals;
         [SerializeField] private Vector2 groundSlope;
         private Vector2 closestMidPoint;
         private Vector2 closestFootPoint;
@@ -396,7 +426,7 @@ public class characterController : MonoBehaviour
             below = false;
             left = false;
             right = false;
-            normal = Vector2.zero;
+            normals = new List<Vector2>();
             closestMidPoint = Vector2.zero;
             closestFootPoint = Vector2.zero;
             closestHeadPoint = Vector2.zero;
@@ -412,11 +442,16 @@ public class characterController : MonoBehaviour
         }
 
         public void setCollisionInfo(CollisionData collisionData) {
-            this.normal = collisionData.normal;
-            if (normal.x > 0) left = true;
-            if (normal.x < 0) right = true;
-            if (normal.y > 0) below = true;
-            if (normal.y < 0) above = true;
+            if (!normals.Contains(collisionData.normal)) {
+                normals.Add(collisionData.normal);
+            }
+
+            foreach(Vector2 normal in normals) {
+                if (normal.x > 0) left = true;
+                if (normal.x < 0) right = true;
+                if (normal.y > 0) below = true;
+                if (normal.y < 0) above = true;
+            }
 
             Collider2D collider = collisionData.collider;
             closestMidPoint = collisionData.otherCollider.ClosestPoint(collider.bounds.center);
@@ -460,8 +495,16 @@ public class characterController : MonoBehaviour
             return below;
         }
 
-        public Vector2 getNorm() {
-            return normal;
+        public List<Vector2> getNorms() {
+            return normals;
+        }
+
+        public Vector2 getAverageNorm() {
+            return (normals.Aggregate(Vector2.zero, (v1, v2) => v1 + v2) / normals.Count).normalized;
+        }
+
+        public bool hasNormWhere(Predicate<Vector2> lambda) {
+            return normals.Find(lambda) != default;
         }
 
         public void setCollidable(bool on = true) {

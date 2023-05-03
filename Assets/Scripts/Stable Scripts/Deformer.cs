@@ -19,6 +19,8 @@ public class Deformer : MonoBehaviour
     Vector3 startRotation;
     Vector3 startScale;
 
+    private int facing = 1;
+
     Vector3 totalScale = Vector3.one;
     Vector3 totalOffset = Vector3.zero;
 
@@ -102,6 +104,17 @@ public class Deformer : MonoBehaviour
         transform.localPosition = totalOffset;
     }
 
+    public void setFacing(float vel)
+    {
+        //During Movement we can keep track of the direction the player is facing each frame
+        if (Mathf.Approximately(vel, 0)) return;
+        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * facing, transform.localScale.y, transform.localScale.z);
+    }
+
+    public int getFacing() {
+        return facing;
+    }
+
     void UpdateOscillators()
     {
         //totalOffset = startPosition;
@@ -164,7 +177,9 @@ public class Deformer : MonoBehaviour
 
             if (col != null)
             {
-                newOffset = startPosition + Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f - newScale.y) * d.offsetDir;
+                newOffset = startPosition +
+                    Vector3.up * (col.bounds.extents.y - col.offset.y) * (1.0f - newScale.y) * d.offsetDir.y +
+                    Vector3.right * (col.bounds.extents.x - col.offset.x) * (1.0f - newScale.x) * d.offsetDir.x;
             }
 
             if (d.timeReturn > 0 && elapsedTime >= d.timeTo + d.timeReturn)
@@ -187,7 +202,7 @@ public class Deformer : MonoBehaviour
         deforms.RemoveAll(d => d.tag.Equals(tag));
     }
 
-    public void startDeform(Vector3 to, float timeTo, float timeReturn = 0.5f, float offsetDir = 0, string tag = "default", bool unique = false)
+    public void startDeform(Vector3 to, float timeTo, float timeReturn = 0.5f, Vector2 offsetDir = default, string tag = "default", bool unique = false)
     {
         Deformation newDeform = new Deformation(to, timeTo, timeReturn, offsetDir);
         newDeform.tag = tag;
@@ -368,10 +383,10 @@ public class Deformation
     public Vector3 to;
     public float timeTo;
     public float timeReturn = 0.5f;
-    public float offsetDir = 0;
+    public Vector2 offsetDir = Vector2.zero;
     public float startTime;
 
-    public Deformation(Vector3 to, float timeTo, float timeReturn = 0.5f, float offsetDir = 0)
+    public Deformation(Vector3 to, float timeTo, float timeReturn = 0.5f, Vector2 offsetDir = default)
     {
         this.to = to;
         this.timeTo = timeTo;

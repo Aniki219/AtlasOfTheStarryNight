@@ -196,15 +196,15 @@ public class BerryPlantController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!(transform.parent && transform.parent.name == "seed") && collision.CompareTag("Player") && canPick && AtlasInputManager.getKeyPressed("Up", true))
-        {
-            if (gameManager.Instance.playerCtrl.canLift())
-            {
-                GameObject berry = gameManager.createInstance(liftObject, center);
-                gameManager.Instance.playerCtrl.liftObject(berry.transform.Find("handle").gameObject);
-                StartCoroutine(Picked(false));
-            }
-        }
+        // if (!(transform.parent && transform.parent.name == "seed") && collision.CompareTag("Player") && canPick && AtlasInputManager.getKeyPressed("Up", true))
+        // {
+        //     if (gameManager.Instance.playerCtrl.canLift())
+        //     {
+        //         GameObject berry = gameManager.createInstance(liftObject, center);
+        //         gameManager.Instance.playerCtrl.liftObject(berry.transform.Find("handle").gameObject);
+        //         StartCoroutine(Picked(false));
+        //     }
+        // }
     }
 
     private void OnDestroy()

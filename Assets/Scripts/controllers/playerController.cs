@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using MyBox;
 
 [RequireComponent (typeof (characterController))]
-public class playerController : MonoBehaviour
+public class playerController : StateMachine
 {
     #region Vars
     //float jumpHeight = 2.2f;
@@ -31,7 +31,7 @@ public class playerController : MonoBehaviour
     doorController currentDoor = null;
     string currentDoorLabel = "none";
 
-    float maxWallSlideVel = -3.5f;
+    [Foldout("Movement Stats")] public float maxWallSlideVel = -3.5f;
     float maxFallVel = -15f;
     float fastFallVel = -25f;
     float wallJumpVelocity = 6;
@@ -48,6 +48,7 @@ public class playerController : MonoBehaviour
     public float wallBlastDelay = 0.2f;
 
     [Foldout("State Info", true)]
+    public bool hasBroom = false;
     public bool hasDoubleJump = false;
     public bool hasWallJump = false;
     public bool canDoubleJump = false;
@@ -82,7 +83,8 @@ public class playerController : MonoBehaviour
     GameObject starRotator;
     Transform hanger;
     Transform currentTornado;
-    Transform heldObject;
+    public Transform liftableObject;
+    public Transform heldObject;
 
     bool fastBroom = false;
     bool screenShake = false;
@@ -94,8 +96,8 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region State
-    public State state = State.Movement;
-    State prevState = State.Movement;
+    public State depState = State.Movement;
+    State depPrevState = State.Movement;
 
     public enum State
     {
@@ -139,8 +141,10 @@ public class playerController : MonoBehaviour
     #endregion
 
     #region Unity functions
-    void Start()
+    public override void Start()
     {
+        startState = new States.Move();
+        base.Start();
         graceFrames = maxGraceFrames;
         sprite = transform.Find("AtlasSprite");
         spriteController = sprite.GetComponent<atlasSpriteController>();
@@ -148,7 +152,7 @@ public class playerController : MonoBehaviour
         anim = GetComponentInChildren<Animator>();
         deformer = GetComponentInChildren<Deformer>();
         controller = GetComponent<characterController>();
-        particleMaker = GetComponent<particleMaker>();
+        particleMaker = GetComponentInChildren<particleMaker>();
         boxCollider = GetComponent<BoxCollider2D>();
         steps = GetComponentInChildren<stepSounds>();
         hanger = transform.Find("AtlasSprite/Hanger");
@@ -170,8 +174,15 @@ public class playerController : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
-    void Update()
+    public override void Update()
     {
+        base.Update();
+
+        if (isGrounded()) {
+            canBroom = true && hasBroom;
+            canDoubleJump = true && hasDoubleJump;
+        }
+        return;
         if (AtlasInputManager.getKeyPressed("Cheat"))
         {
             hasDoubleJump = true;
@@ -180,14 +191,14 @@ public class playerController : MonoBehaviour
         }
         playerShouldWait();
         handleParticles();
-        if (state != State.Wait && state != State.WaitMoveable)
+        if (depState != State.Wait && depState != State.WaitMoveable)
         {
             handleUncrouch();
             handleHolding();
             handleScout();
         }
 
-        switch (state)
+        switch (depState)
         {
             case State.Movement:
                 handleMovement();
@@ -264,34 +275,37 @@ public class playerController : MonoBehaviour
             //TODO: NO
             deformer.endFlashColor();
             }
+        } else {
+        //TODO: NO
+        deformer.endFlashColor();
         }
     }
 
     private void FixedUpdate()
     {
-        if (!dropThroughPlatforms && AtlasInputManager.getKey("Jump") && isCrouching())
-        {
-            dropThroughPlatforms = true;
-            controller.collisions.Reset();
-            controller.checkGrounded();
-        }
-        anim.SetBool("isGrounded", isGrounded());
-        if (isGrounded())
-        {
-            coyoteTime = maxCoyoteTime;
-        } else if (coyoteTime > 0)
-        {
-            coyoteTime--;
-        }
+        // if (!dropThroughPlatforms && AtlasInputManager.getKey("Jump") && isCrouching())
+        // {
+        //     dropThroughPlatforms = true;
+        //     controller.collisions.Reset();
+        //     controller.checkGrounded();
+        // }
+        // anim.SetBool("isGrounded", isGrounded());
+        // if (isGrounded())
+        // {
+        //     coyoteTime = maxCoyoteTime;
+        // } else if (coyoteTime > 0)
+        // {
+        //     coyoteTime--;
+        // }
 
-        if (state == State.Reset || state == State.Wait || state == State.Menu) {
-            controller.canMove = false;
-            controller.canGravity = false;
-        } else
-        {
-            controller.canMove = true;
-            controller.canGravity = true;
-        }
+        // if (depState == State.Reset || depState == State.Wait || depState == State.Menu) {
+        //     controller.canMove = false;
+        //     controller.canGravity = false;
+        // } else
+        // {
+        //     controller.canMove = true;
+        //     controller.canGravity = true;
+        // }
 
     }
 
@@ -318,7 +332,7 @@ public class playerController : MonoBehaviour
             //        resetPosition = true;
             //    }
             //}
-            if (intangibleStates.Contains(state))
+            if (intangibleStates.Contains(depState))
             {
                 return;
             }
@@ -335,7 +349,7 @@ public class playerController : MonoBehaviour
                 resetAnimator();
                 SoundManager.Instance.playClip("LevelObjects/EnterTornado");
                 canTornado = false;
-                state = State.Tornado;
+                depState = State.Tornado;
                 currentTornado = other.transform;
                 Deformer nadoDeformer = other.GetComponent<Deformer>();
                 if (nadoDeformer)
@@ -376,7 +390,7 @@ public class playerController : MonoBehaviour
                 SoundManager.Instance.playClip("Collectibles/starShard", numFollowers);
             }
 
-            if (other.CompareTag("BroomCollectible") && state == State.Broom && hanger.childCount == 0)
+            if (other.CompareTag("BroomCollectible") && depState == State.Broom && hanger.childCount == 0)
             {
                 other.transform.parent = hanger;
                 other.transform.position = hanger.position - Vector3.up * 0.15f;
@@ -392,7 +406,7 @@ public class playerController : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && state == State.Broom)
+        if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && depState == State.Broom)
         {
             other.SendMessage("OnBroomCollide");
         }
@@ -417,7 +431,7 @@ public class playerController : MonoBehaviour
             drown();
         }
 
-        if (intangibleStates.Contains(state)) return;
+        if (intangibleStates.Contains(depState)) return;
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && (!invulnerable || other.CompareTag("ResetDamaging")))
         {
             if (other.CompareTag("ResetDamaging") && graceFrames > 0) return;
@@ -471,7 +485,7 @@ public class playerController : MonoBehaviour
         Vector2 input = new Vector2(0, 0);
 
         //TODO we need a separate input method
-        if (!(state == State.WaitMoveable && isGrounded()))
+        if (!(depState == State.WaitMoveable && isGrounded()))
         input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
 
         if (isGrounded() || coyoteTime > 0)
@@ -479,7 +493,7 @@ public class playerController : MonoBehaviour
             if (isGrounded() && controller.collisions.getGroundSlope().y < 0.5f && controller.velocity.y < -0.5f) {
                 resetAnimator();
                 anim.SetTrigger("slip");
-                state = State.Slip;
+                depState = State.Slip;
                 return;
             }
             if (AtlasInputManager.getKeyPressed("Jump") && canJump)
@@ -492,7 +506,7 @@ public class playerController : MonoBehaviour
             }
             if (isGrounded())
             {
-                if (!canBroom && state == State.Movement)
+                if (!canBroom && depState == State.Movement)
                 {
                     canBroom = true;
                 }
@@ -519,7 +533,7 @@ public class playerController : MonoBehaviour
 
             if (hasWallJump && wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
             {
-                state = State.WallJumpInit;
+                depState = State.WallJumpInit;
                 return;
             }
 
@@ -572,25 +586,26 @@ public class playerController : MonoBehaviour
 
 
         
-        if (fastFalling)
-        {
-            if (AtlasInputManager.getAxisState("Dpad").y >=0 || isGrounded() || controller.velocity.y > 0)
-            {
-                fastFalling = false;
-            }
-            //controller.termVel = fastFallVel;
-            controller.gravityMod = 2.0f;
-        }
-        else
-        {
-            //controller.termVel = maxFallVel;
-            deformer.RemoveDeform("fastfall");
-            if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (controller.velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
-            {
-                fastFalling = true;
-                deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, -1.0f, "fastfall", true);
-            }
-        }
+        //TODO: fast fall state
+        // if (fastFalling)
+        // {
+        //     if (AtlasInputManager.getAxisState("Dpad").y >=0 || isGrounded() || cc.velocity.y > 0)
+        //     {
+        //         fastFalling = false;
+        //     }
+        //     cc.termVel = fastFallVel;
+        //     cc.gravityMod = 2.0f;
+        // }
+        // else
+        // {
+        //     //cc.termVel = maxFallVel;
+        //     state.deformer.RemoveDeform("fastfall");
+        //     if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (cc.velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
+        //     {
+        //         fastFalling = true;
+        //         state.deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, Vector2.down, "fastfall", true);
+        //     }
+        // }
 
 
         if (controller.velocity.y <= 0 && controller.isSafePosition())
@@ -600,7 +615,7 @@ public class playerController : MonoBehaviour
     }
 
     async void handleSlide() {
-        state = State.Sliding;
+        depState = State.Sliding;
         await Task.Delay(300);
         resetVelocity();
         resetAnimator();
@@ -628,40 +643,40 @@ public class playerController : MonoBehaviour
     #region Attacking
     void handleAttackInput()
     {
-        if (AtlasInputManager.getKeyPressed("Attack"))
-        {
-            if (state == State.Broom) { endBroom(); }
-            state = State.Attack;
-            anim.SetTrigger("SelectAttack");
-        }
+        // if (AtlasInputManager.getKeyPressed("Attack"))
+        // {
+        //     if (depState == State.Broom) { endBroom(); }
+        //     depState = State.Attack;
+        //     anim.SetTrigger("SelectAttack");
+        // }
     }
 
     void handleAttack()
     {
-        anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
-        deformer.RemoveDeform("fastfall");
+        // anim.SetFloat("animTime", anim.GetCurrentAnimatorStateInfo(0).normalizedTime);
+        // deformer.RemoveDeform("fastfall");
         
-        if (AtlasInputManager.getKeyPressed("Attack"))
-        {
-            state = State.Attack;
-            anim.SetTrigger("Attack");
-        }
-        if (!isGrounded())
-        {
-            arialAttacking = true;
-        } else
-        {
-            if (arialAttacking)
-            {
-                if (fastFalling) {
-                    anim.SetTrigger("fastFall");
-                }
-                anim.SetTrigger("attackLand");
-                anim.SetBool("Attacking", false);
-                particleMaker.createDust();
-            }
-            arialAttacking = false;
-        }
+        // if (AtlasInputManager.getKeyPressed("Attack"))
+        // {
+        //     state = State.Attack;
+        //     anim.SetTrigger("Attack");
+        // }
+        // if (!isGrounded())
+        // {
+        //     arialAttacking = true;
+        // } else
+        // {
+        //     if (arialAttacking)
+        //     {
+        //         if (fastFalling) {
+        //             anim.SetTrigger("fastFall");
+        //         }
+        //         anim.SetTrigger("attackLand");
+        //         anim.SetBool("Attacking", false);
+        //         particleMaker.createDust();
+        //     }
+        //     arialAttacking = false;
+        // }
     }
 
     void handleParticles()
@@ -740,7 +755,7 @@ public class playerController : MonoBehaviour
     }
     IEnumerator WallJumpCoroutine()
     {
-        state = State.WallJump;
+        depState = State.WallJump;
         GameObject explosion = gameManager.createInstance("Effects/Explosions/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
         explosion.transform.localScale = sprite.localScale;
         if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
@@ -838,7 +853,7 @@ public class playerController : MonoBehaviour
     public bool canLift()
     {
         if (!isGrounded()) return false;
-        if (state != State.Movement) return false;
+        if (depState != State.Movement) return false;
         if (isCrouching()) return false;
         return true;
     }
@@ -872,7 +887,7 @@ public class playerController : MonoBehaviour
         }
 
         heldObject.transform.localScale = new Vector3(facing, 1, 1);
-        if ((state != State.Movement && state != State.WaitMoveable) || AtlasInputManager.getKeyPressed("Down"))
+        if ((depState != State.Movement && depState != State.WaitMoveable) || AtlasInputManager.getKeyPressed("Down"))
         {
             anim.SetBool("isHolding", false);
             dropHolding();
@@ -919,14 +934,14 @@ public class playerController : MonoBehaviour
 
     public void cutScenePrep()
     {
-        state = State.Wait;
+        depState = State.Wait;
         controller.velocity = Vector2.zero;
         resetAnimator();
     }
 
     public bool canMovingPlatform()
     {
-        return moveableStates.Contains(state);
+        return moveableStates.Contains(depState);
     }
     IEnumerator doDoor()
     {
@@ -999,7 +1014,7 @@ public class playerController : MonoBehaviour
     }
     public void startEat()
     {
-        state = State.Eat;
+        depState = State.Eat;
         controller.velocity = new Vector3(0, 0, 0);
         resetAnimator();
         anim.SetBool("eat", true);
@@ -1025,13 +1040,13 @@ public class playerController : MonoBehaviour
     }
     public void OnBonkCeiling()
     {
-        if (controller.velocity.y <= 0) return;
-        if (state == State.Movement) {
-            deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.05f, 0.35f, 1.0f);
-            gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
-            controller.velocity.y = Mathf.Min(0, controller.velocity.y);
-            controller.resetGravity();
-        }
+        // if (controller.velocity.y <= 0) return;
+        // if (depState == State.Movement) {
+        //     deformer.startDeform(new Vector3(1.25f, 0.75f, 1.0f), 0.05f, 0.35f, 1.0f);
+        //     gameManager.createInstance("Effects/StarParticleSpread", transform.position + 0.2f * Vector3.up);
+        //     controller.velocity.y = Mathf.Min(0, controller.velocity.y);
+        //     controller.resetGravity();
+        // }
     }
     public void OnLanding()
     {
@@ -1049,11 +1064,11 @@ public class playerController : MonoBehaviour
     {
         Vector3 oldVelocity = controller.velocity;
         controller.velocity = Vector3.zero;
-        State oldState = state;
-        state = State.Wait;
+        State oldState = depState;
+        depState = State.Wait;
         deformer.flashColor();
         yield return new WaitForSeconds(duration);
-        state = oldState;
+        depState = oldState;
         controller.velocity = oldVelocity;
     }
     #endregion
@@ -1080,14 +1095,14 @@ public class playerController : MonoBehaviour
     {
         //Cancel jump if stuck under something while crawling
         if (isCrouching()) {
-            state = State.Slide;
+            depState = State.Slide;
             anim.SetTrigger("slide");
             controller.velocity.x = facing * 6;
             return;
         }
 
         SoundManager.Instance.playClip("jump2");
-        deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, 1.0f, "jump", true);
+        deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, Vector2.up, "jump", true);
         particleMaker.createDust(true);
 
         jumpCRVar = StartCoroutine(jumpCoroutine());
@@ -1109,8 +1124,8 @@ public class playerController : MonoBehaviour
 
     public void bounce(float bounceVelocity, string sound = "jump2")
     {
-        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, 1.0f);
-        if (state == State.Broom) endBroom();
+        deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, Vector2.up);
+        if (depState == State.Broom) endBroom();
         controller.velocity.y = bounceVelocity;
         SoundManager.Instance.playClip(sound);
         if (jumpCRVar != null)  StopCoroutine(jumpCRVar);
@@ -1122,7 +1137,7 @@ public class playerController : MonoBehaviour
     public void triggerBroomStart(bool fast = false, float dir = 0)
     {
         if (resetPosition || !controller.collisions.isTangible()) return;
-        if (intangibleStates.Contains(state)) return;
+        if (intangibleStates.Contains(depState)) return;
         //Cancel is ceiling above while crouching
         if (isCrouching() && !controller.checkVertDist(0.3f)) return;
         if (dir == 0 && !wallRiding)
@@ -1130,7 +1145,7 @@ public class playerController : MonoBehaviour
             dir = AtlasInputManager.getAxisState("Dpad").x;
         }
         setFacing(dir);
-        state = State.BroomStart;
+        depState = State.BroomStart;
         fastBroom = fast;
         canBroom = false;
     }
@@ -1142,7 +1157,7 @@ public class playerController : MonoBehaviour
         SoundManager.Instance.playClip("onBroom");
         deformer.RemoveDeform("fastfall");
         deformer.RemoveDeform("jump");
-        if (state == State.Attack)
+        if (depState == State.Attack)
         {
             setFacing(AtlasInputManager.getAxisState("Dpad").x);
         }
@@ -1151,7 +1166,7 @@ public class playerController : MonoBehaviour
         //    setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
         //}
 
-        state = fastBroom ? State.Broom : State.Wait;
+        depState = fastBroom ? State.Broom : State.Wait;
         fastBroom = false;
         controller.velocity = Vector3.zero;
     }
@@ -1160,7 +1175,7 @@ public class playerController : MonoBehaviour
     public void startBroom()
     {
         resetAnimator();
-        state = State.Broom;
+        depState = State.Broom;
         SoundManager.Instance.playClip("broomLaunch");
         controller.canGravity = false;
     }
@@ -1182,7 +1197,9 @@ public class playerController : MonoBehaviour
             return;
         }
         if ((facing == -1) ? controller.collisions.getLeft() : controller.collisions.getRight()) {
-            if (Mathf.Abs(Vector2.Dot(controller.collisions.getNorm(), Vector2.right)) > 0.8f) {
+            if (controller.collisions.getNorms().Find(normal => 
+                Mathf.Abs(Vector2.Dot(normal, Vector2.right)) > 0.8f) != null)
+            {
                 startBonk();
             }
             return;
@@ -1206,54 +1223,51 @@ public class playerController : MonoBehaviour
     //Set state to Hurt or Bonk
     public async void startBonk(int damage = 0, bool reset = false)
     {
-        anim.SetBool("resetSpin", reset);
-        if (!controller.collisions.isTangible()) { return; }
-        controller.collisions.setTangible(false);
+    //     anim.SetBool("resetSpin", reset);
+    //     if (!controller.collisions.isTangible()) { return; }
+    //     controller.collisions.setTangible(false);
 
 
    
-        if (reset)
-        {
-            resetPosition = true;
-            SoundManager.Instance.playClip("hurt2");
-        } else { 
-            if (damage > 0)
-            {
-                SoundManager.Instance.playClip("hurt");
-                setInvulnerable(2.0f);
-            } else
-            {
-                SoundManager.Instance.playClip("bonk");
-            }
-            createStars(transform.position);
-        }
+    //     if (reset)
+    //     {
+    //         resetPosition = true;
+    //         SoundManager.Instance.playClip("hurt2");
+    //     } else { 
+    //         if (damage > 0)
+    //         {
+    //             SoundManager.Instance.playClip("hurt");
+    //             setInvulnerable(2.0f);
+    //         } else
+    //         {
+    //             SoundManager.Instance.playClip("bonk");
+    //         }
+    //         createStars(transform.position);
+    //     }
 
-        state = (damage > 0) ? State.Hurt : State.Bonk;
-        resetAnimator();
-        anim.SetTrigger("bonk");
-        controller.lockPosition = true;
-        deformer.startDeform(new Vector3(.25f, 1.1f, 1), 0.1f);
-        await Task.Delay(100);
-        controller.lockPosition = false;
+    //     depState = (damage > 0) ? State.Hurt : State.Bonk;
+    //     resetAnimator();
+    //     anim.SetTrigger("bonk");
+    //     controller.lockPosition = true;
+    //     deformer.startDeform(new Vector3(.25f, 1.1f, 1), 0.1f);
+    //     await Task.Delay(100);
+    //     controller.lockPosition = false;
 
-        if (damage > 0) { resourceManager.Instance.takeDamage(damage); }
-
+    //     if (damage > 0) { resourceManager.Instance.takeDamage(damage); }
         
-        controller.velocity.y = 4f;
+    //     controller.velocity.y = 4f;
         
-
+    //     AtlasEventManager.Instance.BonkEvent();
         
-        AtlasEventManager.Instance.BonkEvent();
-        
-        Camera.main.GetComponent<cameraController>().StartShake();
+    //     Camera.main.GetComponent<cameraController>().StartShake();
     }
 
     void bonk()
     {
-        if (!isGrounded())
-        {
-            controller.velocity.x = -moveSpeed/4f * sprite.localScale.x;
-        }
+        // if (!isGrounded())
+        // {
+        //     controller.velocity.x = -moveSpeed/4f * sprite.localScale.x;
+        // }
     }
 
     public void drown()
@@ -1262,7 +1276,7 @@ public class playerController : MonoBehaviour
         controller.collisions.setTangible(false);
         anim.SetBool("resetSpin", true);
         resetPosition = true;
-        state = State.Wait;
+        depState = State.Wait;
         AtlasEventManager.Instance.BonkEvent();
 
         resetAnimator();
@@ -1299,23 +1313,23 @@ public class playerController : MonoBehaviour
     //Otherwise sets state to movement and sets tangible to true
     public void returnToMovement(State returnState = State.Movement)
     {
-        if (state == State.ChargeAttack || state == State.Attack)
+        if (depState == State.ChargeAttack || depState == State.Attack)
         {
             if (!isCrouching()) resetAnimator();
         }
         if (resetPosition && !controller.isSafePosition())
         {
-            state = State.Reset;
+            depState = State.Reset;
         }
         else
         {
             controller.collisions.setTangible();
             if (returnableStates.Contains(returnState))
             {
-                state = returnState;
+                depState = returnState;
             } else
             {
-                state = State.Movement;
+                depState = State.Movement;
             }
 
             if (!isCrouching()) anim.SetTrigger("Idle");
@@ -1325,6 +1339,7 @@ public class playerController : MonoBehaviour
         anim.speed = 1;
         secretCollider.enabled = true;
         sprite.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
+        changeState(new States.Move());
     }
 
     public void resetAnimator(bool returnToIdle = false)
@@ -1340,6 +1355,9 @@ public class playerController : MonoBehaviour
             {
                 anim.ResetTrigger(parameter.name);
             }
+        }
+        if (returnToIdle) {
+            anim.SetTrigger("Idle");
         }
     }
 
@@ -1364,16 +1382,16 @@ public class playerController : MonoBehaviour
         if (gameManager.Instance.pauseMenus.Count > 0)
         {
             anim.speed = 0;
-            if (state != State.Menu) {
-                prevState = state;
-                state = State.Menu;
+            if (depState != State.Menu) {
+                depPrevState = depState;
+                depState = State.Menu;
             }
         } else
         {
-            if (state == State.Menu)
+            if (depState == State.Menu)
             {
                 anim.speed = 1;
-                state = prevState;
+                depState = depPrevState;
             }
         }
     }
@@ -1387,11 +1405,11 @@ public class playerController : MonoBehaviour
     //But what do we do about multiple pauseCoroutines?
     IEnumerator pauseCoroutine() { 
         Vector2 prevVelocity = controller.velocity;
-        State prevState = state;
+        State prevState = depState;
         float prevAnimSpeed = anim.speed;
 
         controller.velocity = Vector3.zero;
-        state = State.Wait;
+        depState = State.Wait;
         anim.speed = 0;
 
         while (AtlasInputManager.getKey("Scout"))
@@ -1399,7 +1417,7 @@ public class playerController : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
 
-        state = prevState;
+        depState = prevState;
         controller.velocity = prevVelocity;
         anim.speed = prevAnimSpeed;
     }
@@ -1411,19 +1429,20 @@ public class playerController : MonoBehaviour
 
     IEnumerator freezeCoroutine(float time, bool moveable)
     {
-        State prevState = state;
+        State prevState = depState;
         Vector3 prevVel = controller.velocity;
         anim.SetBool("isRunning", false);
 
         if (!moveable) controller.velocity = Vector3.zero;
-        state = moveable ? State.WaitMoveable : State.Wait;
+        depState = moveable ? State.WaitMoveable : State.Wait;
 
         yield return new WaitForSeconds(time);
-        state = prevState;
+        depState = prevState;
         if (!moveable) controller.velocity = prevVel;
     }
 
-    void createStars(Vector3? position = null)
+//TODO: this should be on particlecreator
+    public void createStars(Vector3? position = null)
     {
         if (position == null) position = transform.position;
         Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((facing == 1) ? 180 : 0, 90, 0));
@@ -1478,25 +1497,6 @@ public class playerController : MonoBehaviour
     {
         float hdir = AtlasInputManager.getAxisState("Dpad").x;
         wallRiding = controller.checkWallSlide(hdir);
-        // if (controller.collisions.getBelow() || controller.collisions.getAbove() || state == State.Attack) {
-        //     wallRiding = false;
-        //     return;
-        // }
-        // float hdir = AtlasInputManager.getAxisState("Dpad").x;
-
-        // if (!wallRiding)
-        // {
-        //     if (controller.collisions.getLeft() && hdir == -1 || controller.collisions.getRight() && hdir == 1)
-        //     {
-        //         wallRiding = true;
-        //         return;
-        //     }
-        // } else
-        // {
-        //     wallRiding = controller.collisions.getLeft() || controller.collisions.getRight();
-        //     return;
-        // }
-        // wallRiding = false;
     }
 
     public bool isCrouching()

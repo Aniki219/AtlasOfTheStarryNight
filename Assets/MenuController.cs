@@ -75,7 +75,7 @@ public class MenuController : MonoBehaviour
         if (open) prevState = playerController.State.Movement;
         if (open) gameManager.Instance.playerCtrl.cutScenePrep();
 
-        gameManager.Instance.playerCtrl.state = open ? playerController.State.Wait : prevState;
+        gameManager.Instance.playerCtrl.depState = open ? playerController.State.Wait : prevState;
 
         PausePanel.SetActive(open);
         PauseMenu.SetActive(open);

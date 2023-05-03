@@ -123,7 +123,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &1381289504
 Transform:
   m_ObjectHideFlags: 0
@@ -5056,6 +5056,7 @@ GameObject:
   - component: {fileID: 1908161221}
   - component: {fileID: 425218680454007812}
   - component: {fileID: 3056712456514079565}
+  - component: {fileID: 5229143239224678870}
   m_Layer: 9
   m_Name: AtlasSprite
   m_TagString: Untagged
@@ -5100,7 +5101,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 80177cf875cd1794fab07b70194f9d45, type: 2}
+  - {fileID: 2100000, guid: d38a3c7a3e2cee9419fcbd26718d2cbd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5121,12 +5122,13 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 5
-  m_Sprite: {fileID: 21300000, guid: 4d11999004cb4b24897853571c056dd1, type: 3}
+  m_Sprite: {fileID: 4420518993440042633, guid: ba07fcb547bd19d469ef02a59b7a2bf1,
+    type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.5, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5195,6 +5197,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   terrainType: 0
   isSubmerged: 0
+--- !u!114 &5229143239224678870
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908161217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a6804eaa2f9061449c2965d01f4cb47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1384023053744668337
 GameObject:
   m_ObjectHideFlags: 0
@@ -10113,7 +10127,6 @@ GameObject:
   - component: {fileID: 917463010}
   - component: {fileID: 1721639757}
   - component: {fileID: 2076921580}
-  - component: {fileID: 1546510147449307897}
   - component: {fileID: -7415741619892973089}
   m_Layer: 9
   m_Name: Atlas
@@ -10151,15 +10164,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46801972acfa702428cda0aea1cbfe12, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateDisplay: {fileID: 0}
   airAccelerationTime: 0.1
   airDeccelerationTime: 0.2
   groundAccelerationTime: 0.075
   groundDeccelerationTime: 0.05
   lastSafePosition: {x: 0, y: 0, z: 0}
+  maxWallSlideVel: -3.5
   moveSpeed: 4.5
   jumpVelocity: 8.8
   doubleJumpVelocity: 0
   wallBlastDelay: 0.2
+  hasBroom: 0
   hasDoubleJump: 1
   hasWallJump: 1
   canDoubleJump: 0
@@ -10167,14 +10183,16 @@ MonoBehaviour:
   arialAttacking: 0
   fastFalling: 0
   wallRiding: 0
-  facing: -1
+  facing: 1
   canBroom: 1
   invulnerable: 0
   dropThroughPlatforms: 0
   resetPosition: 0
   controller: {fileID: 1721639758}
   secretCollider: {fileID: 6115427779737381630}
-  state: 3
+  liftableObject: {fileID: 0}
+  heldObject: {fileID: 0}
+  depState: 3
 --- !u!114 &1721639758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10187,39 +10205,50 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44b605d00cbb5c4ab9861895c72f515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
+  showNormal: 1
+  showVelocityNormal: 1
+  showCollisionResolution: 0
+  highlightGrounded: 0
+  velocity: {x: 0, y: 0, z: 0}
+  additionalVelocity: {x: 0, y: 0, z: 0}
+  lockPosition: 0
+  canMove: 1
+  canGravity: 1
+  collisions:
+    normals: []
+    groundSlope: {x: 0, y: 0}
+    grounded: 0
+    tangible: 0
+    collidable: 0
   collisionMask:
     serializedVersion: 2
     m_Bits: 262400
   dangerMask:
     serializedVersion: 2
     m_Bits: 5120
-  lockPosition: 0
   termVel: -12
   gravityMod: 1
+  currentGravity: 0
+  maxGravity: 8
   maxSlope: 0.5
-  test: 0
-  testRayAngle: 0
-  testRayMag: 0
-  velocity: {x: 0, y: 0, z: 0}
   cameraTarget: {x: 0, y: 0, z: 0}
-  canMove: 1
-  canGravity: 1
   bonkCeiling: 1
   OnBonkCeiling:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1721639753}
-        m_TargetAssemblyTypeName: playerController, Assembly-CSharp
-        m_MethodName: OnBonkCeiling
-        m_Mode: 1
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: 
+        m_MethodName: 
+        m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_ObjectArgumentAssemblyTypeName: 
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
-        m_CallState: 2
+        m_CallState: 0
   hasLandingEvent: 1
   OnLanding:
     m_PersistentCalls:
@@ -10236,8 +10265,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-  debug: 0
-  slopeDetectRange: 5
+  slopeDetectRange: 10
   groundedCheckRange: 0.008
 --- !u!61 &917463010
 BoxCollider2D:
@@ -10305,18 +10333,6 @@ MonoBehaviour:
   canMoveParent: 0
   canCollect: 1
   groundAction: 1
---- !u!114 &1546510147449307897
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6349184747420119991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a6804eaa2f9061449c2965d01f4cb47, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-7415741619892973089
 MonoBehaviour:
   m_ObjectHideFlags: 0

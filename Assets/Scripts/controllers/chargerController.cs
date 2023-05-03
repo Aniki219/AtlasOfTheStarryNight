@@ -170,7 +170,7 @@ public class chargerController : enemyAI
     void wallBonk()
     {
         createStars(transform.position + 0.25f * Vector3.right);
-        deformer.startDeform(new Vector3(0.5f, 1.5f, 1.0f), 0.1f, 0.5f, 0, "bonk", true);
+        deformer.startDeform(new Vector3(0.5f, 1.5f, 1.0f), 0.1f, 0.5f, default, "bonk", true);
         velocity.x = -3.0f * getFacing();
         velocity.y = 3.5f;
         returnToMovement(1.0f, true);
@@ -244,7 +244,7 @@ public class chargerController : enemyAI
         sprite.localPosition = new Vector3(0, 0, 0);
         sprite.localRotation = Quaternion.Euler(0,0,0);
         anim.SetTrigger("Pop");
-        deformer.startDeform(new Vector3(1.5f, 1.5f, 1.5f), 0.1f, 0.25f, 0, "regrow", true);
+        deformer.startDeform(new Vector3(1.5f, 1.5f, 1.5f), 0.1f, 0.25f, default, "regrow", true);
         returnToMovement(0.25f, true);
     }
 

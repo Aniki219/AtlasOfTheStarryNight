@@ -79,8 +79,8 @@ public class gameManager : ScriptableObject
             instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
             Physics2D.SyncTransforms();
             instance.player.GetComponent<characterController>().collisions.setCollidable(true);
-            playerController.State playerState = playerCtrl.state;
-            if (instance.playerCtrl.state == playerController.State.Wait)
+            playerController.State playerState = playerCtrl.depState;
+            if (instance.playerCtrl.depState == playerController.State.Wait)
             {
                 playerCtrl.returnToMovement(playerState);
                 canvasCtrl.doBlackout(false);
