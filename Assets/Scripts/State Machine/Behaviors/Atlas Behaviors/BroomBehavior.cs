@@ -31,11 +31,6 @@ public class BroomBehavior : IStateBehavior
         state.deformer.RemoveDeform("fastfall");
         state.deformer.RemoveDeform("jump");
 
-        //if (AtlasInputManager.Instance.aimAtMouse())
-        //{
-        //    setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
-        //}
-
         state.controller.velocity = Vector3.zero;
         state.controller.canGravity = false;
 

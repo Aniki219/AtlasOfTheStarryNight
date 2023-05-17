@@ -13,16 +13,22 @@ namespace States {
       transitions = new List<IStateTransition>() {
         new Transitions.CanAttack(),
         new Transitions.CanBroom(),
-        new Transitions.CanJump(),
         new Transitions.CanSlip(),
-        new Transitions.CanLift(),
         new Transitions.CanFall(),
+        new Transitions.CanWallSlide(),
       };
     }
 
     public async override Task StartState(StateMachine stateMachine, bool wasActive = false)
     {
       await base.StartState(stateMachine, wasActive);
+      if (AtlasInputManager.getAxisState("Dpad").x * controller.velocity.x < 0) {
+        controller.velocity.x = 0;
+      }
+      playAnim();      
+    }
+
+    private async void playAnim() {
       PauseTransition<Transitions.CanFall>();
       await AnimMapper.awaitClip<DoubleJump>();
       UnpauseTransition<Transitions.CanFall>();

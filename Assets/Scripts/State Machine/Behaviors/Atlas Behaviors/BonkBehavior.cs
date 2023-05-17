@@ -14,6 +14,10 @@ public class BonkBehavior : IStateBehavior
     playerController pc;
     bool hasStarted = false;
 
+    public BonkBehavior() {
+        waitForStart = false;
+    }
+    
     public async override Task StartBehavior() {
         pc = (playerController)state.stateMachine;
 
@@ -42,7 +46,7 @@ public class BonkBehavior : IStateBehavior
         state.deformer.startDeform(new Vector3(.25f, 1.1f, 1), 0.1f, .35f, Vector2.right * pc.facing);
         
         state.controller.lockPosition = true;
-        await AnimMapper.awaitClip<States.Bonk>();
+        await Task.Delay(100);
         state.controller.lockPosition = false;
         
 

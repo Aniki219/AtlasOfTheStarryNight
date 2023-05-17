@@ -34,7 +34,7 @@ public class playerController : StateMachine
     [Foldout("Movement Stats")] public float maxWallSlideVel = -3.5f;
     float maxFallVel = -15f;
     float fastFallVel = -25f;
-    float wallJumpVelocity = 6;
+    public float wallJumpVelocity = 6;
     int maxCoyoteTime = 3;
     int coyoteTime = 0;
     int graceFrames = 0;
@@ -75,6 +75,7 @@ public class playerController : StateMachine
     stepSounds steps;
 
     [Foldout("Object References")]
+    [SerializeReference] playerCanvasController playerCanvas;
     public Collider2D secretCollider;
 
     Vector3 colliderStartSize;
@@ -87,7 +88,7 @@ public class playerController : StateMachine
     public Transform heldObject;
 
     bool fastBroom = false;
-    bool screenShake = false;
+    public bool screenShake = false;
 
     Coroutine jumpCRVar;
     Coroutine invulnerableCRVar;
@@ -255,30 +256,56 @@ public class playerController : StateMachine
     private void LateUpdate()
     {
         checkRoomBoundaries();
+        handleControllerDebug();
+    }
 
-        if (controller.debug) {
-            if (controller.highlightGrounded) {
-                if (isGrounded()) {
-                    FlashColor flashColor = FlashColor.builder
-                                                        .withColor(Color.green)
-                                                        .withTimeUnits(TimeUnits.CONTINUOUS)
-                                                        .build();
-                    deformer.flashColor(flashColor);
-                } else {
-                    FlashColor flashColor = FlashColor.builder
-                                                        .withColor(Color.red)
-                                                        .withTimeUnits(TimeUnits.CONTINUOUS)
-                                                        .build();
-                    deformer.flashColor(flashColor);
-                }
-            } else {
-            //TODO: NO
-            deformer.endFlashColor();
-            }
-        } else {
-        //TODO: NO
-        deformer.endFlashColor();
+    private void handleControllerDebug() {
+        if (Input.GetKeyDown(KeyCode.F1)) {
+            controller.debug = !controller.debug;
+            stateDisplay.gameObject.SetActive(controller.debug);
+            playerCanvas.Shoutout("Debug " + (controller.debug ? "On" : "Off"));
         }
+            
+        if (Input.GetKeyDown(KeyCode.F2)) {
+            controller.showNormal = !controller.showNormal;
+            playerCanvas.Shoutout("Collision Normals " + (controller.showNormal ? "On" : "Off"));
+        }
+        if (Input.GetKeyDown(KeyCode.F3)) {
+            controller.showVelocityNormal = !controller.showVelocityNormal;
+            playerCanvas.Shoutout("Velocity Normal " + (controller.showVelocityNormal ? "On" : "Off"));
+        }
+        if (Input.GetKeyDown(KeyCode.F4)) {
+            controller.showCollisionResolution = !controller.showCollisionResolution;
+            playerCanvas.Shoutout("Collision Highlights " + (controller.showCollisionResolution ? "On" : "Off"));
+        }
+        if (Input.GetKeyDown(KeyCode.F5))  {
+            controller.highlightGrounded =!controller.highlightGrounded;
+            playerCanvas.Shoutout("Highlight Grounded " + (controller.highlightGrounded ? "On" : "Off"));
+        }
+
+        // if (controller.debug) {
+        //     if (controller.highlightGrounded) {
+        //         if (isGrounded()) {
+        //             FlashColor flashColor = FlashColor.builder
+        //                                                 .withColor(Color.green)
+        //                                                 .withTimeUnits(TimeUnits.CONTINUOUS)
+        //                                                 .build();
+        //             deformer.flashColor(flashColor);
+        //         } else {
+        //             FlashColor flashColor = FlashColor.builder
+        //                                                 .withColor(Color.red)
+        //                                                 .withTimeUnits(TimeUnits.CONTINUOUS)
+        //                                                 .build();
+        //             deformer.flashColor(flashColor);
+        //         }
+        //     } else {
+        //     //TODO: NO
+        //     deformer.endFlashColor();
+        //     }
+        // } else {
+        // //TODO: NO
+        // deformer.endFlashColor();
+        // }
     }
 
     private void FixedUpdate()
@@ -1313,6 +1340,7 @@ public class playerController : StateMachine
     //Otherwise sets state to movement and sets tangible to true
     public void returnToMovement(State returnState = State.Movement)
     {
+        Debug.Log("return to movement");
         if (depState == State.ChargeAttack || depState == State.Attack)
         {
             if (!isCrouching()) resetAnimator();
@@ -1449,7 +1477,7 @@ public class playerController : StateMachine
     }
 
     //Flip horizontal without turn animation
-    void flipHorizontal()
+    public void flipHorizontal()
     {
         facing = -(int)Mathf.Sign(sprite.localScale.x);
         sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, 1, 1);

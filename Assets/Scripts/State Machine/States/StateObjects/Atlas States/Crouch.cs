@@ -10,7 +10,7 @@ namespace States {
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanAttack(),
+        new Transitions.CanAttack(true),
         new Transitions.CanBroom(),
         new Transitions.CanSlip(),
         new Transitions.CanSlide(),
@@ -36,6 +36,10 @@ namespace States {
       boxCollider.size = Vector2.Scale(colliderStartSize, new Vector3(1.0f, 0.5f));
       boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
       
+      performAnim();
+    }
+
+    async void performAnim() {
       PauseTransition<Transitions.CanUncrouch>();
       await AnimMapper.awaitClip<States.Crouch>();
       UnpauseTransition<Transitions.CanUncrouch>();

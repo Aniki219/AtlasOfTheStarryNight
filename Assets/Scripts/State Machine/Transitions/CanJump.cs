@@ -45,8 +45,8 @@ namespace Transitions {
         }
 
         private void wallJump() {
-            // state.anim.SetBool("wallBlast", true);
-            // changeState(new States.WallJump);
+            state.anim.SetBool("wallBlast", true);
+            changeState(new States.WallJump());
         }
 
     }

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Deformer), typeof(Collider2D))]
 public class shakeWhen : MonoBehaviour
 {
     Deformer deformer;
@@ -13,7 +12,7 @@ public class shakeWhen : MonoBehaviour
 
     private void Start()
     {
-        deformer = GetComponent<Deformer>();
+        deformer = GetComponentInChildren<Deformer>();
     }
 
     private void OnTriggerEnter2D(Collider2D collision)

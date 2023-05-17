@@ -1,32 +1,51 @@
 using UnityEngine;
-using System.Collections.Generic;
-using System;
-using TMPro;
+using System.Threading.Tasks;
 
 public abstract class StateMachine : MonoBehaviour {
   public State state { get; private set; }
   public State startState;
 
-  public TextMeshProUGUI stateDisplay;
+  public StateDisplay stateDisplay;
+  public Phase phase {get; private set;} = Phase.Start;
+
+  public enum Phase {
+    Start,
+    Update,
+    Exit
+  }
 
   public virtual void Start() {
     changeState(startState);
   }
 
   public virtual void Update() {
-    if (!state.hasStarted) return;
+    if (!phase.Equals(Phase.Update)) return;
     state.UpdateState();
   }
 
-  public async void changeState(State newState) {
-
+  public async void changeState(State newState, bool skipWaitForExit = false) {
     bool sameState = false; //checkState(newState);
-  
-    if (state != null) await state.ExitState();
-    state = newState;
-    await state.StartState(this, sameState);
 
-    if (stateDisplay) stateDisplay.text = state.GetType().ToString();
+    if (state != null) {
+      changePhase(Phase.Exit);
+      if (skipWaitForExit) {
+        state.ExitState();
+      } else {
+        await state.ExitState();
+      }
+    }
+    state = newState;
+    changePhase(Phase.Start);
+    await state.StartState(this, sameState);
+    changePhase(Phase.Update);
+  }
+
+  private void changePhase(Phase to) {
+    phase = to;
+    if (stateDisplay) {
+      stateDisplay.setPhase(to.ToString());
+      stateDisplay.setStateInfo(state);
+    }
   }
 
   public bool checkState(State other) {

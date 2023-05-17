@@ -232,7 +232,7 @@ public class Deformer : MonoBehaviour
     }
 
     public void endFlashColor() {
-        if (flashColorRef == null) return;
+        if (flashColorRef == null || flashColorRef.task == null) return;
         StopCoroutine(flashColorRef.task);
         sprite.material = playerStatsManager.Instance.currentSkin;
         sprite.color = Color.white;

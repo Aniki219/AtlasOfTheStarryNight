@@ -15,6 +15,15 @@ namespace States {
         new Transitions.CanJump(),
         new Transitions.CanFall(),
         new Transitions.CanSlip(),
+        new Transitions.CanWallSlide(),
+      };
+    }
+  }
+
+  public class PostJump : Jump {
+    public PostJump() : base() {
+      behaviors = new List<IStateBehavior>() {
+        new Behaviors.MoveBehavior()
       };
     }
   }

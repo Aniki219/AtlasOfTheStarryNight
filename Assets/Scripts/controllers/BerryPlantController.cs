@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 
-[RequireComponent(typeof(Deformer), typeof(BoxCollider2D))]
+[RequireComponent(typeof(BoxCollider2D))]
 public class BerryPlantController : MonoBehaviour
 {
     Animator anim;
@@ -34,8 +34,8 @@ public class BerryPlantController : MonoBehaviour
 
     private void Start()
     {
-        anim = GetComponent<Animator>();
-        deformer = GetComponent<Deformer>();
+        anim = GetComponentInChildren<Animator>();
+        deformer = GetComponentInChildren<Deformer>();
         col = GetComponent<BoxCollider2D>();
 
         Vector2 scenePos = AtlasSceneManager.getPlayerCoords();

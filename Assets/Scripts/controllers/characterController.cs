@@ -100,12 +100,6 @@ public class characterController : MonoBehaviour
     }
 
     private void LateUpdate() {
-        if (Input.GetKeyDown(KeyCode.F1)) debug = !debug;
-        if (Input.GetKeyDown(KeyCode.F2)) showNormal = !showNormal;
-        if (Input.GetKeyDown(KeyCode.F3)) showVelocityNormal = !showVelocityNormal;
-        if (Input.GetKeyDown(KeyCode.F4)) showCollisionResolution = !showCollisionResolution;
-        if (Input.GetKeyDown(KeyCode.F5)) highlightGrounded = !highlightGrounded;
-
         if (debug) {
             UpdateBoundaryPoints();
             GetComponentInChildren<SpriteRenderer>().material.color = Color.white.WithAlphaSetTo(0.75f);

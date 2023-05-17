@@ -14,6 +14,7 @@ namespace States {
         new Transitions.CanBroom(),
         new Transitions.CanJump(),
         new Transitions.CanLand(),
+        new Transitions.CanWallSlide(),
       };
     }
 
@@ -21,6 +22,7 @@ namespace States {
     {
       await base.StartState(stateMachine, wasActive);
       anim.SetBool("isFalling", !anim.GetBool("isDoubleJumping"));
+      anim.SetBool("isJumping", false);
     }
 
     public override async Task ExitState()

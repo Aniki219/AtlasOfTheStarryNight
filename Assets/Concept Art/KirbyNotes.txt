@@ -1,0 +1,18 @@
+- tilesets have colored outlines
+- characters have black outlines
+- outlines are distinct from shading and things with shaded borders also have outlines
+- vfx and light things have colored/white outlines
+- realistic tiles have light outlines, abstract may have more pronounced.
+- distinct objects that tile have a light-colored padding outline so their true outlines dont blend together
+- some vfx and background objects are just (out)lines, these dont have outlines but may be double wide lines instead
+- ui buttons have colored outlines
+- ui text and backgrounds do not have outlines
+- ui titles have enourmous multilayered outlines
+- large bosses my have internal black outlines, small characters do not
+- background decorations have no outlines
+- saturated 5-color foreground pallet
+- desaturated 5-color for background
+	- 1 outline
+	- 3 color shading
+	- 1 hightlight
+- typically use 4 colors for shading

@@ -12,16 +12,17 @@ public class JumpBehavior : IStateBehavior
     public Vector2 velocity;
     public float apexTime;
     public float apexHeight;
-    public float lockOutTime;
+    public int lockOutTime;
     public bool stopVelocityOnEntry;
     public bool variableJump;
 
     private playerController pc;
     private characterController cc;
 
-    public JumpBehavior(Vector2 velocity, bool variableJump = false) {
+    public JumpBehavior(Vector2 velocity, bool variableJump = false, int lockOutTime = 0) {
         this.velocity = velocity;
         this.variableJump = variableJump;
+        this.lockOutTime = lockOutTime;
         waitForStart = false;
     }
 
@@ -38,7 +39,7 @@ public class JumpBehavior : IStateBehavior
         int maxFrames = 6;
 
         cc.velocity.y = velocity.y;
-        cc.velocity.x += velocity.x;
+        cc.velocity.x += velocity.x * ((playerController)state.stateMachine).facing;
         
         cc.resetGravity();
 
@@ -50,6 +51,8 @@ public class JumpBehavior : IStateBehavior
             await new UnityAsync.WaitForSeconds(4 / 60.0f);
             maxFrames--;
         }
+
+        await Task.Delay(lockOutTime);
     }
 
     public override void UpdateBehavior() {

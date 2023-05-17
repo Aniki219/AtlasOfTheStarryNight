@@ -10,21 +10,20 @@ public abstract class State
     public StateMachine stateMachine;
     public Transform transform;
     
-    protected List<IStateBehavior> behaviors;
-    protected List<IStateTransition> transitions;
+    public List<IStateBehavior> behaviors {get; protected set;}
+    public List<IStateTransition> transitions {get; protected set;}
     protected List<Resetters> resetters;
 
     public bool hasStarted {get; private set;} = false;
+    public bool hasEnded {get; private set;} = false;
 
     public virtual async Task StartState(StateMachine stateMachine, bool wasActive = false) {
         this.stateMachine = stateMachine;
         attachComponents();
 
         behaviors.ForEach(b => {if (!b.waitForStart) b.StartBehavior();});
-        var waitForStartBehaviors = behaviors.Where(b => b.waitForStart).Select(b => b.StartBehavior());
-        await Task.WhenAll(waitForStartBehaviors);
-
-        hasStarted = true;
+        var tasks = behaviors.Where(b => b.waitForStart).Select(b => b.StartBehavior());
+        await Task.WhenAll(tasks);
     }
 
     public virtual void UpdateState() {
@@ -36,8 +35,8 @@ public abstract class State
 
     public virtual async Task ExitState() {
         behaviors.ForEach(b => {if (!b.waitForExit) b.ExitBehavior();});
-        var waitForExitBehaviors = behaviors.Where(b => b.waitForExit).Select(b => b.ExitBehavior());
-        await Task.WhenAll(waitForExitBehaviors);
+        var tasks = behaviors.Where(b => b.waitForExit).Select(b => b.ExitBehavior());
+        await Task.WhenAll(tasks);
     }
 
     protected void PauseTransition<T>() where T : IStateTransition {
@@ -71,6 +70,7 @@ public abstract class State
         
         anim = stateMachine.GetComponentInChildren<Animator>();
         sprite = anim.transform;
+        spriteController = stateMachine.GetComponentInChildren<atlasSpriteController>();
         deformer = stateMachine.GetComponentInChildren<Deformer>();
 
         behaviors.ForEach(b => b.attach(this));

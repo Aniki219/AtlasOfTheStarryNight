@@ -10113,6 +10113,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   equipmentPanel: {fileID: 0}
+  shoutoutText: {fileID: 0}
 --- !u!1 &6349184747420119991
 GameObject:
   m_ObjectHideFlags: 0
@@ -10189,6 +10190,7 @@ MonoBehaviour:
   dropThroughPlatforms: 0
   resetPosition: 0
   controller: {fileID: 1721639758}
+  playerCanvas: {fileID: 8046800161178818592}
   secretCollider: {fileID: 6115427779737381630}
   liftableObject: {fileID: 0}
   heldObject: {fileID: 0}
@@ -10227,6 +10229,7 @@ MonoBehaviour:
   dangerMask:
     serializedVersion: 2
     m_Bits: 5120
+  canCrouch: 0
   termVel: -12
   gravityMod: 1
   currentGravity: 0

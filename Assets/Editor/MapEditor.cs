@@ -31,6 +31,7 @@ public class MapEditor : Editor
         displayingNeighbors = false;
     }
 
+    [MenuItem("MapEditor/Toggle Neighbors _F6")]
     public static void toggleNeighbors()
     {
         if (displayingNeighbors)

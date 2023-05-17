@@ -52,7 +52,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 2100000, guid: 44838859f7b15454bb100a58972e99f4, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -116,7 +116,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
+  sprite: {fileID: 0}
   oscillators: []
+  deforms: []
 --- !u!225 &1258055662
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -204,13 +206,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44b605d00cbb5c4ab9861895c72f515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
+  showNormal: 1
+  showVelocityNormal: 0
+  showCollisionResolution: 0
+  highlightGrounded: 0
+  velocity: {x: 0, y: 0, z: 0}
+  additionalVelocity: {x: 0, y: 0, z: 0}
+  lockPosition: 0
+  canMove: 1
+  canGravity: 1
+  collisions:
+    normals: []
+    groundSlope: {x: 0, y: 0}
+    grounded: 0
+    tangible: 0
+    collidable: 0
   collisionMask:
     serializedVersion: 2
     m_Bits: 262400
   dangerMask:
     serializedVersion: 2
     m_Bits: 0
-  lockPosition: 0
+  canCrouch: 0
+  termVel: -10
+  gravityMod: 1
+  currentGravity: 0
+  maxGravity: 8
+  maxSlope: 0.5
   cameraTarget: {x: 0, y: 0, z: 0}
   bonkCeiling: 0
   OnBonkCeiling:
@@ -220,6 +243,8 @@ MonoBehaviour:
   OnLanding:
     m_PersistentCalls:
       m_Calls: []
+  slopeDetectRange: 5
+  groundedCheckRange: 0.008
 --- !u!114 &6726984603581895702
 MonoBehaviour:
   m_ObjectHideFlags: 0

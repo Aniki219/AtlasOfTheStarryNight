@@ -29,6 +29,8 @@ public class AnimMapper : ScriptableObject {
   public static AnimationClip getClip<T>(ClipType clipType = ClipType.StartClip) where T : State {
     StateAnim stateAnim = Instance.stateAnims.Find(s => s.state.Type.Equals(typeof(T)));
     if (stateAnim.state == null) throw new Exception("No stateAnim data found for state: " + typeof(T));
+    
+    if (clipType.Equals(ClipType.ExitClip)) return stateAnim.exitAnim;
     return clipType.Equals(ClipType.StartClip) ? stateAnim.startAnim : stateAnim.updateAnim;
   }
 
