@@ -281,7 +281,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7049648788283265812}
   - component: {fileID: 7049648788283265814}
-  - component: {fileID: 6110851050148159599}
   - component: {fileID: 2086523167177414003}
   - component: {fileID: 4335292197204983298}
   m_Layer: 0
@@ -332,21 +331,6 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 0.2, y: 0.15}
   m_EdgeRadius: 0
---- !u!114 &6110851050148159599
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7049648788283265809}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: This seed will explode on impact!
 --- !u!114 &2086523167177414003
 MonoBehaviour:
   m_ObjectHideFlags: 0

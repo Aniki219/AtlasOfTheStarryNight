@@ -8,9 +8,9 @@ namespace Behaviors {
 [Serializable]
 public class LandBehavior : IStateBehavior
 {
-    private int duration;
+    private float duration;
 
-    public LandBehavior(int duration = 0) {
+    public LandBehavior(float duration = 0) {
         this.duration = duration;
     }
 
@@ -20,7 +20,7 @@ public class LandBehavior : IStateBehavior
             state.particleMaker.createDust(true);
             state.controller.velocity = Vector3.zero;
         }
-        await Task.Delay(duration);
+        await AtlasHelpers.WaitSeconds(duration);
         state.stateMachine.changeState(new States.Move());
     }
 

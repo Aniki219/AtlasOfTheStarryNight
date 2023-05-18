@@ -48,11 +48,11 @@ public class JumpBehavior : IStateBehavior
                 cc.velocity.y /= 4;
                 break;
             }
-            await new UnityAsync.WaitForSeconds(4 / 60.0f);
+            await AtlasHelpers.WaitSeconds(4 / 60.0f);
             maxFrames--;
         }
 
-        await Task.Delay(lockOutTime);
+        await AtlasHelpers.WaitSeconds(lockOutTime);
     }
 
     public override void UpdateBehavior() {

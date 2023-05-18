@@ -20,6 +20,7 @@ public abstract class StateMachine : MonoBehaviour {
 
   public virtual void Update() {
     if (!phase.Equals(Phase.Update)) return;
+    if (gameManager.isPaused) return;
     state.UpdateState();
   }
 

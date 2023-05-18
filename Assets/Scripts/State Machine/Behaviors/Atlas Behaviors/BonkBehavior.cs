@@ -46,7 +46,7 @@ public class BonkBehavior : IStateBehavior
         state.deformer.startDeform(new Vector3(.25f, 1.1f, 1), 0.1f, .35f, Vector2.right * pc.facing);
         
         state.controller.lockPosition = true;
-        await Task.Delay(100);
+        await AtlasHelpers.WaitSeconds(0.1f);
         state.controller.lockPosition = false;
         
 

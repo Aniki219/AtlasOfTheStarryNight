@@ -153,12 +153,12 @@ public class BerryPlantController : MonoBehaviour
                 CompareTag("WooshBerryPlant") && !gameFlagsManager.Instance.checkFlag("GardenWoosh"))
         {
             anim.SetBool("Dry", true);
-            GetComponentInChildren<pauseController>().scoutMessage = "Dried Berry Plant\n\nRestore water to this berries tree to rejuvenate.";
+            //GetComponentInChildren<pauseController>().scoutMessage = "Dried Berry Plant\n\nRestore water to this berries tree to rejuvenate.";
         }
         else
         {
             anim.SetBool("Dry", false);
-            GetComponentInChildren<pauseController>().scoutMessage = "Berry Plant -\nWack this plant too cause a unique effect.";
+            //GetComponentInChildren<pauseController>().scoutMessage = "Berry Plant -\nWack this plant too cause a unique effect.";
         }
     }
 

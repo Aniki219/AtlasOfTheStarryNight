@@ -14,6 +14,9 @@ public class AtlasInputManager : ScriptableObject
     public static List<KeyState> keyStates;
     public static List<AxisState> axisStates;
 
+    public static List<KeyState> pausedKeyStates;
+    public static List<AxisState> pausedAxisStates;
+
     public InputMaster controls;
     public bool holdBroom;
 
@@ -67,18 +70,18 @@ public class AtlasInputManager : ScriptableObject
         }
         input.FindAction("Movement").started += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
         input.FindAction("Movement").performed += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
-        input.FindAction("Movement").canceled += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>()); };
+        input.FindAction("Movement").canceled += ctx => { setAxisState("Dpad", ctx.ReadValue<Vector2>(), true); };
     }
 
-    static void setKeyState(string keyName, bool state)
+    private static void setKeyState(string keyName, bool state)
     {
         KeyState keyState = keyStates.Find(ks => ks.keyName == keyName);
         if (keyState == null) throw new Exception("No keyState " + keyName + " Found!");
-        keyState.state = state;
+        keyState.isDown = state;
         keyState.startTime = Time.time;
     }
 
-    static void setAxisState(string axisName, Vector2 state)
+    private static void setAxisState(string axisName, Vector2 state, bool released = false)
     {
         AxisState axisState = axisStates.Find(axis => axis.axisName == axisName);
         if (axisState == null) throw new Exception("No axisState " + axisName + " Found!");
@@ -103,12 +106,12 @@ public class AtlasInputManager : ScriptableObject
     public static bool getKeyPressed(string keyName, bool useDeltaTime = false)
     {
         KeyState keyState = getKeyState(keyName);
-        return keyState.state && keyState.justPressed(useDeltaTime);
+        return keyState.isDown && keyState.justPressed(useDeltaTime);
     }
 
     public static bool getKey(string keyName)
     {
-        return getKeyState(keyName).state;
+        return getKeyState(keyName).isDown;
     }
 
     public bool aimAtMouse()
@@ -147,13 +150,13 @@ public class AtlasInputManager : ScriptableObject
 public class KeyState
 {
     public string keyName;
-    public bool state;
+    public bool isDown;
     public double startTime;
 
     public KeyState(string keyName)
     {
         this.keyName = keyName;
-        state = false;
+        isDown = false;
     }
 
     //Using deltaTime allows this function to work even in async methods such as "onTrigger" 

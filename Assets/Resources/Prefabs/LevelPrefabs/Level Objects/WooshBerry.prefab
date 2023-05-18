@@ -15,7 +15,6 @@ GameObject:
   - component: {fileID: 1279541664}
   - component: {fileID: -7325879653678202139}
   - component: {fileID: 7692689474575733362}
-  - component: {fileID: 964987135011630447}
   m_Layer: 17
   m_Name: WooshBerry
   m_TagString: WooshBerryPlant
@@ -199,6 +198,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  sprite: {fileID: 0}
   oscillators:
   - tag: default
     enabled: 1
@@ -214,6 +214,7 @@ MonoBehaviour:
     cyclesPerSecond: -2.5
     oscillationSize: 7
     oscillationDirection: {x: 0, y: 0, z: 0}
+  deforms: []
 --- !u!114 &7692689474575733362
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -230,19 +231,3 @@ MonoBehaviour:
   onHit: 0
   onBonk: 0
   shakeDuration: 1
---- !u!114 &964987135011630447
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5235961991136082181}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: Woosh Berry -\n\nBursting this berry forces you onto your broom.
-    Even if you've already used it once.

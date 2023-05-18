@@ -40,7 +40,7 @@ namespace States {
       controller.canGravity = false;
       controller.canMove = false;
 
-      await Task.Delay((int)(pc.wallBlastDelay * 1000));
+      await AtlasHelpers.WaitSeconds(pc.wallBlastDelay);
 
       pc.flipHorizontal();
 
@@ -54,7 +54,7 @@ namespace States {
 
       float startTime = Time.time;
       controller.velocity.x = pc.wallJumpVelocity * pc.facing;
-      await Task.Delay(120);
+      await AtlasHelpers.WaitSeconds(0.12f);
       stateMachine.changeState(new States.PostJump());
     }
 

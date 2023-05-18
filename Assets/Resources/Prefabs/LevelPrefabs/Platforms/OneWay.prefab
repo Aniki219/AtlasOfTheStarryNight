@@ -70,7 +70,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3416689656805370191}
-  - component: {fileID: 8876929995308146782}
   - component: {fileID: 6038493020052010823}
   m_Layer: 11
   m_Name: OneWay
@@ -95,21 +94,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8876929995308146782
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3416689656805370186}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: 
 --- !u!114 &6038493020052010823
 MonoBehaviour:
   m_ObjectHideFlags: 0

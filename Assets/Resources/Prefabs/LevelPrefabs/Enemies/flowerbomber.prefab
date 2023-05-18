@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 6340982575938526987}
   - component: {fileID: 6340982575938527094}
   - component: {fileID: 6340982575938527095}
-  - component: {fileID: -6060089000320675849}
   m_Layer: 10
   m_Name: flowerbomber
   m_TagString: Enemy
@@ -191,21 +190,6 @@ MonoBehaviour:
   startDir: -1
   moveSpeed: 2
   dropTimer: 1.5
---- !u!114 &-6060089000320675849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6340982575938526991}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: 'Florabomber\nHP: 1\nType: Grass\nDrops explosive seeds on its foes.'
 --- !u!1 &6340982577636170046
 GameObject:
   m_ObjectHideFlags: 0

@@ -36,7 +36,7 @@ public class AnimMapper : ScriptableObject {
 
   public static Task awaitClip<T>(ClipType clipType = ClipType.StartClip) where T : State {
     AnimationClip clip = getClip<T>(clipType);
-    return Task.Delay((int)(clip.length * 1000));
+    return AtlasHelpers.WaitSeconds(clip.length);
   }
 
   public enum ClipType {

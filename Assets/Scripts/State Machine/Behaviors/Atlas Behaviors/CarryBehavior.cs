@@ -51,7 +51,7 @@ public class CarryBehavior : IStateBehavior
         if (throwing)
         {
             state.anim.SetTrigger("Throw");
-            await Task.Delay(400);
+            await AtlasHelpers.WaitSeconds(0.4f);
             rb.AddForce(new Vector2(200.0f * pc.facing, 75.0f));
         } else
         {

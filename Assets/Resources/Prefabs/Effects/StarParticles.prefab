@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 6431182781206096600}
   - component: {fileID: 7151572439065644621}
   - component: {fileID: 1822978446017250925}
-  - component: {fileID: 4994766080528453798}
   m_Layer: 0
   m_Name: StarParticles
   m_TagString: Untagged
@@ -4769,7 +4768,6 @@ ParticleSystemRenderer:
   m_RendererPriority: 0
   m_Materials:
   - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
-  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -4827,17 +4825,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4358f4cd28451c44caca7e44bbddba1c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &4994766080528453798
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4700776363475074070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0

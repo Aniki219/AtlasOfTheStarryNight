@@ -82,7 +82,6 @@ GameObject:
   - component: {fileID: 6280628106179491540}
   - component: {fileID: 6280628106179491543}
   - component: {fileID: 6280628106179491546}
-  - component: {fileID: -2575694735263056574}
   m_Layer: 10
   m_Name: GreenCharger
   m_TagString: Enemy
@@ -145,13 +144,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d44b605d00cbb5c4ab9861895c72f515, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  debug: 0
+  showNormal: 1
+  showVelocityNormal: 0
+  showCollisionResolution: 0
+  highlightGrounded: 0
+  velocity: {x: 0, y: 0, z: 0}
+  additionalVelocity: {x: 0, y: 0, z: 0}
+  lockPosition: 0
+  canMove: 1
+  canGravity: 1
+  collisions:
+    normals: []
+    groundSlope: {x: 0, y: 0}
+    grounded: 0
+    tangible: 0
+    collidable: 0
   collisionMask:
     serializedVersion: 2
     m_Bits: 262400
   dangerMask:
     serializedVersion: 2
     m_Bits: 0
-  lockPosition: 0
+  canCrouch: 0
+  termVel: -10
+  gravityMod: 1
+  currentGravity: 0
+  maxGravity: 8
+  maxSlope: 0.5
   cameraTarget: {x: 0, y: 0, z: 0}
   bonkCeiling: 0
   OnBonkCeiling:
@@ -161,6 +181,8 @@ MonoBehaviour:
   OnLanding:
     m_PersistentCalls:
       m_Calls: []
+  slopeDetectRange: 5
+  groundedCheckRange: 0.008
 --- !u!114 &6280628106179491543
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -183,6 +205,7 @@ MonoBehaviour:
   receivesHitStun: 1
   hitStunDuration: 0.1
   inHitStun: 0
+  deathPause: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -258,22 +281,6 @@ MonoBehaviour:
   chargeVelocity: 5
   chargeDuration: 1.5
   starOrigin: {fileID: 0}
---- !u!114 &-2575694735263056574
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6280628106179491537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: Forest Gaurd -\n\nWears a protective mask over its face. Weak to
-    back-attacks.
 --- !u!1 &6280628107221707902
 GameObject:
   m_ObjectHideFlags: 0
@@ -393,7 +400,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f96149494901ee14c95d731ad165c6f7, type: 2}
+  sprite: {fileID: 0}
   oscillators: []
+  deforms: []
 --- !u!198 &6280628107221707840
 ParticleSystem:
   m_ObjectHideFlags: 0

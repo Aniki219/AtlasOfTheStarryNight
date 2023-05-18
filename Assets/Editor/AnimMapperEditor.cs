@@ -12,13 +12,7 @@ public class AnimMapperEditor : Editor
     static EditorWindow inspectorInstance;
     
     [MenuItem("AnimMapper/Open Mapper Window")]
-    public static void toggleMapperWhilePlaying() {
-        toggleMapper(false);
-    }
-
-    [MenuItem("AnimMapper/Open Mapper Window _F5")]
-    public static void toggleMapper(bool test = true) {
-        if(!test && EditorApplication.isPlaying ) return;
+    public static void toggleMapper() {
         if (inspectorInstance != null) {
             inspectorInstance.Close();
             inspectorInstance = null;
@@ -35,6 +29,12 @@ public class AnimMapperEditor : Editor
         isLocked.GetSetMethod().Invoke(inspectorInstance, new object[] { true });
 
         Selection.activeGameObject = prevSelection;
+    }
+
+    [MenuItem("AnimMapper/Toggle Mapper Window _F5")]
+    public static void toggleMapperShortcut() {
+        if(EditorApplication.isPlaying ) return;
+        toggleMapper();
     }
 
 

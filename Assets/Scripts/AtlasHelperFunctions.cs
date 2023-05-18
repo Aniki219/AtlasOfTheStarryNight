@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Threading.Tasks;
 
 public static class AtlasHelpers
 {
@@ -26,6 +27,15 @@ public static class AtlasHelpers
     {
         if (value == 0) return 0;
         return value > 0 ? 1 : -1;
+    }
+
+    public static async Task WaitSeconds(float seconds) {
+        float startTime = Time.time;
+        float endTime = Time.time + seconds;
+        while(Time.time < endTime) {
+            await Task.Delay(16); // one frame
+        }
+        await Task.Yield();
     }
 }
 

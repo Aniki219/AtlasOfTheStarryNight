@@ -19,7 +19,7 @@ namespace States {
       AnimationClip attackLandClip = AnimMapper.getClip<States.AttackLand>();
       
       behaviors = new List<IStateBehavior>() {
-        new Behaviors.LandBehavior((int)(attackLandClip.length * 1000)),
+        new Behaviors.LandBehavior(attackLandClip.length),
       };
 
       transitions = new List<IStateTransition>() {

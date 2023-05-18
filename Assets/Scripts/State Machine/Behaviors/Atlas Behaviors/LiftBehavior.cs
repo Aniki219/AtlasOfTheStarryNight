@@ -20,7 +20,7 @@ public class LiftBehavior : IStateBehavior
         if (lc && rb)
         {
             pc.liftableObject = null;
-            int liftTime = 220;
+            float liftTime = 0.22f;
             pc.setFacing(Mathf.Sign(obj.transform.position.x - state.transform.position.x));
             rb.velocity = Vector2.zero;
             rb.simulated = false;
@@ -30,11 +30,11 @@ public class LiftBehavior : IStateBehavior
             state.anim.SetTrigger("Lift");
             state.anim.SetBool("isHolding", true);
             //pc.freezeForSeconds(liftTime + 0.15f, true);
-            await Task.Delay(liftTime);
+            await AtlasHelpers.WaitSeconds(liftTime);
             pc.heldObject = obj.transform.parent;
         }
         //TODO: No literals in delay
-        await Task.Delay(150);
+        await AtlasHelpers.WaitSeconds(0.15f);
         pc.changeState(new States.Carry());
     }
 

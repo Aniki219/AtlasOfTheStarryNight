@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 1955821922894580502}
   - component: {fileID: 1192842827013696237}
   - component: {fileID: 8518535542732930049}
-  - component: {fileID: -8452413137374639975}
   - component: {fileID: 1034127648981461234}
   m_Layer: 0
   m_Name: RibbonLock
@@ -133,21 +132,6 @@ MonoBehaviour:
   persistant: 1
   markRemovedOnDestroy: 1
   onceEnemiesDefeated: 0
---- !u!114 &-8452413137374639975
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6172398128550943628}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: This bow can't be undone until all of the ribbons are collected.
 --- !u!61 &1034127648981461234
 BoxCollider2D:
   m_ObjectHideFlags: 0

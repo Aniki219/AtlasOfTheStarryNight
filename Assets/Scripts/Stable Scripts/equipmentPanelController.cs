@@ -9,13 +9,16 @@ public class equipmentPanelController : MonoBehaviour
     List<GameObject> equipmentPanels;
 
     public GameObject selectIcon;
+    
+    float easingTime = 0.25f;
     int selected;
-    Vector2 selectIconVel;
+    Easer easer;
 
     // Start is called before the first frame update
     void OnEnable()
     {
-        gameManager.Instance.pauseMenus.Add(gameObject);
+        easer = new Easer(Vector2.zero, Vector2.zero, 0);
+        gameManager.setPause(gameManager.PauseType.ON);
         selected = -1;
         equipmentPanels = new List<GameObject>();
         materials = playerStatsManager.Instance.playerSkins;
@@ -38,35 +41,41 @@ public class equipmentPanelController : MonoBehaviour
             equipmentPanels.Add(panel);
         }
         selectIcon.transform.SetAsLastSibling();
-        StartCoroutine(appear());
+        appear();
     }
 
     void Update()
     {
         Vector2 input = AtlasInputManager.getAxisState("Dpad");
+        int index = -1;
         if (input.x == 0 && input.y == 0)
         {
-            selectIcon.transform.localPosition = Vector2.zero;
-            selectIcon.SetActive(false);
-            return;
+
+        } else {
+            float theta = Mathf.Atan2(input.y, input.x);
+            theta *= Mathf.Rad2Deg;
+            theta += 360.0f;
+            index = (int)Mathf.Round(theta / 45.0f);
+            index %= 8;
         }
-        selectIcon.SetActive(true);
-        float theta = Mathf.Atan2(input.y, input.x);
-        theta *= Mathf.Rad2Deg;
-        theta += 360.0f;
-        int index = (int)Mathf.Round(theta / 45.0f);
-        index %= 8;
-        selected = index;
-        selectIcon.transform.localPosition = Vector2.SmoothDamp(
-                selectIcon.transform.localPosition, 
+
+        if (input.normalized != easer.end) {
+            easer = new Easer(selectIcon.transform.localPosition, 
                 input.normalized, 
-                ref selectIconVel, 
-                0.05f);
+                input.magnitude == 0 ? 0.25f : 0.1f,
+                Ease.OutQuart);
+        }
+
+        if (easer != null) selectIcon.transform.localPosition = easer.Update();
+        if (easer.isComplete) {
+            selected = index;
+        }
+
     }
 
     void OnDisable()
     {
-        gameManager.Instance.pauseMenus.Remove(gameObject);
+        gameManager.setPause(gameManager.PauseType.OFF);
         if (selected >= 0)
         {
             Material selectedMat = materials[selected];
@@ -81,7 +90,6 @@ public class equipmentPanelController : MonoBehaviour
             if (t.name == "SelectIcon") continue;
             Destroy(t.gameObject);
         }
-        StopAllCoroutines();
     }
 
     void OnDestroy()
@@ -89,18 +97,20 @@ public class equipmentPanelController : MonoBehaviour
         gameManager.Instance.pauseMenus.Remove(gameObject);
     }
 
-    IEnumerator appear()
+    async void appear()
     {
         transform.localScale = Vector3.zero;
         transform.localEulerAngles = Vector3.forward * -180;
 
+        float startTime = Time.unscaledTime;
+
         float duration = 0.3f;
         while (transform.localScale.x < 1.0f)
         {
-            float tstep = Time.deltaTime / duration;
-            transform.localScale += Vector3.one * tstep * 1.0f;
-            transform.localEulerAngles += Vector3.forward * tstep * 360.0f;
-            yield return new WaitForEndOfFrame();
+            float p = (Time.unscaledTime - startTime) / duration;
+            transform.localScale = Vector3.one * p;
+            transform.localEulerAngles = Vector3.forward * p * 360.0f;
+            await System.Threading.Tasks.Task.Delay(16);
         }
 
         transform.localScale = Vector3.one;

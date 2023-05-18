@@ -75,7 +75,6 @@ GameObject:
   - component: {fileID: 3651724148441579793}
   - component: {fileID: 1782002806}
   - component: {fileID: 1782002811}
-  - component: {fileID: -746179904205589926}
   m_Layer: 0
   m_Name: tornado
   m_TagString: Tornado
@@ -224,23 +223,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 0}
+  sprite: {fileID: 0}
   oscillators: []
---- !u!114 &-746179904205589926
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3651724148441579821}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: You csan safely ride inside of this miniature tornado. \nJump or
-    drop to get out.\n Restores your ability to broom.
+  deforms: []
 --- !u!1 &3651724148731290292
 GameObject:
   m_ObjectHideFlags: 0

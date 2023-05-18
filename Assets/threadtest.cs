@@ -36,17 +36,10 @@ public class threadtest : MonoBehaviour
     async Task move() {
         velocity = Vector3.right;
 
-        await waitSeconds(2);
+        await AtlasHelpers.WaitSeconds(2);
         velocity *= -1;
-        await waitSeconds(2);
+        await AtlasHelpers.WaitSeconds(2);
     }
 
-    async Task waitSeconds(float seconds) {
-        float startTime = Time.time;
-        float endTime = Time.time + seconds;
-        while(Time.time < endTime) {
-            await Task.Delay(16); // one frame
-        }
-        await Task.Yield();
-    }
+
 }

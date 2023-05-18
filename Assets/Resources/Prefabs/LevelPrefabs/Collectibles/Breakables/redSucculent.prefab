@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: -1717526212303541566}
   - component: {fileID: 2019911378}
   - component: {fileID: -5807125436704189473}
-  - component: {fileID: -7701548531025585646}
   - component: {fileID: 9140532345097843703}
   m_Layer: 0
   m_Name: redSucculent
@@ -238,21 +237,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bits: {fileID: 6517377595680698745, guid: 8255facd88c4133479e1bbb9f726c80e, type: 3}
---- !u!114 &-7701548531025585646
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4086491157713668470}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: Succulent -\n\nBreakable plant. Salvage for resources.
 --- !u!114 &9140532345097843703
 MonoBehaviour:
   m_ObjectHideFlags: 0

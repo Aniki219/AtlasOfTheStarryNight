@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 1070314997706193270}
   - component: {fileID: 2621174232687574965}
   - component: {fileID: 2621174232687574967}
-  - component: {fileID: -4602187968153992462}
   m_Layer: 8
   m_Name: RibbonStarBlock
   m_TagString: Wall
@@ -105,7 +104,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1.0625, y: 1.0625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -136,6 +135,7 @@ MonoBehaviour:
   receivesHitStun: 1
   hitStunDuration: 0.1
   inHitStun: 0
+  deathPause: 0
   hurtByPlayer: 1
   hurtCallback:
     m_PersistentCalls:
@@ -176,7 +176,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flashMaterial: {fileID: 2100000, guid: f8f2285b18bb7a8498f04dc587090614, type: 3}
+  sprite: {fileID: 0}
   oscillators: []
+  deforms: []
 --- !u!114 &2621174232687574967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,21 +194,6 @@ MonoBehaviour:
   persistant: 1
   markRemovedOnDestroy: 1
   onceEnemiesDefeated: 0
---- !u!114 &-4602187968153992462
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1070314997706193271}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: 
 --- !u!114 &2621174233843209905
 MonoBehaviour:
   m_ObjectHideFlags: 0

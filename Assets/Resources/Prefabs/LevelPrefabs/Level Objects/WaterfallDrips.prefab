@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 2027523233350641107}
   - component: {fileID: 2027523233350641116}
   - component: {fileID: 2027523233350641117}
-  - component: {fileID: -8987171216200331400}
   m_Layer: 0
   m_Name: WaterfallDrips
   m_TagString: Untagged
@@ -4813,18 +4812,3 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
---- !u!114 &-8987171216200331400
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2027523233350641118}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0370aebdead717c46b595f24a6d55411, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isPaused: 0
-  priority: 0
-  scoutMessage: Looks like there used to be a full waterfall here...

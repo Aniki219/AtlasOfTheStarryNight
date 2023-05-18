@@ -11,10 +11,11 @@ public class gameManager : ScriptableObject
     private static gameManager instance;
     public static gameManager Instance { get { return instance; } }
 
-    public pauseManager pause_manager;
+    //public pauseManager pause_manager;
 
     public static int numberOfStarts = 0;
 
+    public static bool isPaused {get; private set;} = false;
     private static bool isShuttingDown = false;
     private static Dictionary<string, bool> objects = new Dictionary<string, bool>();
 
@@ -47,8 +48,8 @@ public class gameManager : ScriptableObject
         onSceneLoad(SceneManager.GetActiveScene(), LoadSceneMode.Single);
 
         instance.pauseMenus = new List<GameObject>();
-        instance.pause_manager = (pauseManager)ScriptableObject.CreateInstance("pauseManager");
-        instance.pause_manager.Init();
+        // instance.pause_manager = (pauseManager)ScriptableObject.CreateInstance("pauseManager");
+        // instance.pause_manager.Init();
 
         Application.quitting += OnApplicationQuit;
     }
@@ -95,6 +96,26 @@ public class gameManager : ScriptableObject
         playerStartY = starty;
         playerCtrl.controller.collisions.setCollidable(false);
         SceneManager.LoadScene(to);
+    }
+
+    public enum PauseType {
+        ON,
+        OFF,
+        TOGGLE
+    }
+    public static void setPause(PauseType type) {
+        switch (type) {
+            case PauseType.ON:
+                isPaused = true;
+                break;
+            case PauseType.OFF:
+                isPaused = false;
+                break;
+            case PauseType.TOGGLE:
+                isPaused = !isPaused;
+                break;
+        }
+        Time.timeScale = isPaused ? 0 : 1;
     }
 
     public static void switchSceneButton(string to)

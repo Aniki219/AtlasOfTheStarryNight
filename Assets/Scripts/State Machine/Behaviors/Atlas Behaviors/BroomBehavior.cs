@@ -34,7 +34,7 @@ public class BroomBehavior : IStateBehavior
         state.controller.velocity = Vector3.zero;
         state.controller.canGravity = false;
 
-        await Task.Delay((int)(AnimMapper.getClip<States.Broom>().length * 1000));
+        await AtlasHelpers.WaitSeconds(AnimMapper.getClip<States.Broom>().length);
 
         pc.resetAnimator();
         SoundManager.Instance.playClip("broomLaunch");

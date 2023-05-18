@@ -183,74 +183,78 @@ public class playerController : StateMachine
             canBroom = true && hasBroom;
             canDoubleJump = true && hasDoubleJump;
         }
-        return;
-        if (AtlasInputManager.getKeyPressed("Cheat"))
-        {
-            hasDoubleJump = true;
-            hasWallJump = true;
-            SoundManager.Instance.playClip("jump2");
-        }
-        playerShouldWait();
-        handleParticles();
-        if (depState != State.Wait && depState != State.WaitMoveable)
-        {
-            handleUncrouch();
-            handleHolding();
-            handleScout();
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            gameManager.setPause(gameManager.PauseType.TOGGLE);
         }
 
-        switch (depState)
-        {
-            case State.Movement:
-                handleMovement();
-                handleAttackInput();
-                canPickUp();
-                allowDoor();
-                allowCrouch();
-                break;
-            case State.Slip:
-                handleSlip();
-                handleAttackInput();
-                allowCrouch();
-                break;
-            case State.Slide:
-                handleSlide();
-                break;
-            case State.BroomStart:
-                handleBroomStart();
-                break;
-            case State.Broom:
-                handleBroom();
-                handleAttackInput();
-                break;
-            case State.Attack:
-                handleAttack();
-                handleMovement(isGrounded() ? 0f : 1.0f, false, false);
-                break;
-            //Hurt and Bonk look the same to the player, but have different effects
-            case State.Bonk:
-            case State.Hurt:
-                bonk();
-                break;
-            case State.Reset:
-                handleReset();
-                break;
-            case State.WaitMoveable:
-                handleMovement(1, false, false);
-                break;
-            case State.WallJumpInit:
-                wallJumpInit();
-                break;
-            case State.WallJump:
-                handleWallJump();
-                break;
-            case State.Tornado:
-                handleTornado();
-                break;
-            default:
-                break;
-        }
-        //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+        // if (AtlasInputManager.getKeyPressed("Cheat"))
+        // {
+        //     hasDoubleJump = true;
+        //     hasWallJump = true;
+        //     SoundManager.Instance.playClip("jump2");
+        // }
+        // playerShouldWait();
+        // handleParticles();
+        // if (depState != State.Wait && depState != State.WaitMoveable)
+        // {
+        //     handleUncrouch();
+        //     handleHolding();
+        //     handleScout();
+        // }
+
+        // switch (depState)
+        // {
+        //     case State.Movement:
+        //         handleMovement();
+        //         handleAttackInput();
+        //         canPickUp();
+        //         allowDoor();
+        //         allowCrouch();
+        //         break;
+        //     case State.Slip:
+        //         handleSlip();
+        //         handleAttackInput();
+        //         allowCrouch();
+        //         break;
+        //     case State.Slide:
+        //         handleSlide();
+        //         break;
+        //     case State.BroomStart:
+        //         handleBroomStart();
+        //         break;
+        //     case State.Broom:
+        //         handleBroom();
+        //         handleAttackInput();
+        //         break;
+        //     case State.Attack:
+        //         handleAttack();
+        //         handleMovement(isGrounded() ? 0f : 1.0f, false, false);
+        //         break;
+        //     //Hurt and Bonk look the same to the player, but have different effects
+        //     case State.Bonk:
+        //     case State.Hurt:
+        //         bonk();
+        //         break;
+        //     case State.Reset:
+        //         handleReset();
+        //         break;
+        //     case State.WaitMoveable:
+        //         handleMovement(1, false, false);
+        //         break;
+        //     case State.WallJumpInit:
+        //         wallJumpInit();
+        //         break;
+        //     case State.WallJump:
+        //         handleWallJump();
+        //         break;
+        //     case State.Tornado:
+        //         handleTornado();
+        //         break;
+        //     default:
+        //         break;
+        // }
+        // //Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
     }
 
     private void LateUpdate()
@@ -950,13 +954,13 @@ public class playerController : StateMachine
 
     public void handleScout()
     {
-        if (AtlasInputManager.getKeyPressed("Scout"))
-        {
-            //pauseUntilCondition();
-            gameManager.Instance.pause_manager.addPause(pauseManager.PauseType.Scouter);
-            GameObject scouter = gameManager.createInstance("UI/ScouterTarget", transform.position);
-            Camera.main.GetComponent<cameraController>().target = scouter.transform;
-        }
+        // if (AtlasInputManager.getKeyPressed("Scout"))
+        // {
+        //     //pauseUntilCondition();
+        //     gameManager.Instance.pause_manager.addPause(pauseManager.PauseType.Scouter);
+        //     GameObject scouter = gameManager.createInstance("UI/ScouterTarget", transform.position);
+        //     Camera.main.GetComponent<cameraController>().target = scouter.transform;
+        // }
     }
 
     public void cutScenePrep()
