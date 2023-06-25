@@ -77,8 +77,7 @@ public class AtlasInputManager : ScriptableObject
     {
         KeyState keyState = keyStates.Find(ks => ks.keyName == keyName);
         if (keyState == null) throw new Exception("No keyState " + keyName + " Found!");
-        keyState.isDown = state;
-        keyState.startTime = Time.time;
+        keyState.setState(state);
     }
 
     private static void setAxisState(string axisName, Vector2 state, bool released = false)
@@ -106,12 +105,12 @@ public class AtlasInputManager : ScriptableObject
     public static bool getKeyPressed(string keyName, bool useDeltaTime = false)
     {
         KeyState keyState = getKeyState(keyName);
-        return keyState.isDown && keyState.justPressed(useDeltaTime);
+        return keyState.getPressed();// && keyState.justPressed(useDeltaTime);
     }
 
     public static bool getKey(string keyName)
     {
-        return getKeyState(keyName).isDown;
+        return getKeyState(keyName).getDown();
     }
 
     public bool aimAtMouse()
@@ -149,20 +148,38 @@ public class AtlasInputManager : ScriptableObject
 
 public class KeyState
 {
-    public string keyName;
-    public bool isDown;
-    public double startTime;
+    public string keyName {get; private set;}
+    private bool isDown;
+    private double startTime;
 
     public KeyState(string keyName)
     {
         this.keyName = keyName;
         isDown = false;
+        startTime = -Mathf.Infinity;
     }
 
     //Using deltaTime allows this function to work even in async methods such as "onTrigger" 
     public bool justPressed(bool useDeltaTime = false)
     {
         return (Time.time - startTime <= (useDeltaTime?Time.deltaTime:0));
+    }
+
+    public void setState(bool state) {
+        isDown = state;
+        if (state) startTime = Time.time;
+    }
+
+    public bool getDown() {
+        return isDown;
+    }
+
+    const float BUFFER_TIME = 0.04f;
+    public bool getPressed(float buffer = BUFFER_TIME) {
+        bool consume = (Time.time - startTime < buffer);
+        if (consume) startTime = -Mathf.Infinity;
+
+        return consume && isDown;
     }
 }
 

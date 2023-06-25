@@ -56,7 +56,6 @@ public class playerController : StateMachine
     [SerializeField] bool arialAttacking = false;
     [SerializeField] bool fastFalling = false;
     [SerializeField] bool wallRiding = false;
-    public int facing = 1;
     public bool canBroom = false;
     public bool invulnerable = false;
     public bool dropThroughPlatforms = false;
@@ -70,16 +69,12 @@ public class playerController : StateMachine
     Animator anim;
     Transform sprite;
     atlasSpriteController spriteController;
-    BoxCollider2D boxCollider;
+    ColliderManager colliderManager;
     Deformer deformer;
     stepSounds steps;
 
     [Foldout("Object References")]
     [SerializeReference] playerCanvasController playerCanvas;
-    public Collider2D secretCollider;
-
-    Vector3 colliderStartSize;
-    Vector3 colliderStartOffset;
 
     GameObject starRotator;
     Transform hanger;
@@ -144,7 +139,7 @@ public class playerController : StateMachine
     #region Unity functions
     public override void Start()
     {
-        startState = new States.Move();
+        startState = new States.Idle();
         base.Start();
         graceFrames = maxGraceFrames;
         sprite = transform.Find("AtlasSprite");
@@ -154,12 +149,9 @@ public class playerController : StateMachine
         deformer = GetComponentInChildren<Deformer>();
         controller = GetComponent<characterController>();
         particleMaker = GetComponentInChildren<particleMaker>();
-        boxCollider = GetComponent<BoxCollider2D>();
+        colliderManager = GetComponent<ColliderManager>();
         steps = GetComponentInChildren<stepSounds>();
         hanger = transform.Find("AtlasSprite/Hanger");
-
-        colliderStartSize = boxCollider.size;
-        colliderStartOffset = boxCollider.offset;
 
         sortingOrder = sprite.GetComponent<SpriteRenderer>().sortingOrder;
 
@@ -560,7 +552,6 @@ public class playerController : StateMachine
                 }
                 return;
             }
-            isWallSliding();
 
             if (hasWallJump && wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
             {
@@ -850,37 +841,9 @@ public class playerController : StateMachine
             StartCoroutine(doDoor());
         }
     }
-    void allowCrouch()
-    {
-        if (AtlasInputManager.getAxisState("Dpad").y < 0 && isGrounded())
-        {
-            anim.SetBool("isCrouching", true);
-        } else if (controller.checkVertDist(0.3f))
-        {
-            anim.SetBool("isCrouching", false);
-        }
-    }
-    void handleUncrouch()
-    {
-        checkCrouchHitbox();
-        if (dropThroughPlatforms && AtlasInputManager.getAxisState("Dpad").y >= 0 || isGrounded())
-        {
-            dropThroughPlatforms = false;
-        }
-    }
-    void checkCrouchHitbox()
-    {
-        if (isCrouching())
-        {
-            boxCollider.size = Vector2.Scale(colliderStartSize, new Vector3(1.0f, 0.5f));
-            boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
-        }
-        else if (controller.checkVertDist(0.3f))
-        {
-            boxCollider.size = colliderStartSize;
-            boxCollider.offset = colliderStartOffset;
-        }
-    }
+
+
+
     public bool canLift()
     {
         if (!isGrounded()) return false;
@@ -1050,25 +1013,37 @@ public class playerController : StateMachine
         resetAnimator();
         anim.SetBool("eat", true);
     }
-    public void setFacing(float vel)
-    {
-        //During Movement we can keep track of the direction the player is facing each frame
+    // public void setFacing(float vel)
+    // {
+    //     //During Movement we can keep track of the direction the player is facing each frame
+    //     if (Mathf.Abs(vel) < 0.01f) return;
+    //     if (facing != (int)Mathf.Sign(vel))
+    //     {
+    //         if (isCrouching())
+    //         {
+    //             anim.SetFloat("animDir", -1.0f);
+    //         } else {
+    //             if (anim.GetBool("isRunning") && !anim.GetBool("cantTurnAround")) anim.SetTrigger("turnAround");
+    //             facing = (int)Mathf.Sign(vel);
+    //         }
+    //     } else
+    //     {
+    //         anim.SetFloat("animDir", 1.0f);
+    //     }
+    //     sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
+    // }
+    public override void setFacing(float vel) {
         if (Mathf.Abs(vel) < 0.01f) return;
-        if (facing != (int)Mathf.Sign(vel))
-        {
-            if (isCrouching())
-            {
-                anim.SetFloat("animDir", -1.0f);
-            } else {
-                if (anim.GetBool("isRunning") && !anim.GetBool("cantTurnAround")) anim.SetTrigger("turnAround");
-                facing = (int)Mathf.Sign(vel);
+        if (AtlasHelpers.Sign(vel) == 0) return;
+        if (facing != (int)Mathf.Sign(vel) && 
+            anim.GetBool("isRunning") && 
+            !anim.GetBool("cantTurnAround")) {
+                anim.SetTrigger("turnAround");
             }
-        } else
-        {
-            anim.SetFloat("animDir", 1.0f);
-        }
+        base.setFacing(vel);
         sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     }
+
     public void OnBonkCeiling()
     {
         // if (controller.velocity.y <= 0) return;
@@ -1320,7 +1295,7 @@ public class playerController : StateMachine
     //Returnns to movement after reaching lastSafePosition
     void handleReset(bool isSafe = false)
     {
-        secretCollider.enabled = false;
+        colliderManager.disableCollider("SecretCollider");
         sprite.GetComponent<SpriteRenderer>().sortingOrder = 25;
         controller.collisions.setTangible(false);
         if (!starRotator)
@@ -1369,9 +1344,9 @@ public class playerController : StateMachine
         resetPosition = false;
         arialAttacking = false;
         anim.speed = 1;
-        secretCollider.enabled = true;
+        colliderManager.enableCollider("Secret");
         sprite.GetComponent<SpriteRenderer>().sortingOrder = sortingOrder;
-        changeState(new States.Move());
+        changeState(new States.Idle());
     }
 
     public void resetAnimator(bool returnToIdle = false)
@@ -1489,6 +1464,7 @@ public class playerController : StateMachine
 
     void checkRoomBoundaries()
     {
+        BoxCollider2D boxCollider = colliderManager.getCollider();
         GameObject roomBounds = GameObject.FindGameObjectWithTag("RoomBounds");
         if (roomBounds == null) throw new System.Exception("No RoomBounds in Scene: " + SceneManager.GetActiveScene().name);
 
@@ -1523,12 +1499,6 @@ public class playerController : StateMachine
     public bool isGrounded()
     {
         return controller.collisions.isGrounded();
-    }
-
-    void isWallSliding()
-    {
-        float hdir = AtlasInputManager.getAxisState("Dpad").x;
-        wallRiding = controller.checkWallSlide(hdir);
     }
 
     public bool isCrouching()

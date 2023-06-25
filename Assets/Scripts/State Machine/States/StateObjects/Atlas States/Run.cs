@@ -4,8 +4,8 @@ using Behaviors;
 using Transitions;
 
 namespace States {
-  public class Move : State {
-    public Move() {
+  public class Run : State {
+    public Run() {
       behaviors = new List<IStateBehavior>() {
         new MoveBehavior()
       };
@@ -13,12 +13,17 @@ namespace States {
       transitions = new List<IStateTransition>() {
         new CanAttack(),
         new CanBroom(),
-        new CanJump(),
+        new CanJump<States.GroundJump>(),
         new CanSlip(),
         new CanFall(),
         new CanLift(),
         new CanCrouch(),
+        new RunIdle()
       };
     }
+  }
+
+  public class Idle : Run {
+    public Idle() : base() {}
   }
 }

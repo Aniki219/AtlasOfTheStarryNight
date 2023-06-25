@@ -10,14 +10,17 @@ public abstract class State
     public StateMachine stateMachine;
     public Transform transform;
     
-    public List<IStateBehavior> behaviors {get; protected set;}
-    public List<IStateTransition> transitions {get; protected set;}
+    public List<IStateBehavior> behaviors {get; protected set;} = new List<IStateBehavior>();
+    public List<IStateTransition> transitions {get; protected set;} = new List<IStateTransition>();
     protected List<Resetters> resetters;
 
     public bool hasStarted {get; private set;} = false;
     public bool hasEnded {get; private set;} = false;
 
-    public virtual async Task StartState(StateMachine stateMachine, bool wasActive = false) {
+    protected bool skipStartAnim = false;
+    public bool alwaysUpdate = false;
+
+    public virtual async Task StartState(StateMachine stateMachine) {
         this.stateMachine = stateMachine;
         attachComponents();
 
@@ -43,21 +46,39 @@ public abstract class State
         GetTransition<T>().pause();
     }
 
+    protected async void PauseTransition<T>(float seconds) where T : IStateTransition {
+        IStateTransition t = GetTransition<T>();
+        t.pause();
+        await AtlasHelpers.WaitSeconds(seconds);
+        t.unpause();
+    }
+
     protected void UnpauseTransition<T>() where T : IStateTransition {
         GetTransition<T>().unpause();
     }
 
-    public IStateTransition GetTransition<T>() where T : IStateTransition {
+    public T GetBehavior<T>() where T : IStateBehavior {
+        IStateBehavior behavior = behaviors.Find(t => t.GetType().Equals(typeof(T)));
+        if (behavior == null) throw new Exception(GetType() + " does not contain a " + typeof(T));
+        return (T)behavior;
+    }
+
+    public T GetTransition<T>() where T : IStateTransition {
         IStateTransition transition = transitions.Find(t => t.GetType().Equals(typeof(T)));
         if (transition == null) throw new Exception(GetType() + " does not contain a " + typeof(T));
-        return transition;
+        return (T)transition;
+    }
+
+    public State SkipStartAnim() {
+        skipStartAnim = true;
+        return this;
     }
 
 #region Components
     public Animator anim;
     public Deformer deformer;
     public Transform sprite;
-    public BoxCollider2D boxCollider;
+    public ColliderManager colliderManager;
     public particleMaker particleMaker;
     public characterController controller;
     public atlasSpriteController spriteController;
@@ -65,7 +86,7 @@ public abstract class State
     protected virtual void attachComponents() {
         transform = stateMachine.GetComponent<Transform>();
         controller = stateMachine.GetComponent<characterController>();
-        boxCollider = stateMachine.GetComponent<BoxCollider2D>();
+        colliderManager = stateMachine.GetComponent<ColliderManager>();
         particleMaker = stateMachine.GetComponentInChildren<particleMaker>();
         
         anim = stateMachine.GetComponentInChildren<Animator>();

@@ -10,7 +10,7 @@ namespace States {
 
       transitions = new List<IStateTransition>() {
         new Transitions.CanBroom(),
-        new Transitions.CanJump(),
+        new Transitions.CanJump<States.SpinJump>(),
         new Transitions.CanFall(),
       };
     }

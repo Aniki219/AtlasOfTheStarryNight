@@ -9,7 +9,7 @@ namespace Transitions {
         public override void attach(State state) {
             base.attach(state);
             cc = state.controller;
-            collider = state.transform.GetComponent<Collider2D>();
+            collider = state.colliderManager.getCollider();
         }
 
         public override void checkCondition() {
@@ -32,7 +32,7 @@ namespace Transitions {
         public override void attach(State state) {
             base.attach(state);
             cc = state.controller;
-            collider = state.transform.GetComponent<Collider2D>();
+            collider = collider = state.colliderManager.getCollider();
         }
 
         public override void checkCondition() {
@@ -43,7 +43,7 @@ namespace Transitions {
             if (!(directionX != 0 &&
                 cc.collisions.hasNormWhere(norm => Vector2.Dot(directionX * Vector2.right, norm) == -1) &&
                 Mathf.Abs(Vector2.Dot(midRay.normalized, footRay.normalized)) >= 0.8f)) {
-                    changeState(new States.Move());
+                    changeState(new States.Fall());
                 }
         }
     }

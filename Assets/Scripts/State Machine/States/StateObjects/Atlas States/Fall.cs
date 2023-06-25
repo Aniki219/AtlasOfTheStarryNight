@@ -12,15 +12,16 @@ namespace States {
       transitions = new List<IStateTransition>() {
         new Transitions.CanAttack(),
         new Transitions.CanBroom(),
-        new Transitions.CanJump(),
+        new Transitions.CanJump<States.DoubleJump>(),
+        new Transitions.CanSlip(),
         new Transitions.CanLand(),
         new Transitions.CanWallSlide(),
       };
     }
 
-    public override async Task StartState(StateMachine stateMachine, bool wasActive = false)
+    public override async Task StartState(StateMachine stateMachine)
     {
-      await base.StartState(stateMachine, wasActive);
+      await base.StartState(stateMachine);
       anim.SetBool("isFalling", !anim.GetBool("isDoubleJumping"));
       anim.SetBool("isJumping", false);
     }

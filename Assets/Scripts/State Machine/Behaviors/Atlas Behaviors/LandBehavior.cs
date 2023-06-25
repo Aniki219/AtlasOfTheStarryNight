@@ -21,7 +21,7 @@ public class LandBehavior : IStateBehavior
             state.controller.velocity = Vector3.zero;
         }
         await AtlasHelpers.WaitSeconds(duration);
-        state.stateMachine.changeState(new States.Move());
+        state.stateMachine.changeState(new States.Idle());
     }
 
     public override void UpdateBehavior() {

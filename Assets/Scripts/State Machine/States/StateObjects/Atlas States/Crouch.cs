@@ -6,14 +6,17 @@ namespace States {
   public class Crouch : State {
     public Crouch() {
       behaviors = new List<IStateBehavior>() {
-        new Behaviors.MoveBehavior(false, 0.5f)
+        new Behaviors.MoveBehavior()
+          .CanTurnAround(false)
+          .MoveSpeedMod(0.5f)
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanAttack(true),
+        new Transitions.CanAttack(),
+        new Transitions.CanJump<States.GroundJump>().PauseTransition(),
         new Transitions.CanBroom(),
         new Transitions.CanSlip(),
-        new Transitions.CanSlide(),
+        new Transitions.CanSlide().SkipWaitForExit(),
         new Transitions.CanFall(),
         new Transitions.CanUncrouch(),
       };
@@ -23,20 +26,18 @@ namespace States {
     Vector3 colliderStartSize;
     Vector3 colliderStartOffset;
 
-    public override async Task StartState(StateMachine stateMachine, bool wasActive = false)
+    public override async Task StartState(StateMachine stateMachine)
     {
-      await base.StartState(stateMachine, wasActive);
+      await base.StartState(stateMachine);
       pc = (playerController)stateMachine;
-
+      colliderManager.setActiveCollider("Crouching");
       anim.SetBool("isCrouching", true);
-      
-      colliderStartSize = boxCollider.size;
-      colliderStartOffset = boxCollider.offset;
-      
-      boxCollider.size = Vector2.Scale(colliderStartSize, new Vector3(1.0f, 0.5f));
-      boxCollider.offset = Vector2.up * (colliderStartOffset.y - colliderStartSize.y * 0.25f);
-      
-      performAnim();
+
+      //TODO I think we need to fix the animator for this to work
+      //alwaysUpdate = true;
+      if (!skipStartAnim) {
+        performAnim();
+      }     
     }
 
     async void performAnim() {
@@ -60,8 +61,10 @@ namespace States {
       await base.ExitState();
       anim.SetBool("isCrouching", false);
       anim.SetFloat("animDir", 1f);
-      boxCollider.size = colliderStartSize;
-      boxCollider.offset = colliderStartOffset;
+      UnpauseTransition<Transitions.CanJump<States.GroundJump>>(); //cant becaue transitions go on Update phase
+      colliderManager.setActiveCollider("Standing");
+      
+      GetBehavior<Behaviors.MoveBehavior>().MoveSpeedMod(1.0f);
       await AnimMapper.awaitClip<States.Crouch>(AnimMapper.ClipType.ExitClip);
     }
   }

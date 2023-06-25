@@ -5,6 +5,9 @@ TextureImporter:
   - first:
       213: 9163269868400386039
     second: atlasSlide_0
+  - first:
+      213: 349002767709748548
+    second: atlasSlide_0
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -97,17 +100,17 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 48
+        width: 64
         height: 32
       alignment: 9
-      pivot: {x: 0.5014129, y: 0.6527166}
+      pivot: {x: 0.38591564, y: 0.49716842}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7ff9b0f65697a2f70800000000000000
-      internalID: 9163269868400386039
+      spriteID: 44db7fa0b28e7d400800000000000000
+      internalID: 349002767709748548
       vertices: []
       indices: 
       edges: []

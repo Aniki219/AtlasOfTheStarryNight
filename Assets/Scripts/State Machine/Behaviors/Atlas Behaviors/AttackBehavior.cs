@@ -12,11 +12,6 @@ public class AttackBehavior : IStateBehavior
     public bool resetVelocity;
     public Vector2 stepVelocity;
 
-    public AttackBehavior(bool resetVelocity = false, Vector2 stepVelocity = default) {
-        this.resetVelocity = resetVelocity;
-        this.stepVelocity = stepVelocity;
-    }
-
     public async override Task StartBehavior() {
         //TODO: See if we can move `selectAttack()` into here
         state.anim.SetTrigger("SelectAttack");
@@ -37,6 +32,16 @@ public class AttackBehavior : IStateBehavior
         state.anim.SetBool("Attacking", false);
         arialAttacking = false;
         await Task.Yield();
+    }
+
+    public AttackBehavior ResetVelocity() {
+        resetVelocity = true;
+        return this;
+    }
+    
+    public AttackBehavior StepVelocity(float vel) {
+        stepVelocity = Vector2.right * state.stateMachine.facing * vel;
+        return this;
     }
 }
 }

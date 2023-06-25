@@ -47,7 +47,7 @@ public class BroomBehavior : IStateBehavior
             (!AtlasInputManager.getKey("Broom") && 
             AtlasInputManager.Instance.holdBroom))
         {
-            state.stateMachine.changeState(new States.Move());
+            state.stateMachine.changeState(new States.Fall());
             return;
         }
         if (!onBroom) return;

@@ -3,7 +3,7 @@ using UnityEngine;
 using System.Threading.Tasks;
 
 namespace States {
-  public class WallJump : State {
+  public class WallJump : Jump {
     playerController pc;
 
     public WallJump() {
@@ -22,8 +22,9 @@ namespace States {
       pc = (playerController)stateMachine;
     }
 
-    public override async Task StartState(StateMachine stateMachine, bool wasActive = false) {
-      await base.StartState(stateMachine, wasActive);
+    public override async Task StartState(StateMachine stateMachine) {
+      await base.StartState(stateMachine);
+      anim.SetBool("wallBlast", true);
       GameObject explosion = gameManager.createInstance("Effects/Explosions/wallBlast", 
                               transform.position + new Vector3(-0.80f * pc.facing, 0.23f, 0));
       explosion.transform.localScale = sprite.localScale;

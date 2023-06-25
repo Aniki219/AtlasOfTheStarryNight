@@ -10,7 +10,7 @@ public abstract class IStateTransition {
         this.state = state;
     }
 
-    public virtual void changeState(State newState, bool skipWaitForExit = false) {
+    public virtual void changeState(State newState) {
         state.stateMachine.changeState(newState, skipWaitForExit);
     }
 
@@ -23,5 +23,15 @@ public abstract class IStateTransition {
 
     public void unpause() {
         isActive = true;
+    }
+
+    public IStateTransition SkipWaitForExit() {
+        skipWaitForExit = true;
+        return this;
+    }
+
+    public IStateTransition PauseTransition() {
+        pause();
+        return this;
     }
 }

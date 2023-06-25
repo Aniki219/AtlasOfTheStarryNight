@@ -12,12 +12,12 @@ public class equipmentPanelController : MonoBehaviour
     
     float easingTime = 0.25f;
     int selected;
-    Easer easer;
+    VectorEaser easer;
 
     // Start is called before the first frame update
     void OnEnable()
     {
-        easer = new Easer(Vector2.zero, Vector2.zero, 0);
+        easer = new VectorEaser(Vector2.zero, Vector2.zero, 0);
         gameManager.setPause(gameManager.PauseType.ON);
         selected = -1;
         equipmentPanels = new List<GameObject>();
@@ -60,7 +60,7 @@ public class equipmentPanelController : MonoBehaviour
         }
 
         if (input.normalized != easer.end) {
-            easer = new Easer(selectIcon.transform.localPosition, 
+            easer = new VectorEaser(selectIcon.transform.localPosition, 
                 input.normalized, 
                 input.magnitude == 0 ? 0.25f : 0.1f,
                 Ease.OutQuart);

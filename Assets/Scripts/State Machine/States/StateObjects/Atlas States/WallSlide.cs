@@ -13,7 +13,7 @@ namespace States
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanJump(),
+        new Transitions.CanJump<WallJump>(),
         new Transitions.CanLand(),
         new Transitions.CanUnwallSlide(),
         new Transitions.CanBroom(),
@@ -25,8 +25,8 @@ namespace States
       pc = (playerController)stateMachine;
     }
 
-    public override async Task StartState(StateMachine stateMachine, bool wasActive = false) {
-      await base.StartState(stateMachine, wasActive);
+    public override async Task StartState(StateMachine stateMachine) {
+      await base.StartState(stateMachine);
       anim.SetBool("wallSlide", true);
       spriteController.dustTrail.SetActive(true);
     }

@@ -5,7 +5,7 @@ namespace States {
   public abstract class AirAttack : State {
     public AirAttack() {
       behaviors = new List<IStateBehavior>() {
-        new Behaviors.MoveBehavior(false),
+        new Behaviors.MoveBehavior().CanTurnAround(false),
         new Behaviors.AttackBehavior(),
       };
 

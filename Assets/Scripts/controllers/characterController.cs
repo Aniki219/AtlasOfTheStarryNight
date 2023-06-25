@@ -6,7 +6,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
-[RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(ColliderManager), typeof(StateMachine))]
 public class characterController : MonoBehaviour
 {
     #region Defs
@@ -50,14 +50,15 @@ public class characterController : MonoBehaviour
     
     [Foldout("Gravity")] public float termVel = -10;
     [Foldout("Gravity")] public float gravityMod = 1.0f;
-    private float gravity;
+    public float gravity {get; private set;}
     [Foldout("Gravity")] [SerializeField] private float currentGravity = 0;
     [Foldout("Gravity")] public float maxGravity = 8.0f;
     private float gravitySmoothing = 0;
 
     [Foldout("Gravity")] public float maxSlope = 0.5f;
 
-    new BoxCollider2D collider;
+    StateMachine stateMachine;
+    ColliderManager colliderManager;
     BoundaryPoints boundaryPoints;
 
     [HideInInspector] public Vector3 cameraTarget;
@@ -77,7 +78,8 @@ public class characterController : MonoBehaviour
     void Start()
     {
         gravity = gameManager.Instance.gravity;
-        collider = GetComponent<BoxCollider2D>();
+        colliderManager = GetComponent<ColliderManager>();
+        stateMachine = GetComponent<StateMachine>();
         collisions.Init();
     }
 
@@ -100,6 +102,7 @@ public class characterController : MonoBehaviour
     }
 
     private void LateUpdate() {
+        BoxCollider2D collider = colliderManager.getCollider();
         if (debug) {
             UpdateBoundaryPoints();
             GetComponentInChildren<SpriteRenderer>().material.color = Color.white.WithAlphaSetTo(0.75f);
@@ -130,6 +133,17 @@ public class characterController : MonoBehaviour
         }
 
         velocity.y += currentGravity;
+    }
+
+    public enum VelocityType {
+        Relative,
+        Absolute,
+        Reverse
+    }
+    public void setXVelocity(float value, VelocityType vtype = VelocityType.Relative) {
+        velocity.x = value;
+        if (vtype.Equals(VelocityType.Relative)) velocity.x *= stateMachine.facing;
+        if (vtype.Equals(VelocityType.Reverse)) velocity.x *= -stateMachine.facing;
     }
 
     public void resetGravity()
@@ -203,7 +217,8 @@ public class characterController : MonoBehaviour
     }
 
     public CollisionData detectCollision(Vector2 dp) {
-        
+        BoxCollider2D collider = colliderManager.getCollider();
+
         Vector2 originalOffset = collider.offset;
         collider.offset = originalOffset + dp;
 
@@ -239,10 +254,10 @@ public class characterController : MonoBehaviour
             }
 
             //Walk into steep walls as if they were vertical ->/ => ->|
-            if (collisions.wasGrounded && returnData.normal.y < maxSlope && Mathf.Sign(returnData.normal.x) != Mathf.Sign(velocity.x) ) {
-                returnData.normal.y = 0;
-                returnData.normal.Normalize();
-            }
+            // if (collisions.wasGrounded && returnData.normal.y < maxSlope && Mathf.Sign(returnData.normal.x) != Mathf.Sign(velocity.x) ) {
+            //     returnData.normal.y = 0;
+            //     returnData.normal.Normalize();
+            // }
 
         }
 
@@ -270,17 +285,6 @@ public class characterController : MonoBehaviour
     {
         if (!collisions.isTangible()) { return; }
         additionalVelocity += amount;
-    }
-
-    public bool checkWallSlide(float directionX)
-    {
-        // Vector2 midRay = collisions.getMidPoint() - (Vector2)collider.bounds.center;
-        // Vector2 footRay = collisions.getFootPoint() - ((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
-
-        // return directionX != 0 &&
-        //     Vector2.Dot(directionX * Vector2.right, collisions.getNorm()) == -1
-        //     && Mathf.Abs(Vector2.Dot(midRay.normalized, footRay.normalized)) >= 0.8f;
-        return false;
     }
 
     public bool checkVertDist(float dist)
@@ -352,6 +356,8 @@ public class characterController : MonoBehaviour
 
     public bool isSafePosition()
     {
+        BoxCollider2D collider = colliderManager.getCollider();
+
         if (!collisions.isTangible()) { return false; }
         Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2 - collider.size.y/2 * Vector3.up;
 
@@ -383,7 +389,7 @@ public class characterController : MonoBehaviour
 
     public void UpdateBoundaryPoints()
     {
-        Bounds bounds = collider.bounds;
+        Bounds bounds = colliderManager.getCollider().bounds;
 
         boundaryPoints.bottomLeft = new Vector2(bounds.min.x, bounds.min.y);
         boundaryPoints.bottomRight = new Vector2(bounds.max.x, bounds.min.y);
@@ -446,6 +452,8 @@ public class characterController : MonoBehaviour
                 if (normal.y > 0) below = true;
                 if (normal.y < 0) above = true;
             }
+
+            //setGroundSlope(collisionData.normal);
 
             Collider2D collider = collisionData.collider;
             closestMidPoint = collisionData.otherCollider.ClosestPoint(collider.bounds.center);

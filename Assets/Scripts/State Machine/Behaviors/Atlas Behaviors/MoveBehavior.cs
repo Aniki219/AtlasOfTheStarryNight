@@ -9,17 +9,12 @@ namespace Behaviors {
 public class MoveBehavior : IStateBehavior
 {
     public bool canTurnAround = true;
-    float msMod;
+    float msMod = 1.0f;
 
     float xVelocitySmoothing;
 
     playerController pc;
     characterController cc;
-
-    public MoveBehavior(bool canTurnAround = true, float msMod = 1.0f) {
-        this.canTurnAround = canTurnAround;
-        this.msMod = msMod;
-    }
 
     public override void attach(State state) {
         this.state = state;
@@ -64,6 +59,16 @@ public class MoveBehavior : IStateBehavior
         state.particleMaker.createStars(state.transform.position + 0.2f * Vector3.up);
         cc.velocity.y = Mathf.Min(0, cc.velocity.y/2);
         cc.resetGravity();
+    }
+
+    public MoveBehavior CanTurnAround(bool canturn = true) {
+        canTurnAround = canturn;
+        return this;
+    }
+
+    public MoveBehavior MoveSpeedMod(float mod) {
+        msMod = mod;
+        return this;
     }
 }
 }

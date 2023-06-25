@@ -15,7 +15,8 @@ namespace Transitions {
         public override void checkCondition() {
             if (pc.isGrounded() && 
                     cc.collisions.getGroundSlope().y < 0.5f && 
-                    cc.velocity.y < -0.5f) {
+                    cc.collisions.getGroundSlope().y > 0.1f && 
+                    cc.velocity.y < -0.1f) {
                 changeState(new States.Slip());
             }
         }

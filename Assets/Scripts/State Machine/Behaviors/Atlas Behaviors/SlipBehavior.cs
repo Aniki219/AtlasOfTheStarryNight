@@ -22,7 +22,7 @@ public class SlipBehavior : IStateBehavior
 
     public override void UpdateBehavior() {
         if (state.controller.collisions.getGroundSlope().y > state.controller.maxSlope) {
-            pc.changeState(new States.Move());
+            pc.changeState(new States.Idle());
         }
     }
 

@@ -48,3 +48,8 @@ MonoBehaviour:
     startAnim: {fileID: 7400000, guid: 98579da4b3ccb7746b22788cdfbd2c7e, type: 2}
     updateAnim: {fileID: 0}
     exitAnim: {fileID: 0}
+  - state:
+      _classRef: States.SpinJump, Assembly-CSharp
+    startAnim: {fileID: 7400000, guid: b3e053e6025d5a2429e7601fab04f7a7, type: 2}
+    updateAnim: {fileID: 0}
+    exitAnim: {fileID: 0}
