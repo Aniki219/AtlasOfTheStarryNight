@@ -24,7 +24,7 @@ public class MenuController : MonoBehaviour
 
     string newControlScheme;
 
-    playerController.State prevState = playerController.State.Movement;
+    PlayerController.State prevState = PlayerController.State.Movement;
 
     public enum MenuState
     {
@@ -72,10 +72,10 @@ public class MenuController : MonoBehaviour
 
     public void togglePauseMenu(bool open = true)
     {
-        if (open) prevState = playerController.State.Movement;
+        if (open) prevState = PlayerController.State.Movement;
         if (open) gameManager.Instance.playerCtrl.cutScenePrep();
 
-        gameManager.Instance.playerCtrl.depState = open ? playerController.State.Wait : prevState;
+        gameManager.Instance.playerCtrl.depState = open ? PlayerController.State.Wait : prevState;
 
         PausePanel.SetActive(open);
         PauseMenu.SetActive(open);
@@ -120,7 +120,7 @@ public class MenuController : MonoBehaviour
     {
         GameObject atlas = GameObject.Find("Atlas");
         if (atlas != null) { Destroy(atlas); }
-        playerController.created = false;
+        PlayerController.created = false;
         gameManager.Instance.canSetPosition = false;
         SceneManager.LoadScene(mainmenu.ScenePath);
     }

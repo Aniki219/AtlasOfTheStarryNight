@@ -3,12 +3,12 @@ using System;
 
 namespace Transitions {
     public class CanSlip : IStateTransition {
-        playerController pc;
+        PlayerController pc;
         characterController cc;
 
         public override void attach(State state) {
             base.attach(state);
-            pc = (playerController)state.stateMachine;
+            pc = (PlayerController)state.stateMachine;
             cc = state.controller;
         }
 

@@ -7,61 +7,61 @@ public class selectAttack : StateMachineBehaviour
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        playerController pc = animator.gameObject.GetComponentInParent<playerController>();
-        foreach (AnimatorControllerParameter key in animator.parameters)
-        {
-            if (key.type == AnimatorControllerParameterType.Trigger)
-            animator.ResetTrigger(key.name);
-        }
-        animator.SetBool("Attacking", true);
+        // playerController pc = animator.gameObject.GetComponentInParent<playerController>();
+        // foreach (AnimatorControllerParameter key in animator.parameters)
+        // {
+        //     if (key.type == AnimatorControllerParameterType.Trigger)
+        //     animator.ResetTrigger(key.name);
+        // }
+        // animator.SetBool("Attacking", true);
 
-        bool up = false;
-        bool down = false;
+        // bool up = false;
+        // bool down = false;
 
-        if (AtlasInputManager.Instance.aimAtMouse())
-        {
-            Vector2 aim = AtlasInputManager.Instance.getPlayerAim(true);
-            up = aim.y > 0;
-            down = pc.isGrounded() ? pc.isCrouching() : aim.y < 0;
-            if (aim.x != 0) pc.setFacing(aim.x);
-        } else
-        {
-            up = AtlasInputManager.getAxisState("Dpad").y > 0.1f;
-            down = AtlasInputManager.getAxisState("Dpad").y < -0.1f || pc.isCrouching();
-        }
+        // if (AtlasInputManager.Instance.aimAtMouse())
+        // {
+        //     Vector2 aim = AtlasInputManager.Instance.getPlayerAim(true);
+        //     up = aim.y > 0;
+        //     down = pc.isGrounded() ? pc.isCrouching() : aim.y < 0;
+        //     if (aim.x != 0) pc.setFacing(aim.x);
+        // } else
+        // {
+        //     up = AtlasInputManager.getAxis("Dpad").getValue();.y > 0.1f;
+        //     down = AtlasInputManager.getAxis("Dpad").getValue();.y < -0.1f || pc.isCrouching();
+        // }
 
-        bool falling = (pc.controller.velocity.y < -0.1);
+        // bool falling = (pc.controller.velocity.y < -0.1);
 
-        if (up)
-        {
-            animator.SetTrigger("UpAttack");
-            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
-        }
-        else if (down)
-        {
-            animator.SetTrigger("DownAttack");
-            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
-        }
-        else
-        {
-            if (!pc.isGrounded())
-            {
-                if (falling)
-                {
-                    animator.SetTrigger("FallingAttack");
-                }
-                else
-                {
-                    animator.SetTrigger("RisingAttack");
-                }
+        // if (up)
+        // {
+        //     animator.SetTrigger("UpAttack");
+        //     SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        // }
+        // else if (down)
+        // {
+        //     animator.SetTrigger("DownAttack");
+        //     SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        // }
+        // else
+        // {
+        //     if (!pc.isGrounded())
+        //     {
+        //         if (falling)
+        //         {
+        //             animator.SetTrigger("FallingAttack");
+        //         }
+        //         else
+        //         {
+        //             animator.SetTrigger("RisingAttack");
+        //         }
 
-            }
-            else
-            {
-                animator.SetTrigger("Attack");
-            }
-            SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
-        }
+        //     }
+        //     else
+        //     {
+        //         animator.SetTrigger("Attack");
+        //     }
+        //     SoundManager.Instance.playClip("BroomAttacks/LightAttack", Random.Range(-1, 1));
+        // }
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

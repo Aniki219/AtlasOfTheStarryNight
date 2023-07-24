@@ -16,7 +16,6 @@ public class LandBehavior : IStateBehavior
 
     public async override Task StartBehavior() {
         if (duration > 0) {
-            state.anim.SetTrigger("attackLand");
             state.particleMaker.createDust(true);
             state.controller.velocity = Vector3.zero;
         }

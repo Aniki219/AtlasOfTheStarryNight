@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class atlasSpriteController : MonoBehaviour
 {
-    playerController pc;
+    PlayerController pc;
     SpriteRenderer sprite;
 
     public GameObject dustTrail;
@@ -12,7 +12,7 @@ public class atlasSpriteController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        pc = transform.GetComponentInParent<playerController>();
+        pc = transform.GetComponentInParent<PlayerController>();
         sprite = GetComponent<SpriteRenderer>();
         sprite.material = playerStatsManager.Instance.currentSkin;
     }
@@ -35,7 +35,7 @@ public class atlasSpriteController : MonoBehaviour
 
     public void startBroom()
     {
-        pc.startBroom();
+        // pc.startBroom();
     }
 
     public void createHitbox(HitBox hitBox)
@@ -46,7 +46,7 @@ public class atlasSpriteController : MonoBehaviour
     public void takeStep(float stepSize)
     {
         stepSize = 0.175f;
-        if (Mathf.Ceil(AtlasInputManager.getAxisState("Dpad").x) != pc.facing) return;
+        if (Mathf.Ceil(AtlasInputManager.getAxis("Dpad").getValue().x) != pc.facing) return;
         Vector3 velocity = stepSize * pc.facing * Vector3.right  +  .01f * Vector3.down;
         pc.controller.Move(velocity);
     }

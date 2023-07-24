@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class canvasController : MonoBehaviour
+public class CanvasController : MonoBehaviour
 {
     public Slider healthSlider;
     public Slider manaSlider;
+    public Slider novaSlider;
+    private List<ResourceBar> resourceBars;
     Color healthBarColor;
     Color manaBarColor;
     public Image blackoutPanel;
@@ -16,14 +18,19 @@ public class canvasController : MonoBehaviour
     {
         //blackoutPanel.color = new Vector4(0, 0, 0, 1.0f);
         //doBlackout(false);
+        resourceBars = new List<ResourceBar>() {
+            new ResourceBar(novaSlider, ResourceManager.Instance.nova),
+        };
     }
 
     void Update()
     {
-        healthSlider.value = Mathf.Lerp(healthSlider.value, resourceManager.Instance.getPlayerHealth(true), barRestoreSpeed * Time.deltaTime);
-        manaSlider.value = Mathf.Lerp(manaSlider.value, resourceManager.Instance.getPlayerMana(true), barRestoreSpeed * Time.deltaTime);
+        healthSlider.value = Mathf.Lerp(healthSlider.value, ResourceManager.Instance.getPlayerHealth(true), barRestoreSpeed * Time.deltaTime);
+        manaSlider.value = Mathf.Lerp(manaSlider.value, ResourceManager.Instance.getPlayerMana(true), barRestoreSpeed * Time.deltaTime);
         healthBarColor = healthSlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color;
         manaBarColor = manaSlider.transform.Find("Fill Area/Fill").GetComponent<Image>().color;
+
+        resourceBars.ForEach(rb => rb.UpdateSliderValue());
     }
 
     public void FlashManaBar()
@@ -66,5 +73,31 @@ public class canvasController : MonoBehaviour
         }
         blackoutPanel.color = targetColor;
         yield return 0;
+    }
+
+    public class ResourceBar {
+        Slider slider;
+        ResourceManager.Resource resource;
+        float targetValue;
+        float startTime;
+        float smoothingTime = 0.25f;
+
+        public ResourceBar(Slider _slider, ResourceManager.Resource _resourceReference) {
+            slider = _slider;
+            resource = _resourceReference;
+            resource.OnChange.AddListener(SetTargetValue);
+            startTime = Time.time;
+        }
+
+        private void SetTargetValue(float delta) {
+            if (targetValue == slider.value) startTime = Time.time;
+            targetValue = resource.getPercentage();
+        }
+
+        public void UpdateSliderValue() {
+            float currentTime = Time.time - startTime;
+            slider.value = EasingFunctions.EaseOutQuart(slider.value, targetValue, Mathf.Clamp01(currentTime/smoothingTime));
+            //Debug.Log("Update Slider Value to: " + targetValue + " currently: " + slider.value + " | t: " + currentTime);
+        }
     }
 }

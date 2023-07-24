@@ -8,6 +8,7 @@ namespace States {
 
     public Slide() {
       behaviors = new List<IStateBehavior>() {
+        new Behaviors.NovaBehavior().GainSpeed(NovaManager.GainSpeed.Fast),
       };
 
       transitions = new List<IStateTransition>() {
@@ -16,17 +17,17 @@ namespace States {
       };
     }
 
-    public async override Task StartState(StateMachine stateMachine) {
-      await base.StartState(stateMachine);
-      anim.SetBool("isSliding", true);
+    public async override Task StartState() {
+      await base.StartState();
       colliderManager.setActiveCollider("Crouching");
-      float dir = AtlasInputManager.getAxisState("Dpad").x;
+      float dir = AtlasInputManager.getAxis("Dpad").getValue().x;
       if (Mathf.Abs(dir) > 0.1f) stateMachine.setFacing(dir);
       slideVelocityEaser = new CompositeEaser(
                               //new Easer(2, 10f, 0.2f, Ease.InOutQuad),
                               new Easer(10, 1f, 0.5f, Ease.OutQuad)
                             );
-      PauseTransition<Transitions.CanJump<States.SpinJump>>(0.1f);
+      PauseTransition<Transitions.CanJump<States.SpinJump>>(0.05f);
+      particleMaker.createDust(true);
       await Task.Yield();
     }
 
@@ -42,9 +43,9 @@ namespace States {
 
     public async override Task ExitState()
     {
-      anim.SetBool("isSliding", false);
       colliderManager.setActiveCollider("Standing");
       controller.setXVelocity(Mathf.Clamp(controller.velocity.x, -6, 6), characterController.VelocityType.Absolute);
+
       await base.ExitState();
       await Task.Yield();
     }

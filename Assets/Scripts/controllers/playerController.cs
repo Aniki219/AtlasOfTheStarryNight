@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 using MyBox;
 
 [RequireComponent (typeof (characterController))]
-public class playerController : StateMachine
+public class PlayerController : StateMachine
 {
     #region Vars
     //float jumpHeight = 2.2f;
@@ -65,9 +65,11 @@ public class playerController : StateMachine
     Vector3 velocitySmoothing;
 
     [HideInInspector] public characterController controller;
-    particleMaker particleMaker;
+    ParticleMaker particleMaker;
     Animator anim;
     Transform sprite;
+    [HideInInspector] public BroomEffectsController broomEffects {get; private set;}
+    [HideInInspector] public NovaManager novaManager {get; private set;}
     atlasSpriteController spriteController;
     ColliderManager colliderManager;
     Deformer deformer;
@@ -143,12 +145,14 @@ public class playerController : StateMachine
         base.Start();
         graceFrames = maxGraceFrames;
         sprite = transform.Find("AtlasSprite");
+        broomEffects = GetComponentInChildren<BroomEffectsController>();
+        novaManager = GetComponent<NovaManager>();
         spriteController = sprite.GetComponent<atlasSpriteController>();
 
         anim = GetComponentInChildren<Animator>();
         deformer = GetComponentInChildren<Deformer>();
         controller = GetComponent<characterController>();
-        particleMaker = GetComponentInChildren<particleMaker>();
+        particleMaker = GetComponentInChildren<ParticleMaker>();
         colliderManager = GetComponent<ColliderManager>();
         steps = GetComponentInChildren<stepSounds>();
         hanger = transform.Find("AtlasSprite/Hanger");
@@ -279,29 +283,29 @@ public class playerController : StateMachine
             playerCanvas.Shoutout("Highlight Grounded " + (controller.highlightGrounded ? "On" : "Off"));
         }
 
-        // if (controller.debug) {
-        //     if (controller.highlightGrounded) {
-        //         if (isGrounded()) {
-        //             FlashColor flashColor = FlashColor.builder
-        //                                                 .withColor(Color.green)
-        //                                                 .withTimeUnits(TimeUnits.CONTINUOUS)
-        //                                                 .build();
-        //             deformer.flashColor(flashColor);
-        //         } else {
-        //             FlashColor flashColor = FlashColor.builder
-        //                                                 .withColor(Color.red)
-        //                                                 .withTimeUnits(TimeUnits.CONTINUOUS)
-        //                                                 .build();
-        //             deformer.flashColor(flashColor);
-        //         }
-        //     } else {
-        //     //TODO: NO
-        //     deformer.endFlashColor();
-        //     }
-        // } else {
-        // //TODO: NO
-        // deformer.endFlashColor();
-        // }
+        if (controller.debug) {
+            if (controller.highlightGrounded) {
+                if (isGrounded()) {
+                    FlashColor flashColor = FlashColor.builder
+                                                        .withColor(Color.green)
+                                                        .withTimeUnits(TimeUnits.CONTINUOUS)
+                                                        .build();
+                    deformer.flashColor(flashColor);
+                } else {
+                    FlashColor flashColor = FlashColor.builder
+                                                        .withColor(Color.red)
+                                                        .withTimeUnits(TimeUnits.CONTINUOUS)
+                                                        .build();
+                    deformer.flashColor(flashColor);
+                }
+            } else {
+            //TODO: NO
+            deformer.endFlashColor();
+            }
+        } else {
+        //TODO: NO
+        deformer.endFlashColor();
+        }
     }
 
     private void FixedUpdate()
@@ -498,168 +502,142 @@ public class playerController : StateMachine
 
     void handleMovement(float msMod = 1.0f, bool canJump = true, bool canTurnAround = true)
     {
-        //TODO: this should not be here
-        if (heldObject != null)
-        {
-            msMod *= 0.5f;
-            canJump = false;
-        }
-
-        Vector2 input = new Vector2(0, 0);
-
-        //TODO we need a separate input method
-        if (!(depState == State.WaitMoveable && isGrounded()))
-        input = new Vector2(AtlasInputManager.getAxisState("Dpad").x, AtlasInputManager.getAxisState("Dpad").y);
-
-        if (isGrounded() || coyoteTime > 0)
-        {
-            if (isGrounded() && controller.collisions.getGroundSlope().y < 0.5f && controller.velocity.y < -0.5f) {
-                resetAnimator();
-                anim.SetTrigger("slip");
-                depState = State.Slip;
-                return;
-            }
-            if (AtlasInputManager.getKeyPressed("Jump") && canJump)
-            {
-                firstJump();
-            }
-            if (AtlasInputManager.getKeyPressed("Broom"))
-            {
-                triggerBroomStart();
-            }
-            if (isGrounded())
-            {
-                if (!canBroom && depState == State.Movement)
-                {
-                    canBroom = true;
-                }
-                canDoubleJump = true;
-            }
-            wallRiding = false;
-        }
-        else
-        {
-            if (canBroom && AtlasInputManager.getKeyPressed("Broom"))
-            {
-                if (wallRiding)
-                {
-                    flipHorizontal();
-                    //TODO: we need to investigate facing i think
-                    triggerBroomStart(fastBroom, facing);
-                } else
-                {
-                    triggerBroomStart(fastBroom);
-                }
-                return;
-            }
-
-            if (hasWallJump && wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
-            {
-                depState = State.WallJumpInit;
-                return;
-            }
-
-            if (hasDoubleJump && AtlasInputManager.getKeyPressed("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
-            {
-                doubleJump();
-            }
-        }
-
-        float currentMoveSpeed = moveSpeed;
-        if (isCrouching()   )
-        {
-            currentMoveSpeed = 1.5f;
-        }
-        float targetVelocityX = input.x * currentMoveSpeed * msMod;
-
-        anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
-        anim.SetBool("isJumping", !isGrounded() && (controller.velocity.y > 0) && canDoubleJump);
-        anim.SetBool("isFalling", !isGrounded() && (controller.velocity.y < -0.5f) && !heldObject);
-        anim.SetBool("wallSlide", wallRiding);
-        if (wallRiding)
-        {
-            deformer.RemoveDeform("jump");
-            deformer.RemoveDeform("fastfall");
-        }
-
-        if (canTurnAround) setFacing(controller.velocity.x);
-
-        float smoothTime = 0;
-        if (controller.collisions.getBelow()) {
-            if (AtlasHelpers.Sign(controller.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 
-            Mathf.Abs(targetVelocityX) >= Mathf.Abs(controller.velocity.x)) {
-                smoothTime = groundAccelerationTime;
-            } else {
-                smoothTime = groundDeccelerationTime;
-            }
-        }  else {
-            if (AtlasHelpers.Sign(controller.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 
-            Mathf.Abs(targetVelocityX) >= Mathf.Abs(controller.velocity.x)) {
-                smoothTime = airAccelerationTime;
-            } else {
-                smoothTime = airDeccelerationTime;
-            }
-        }
-        controller.velocity.x = Mathf.SmoothDamp(controller.velocity.x, targetVelocityX, ref velocityXSmoothing, smoothTime);
-        //controller.velocity.x = targetVelocityX;
-        controller.gravityMod = ((wallRiding && controller.velocity.y <= 0) ? 0.5f : 1.0f);
-
-        if (wallRiding && controller.velocity.y < maxWallSlideVel) { controller.velocity.y = maxWallSlideVel; }
-
-
-        
-        //TODO: fast fall state
-        // if (fastFalling)
+        // //TODO: this should not be here
+        // if (heldObject != null)
         // {
-        //     if (AtlasInputManager.getAxisState("Dpad").y >=0 || isGrounded() || cc.velocity.y > 0)
-        //     {
-        //         fastFalling = false;
+        //     msMod *= 0.5f;
+        //     canJump = false;
+        // }
+
+        // Vector2 input = new Vector2(0, 0);
+
+        // //TODO we need a separate input method
+        // if (!(depState == State.WaitMoveable && isGrounded()))
+        // input = new Vector2(AtlasInputManager.getAxis("Dpad").getValue().x, AtlasInputManager.getAxis("Dpad").getValue();.y);
+
+        // if (isGrounded() || coyoteTime > 0)
+        // {
+        //     if (isGrounded() && controller.collisions.getGroundSlope().y < 0.5f && controller.velocity.y < -0.5f) {
+        //         resetAnimator();
+        //         anim.SetTrigger("slip");
+        //         depState = State.Slip;
+        //         return;
         //     }
-        //     cc.termVel = fastFallVel;
-        //     cc.gravityMod = 2.0f;
+        //     if (AtlasInputManager.getKeyPressed("Jump") && canJump)
+        //     {
+        //         firstJump();
+        //     }
+        //     if (AtlasInputManager.getKeyPressed("Broom"))
+        //     {
+        //         triggerBroomStart();
+        //     }
+        //     if (isGrounded())
+        //     {
+        //         if (!canBroom && depState == State.Movement)
+        //         {
+        //             canBroom = true;
+        //         }
+        //         canDoubleJump = true;
+        //     }
+        //     wallRiding = false;
         // }
         // else
         // {
-        //     //cc.termVel = maxFallVel;
-        //     state.deformer.RemoveDeform("fastfall");
-        //     if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (cc.velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
+        //     if (canBroom && AtlasInputManager.getKeyPressed("Broom"))
         //     {
-        //         fastFalling = true;
-        //         state.deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, Vector2.down, "fastfall", true);
+        //         if (wallRiding)
+        //         {
+        //             flipHorizontal();
+        //             //TODO: we need to investigate facing i think
+        //             triggerBroomStart(fastBroom, facing);
+        //         } else
+        //         {
+        //             triggerBroomStart(fastBroom);
+        //         }
+        //         return;
+        //     }
+
+        //     if (hasWallJump && wallRiding && AtlasInputManager.getKeyPressed("Jump") && resourceManager.Instance.getPlayerMana() >= 2)
+        //     {
+        //         depState = State.WallJumpInit;
+        //         return;
+        //     }
+
+        //     if (hasDoubleJump && AtlasInputManager.getKeyPressed("Jump") && canJump && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+        //     {
+        //         doubleJump();
         //     }
         // }
 
+        // float currentMoveSpeed = moveSpeed;
+        // if (isCrouching()   )
+        // {
+        //     currentMoveSpeed = 1.5f;
+        // }
+        // float targetVelocityX = input.x * currentMoveSpeed * msMod;
 
-        if (controller.velocity.y <= 0 && controller.isSafePosition())
-        {
-            lastSafePosition = transform.position;
-        }
-    }
+        // anim.SetBool("isRunning", isGrounded() && (targetVelocityX != 0));
+        // anim.SetBool("isJumping", !isGrounded() && (controller.velocity.y > 0) && canDoubleJump);
+        // anim.SetBool("isFalling", !isGrounded() && (controller.velocity.y < -0.5f) && !heldObject);
+        // anim.SetBool("wallSlide", wallRiding);
+        // if (wallRiding)
+        // {
+        //     deformer.RemoveDeform("jump");
+        //     deformer.RemoveDeform("fastfall");
+        // }
 
-    async void handleSlide() {
-        depState = State.Sliding;
-        await Task.Delay(300);
-        resetVelocity();
-        resetAnimator();
-        returnToMovement();
-    }
+        // if (canTurnAround) setFacing(controller.velocity.x);
 
-    void handleSlip() {
-        controller.velocity.x = 0;
-        setFacing(AtlasHelpers.Sign(controller.collisions.getGroundSlope().x));
-        if (AtlasInputManager.getKeyPressed("Jump"))
-        {
-            novahop();
-        }
-        if (controller.collisions.getGroundSlope().y > 0.5f || !isGrounded()) {
-            resetAnimator();
-            returnToMovement();
-        }
-    }
+        // float smoothTime = 0;
+        // if (controller.collisions.getBelow()) {
+        //     if (AtlasHelpers.Sign(controller.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 
+        //     Mathf.Abs(targetVelocityX) >= Mathf.Abs(controller.velocity.x)) {
+        //         smoothTime = groundAccelerationTime;
+        //     } else {
+        //         smoothTime = groundDeccelerationTime;
+        //     }
+        // }  else {
+        //     if (AtlasHelpers.Sign(controller.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 
+        //     Mathf.Abs(targetVelocityX) >= Mathf.Abs(controller.velocity.x)) {
+        //         smoothTime = airAccelerationTime;
+        //     } else {
+        //         smoothTime = airDeccelerationTime;
+        //     }
+        // }
+        // controller.velocity.x = Mathf.SmoothDamp(controller.velocity.x, targetVelocityX, ref velocityXSmoothing, smoothTime);
+        // //controller.velocity.x = targetVelocityX;
+        // controller.gravityMod = ((wallRiding && controller.velocity.y <= 0) ? 0.5f : 1.0f);
 
-    async void novahop() {
-        controller.velocity = new Vector2(facing * 8, 5);
-        returnToMovement();
+        // if (wallRiding && controller.velocity.y < maxWallSlideVel) { controller.velocity.y = maxWallSlideVel; }
+
+
+        
+        // //TODO: fast fall state
+        // // if (fastFalling)
+        // // {
+        // //     if (AtlasInputManager.getAxis("Dpad").getValue();.y >=0 || isGrounded() || cc.velocity.y > 0)
+        // //     {
+        // //         fastFalling = false;
+        // //     }
+        // //     cc.termVel = fastFallVel;
+        // //     cc.gravityMod = 2.0f;
+        // // }
+        // // else
+        // // {
+        // //     //cc.termVel = maxFallVel;
+        // //     state.deformer.RemoveDeform("fastfall");
+        // //     if (AtlasInputManager.getKeyPressed("Down") && !isGrounded() && (cc.velocity.y <= 0.5f || !AtlasInputManager.getKey("Jump")))
+        // //     {
+        // //         fastFalling = true;
+        // //         state.deformer.startDeform(new Vector3(0.85f, 1.4f, 1.0f), 0.2f, -1.0f, Vector2.down, "fastfall", true);
+        // //     }
+        // // }
+
+
+        // if (controller.velocity.y <= 0 && controller.isSafePosition())
+        // {
+        //     lastSafePosition = transform.position;
+        // }
     }
 
     #region Attacking
@@ -844,75 +822,75 @@ public class playerController : StateMachine
 
 
 
-    public bool canLift()
-    {
-        if (!isGrounded()) return false;
-        if (depState != State.Movement) return false;
-        if (isCrouching()) return false;
-        return true;
-    }
+    // public bool canLift()
+    // {
+    //     // if (!isGrounded()) return false;
+    //     // if (depState != State.Movement) return false;
+    //     // if (isCrouching()) return false;
+    //     // return true;
+    // }
     public void liftObject(GameObject other)
     {
-        if (!canLift()) return;
-        liftController lc = other.GetComponent<liftController>();
-        Rigidbody2D rb = other.GetComponentInParent<Rigidbody2D>();
-        if (lc && rb)
-        {
-            float liftTime = 0.2f;
-            setFacing(Mathf.Sign(other.transform.position.x - transform.position.x));
-            rb.velocity = Vector2.zero;
-            rb.simulated = false;
-            lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), transform, liftTime);
-            resetAnimator();
-            resetVelocity();
-            anim.SetTrigger("Lift");
-            anim.SetBool("isHolding", true);
-            freezeForSeconds(liftTime + 0.15f, true);
-            heldObject = other.transform.parent;
-        }
+        // if (!canLift()) return;
+        // liftController lc = other.GetComponent<liftController>();
+        // Rigidbody2D rb = other.GetComponentInParent<Rigidbody2D>();
+        // if (lc && rb)
+        // {
+        //     float liftTime = 0.2f;
+        //     setFacing(Mathf.Sign(other.transform.position.x - transform.position.x));
+        //     rb.velocity = Vector2.zero;
+        //     rb.simulated = false;
+        //     lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), transform, liftTime);
+        //     resetAnimator();
+        //     resetVelocity();
+        //     anim.SetTrigger("Lift");
+        //     anim.SetBool("isHolding", true);
+        //     freezeForSeconds(liftTime + 0.15f, true);
+        //     heldObject = other.transform.parent;
+        // }
     }
     void handleHolding()
     {
-        if (!anim.GetBool("isHolding")) return;
-        if (!heldObject)
-        {
-            anim.SetBool("isHolding", false);
-            return;
-        }
+        // if (!anim.GetBool("isHolding")) return;
+        // if (!heldObject)
+        // {
+        //     anim.SetBool("isHolding", false);
+        //     return;
+        // }
 
-        heldObject.transform.localScale = new Vector3(facing, 1, 1);
-        if ((depState != State.Movement && depState != State.WaitMoveable) || AtlasInputManager.getKeyPressed("Down"))
-        {
-            anim.SetBool("isHolding", false);
-            dropHolding();
-        } else if (AtlasInputManager.getKeyPressed("Up") || AtlasInputManager.getKeyPressed("Jump")) {
-            anim.SetBool("isHolding", false);
-            anim.SetTrigger("Throw");
-            freezeForSeconds(0.4f, true);
-            Invoke("throwHolding", 0.15f);
-        }
+        // heldObject.transform.localScale = new Vector3(facing, 1, 1);
+        // if ((depState != State.Movement && depState != State.WaitMoveable) || AtlasInputManager.getKeyPressed("Down"))
+        // {
+        //     anim.SetBool("isHolding", false);
+        //     dropHolding();
+        // } else if (AtlasInputManager.getKeyPressed("Up") || AtlasInputManager.getKeyPressed("Jump")) {
+        //     anim.SetBool("isHolding", false);
+        //     anim.SetTrigger("Throw");
+        //     freezeForSeconds(0.4f, true);
+        //     Invoke("throwHolding", 0.15f);
+        // }
     }
     void throwHolding()
     {
-        dropHolding(true);
+        // dropHolding(true);
     }
     void dropHolding(bool throwing = false)
     {
-        if (!heldObject) return;
-        Rigidbody2D rb = heldObject.GetComponent<Rigidbody2D>();
-        rb.simulated = true;
+        // if (!heldObject) return;
+        // Rigidbody2D rb = heldObject.GetComponent<Rigidbody2D>();
+        // rb.simulated = true;
 
-        if (throwing)
-        {
-            rb.AddForce(new Vector2(200.0f * facing, 75.0f));
-        } else
-        {
-            rb.AddForce(new Vector2(0, 50.0f));
-        }
+        // if (throwing)
+        // {
+        //     rb.AddForce(new Vector2(200.0f * facing, 75.0f));
+        // } else
+        // {
+        //     rb.AddForce(new Vector2(0, 50.0f));
+        // }
 
-        heldObject.parent = null;
-        SceneManager.MoveGameObjectToScene(heldObject.gameObject, SceneManager.GetActiveScene());
-        heldObject = null;
+        // heldObject.parent = null;
+        // SceneManager.MoveGameObjectToScene(heldObject.gameObject, SceneManager.GetActiveScene());
+        // heldObject = null;
     }
 
     public void handleScout()
@@ -940,7 +918,7 @@ public class playerController : StateMachine
     IEnumerator doDoor()
     {
         currentDoorLabel = currentDoor.label;
-        GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<canvasController>().doBlackout();
+        GameObject.FindGameObjectWithTag("MainCanvas").GetComponent<CanvasController>().doBlackout();
         yield return new WaitForSeconds(0.5f);
         gameManager.Instance.currentDoorLabel = currentDoor.label;
         gameManager.Instance.switchScene(currentDoor.targetScene.ScenePath, 0, 0);
@@ -1035,11 +1013,11 @@ public class playerController : StateMachine
     public override void setFacing(float vel) {
         if (Mathf.Abs(vel) < 0.01f) return;
         if (AtlasHelpers.Sign(vel) == 0) return;
-        if (facing != (int)Mathf.Sign(vel) && 
-            anim.GetBool("isRunning") && 
-            !anim.GetBool("cantTurnAround")) {
-                anim.SetTrigger("turnAround");
-            }
+        // if (facing != (int)Mathf.Sign(vel) && 
+        //     anim.GetBool("isRunning") && 
+        //     !anim.GetBool("cantTurnAround")) {
+        //         anim.SetTrigger("turnAround");
+        //     }
         base.setFacing(vel);
         sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     }
@@ -1099,33 +1077,33 @@ public class playerController : StateMachine
 
     void firstJump()
     {
-        //Cancel jump if stuck under something while crawling
-        if (isCrouching()) {
-            depState = State.Slide;
-            anim.SetTrigger("slide");
-            controller.velocity.x = facing * 6;
-            return;
-        }
+        // //Cancel jump if stuck under something while crawling
+        // if (isCrouching()) {
+        //     depState = State.Slide;
+        //     anim.SetTrigger("slide");
+        //     controller.velocity.x = facing * 6;
+        //     return;
+        // }
 
-        SoundManager.Instance.playClip("jump2");
-        deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, Vector2.up, "jump", true);
-        particleMaker.createDust(true);
+        // SoundManager.Instance.playClip("jump2");
+        // deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, Vector2.up, "jump", true);
+        // particleMaker.createDust(true);
 
-        jumpCRVar = StartCoroutine(jumpCoroutine());
+        // jumpCRVar = StartCoroutine(jumpCoroutine());
     }
 
     void doubleJump()
     {
-        returnToMovement();
+        // returnToMovement();
 
-        canDoubleJump = false;
-        anim.SetTrigger("doubleJump");
+        // canDoubleJump = false;
+        // anim.SetTrigger("doubleJump");
 
-        SoundManager.Instance.playClip("doubleJump");
-        spriteController.doubleJumpParticle.Play();
+        // SoundManager.Instance.playClip("doubleJump");
+        // spriteController.doubleJumpParticle.Play();
 
-        if (jumpCRVar != null) StopCoroutine(jumpCRVar);
-        jumpCRVar = StartCoroutine(jumpCoroutine(true));
+        // if (jumpCRVar != null) StopCoroutine(jumpCRVar);
+        // jumpCRVar = StartCoroutine(jumpCoroutine(true));
     }
 
     public void bounce(float bounceVelocity, string sound = "jump2")
@@ -1142,78 +1120,78 @@ public class playerController : StateMachine
     //Popping a WooshBerry calls this.
     public void triggerBroomStart(bool fast = false, float dir = 0)
     {
-        if (resetPosition || !controller.collisions.isTangible()) return;
-        if (intangibleStates.Contains(depState)) return;
-        //Cancel is ceiling above while crouching
-        if (isCrouching() && !controller.checkVertDist(0.3f)) return;
-        if (dir == 0 && !wallRiding)
-        {
-            dir = AtlasInputManager.getAxisState("Dpad").x;
-        }
-        setFacing(dir);
-        depState = State.BroomStart;
-        fastBroom = fast;
-        canBroom = false;
+    //     if (resetPosition || !controller.collisions.isTangible()) return;
+    //     if (intangibleStates.Contains(depState)) return;
+    //     //Cancel is ceiling above while crouching
+    //     if (isCrouching() && !controller.checkVertDist(0.3f)) return;
+    //     if (dir == 0 && !wallRiding)
+    //     {
+    //         dir = AtlasInputManager.getAxis("Dpad").getValue().x;
+    //     }
+    //     setFacing(dir);
+    //     depState = State.BroomStart;
+    //     fastBroom = fast;
+    //     canBroom = false;
     }
     
     //State BroomStart waits for Atlas to get on Broom. Animator calls startBroom
-    void handleBroomStart()
-    {
-        anim.SetTrigger("broomStart");
-        SoundManager.Instance.playClip("onBroom");
-        deformer.RemoveDeform("fastfall");
-        deformer.RemoveDeform("jump");
-        if (depState == State.Attack)
-        {
-            setFacing(AtlasInputManager.getAxisState("Dpad").x);
-        }
-        //if (AtlasInputManager.Instance.aimAtMouse())
-        //{
-        //    setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
-        //}
+    // void handleBroomStart()
+    // {
+    //     anim.SetTrigger("broomStart");
+    //     SoundManager.Instance.playClip("onBroom");
+    //     deformer.RemoveDeform("fastfall");
+    //     deformer.RemoveDeform("jump");
+    //     if (depState == State.Attack)
+    //     {
+    //         setFacing(AtlasInputManager.getAxis("Dpad").getValue().x);
+    //     }
+    //     //if (AtlasInputManager.Instance.aimAtMouse())
+    //     //{
+    //     //    setFacing(AtlasInputManager.Instance.getPlayerAim(true).x);
+    //     //}
 
-        depState = fastBroom ? State.Broom : State.Wait;
-        fastBroom = false;
-        controller.velocity = Vector3.zero;
-    }
+    //     depState = fastBroom ? State.Broom : State.Wait;
+    //     fastBroom = false;
+    //     controller.velocity = Vector3.zero;
+    // }
 
     //Called by animator after hopping on broom
-    public void startBroom()
-    {
-        resetAnimator();
-        depState = State.Broom;
-        SoundManager.Instance.playClip("broomLaunch");
-        controller.canGravity = false;
-    }
+    // public void startBroom()
+    // {
+    //     resetAnimator();
+    //     depState = State.Broom;
+    //     SoundManager.Instance.playClip("broomLaunch");
+    //     controller.canGravity = false;
+    // }
 
-    void handleBroom()
-    {
-        if (AtlasInputManager.getKeyPressed("Broom") || 
-            AtlasInputManager.getKeyPressed("Down") ||
-            (!AtlasInputManager.getKey("Broom") && 
-            AtlasInputManager.Instance.holdBroom))
-        {
-            endBroom();
-            return;
-        }
-        if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
-        {
-            endBroom();
-            if (hasDoubleJump) doubleJump();
-            return;
-        }
-        if ((facing == -1) ? controller.collisions.getLeft() : controller.collisions.getRight()) {
-            if (controller.collisions.getNorms().Find(normal => 
-                Mathf.Abs(Vector2.Dot(normal, Vector2.right)) > 0.8f) != null)
-            {
-                startBonk();
-            }
-            return;
-        }
-        float vdir = AtlasInputManager.getAxisState("Dpad").y;
-        controller.velocity.y = moveSpeed / 2.0f * vdir;
-        controller.velocity.x = moveSpeed * 2 * facing;
-    }
+    // void handleBroom()
+    // {
+    //     if (AtlasInputManager.getKeyPressed("Broom") || 
+    //         AtlasInputManager.getKeyPressed("Down") ||
+    //         (!AtlasInputManager.getKey("Broom") && 
+    //         AtlasInputManager.Instance.holdBroom))
+    //     {
+    //         endBroom();
+    //         return;
+    //     }
+    //     if (AtlasInputManager.getKeyPressed("Jump") && canDoubleJump && resourceManager.Instance.getPlayerMana() >= 1)
+    //     {
+    //         endBroom();
+    //         if (hasDoubleJump) doubleJump();
+    //         return;
+    //     }
+    //     if ((facing == -1) ? controller.collisions.getLeft() : controller.collisions.getRight()) {
+    //         if (controller.collisions.getNorms().Find(normal => 
+    //             Mathf.Abs(Vector2.Dot(normal, Vector2.right)) > 0.8f) != null)
+    //         {
+    //             startBonk();
+    //         }
+    //         return;
+    //     }
+    //     float vdir = AtlasInputManager.getAxis("Dpad").getValue();.y;
+    //     controller.velocity.y = moveSpeed / 2.0f * vdir;
+    //     controller.velocity.x = moveSpeed * 2 * facing;
+    // }
 
     void endBroom()
     {
@@ -1320,10 +1298,10 @@ public class playerController : StateMachine
     public void returnToMovement(State returnState = State.Movement)
     {
         Debug.Log("return to movement");
-        if (depState == State.ChargeAttack || depState == State.Attack)
-        {
-            if (!isCrouching()) resetAnimator();
-        }
+        // if (depState == State.ChargeAttack || depState == State.Attack)
+        // {
+        //     if (!isCrouching()) resetAnimator();
+        // }
         if (resetPosition && !controller.isSafePosition())
         {
             depState = State.Reset;
@@ -1339,7 +1317,7 @@ public class playerController : StateMachine
                 depState = State.Movement;
             }
 
-            if (!isCrouching()) anim.SetTrigger("Idle");
+            // if (!isCrouching()) anim.SetTrigger("Idle");
         }
         resetPosition = false;
         arialAttacking = false;
@@ -1364,7 +1342,7 @@ public class playerController : StateMachine
             }
         }
         if (returnToIdle) {
-            anim.SetTrigger("Idle");
+            // anim.SetTrigger("Idle");
         }
     }
 
@@ -1499,12 +1477,6 @@ public class playerController : StateMachine
     public bool isGrounded()
     {
         return controller.collisions.isGrounded();
-    }
-
-    public bool isCrouching()
-    {
-        if (!anim.GetBool("isCrouching")) return false;
-        return isGrounded();
     }
     #endregion
 }

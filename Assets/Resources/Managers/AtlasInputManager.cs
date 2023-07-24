@@ -13,7 +13,7 @@ public class AtlasInputManager : ScriptableObject
 
     public static List<KeyState> keyStates;
     public static List<AxisState> axisStates;
-
+    
     public static List<KeyState> pausedKeyStates;
     public static List<AxisState> pausedAxisStates;
 
@@ -84,7 +84,7 @@ public class AtlasInputManager : ScriptableObject
     {
         AxisState axisState = axisStates.Find(axis => axis.axisName == axisName);
         if (axisState == null) throw new Exception("No axisState " + axisName + " Found!");
-        axisState.state = state;
+        axisState.setValue(state);
         axisState.startTime = Time.time;
     }
 
@@ -95,11 +95,11 @@ public class AtlasInputManager : ScriptableObject
         return keyState;
     }
 
-    public static Vector2 getAxisState(string axisName)
+    public static AxisState getAxis(string axisName)
     {
         AxisState axisState = axisStates.Find(axis => axis.axisName == axisName);
         if (axisState == null) throw new Exception("No axisState " + axisName + " Found!");
-        return axisState.state;
+        return axisState;
     }
 
     public static bool getKeyPressed(string keyName, bool useDeltaTime = false)
@@ -186,17 +186,52 @@ public class KeyState
 public class AxisState
 {
     public string axisName;
-    public Vector2 state;
-    public double startTime;
+    private Vector2 value;
+    public float startTime;
+    public TiltDirection direction;
 
     public AxisState(string axisName)
     {
         this.axisName = axisName;
-        state = Vector2.zero;
+        value = Vector2.zero;
     }
 
     public bool justPressed()
     {
         return (Time.time - startTime <= 0);
     }
+
+    public TiltDirection getDirection() {
+        if (value.x == 0) return TiltDirection.Neutral;
+        if (AtlasHelpers.SameSign(gameManager.Instance.playerCtrl.facing, value.x)) return TiltDirection.Forward;
+        return TiltDirection.Backward;
+    }
+
+    public int getSignX() {
+        return AtlasHelpers.Sign(value.x);
+    }
+
+    public Vector2 getValue() {
+        return value;
+    }
+
+    public void setValue(Vector2 newValue) {
+        value = newValue;
+    }
+
+    public float getStartTime() {
+        return startTime;
+    }
+
+    public bool pressedAfter(float time) {
+        return getStartTime() > time;
+    }
+}
+
+public enum TiltDirection {
+    Neutral,
+    Forward,
+    Backward,
+    Up,
+    Down
 }

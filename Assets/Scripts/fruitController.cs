@@ -44,7 +44,7 @@ public class fruitController : MonoBehaviour
     {
         GetComponentInChildren<Animator>().SetTrigger("eat");
         GameObject atlas = GameObject.Find("Atlas");
-        playerController pc = atlas.GetComponent<playerController>();
+        PlayerController pc = atlas.GetComponent<PlayerController>();
         transform.rotation = Quaternion.identity;
         transform.localScale = new Vector3(atlas.transform.localScale.x, 1.0f, 1.0f);
         transform.position = atlas.transform.position + atlas.transform.localScale.x * Vector3.right * 0.75f + Vector3.up * 0.75f;

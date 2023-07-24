@@ -27,7 +27,7 @@ public class scouterController : MonoBehaviour
     //         textPanel.SetActive(true);
     //         textPanel.GetComponentInChildren<TextMeshProUGUI>().text = selectedPc.scoutMessage.Replace("\\n", "\n");
     //     }
-    //     Vector2 velocity = AtlasInputManager.getAxisState("Dpad");
+    //     Vector2 velocity = AtlasInputManager.getAxis("Dpad").getValue();;
     //     transform.Translate(velocity * speed * Time.deltaTime);
     // }
 

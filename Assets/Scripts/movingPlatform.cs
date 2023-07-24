@@ -79,7 +79,7 @@ public class movingPlatform : MonoBehaviour
         {
             if (actor.transform.CompareTag("Player"))
             {
-                playerController pc = gameManager.Instance.playerCtrl;
+                PlayerController pc = gameManager.Instance.playerCtrl;
                 if (pc.canMovingPlatform())
                 {
                     if (velocity.y > 0 && !actor.transform.GetComponent<characterController>().checkVertDist(velocity.y))

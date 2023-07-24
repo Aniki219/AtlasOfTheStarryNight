@@ -17,7 +17,7 @@ public class ribbonController : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collected && collision.CompareTag("Player") &&
-            gameManager.Instance.playerCtrl.depState == playerController.State.Broom)
+            gameManager.Instance.playerCtrl.depState == PlayerController.State.Broom)
         {
             collected = true;
             anim.SetTrigger("FlyAway");

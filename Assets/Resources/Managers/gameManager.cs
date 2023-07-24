@@ -22,9 +22,9 @@ public class gameManager : ScriptableObject
     public float gravity = -17.6f;
     public float maxFallVel = -15f;
 
-    public canvasController canvasCtrl;
+    public CanvasController canvasCtrl;
     public GameObject player;
-    public playerController playerCtrl;
+    public PlayerController playerCtrl;
     public Transform playerHanger;
 
     private float playerStartX;
@@ -68,11 +68,11 @@ public class gameManager : ScriptableObject
             instance.player = createInstance("RoomSetup/Atlas", Vector3.zero);
         }
         instance.playerHanger = instance.player.transform.Find("AtlasSprite/Hanger");
-        instance.playerCtrl = instance.player.GetComponent<playerController>();
+        instance.playerCtrl = instance.player.GetComponent<PlayerController>();
         
         if (GameObject.Find("GameCanvas"))
         {
-            instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<canvasController>();
+            instance.canvasCtrl = GameObject.Find("GameCanvas").GetComponent<CanvasController>();
         }
 
         if (instance.canSetPosition && instance.player)
@@ -80,8 +80,8 @@ public class gameManager : ScriptableObject
             instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
             Physics2D.SyncTransforms();
             instance.player.GetComponent<characterController>().collisions.setCollidable(true);
-            playerController.State playerState = playerCtrl.depState;
-            if (instance.playerCtrl.depState == playerController.State.Wait)
+            PlayerController.State playerState = playerCtrl.depState;
+            if (instance.playerCtrl.depState == PlayerController.State.Wait)
             {
                 playerCtrl.returnToMovement(playerState);
                 canvasCtrl.doBlackout(false);

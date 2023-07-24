@@ -48,6 +48,8 @@ public class MapEditor : Editor
         List<AtlasScene> neighbors = AtlasSceneManager.getNeighbors();
         AtlasScene currentScene = AtlasSceneManager.getScene();
 
+        Debug.LogWarning("Scene loaded with " + neighbors.Count + " nieghbors");
+
         foreach (AtlasScene n in neighbors)
         {
             if (n.scene != "null")
@@ -62,6 +64,7 @@ public class MapEditor : Editor
 
     public static void shiftScene(string name, float xdir, float ydir)
     {
+        Debug.LogWarning("Shift Scene");
         Scene currentScene = SceneManager.GetSceneAt(0);
         Scene rightScene = SceneManager.GetSceneByName(name);
 

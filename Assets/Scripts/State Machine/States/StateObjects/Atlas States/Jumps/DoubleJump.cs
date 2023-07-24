@@ -20,10 +20,14 @@ namespace States {
       };
     }
 
-    public async override Task StartState(StateMachine stateMachine)
+    public override void CreateJumpEffect() {
+      particleMaker.createEffect("DoubleJumpBurst", transform.position);
+    }
+
+    public async override Task StartState()
     {
-      await base.StartState(stateMachine);
-      if (AtlasInputManager.getAxisState("Dpad").x * controller.velocity.x < 0) {
+      await base.StartState();
+      if (AtlasInputManager.getAxis("Dpad").getValue().x * controller.velocity.x < 0) {
         controller.velocity.x = 0;
       }
       playAnim();      
@@ -31,14 +35,12 @@ namespace States {
 
     private async void playAnim() {
       PauseTransition<Transitions.CanFall>();
-      anim.SetBool("isDoubleJumping", true);
       await AnimMapper.awaitClip<DoubleJump>();
       UnpauseTransition<Transitions.CanFall>();
     }
 
     public override async Task ExitState()
     {
-      anim.SetBool("isDoubleJumping", false);
       await base.ExitState();
     }
   }

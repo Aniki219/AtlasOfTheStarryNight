@@ -10,11 +10,11 @@ namespace Behaviors {
 [Serializable]
 public class CarryBehavior : IStateBehavior
 {
-    playerController pc;
+    PlayerController pc;
     Transform heldObject;
 
     public async override Task StartBehavior() {
-        pc = (playerController)state.stateMachine;
+        pc = (PlayerController)state.stateMachine;
         heldObject = pc.heldObject;
         await Task.Yield();
     }
@@ -46,11 +46,8 @@ public class CarryBehavior : IStateBehavior
         Rigidbody2D rb = heldObject.GetComponent<Rigidbody2D>();
         rb.simulated = true;
 
-        state.anim.SetBool("isHolding", false);
-
         if (throwing)
         {
-            state.anim.SetTrigger("Throw");
             await AtlasHelpers.WaitSeconds(0.4f);
             rb.AddForce(new Vector2(200.0f * pc.facing, 75.0f));
         } else
@@ -65,7 +62,6 @@ public class CarryBehavior : IStateBehavior
     }
 
     public async override Task ExitBehavior() {
-        state.anim.SetBool("isHolding", false);
         pc.heldObject = null;
         pc.changeState(new States.Idle());
         await Task.Yield();

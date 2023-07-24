@@ -220,14 +220,22 @@ public class characterController : MonoBehaviour
         BoxCollider2D collider = colliderManager.getCollider();
 
         Vector2 originalOffset = collider.offset;
-        collider.offset = originalOffset + dp;
+        Collider2D boxhitCollider;
 
-        Collider2D boxhitCollider = Physics2D.OverlapBox(
-            (Vector2)transform.position + collider.offset, 
-            Vector2.Scale(collider.size, (Vector2)transform.localScale), 
-            0, 
-            collisionMask
-        );
+        // float maxStep = collider.size.x/2.0f;
+        // int stepsNeeded = dp / maxStep;
+        // for (int i = ) {
+            collider.offset = originalOffset + dp;
+
+            boxhitCollider = Physics2D.OverlapBox(
+                (Vector2)transform.position + collider.offset, 
+                Vector2.Scale(collider.size, (Vector2)transform.localScale), 
+                0, 
+                collisionMask
+            );
+
+        //     if (boxhitCollider) break;
+        // }
 
         CollisionData returnData = new CollisionData();
 
@@ -295,62 +303,62 @@ public class characterController : MonoBehaviour
 #region Rework needed
     bool crushTest(bool vertical)
     {
-        float rayLength = 4.0f / 32.0f;
-        Vector3 dir;
-        Vector2 rayOrigin1, rayOrigin2, rayDirection;
-        float raySpacing;
-        int rayCount;
+        // float rayLength = 4.0f / 32.0f;
+        // Vector3 dir;
+        // Vector2 rayOrigin1, rayOrigin2, rayDirection;
+        // float raySpacing;
+        // int rayCount;
 
-        if (vertical)
-        {
-            dir = Vector3.up;
+        // if (vertical)
+        // {
+        //     dir = Vector3.up;
 
-            rayCount = verticalRayCount;
+        //     rayCount = verticalRayCount;
 
-            rayOrigin1 = boundaryPoints.topLeft;
-            rayOrigin2 = boundaryPoints.bottomLeft;
+        //     rayOrigin1 = boundaryPoints.topLeft;
+        //     rayOrigin2 = boundaryPoints.bottomLeft;
 
-            raySpacing = verticalRaySpacing;
-            rayDirection = Vector2.right;
-        } else
-        {
-            dir = Vector3.right;
+        //     raySpacing = verticalRaySpacing;
+        //     rayDirection = Vector2.right;
+        // } else
+        // {
+        //     dir = Vector3.right;
 
-            rayCount = horizontalRayCount;
+        //     rayCount = horizontalRayCount;
 
-            rayOrigin1 = boundaryPoints.bottomRight;
-            rayOrigin2 = boundaryPoints.bottomLeft;
+        //     rayOrigin1 = boundaryPoints.bottomRight;
+        //     rayOrigin2 = boundaryPoints.bottomLeft;
 
-            raySpacing = horizontalRaySpacing;
-            rayDirection = Vector2.up;
-        }
+        //     raySpacing = horizontalRaySpacing;
+        //     rayDirection = Vector2.up;
+        // }
 
-        for (int i = 0; i < rayCount; i++)
-        {
-            RaycastHit2D hit1 = Physics2D.Raycast(rayOrigin1, dir, rayLength, collisionMask);
-            RaycastHit2D hit2 = Physics2D.Raycast(rayOrigin2, -dir, rayLength, collisionMask);
+        // for (int i = 0; i < rayCount; i++)
+        // {
+        //     RaycastHit2D hit1 = Physics2D.Raycast(rayOrigin1, dir, rayLength, collisionMask);
+        //     RaycastHit2D hit2 = Physics2D.Raycast(rayOrigin2, -dir, rayLength, collisionMask);
 
-            //if (hit1) {
-            //    Debug.DrawLine(rayOrigin1, rayOrigin1 + (Vector2)dir * rayLength, Color.red);
-            //} else
-            //{
-            //    Debug.DrawLine(rayOrigin1, rayOrigin1 + (Vector2)dir * rayLength, Color.green);
-            //}
-            //if (hit2) {
-            //    Debug.DrawLine(rayOrigin2, rayOrigin2 + -(Vector2)dir * rayLength, Color.red);
-            //} else
-            //{
-            //    Debug.DrawLine(rayOrigin2, rayOrigin2 + -(Vector2)dir * rayLength, Color.green);
-            //}
+        //     //if (hit1) {
+        //     //    Debug.DrawLine(rayOrigin1, rayOrigin1 + (Vector2)dir * rayLength, Color.red);
+        //     //} else
+        //     //{
+        //     //    Debug.DrawLine(rayOrigin1, rayOrigin1 + (Vector2)dir * rayLength, Color.green);
+        //     //}
+        //     //if (hit2) {
+        //     //    Debug.DrawLine(rayOrigin2, rayOrigin2 + -(Vector2)dir * rayLength, Color.red);
+        //     //} else
+        //     //{
+        //     //    Debug.DrawLine(rayOrigin2, rayOrigin2 + -(Vector2)dir * rayLength, Color.green);
+        //     //}
 
-            if (hit1 && hit2 && !(hit1.transform.gameObject.Equals(hit2.transform.gameObject)))
-            {
-                return true;
-            }
+        //     if (hit1 && hit2 && !(hit1.transform.gameObject.Equals(hit2.transform.gameObject)))
+        //     {
+        //         return true;
+        //     }
 
-            rayOrigin1 += rayDirection * (raySpacing);
-            rayOrigin2 += rayDirection * (raySpacing);
-        }
+        //     rayOrigin1 += rayDirection * (raySpacing);
+        //     rayOrigin2 += rayDirection * (raySpacing);
+        // }
         return false;
     }
 

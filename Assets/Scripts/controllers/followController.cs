@@ -11,7 +11,7 @@ public class followController : MonoBehaviour
     public bool canMoveParent = true;
     public bool canCollect = true;
 
-    playerController pc;
+    PlayerController pc;
 
     Vector3 startLocation;
     Vector3 smoothVelocity;
@@ -27,7 +27,7 @@ public class followController : MonoBehaviour
 
     void Start()
     {
-        pc = GetComponent<playerController>();
+        pc = GetComponent<PlayerController>();
         startLocation = transform.position;
         following = null;
         followedBy = null;

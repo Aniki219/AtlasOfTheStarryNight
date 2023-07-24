@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class selfDestruct : MonoBehaviour
 {
     public float lifetime = Mathf.Infinity;

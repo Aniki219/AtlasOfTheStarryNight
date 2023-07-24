@@ -29,6 +29,10 @@ public static class AtlasHelpers
         return value > 0 ? 1 : -1;
     }
 
+    public static bool SameSign(float v1, float v2) {
+        return Sign(v1) == Sign(v2);
+    }
+
     public static async Task WaitSeconds(float seconds) {
         float startTime = Time.time;
         float endTime = Time.time + seconds;
@@ -36,6 +40,19 @@ public static class AtlasHelpers
             await Task.Delay(16); // one frame
         }
         await Task.Yield();
+    }
+
+    public static AnimationClip FindAnimation (Animator animator, string name) 
+    {
+      foreach (AnimationClip clip in animator.runtimeAnimatorController.animationClips)
+      {
+          if (clip.name == name)
+          {
+            return clip;
+          }
+      }
+
+      return null;
     }
 }
 

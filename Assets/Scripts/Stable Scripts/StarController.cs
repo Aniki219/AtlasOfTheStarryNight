@@ -19,7 +19,7 @@ public class StarController : MonoBehaviour
     {
         float time = 3.0f;
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        playerController pc = player.GetComponent<playerController>();
+        PlayerController pc = player.GetComponent<PlayerController>();
 
         pc.pauseAnimator();
         pc.cutScenePrep();

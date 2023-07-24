@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class stopAttacking : StateMachineBehaviour
 {
-    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
-    {
-        if (animator.GetBool("Attacking"))
-        {
-            foreach (AnimatorControllerParameter parameter in animator.parameters)
-            {
-                if (parameter.type == AnimatorControllerParameterType.Bool)
-                {
-                    animator.SetBool(parameter.name, false);
-                }
-                if (parameter.type == AnimatorControllerParameterType.Trigger)
-                {
-                    animator.ResetTrigger(parameter.name);
-                }
-            }
-        }
-    }
+    // override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+    // {
+    //     if (animator.GetBool("Attacking"))
+    //     {
+    //         foreach (AnimatorControllerParameter parameter in animator.parameters)
+    //         {
+    //             if (parameter.type == AnimatorControllerParameterType.Bool)
+    //             {
+    //                 animator.SetBool(parameter.name, false);
+    //             }
+    //             if (parameter.type == AnimatorControllerParameterType.Trigger)
+    //             {
+    //                 animator.ResetTrigger(parameter.name);
+    //             }
+    //         }
+    //     }
+    // }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks
     //override public void OnStateUpdate(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)

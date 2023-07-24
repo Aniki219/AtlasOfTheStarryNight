@@ -5,11 +5,11 @@ using UnityEngine;
 public class bonkSetFacing : StateMachineBehaviour
 {
     int preBonkFacing = 1;
-    playerController pc;
+    PlayerController pc;
     // OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        pc = animator.transform.parent.GetComponent<playerController>();
+        pc = animator.transform.parent.GetComponent<PlayerController>();
         preBonkFacing = pc.facing;
     }
 
@@ -22,7 +22,7 @@ public class bonkSetFacing : StateMachineBehaviour
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        pc = animator.transform.parent.GetComponent<playerController>();
+        pc = animator.transform.parent.GetComponent<PlayerController>();
         if (!pc.resetPosition)
         {
             pc.resetVelocity();

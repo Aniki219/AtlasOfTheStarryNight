@@ -4,26 +4,37 @@ using Behaviors;
 using Transitions;
 
 namespace States {
-  public class Run : State {
-    public Run() {
-      behaviors = new List<IStateBehavior>() {
-        new MoveBehavior()
+  public class Idle : State {
+    public static readonly List<IStateTransition> defaultTransitions = 
+      new List<IStateTransition>() {
+          new CanAttack(),
+          new CanBroom(),
+          new CanJump<States.GroundJump>(),
+          new CanSlip(),
+          new CanFall(),
+          new CanLift(),
+          new CanCrouch(),
+          new RunIdle(),
+          new CanTurnAround(),
       };
 
-      transitions = new List<IStateTransition>() {
-        new CanAttack(),
-        new CanBroom(),
-        new CanJump<States.GroundJump>(),
-        new CanSlip(),
-        new CanFall(),
-        new CanLift(),
-        new CanCrouch(),
-        new RunIdle()
+    public Idle() {
+      behaviors = new List<IStateBehavior>() {
+        new MoveBehavior(),
       };
+
+      transitions = new List<IStateTransition>();
+      transitions.AddRange(defaultTransitions.ToArray());
+      
     }
   }
 
-  public class Idle : Run {
-    public Idle() : base() {}
+  public class Run : Idle {
+    public Run() : base() {
+      behaviors.Add(new NovaBehavior().GainSpeed(NovaManager.GainSpeed.Slow));
+
+      transitions.Remove(GetTransition<CanTurnAround>());
+      transitions.Add(new CanTurnAround<TurnAroundRun>());
+    }
   }
 }

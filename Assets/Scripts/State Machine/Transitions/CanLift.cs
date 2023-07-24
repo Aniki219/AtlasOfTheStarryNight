@@ -3,11 +3,11 @@ using System;
 
 namespace Transitions {
     public class CanLift : IStateTransition {
-        playerController pc;
+        PlayerController pc;
 
         public override void attach(State state) {
             base.attach(state);
-            pc = (playerController)state.stateMachine;
+            pc = (PlayerController)state.stateMachine;
         }
         public override void checkCondition() {
             // if (Input.GetButtonDown("Up")) {

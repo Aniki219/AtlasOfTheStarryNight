@@ -3,7 +3,7 @@ using System;
 
 public abstract class IStateTransition {
     protected State state;
-    public bool isActive {get; protected set;} = true;
+    public bool paused {get; protected set;} = false;
     public bool skipWaitForExit {get; protected set;} = false;
 
     public virtual void attach(State state) {
@@ -16,22 +16,23 @@ public abstract class IStateTransition {
 
     public abstract void checkCondition();
 
-    
-    public void pause() {
-        isActive = false;
-    }
 
-    public void unpause() {
-        isActive = true;
-    }
 
     public IStateTransition SkipWaitForExit() {
         skipWaitForExit = true;
         return this;
     }
 
-    public IStateTransition PauseTransition() {
-        pause();
+    public IStateTransition Pause() {
+        paused = true;
         return this;
+    }
+
+    public void Unpause() {
+        paused = false;
+    }
+
+    public State getNewState<T>() where T : State {
+        return (T) Activator.CreateInstance(typeof(T));
     }
 }

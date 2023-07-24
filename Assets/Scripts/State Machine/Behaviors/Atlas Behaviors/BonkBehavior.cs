@@ -11,7 +11,7 @@ public class BonkBehavior : IStateBehavior
     public bool reset;
     public int damage;
 
-    playerController pc;
+    PlayerController pc;
     bool hasStarted = false;
 
     public BonkBehavior() {
@@ -19,9 +19,8 @@ public class BonkBehavior : IStateBehavior
     }
     
     public async override Task StartBehavior() {
-        pc = (playerController)state.stateMachine;
+        pc = (PlayerController)state.stateMachine;
 
-        state.anim.SetBool("resetSpin", reset);
         if (!state.controller.collisions.isTangible()) { return; }
         state.controller.collisions.setTangible(false);
 
@@ -42,7 +41,6 @@ public class BonkBehavior : IStateBehavior
         }
 
         pc.resetAnimator();
-        state.anim.SetTrigger("bonk");
         state.deformer.startDeform(new Vector3(.25f, 1.1f, 1), 0.1f, .35f, Vector2.right * pc.facing);
         
         state.controller.lockPosition = true;
@@ -50,7 +48,7 @@ public class BonkBehavior : IStateBehavior
         state.controller.lockPosition = false;
         
 
-        if (damage > 0) { resourceManager.Instance.takeDamage(damage); }
+        if (damage > 0) { ResourceManager.Instance.takeDamage(damage); }
 
         state.controller.velocity.y = 4f;
         state.controller.velocity.x = -pc.moveSpeed/4f * pc.facing;

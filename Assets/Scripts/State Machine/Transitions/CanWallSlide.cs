@@ -13,7 +13,7 @@ namespace Transitions {
         }
 
         public override void checkCondition() {
-            float directionX = AtlasInputManager.getAxisState("Dpad").x;
+            float directionX = AtlasInputManager.getAxis("Dpad").getValue().x;
             Vector2 midRay = cc.collisions.getMidPoint() - (Vector2)collider.bounds.center;
             Vector2 footRay = cc.collisions.getFootPoint() - ((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
 
@@ -36,7 +36,7 @@ namespace Transitions {
         }
 
         public override void checkCondition() {
-            float directionX = AtlasInputManager.getAxisState("Dpad").x;
+            float directionX = AtlasInputManager.getAxis("Dpad").getValue().x;
             Vector2 midRay = cc.collisions.getMidPoint() - (Vector2)collider.bounds.center;
             Vector2 footRay = cc.collisions.getFootPoint() - ((Vector2)collider.bounds.min + collider.bounds.extents.x * Vector2.right);
 

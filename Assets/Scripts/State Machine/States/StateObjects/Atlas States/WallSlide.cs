@@ -1,44 +1,45 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Behaviors;
+using Transitions;
 
 namespace States
 {
   public class WallSlide : State {
-    playerController pc;
+    PlayerController pc;
 
     public WallSlide() {
       behaviors = new List<IStateBehavior>() {
-
+        new NovaBehavior().GainSpeed(NovaManager.GainSpeed.SlowMinus),
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanJump<WallJump>(),
-        new Transitions.CanLand(),
-        new Transitions.CanUnwallSlide(),
-        new Transitions.CanBroom(),
+        new CanJump<WallJump>(),
+        new CanLand(),
+        new CanUnwallSlide(),
+        new CanBroom(),
       };
     }
 
     protected override void attachComponents() {
       base.attachComponents();
-      pc = (playerController)stateMachine;
+      pc = (PlayerController)stateMachine;
     }
 
-    public override async Task StartState(StateMachine stateMachine) {
-      await base.StartState(stateMachine);
-      anim.SetBool("wallSlide", true);
+    public override async Task StartState() {
+      await base.StartState();
       spriteController.dustTrail.SetActive(true);
+      PauseTransition<CanUnwallSlide>(0.15f);
     }
 
-    public override async void UpdateState() {
+    public override void UpdateState() {
       base.UpdateState();
       Mathf.Clamp(controller.velocity.y, pc.maxWallSlideVel, Mathf.Infinity);
     }
 
     public override async Task ExitState() {
       await base.ExitState();
-      anim.SetBool("wallSlide", false);
       spriteController.dustTrail.SetActive(false);
     }
   }

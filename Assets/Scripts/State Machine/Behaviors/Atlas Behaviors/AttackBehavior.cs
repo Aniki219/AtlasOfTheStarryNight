@@ -14,7 +14,6 @@ public class AttackBehavior : IStateBehavior
 
     public async override Task StartBehavior() {
         //TODO: See if we can move `selectAttack()` into here
-        state.anim.SetTrigger("SelectAttack");
         state.deformer.RemoveDeform("fastfall");
         if (resetVelocity) state.controller.velocity = Vector3.zero;
         if (!state.controller.isGrounded())
@@ -29,7 +28,6 @@ public class AttackBehavior : IStateBehavior
     }
 
     public async override Task ExitBehavior() {
-        state.anim.SetBool("Attacking", false);
         arialAttacking = false;
         await Task.Yield();
     }

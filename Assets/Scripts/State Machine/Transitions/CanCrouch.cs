@@ -4,17 +4,17 @@ using States;
 
 namespace Transitions {
 public class CanCrouch : IStateTransition {
-    playerController pc;
+    PlayerController pc;
     characterController cc;
 
     public override void attach(State state) {
         base.attach(state);
-        pc = (playerController)state.stateMachine;
+        pc = (PlayerController)state.stateMachine;
         cc = state.controller;    
     }
 
     public override void checkCondition() {
-        if (AtlasInputManager.getAxisState("Dpad").y < 0)
+        if (AtlasInputManager.getAxis("Dpad").getValue().y < 0)
         {
             changeState(new Crouch());
             return;
@@ -43,8 +43,12 @@ public class CanCrouch : IStateTransition {
 public class CanUncrouch : IStateTransition {
     public override void checkCondition()
     {
-        if (AtlasInputManager.getAxisState("Dpad").y >= 0 && state.controller.checkVertDist(0.3f)) {
-            changeState(new Idle());
+        if (AtlasInputManager.getAxis("Dpad").getValue().y >= 0 && state.controller.checkVertDist(0.3f)) {
+            if (AtlasInputManager.getAxis("Dpad").getDirection() == TiltDirection.Neutral) {
+                changeState(new Idle());
+            } else {
+                changeState(new Run());
+            }
         }
     }
 }

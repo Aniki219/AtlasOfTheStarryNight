@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class particleMaker : MonoBehaviour
+public class ParticleMaker : MonoBehaviour
 {
     public void createDust(bool small = false)
     {
@@ -20,5 +20,10 @@ public class particleMaker : MonoBehaviour
     public void createStars(Vector2 location)
     {
         gameManager.createInstance("Effects/StarParticleSpread", location);
+    }
+
+    public void createEffect(string effectName, Vector2 location)
+    {
+        gameManager.createInstance("Effects/"+effectName, location);
     }
 }

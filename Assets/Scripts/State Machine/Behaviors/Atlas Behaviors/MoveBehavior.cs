@@ -13,12 +13,12 @@ public class MoveBehavior : IStateBehavior
 
     float xVelocitySmoothing;
 
-    playerController pc;
+    PlayerController pc;
     characterController cc;
 
     public override void attach(State state) {
         this.state = state;
-        pc = (playerController)state.stateMachine;
+        pc = (PlayerController)state.stateMachine;
         cc = state.controller;
     }
 
@@ -28,13 +28,9 @@ public class MoveBehavior : IStateBehavior
     }
 
     public override void UpdateBehavior() {
-        state.anim.SetBool("isGrounded", cc.isGrounded());
+        float targetVelocityX = AtlasInputManager.getAxis("Dpad").getValue().x * msMod * pc.moveSpeed;
 
-        float targetVelocityX = AtlasInputManager.getAxisState("Dpad").x * msMod * pc.moveSpeed;
-
-        state.anim.SetBool("isRunning", cc.isGrounded() && (targetVelocityX != 0));
-
-        if (canTurnAround) pc.setFacing(targetVelocityX);
+        //if (canTurnAround) pc.setFacing(targetVelocityX);
 
         float smoothTime = 0;
         bool isAccelerating = AtlasHelpers.Sign(cc.velocity.x) == AtlasHelpers.Sign(targetVelocityX) && 

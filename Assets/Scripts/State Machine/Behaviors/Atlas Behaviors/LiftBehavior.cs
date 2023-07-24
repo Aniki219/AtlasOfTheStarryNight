@@ -8,10 +8,10 @@ namespace Behaviors {
 [Serializable]
 public class LiftBehavior : IStateBehavior
 {
-    playerController pc;
+    PlayerController pc;
     Transform obj;
     public async override Task StartBehavior() {
-        pc = (playerController)state.stateMachine;
+        pc = (PlayerController)state.stateMachine;
         obj = pc.liftableObject;
 
         liftController lc = obj.GetComponent<liftController>();
@@ -27,8 +27,6 @@ public class LiftBehavior : IStateBehavior
             lc.startLift(new Vector3(0.4f, 0.4f, 0), new Vector3(0, 0.4f, 0), state.transform, liftTime);
             pc.resetAnimator();
             pc.resetVelocity();
-            state.anim.SetTrigger("Lift");
-            state.anim.SetBool("isHolding", true);
             //pc.freezeForSeconds(liftTime + 0.15f, true);
             await AtlasHelpers.WaitSeconds(liftTime);
             pc.heldObject = obj.transform.parent;

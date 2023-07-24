@@ -8,12 +8,13 @@ namespace States {
       behaviors = new List<IStateBehavior>() {
         new Behaviors.MoveBehavior()
           .CanTurnAround(false)
-          .MoveSpeedMod(0.5f)
+          .MoveSpeedMod(0.5f),
+        new Behaviors.NovaBehavior().GainSpeed(NovaManager.GainSpeed.Hold),
       };
 
       transitions = new List<IStateTransition>() {
         new Transitions.CanAttack(),
-        new Transitions.CanJump<States.GroundJump>().PauseTransition(),
+        new Transitions.CanJump<States.GroundJump>().Pause(),
         new Transitions.CanBroom(),
         new Transitions.CanSlip(),
         new Transitions.CanSlide().SkipWaitForExit(),
@@ -22,16 +23,15 @@ namespace States {
       };
     }
 
-    playerController pc;
+    PlayerController pc;
     Vector3 colliderStartSize;
     Vector3 colliderStartOffset;
 
-    public override async Task StartState(StateMachine stateMachine)
+    public override async Task StartState()
     {
-      await base.StartState(stateMachine);
-      pc = (playerController)stateMachine;
+      await base.StartState();
+      pc = (PlayerController)stateMachine;
       colliderManager.setActiveCollider("Crouching");
-      anim.SetBool("isCrouching", true);
 
       //TODO I think we need to fix the animator for this to work
       //alwaysUpdate = true;
@@ -58,14 +58,14 @@ namespace States {
 
     public override async Task ExitState()
     {
-      await base.ExitState();
-      anim.SetBool("isCrouching", false);
       anim.SetFloat("animDir", 1f);
       UnpauseTransition<Transitions.CanJump<States.GroundJump>>(); //cant becaue transitions go on Update phase
       colliderManager.setActiveCollider("Standing");
       
       GetBehavior<Behaviors.MoveBehavior>().MoveSpeedMod(1.0f);
-      await AnimMapper.awaitClip<States.Crouch>(AnimMapper.ClipType.ExitClip);
+      SetAnimation(StateMachine.Phase.Exit);
+      await AtlasHelpers.WaitSeconds(AtlasHelpers.FindAnimation(anim, "CrouchExit").length);
+      await base.ExitState();
     }
   }
 }

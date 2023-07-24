@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class HitBox3DController : MonoBehaviour
 {
-    playerController pc;
+    PlayerController pc;
     private void Start()
     {
-        pc = transform.parent.GetComponent<playerController>();
+        pc = transform.parent.GetComponent<PlayerController>();
     }
     private void OnTriggerEnter(Collider other)
     {

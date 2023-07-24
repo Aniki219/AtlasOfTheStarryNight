@@ -46,7 +46,7 @@ public class equipmentPanelController : MonoBehaviour
 
     void Update()
     {
-        Vector2 input = AtlasInputManager.getAxisState("Dpad");
+        Vector2 input = AtlasInputManager.getAxis("Dpad").getValue();
         int index = -1;
         if (input.x == 0 && input.y == 0)
         {
