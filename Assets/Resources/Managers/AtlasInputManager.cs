@@ -188,7 +188,6 @@ public class AxisState
     public string axisName;
     private Vector2 value;
     public float startTime;
-    public TiltDirection direction;
 
     public AxisState(string axisName)
     {
@@ -201,10 +200,22 @@ public class AxisState
         return (Time.time - startTime <= 0);
     }
 
-    public TiltDirection getDirection() {
-        if (value.x == 0) return TiltDirection.Neutral;
-        if (AtlasHelpers.SameSign(gameManager.Instance.playerCtrl.facing, value.x)) return TiltDirection.Forward;
-        return TiltDirection.Backward;
+    public TiltInfo getDirection() {
+        TiltDirection x = TiltDirection.Neutral;
+        TiltDirection y = TiltDirection.Neutral;
+
+        if (value.x != 0) {
+            if (AtlasHelpers.SameSign(gameManager.Instance.playerCtrl.facing, value.x)) {
+                x = TiltDirection.Forward;
+            } else {
+                x = TiltDirection.Backward;
+            }
+        }
+
+        if (value.y > 0) y = TiltDirection.Up;
+        if (value.y < 0) y = TiltDirection.Down;
+
+        return new TiltInfo(x, y);
     }
 
     public int getSignX() {
@@ -234,4 +245,14 @@ public enum TiltDirection {
     Backward,
     Up,
     Down
+}
+
+public struct TiltInfo {
+    public TiltDirection x;
+    public TiltDirection y;
+
+    public TiltInfo(TiltDirection _x, TiltDirection _y) {
+        x = _x;
+        y = _y;
+    }
 }

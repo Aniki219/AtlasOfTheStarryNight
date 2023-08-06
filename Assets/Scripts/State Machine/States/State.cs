@@ -41,7 +41,7 @@ public abstract class State
         behaviors.Where(b => !b.paused)
             .ToList()
             .ForEach(b => b.UpdateBehavior());
-        transitions.Where(t => !t.paused)
+        transitions.Where(t => t.canTransition())
             .ToList()
             .ForEach(t => t.checkCondition());
     }
@@ -131,7 +131,7 @@ public abstract class State
             Mathf.Max(FindStatePhaseClip(phase).length - stateTime(), 0)
         );
         } catch(Exception e) {
-            Debug.Log(GetType().Name + phase.ToString());
+            Debug.Log(GetType().Name + phase.ToString() + e);
         }
     }
 
@@ -169,6 +169,8 @@ public abstract class State
         transitions.Remove(GetTransition<T>());
         return this;
     }
+
+    public virtual void OnAnimationEnd() {}
 
 #region Components
     public Animator anim;

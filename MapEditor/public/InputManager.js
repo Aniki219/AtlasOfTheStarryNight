@@ -80,7 +80,11 @@ class ButtonState {
   }
 
   pressed() {
-    return frameCount - this.time == 1;
+    return frameCount - this.time == 1 && this.state;
+  }
+
+  released() {
+    return frameCount - this.time == 1 && !this.state;
   }
 }
 

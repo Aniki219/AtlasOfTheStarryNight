@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: StandingAttack3
+  m_Name: Jab3
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -112,27 +112,6 @@ AnimationClip:
     data: 
     objectReferenceParameter: {fileID: 11400000, guid: 240dec3922890904eaf3c22c7e0d6973,
       type: 2}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.28333333
-    functionName: takeStep
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0.25
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.68333334
-    functionName: takeStep
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
-  - time: 0.73333335
-    functionName: returnToMovement
-    data: 
-    objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0

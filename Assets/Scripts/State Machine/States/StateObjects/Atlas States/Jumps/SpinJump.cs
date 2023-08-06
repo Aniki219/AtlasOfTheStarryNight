@@ -32,8 +32,8 @@ namespace States {
     {
       pc = (PlayerController)stateMachine;
       float jumpDistance = 6;
-      if (AtlasInputManager.getAxis("Dpad").getDirection() != TiltDirection.Neutral) {
-        jumpDistance += AtlasInputManager.getAxis("Dpad").getDirection() == TiltDirection.Forward ? 2 : -2;
+      if (AtlasInputManager.getAxis("Dpad").getDirection().x != TiltDirection.Neutral) {
+        jumpDistance += AtlasInputManager.getAxis("Dpad").getDirection().x == TiltDirection.Forward ? 2 : -2;
       }
       return jumpDistance;
     }

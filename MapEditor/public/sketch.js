@@ -1,6 +1,10 @@
 const $ = require('jquery');
 const fs = require('fs');
+const {openTiledMap} = require(`${__dirname}/../scripts.js`)
 
+var startTime;
+var currentTime;
+var Time = new Date();
 var zooming = false;
 var val;
 var dataObj;
@@ -10,20 +14,30 @@ var settings = {
 }
 
 function setup() {
+  $('body').on("mousedown", e => e.preventDefault());
+  // openTiledMap("fakeFile");
   LIGHTBLUE = color(180, 180, 250);
   GREY = color(80, 80, 80);
   WHITE = color(255, 255, 255);
   getDataObj();
   getSceneNames();
 
-  let cnv = createCanvas(950, 750);
+  let cnv = createCanvas(windowWidth, windowHeight);
   cnv.parent("canvas")
   cnv.mouseOut(() => mouse.in = false);
   cnv.mouseOver(() => mouse.in = true);
 
   createSceneTiles();
+  sortTiles();
 
   textAlign(CENTER, CENTER);
+
+  startTime = Time.getTime();
+  currentTime = Time.getTime();
+}
+
+function windowResized() {
+  resizeCanvas(windowWidth, windowHeight);
 }
 
 var screenshots;
@@ -43,23 +57,26 @@ function getImage(filename) {
 }
 
 function draw() {
+  Time = new Date();
+  currentTime = Time.getTime() - startTime;
   push()
   scale(settings.scale.x, settings.scale.y);
   translate(settings.translate.x, settings.translate.y);
-    background(40);
+    background(15,20,30);
     inputUpdate();
     cameraUpdate();
-    grid.update();
-    setTileCoords();
     drawTiles();
+    grid.update();
+    drawTiles(true);
     warnOverlapTiles();
+    grid.drawStretchLines();
   pop();
 
   if (getKeyCode(CONTROL) && getKeyDown("S")) {
     saveData();
     console.log("Saved!");
   }
-    zooming = false;
+  zooming = false;
 }
 
 function cameraUpdate() {
@@ -71,11 +88,15 @@ function cameraUpdate() {
     settings.translate.x += d.x;
     settings.translate.y += d.y;
     camera.dragStart = createVector(mouse.ax - d.x, mouse.ay - d.y);
+    cursor(HAND);
+  } else {
+    cursor(ARROW);
   }
 }
-
+//${__dirname}/../../Assets/StreamingAssets/TiledMapFiles/snowyMountains.tmx
 function getDataObj() {
-  let rawdata = fs.readFileSync(`${__dirname}/../data/test.json`);
+  //let rawdata = fs.readFileSync(`${__dirname}/../data/test.json`);
+  let rawdata = fs.readFileSync(`${__dirname}/../../Assets/StreamingAssets/WorldMapData.json`);
   dataObj = {};
   dataObj = JSON.parse(rawdata);
   if (!dataObj.hasOwnProperty("scenes")) {
@@ -112,11 +133,11 @@ function getSceneNames() {
 }
 
 function saveData() {
-  for (let t of tiles) {
-    let {scene, x, y, w, h, coords} = t;
-    let position = {x, y};
-    let size = {x: w, y: h};
-    let sceneObj = dataObj.scenes.find(s => s.scene == scene);
+  for (let tile of tiles) {
+    let position = {x: tile.x, y: tile.y};
+    let size = {x: tile.w, y: tile.h};
+    let coords = tile.getCoords();
+    let sceneObj = dataObj.scenes.find(s => s.scene == tile.scene);
     if (sceneObj) {
       Object.assign(sceneObj, {scene, position, size, coords});
     }

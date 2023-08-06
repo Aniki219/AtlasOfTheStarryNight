@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: JumpAttack
+  m_Name: DownAir
   serializedVersion: 6
   m_Legacy: 0
   m_Compressed: 0
@@ -20,19 +20,19 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 7737523285659061912, guid: 0a7f762b7f050eb438e23d14358c6ed5,
+      value: {fileID: -8653385520238438876, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
     - time: 0.083333336
-      value: {fileID: 7926440152911786555, guid: 0a7f762b7f050eb438e23d14358c6ed5,
+      value: {fileID: -697086912063529615, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
-    - time: 0.2
-      value: {fileID: -5518497384438722835, guid: 0a7f762b7f050eb438e23d14358c6ed5,
+    - time: 0.16666667
+      value: {fileID: 7385060343856977996, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
-    - time: 0.3
-      value: {fileID: 7334009453381783980, guid: 0a7f762b7f050eb438e23d14358c6ed5,
+    - time: 0.25
+      value: {fileID: 5456291557061139598, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
     - time: 0.41666666
-      value: {fileID: 7334009453381783980, guid: 0a7f762b7f050eb438e23d14358c6ed5,
+      value: {fileID: 5456291557061139598, guid: 838f01e801b95844c865f2c279583b32,
         type: 3}
     attribute: m_Sprite
     path: 
@@ -53,11 +53,11 @@ AnimationClip:
       customType: 23
       isPPtrCurve: 1
     pptrCurveMapping:
-    - {fileID: 7737523285659061912, guid: 0a7f762b7f050eb438e23d14358c6ed5, type: 3}
-    - {fileID: 7926440152911786555, guid: 0a7f762b7f050eb438e23d14358c6ed5, type: 3}
-    - {fileID: -5518497384438722835, guid: 0a7f762b7f050eb438e23d14358c6ed5, type: 3}
-    - {fileID: 7334009453381783980, guid: 0a7f762b7f050eb438e23d14358c6ed5, type: 3}
-    - {fileID: 7334009453381783980, guid: 0a7f762b7f050eb438e23d14358c6ed5, type: 3}
+    - {fileID: -8653385520238438876, guid: 838f01e801b95844c865f2c279583b32, type: 3}
+    - {fileID: -697086912063529615, guid: 838f01e801b95844c865f2c279583b32, type: 3}
+    - {fileID: 7385060343856977996, guid: 838f01e801b95844c865f2c279583b32, type: 3}
+    - {fileID: 5456291557061139598, guid: 838f01e801b95844c865f2c279583b32, type: 3}
+    - {fileID: 5456291557061139598, guid: 838f01e801b95844c865f2c279583b32, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -83,10 +83,10 @@ AnimationClip:
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
   m_Events:
-  - time: 0.083333336
+  - time: 0
     functionName: createHitbox
     data: 
-    objectReferenceParameter: {fileID: 11400000, guid: 8ab429609219a414bbff5df3cb1fef7c,
+    objectReferenceParameter: {fileID: 11400000, guid: 48b513f552eb18444b54703d59546354,
       type: 2}
     floatParameter: 0
     intParameter: 0

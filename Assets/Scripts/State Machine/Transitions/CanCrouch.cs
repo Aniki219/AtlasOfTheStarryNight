@@ -43,13 +43,17 @@ public class CanCrouch : IStateTransition {
 public class CanUncrouch : IStateTransition {
     public override void checkCondition()
     {
-        if (AtlasInputManager.getAxis("Dpad").getValue().y >= 0 && state.controller.checkVertDist(0.3f)) {
-            if (AtlasInputManager.getAxis("Dpad").getDirection() == TiltDirection.Neutral) {
+        if (IsAllowed(state)) {
+            if (AtlasInputManager.getAxis("Dpad").getDirection().x == TiltDirection.Neutral) {
                 changeState(new Idle());
             } else {
                 changeState(new Run());
             }
         }
+    }
+
+    public static bool IsAllowed(State state) {
+        return AtlasInputManager.getAxis("Dpad").getValue().y >= 0 && state.controller.checkVertDist(0.3f);
     }
 }
 }

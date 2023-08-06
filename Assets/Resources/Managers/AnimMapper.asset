@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   stateAnims:
   - state:
-      _classRef: States.AirialAttacks.RisingFair, Assembly-CSharp
+      _classRef: States.AerialAttacks.RisingFair, Assembly-CSharp
     startAnim: {fileID: 0}
     updateAnim: {fileID: 0}
     exitAnim: {fileID: 0}
   - state:
-      _classRef: States.AirialAttacks.FallingFair, Assembly-CSharp
+      _classRef: States.AerialAttacks.FallingFair, Assembly-CSharp
     startAnim: {fileID: 0}
     updateAnim: {fileID: 0}
     exitAnim: {fileID: 0}

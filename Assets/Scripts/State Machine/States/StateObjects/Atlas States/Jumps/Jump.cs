@@ -28,7 +28,7 @@ namespace States {
         new MoveBehavior(),
         new JumpBehavior()
           .VariableJump()
-          .JumpHeight(3.5f)
+          .JumpHeight(4f)
       };
 
       transitions = getJumpTransitions();

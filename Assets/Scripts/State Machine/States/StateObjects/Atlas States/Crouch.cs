@@ -13,7 +13,7 @@ namespace States {
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanAttack(),
+        new Transitions.CanAttack<States.Attacks.DownTilt>().SkipWaitForExit(),
         new Transitions.CanJump<States.GroundJump>().Pause(),
         new Transitions.CanBroom(),
         new Transitions.CanSlip(),
@@ -64,7 +64,9 @@ namespace States {
       
       GetBehavior<Behaviors.MoveBehavior>().MoveSpeedMod(1.0f);
       SetAnimation(StateMachine.Phase.Exit);
-      await AtlasHelpers.WaitSeconds(AtlasHelpers.FindAnimation(anim, "CrouchExit").length);
+      if (controller.isGrounded()) {
+        await AtlasHelpers.WaitSeconds(AtlasHelpers.FindAnimation(anim, "CrouchExit").length);
+      }
       await base.ExitState();
     }
   }

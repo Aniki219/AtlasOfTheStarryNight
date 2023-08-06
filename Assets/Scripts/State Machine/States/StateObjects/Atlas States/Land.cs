@@ -14,16 +14,16 @@ namespace States {
     }
   }
 
-  public class AttackLand : State {
+  public class AttackLand : Land {
     public AttackLand() {
       AnimationClip attackLandClip = AnimMapper.getClip<States.AttackLand>();
       
       behaviors = new List<IStateBehavior>() {
-        new Behaviors.LandBehavior(attackLandClip.length),
+        new Behaviors.LandBehavior(attackLandClip.length-0.1f),
       };
 
       transitions = new List<IStateTransition>() {
-
+        new Transitions.CanSlip(),
       };
     }
   }

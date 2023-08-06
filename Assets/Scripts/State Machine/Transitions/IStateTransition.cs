@@ -5,6 +5,7 @@ public abstract class IStateTransition {
     protected State state;
     public bool paused {get; protected set;} = false;
     public bool skipWaitForExit {get; protected set;} = false;
+    public float transitionTime {get; protected set;}
 
     public virtual void attach(State state) {
         this.state = state;
@@ -14,7 +15,7 @@ public abstract class IStateTransition {
         state.stateMachine.changeState(newState, skipWaitForExit);
     }
 
-    public abstract void checkCondition();
+    public virtual void checkCondition() {}
 
 
 
@@ -30,6 +31,15 @@ public abstract class IStateTransition {
 
     public void Unpause() {
         paused = false;
+    }
+
+    public bool canTransition() {
+        return !paused && (transitionTime < state.stateTime());
+    }
+
+    public IStateTransition TransitionTime(float time) {
+        transitionTime = time;
+        return this;
     }
 
     public State getNewState<T>() where T : State {
