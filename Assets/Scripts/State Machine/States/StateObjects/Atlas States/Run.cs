@@ -11,11 +11,11 @@ namespace States {
           new CanBroom(),
           new CanJump<States.GroundJump>(),
           new CanSlip(),
-          new CanFall(),
           new CanLift(),
           new CanCrouch(),
           new RunIdle(),
           new CanTurnAround(),
+          new CanFall(),
       };
 
     public Idle() {

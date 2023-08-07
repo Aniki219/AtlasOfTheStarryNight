@@ -24,6 +24,13 @@ class Tile {
     this.drag();
     this.stretch();
     this.draw();
+    this.openInTiled();
+  }
+
+  openInTiled() {
+    if (checkHover(this) && getKeyDown("T")) {
+      openTiledMap(this.scene);
+    }
   }
 
   setVerticies() {

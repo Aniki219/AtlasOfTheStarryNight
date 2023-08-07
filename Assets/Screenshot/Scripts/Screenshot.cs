@@ -18,7 +18,7 @@ public class Screenshot : MonoBehaviour {
 
     public void TakeScreenshot() {
         string dir = "Assets/../MapEditor/screenshots/";
-        string filename = AtlasSceneManager.getScene().scene + ".png";
+        string filename = AtlasSceneManager.getMap().fileName + ".png";
         string path = dir + filename;
 
         Camera cam = GetComponent<Camera>();

@@ -15,7 +15,7 @@ public class MapEditor : Editor
     [MenuItem("MapEditor/Display Neighbors")]
     public static void displayNeighbors()
     {
-        AtlasSceneManager.getSceneData();
+        AtlasSceneManager.getWorldMapData();
         AtlasSceneManager.getNeighbors();
         loadScene();
         displayingNeighbors = true;
@@ -45,19 +45,19 @@ public class MapEditor : Editor
 
     static void loadScene()
     {
-        List<AtlasScene> neighbors = AtlasSceneManager.getNeighbors();
-        AtlasScene currentScene = AtlasSceneManager.getScene();
+        List<AtlasMap> neighbors = AtlasSceneManager.getNeighbors();
+        AtlasMap currentScene = AtlasSceneManager.getMap();
 
         Debug.LogWarning("Scene loaded with " + neighbors.Count + " nieghbors");
 
-        foreach (AtlasScene n in neighbors)
+        foreach (AtlasMap n in neighbors)
         {
-            if (n.scene != "null")
+            if (n.fileName != "null")
             {
-                EditorSceneManager.OpenScene("Assets/Scenes/WorldMap/" + n.scene + ".unity", OpenSceneMode.Additive);
-                Vector2 d = (n.size + currentScene.size)*0.5f;
+                EditorSceneManager.OpenScene("Assets/Scenes/WorldMap/" + n.fileName + ".unity", OpenSceneMode.Additive);
+                Vector2 d = (n.getSize() + currentScene.getSize())*0.5f;
                 Vector2 t = (n.getCenter() - currentScene.getCenter());
-                shiftScene(n.scene, t.x, -t.y);
+                shiftScene(n.fileName, t.x, -t.y);
             }
         }
     }

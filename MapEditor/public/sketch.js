@@ -133,11 +133,11 @@ function getSceneNames() {
 }
 
 function saveData() {
-  for (let tile of tiles) {
-    let position = {x: tile.x, y: tile.y};
-    let size = {x: tile.w, y: tile.h};
-    let coords = tile.getCoords();
-    let sceneObj = dataObj.scenes.find(s => s.scene == tile.scene);
+  for (let t of tiles) {
+    let {scene, x, y, w, h, coords} = t;
+    let position = {x, y};
+    let size = {x: w, y: h};
+    let sceneObj = dataObj.scenes.find(s => s.scene == scene);
     if (sceneObj) {
       Object.assign(sceneObj, {scene, position, size, coords});
     }

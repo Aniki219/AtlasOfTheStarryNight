@@ -1,0 +1,27 @@
+{
+    "maps": [
+        {
+            "fileName": "../../SuperTiled2Unity/TiledMaps/tiledTestMap.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 0,
+            "y": 0
+        },
+        {
+            "fileName": "../../SuperTiled2Unity/TiledMaps/uptesty.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -512,
+            "y": -288
+        },
+        {
+            "fileName": "../../SuperTiled2Unity/TiledMaps/testy.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -512,
+            "y": 0
+        }
+    ],
+    "onlyShowAdjacentMaps": false,
+    "type": "world"
+}

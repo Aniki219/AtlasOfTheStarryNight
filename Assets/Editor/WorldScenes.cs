@@ -18,7 +18,7 @@ public class WorldScenes : EditorWindow
     [MenuItem("MapEditor/Update Scene Data")]
     public static void updateSceneData()
     {
-        AtlasSceneManager.getSceneData();
+        AtlasSceneManager.getWorldMapData();
     }
 
     void OnGUI()
@@ -55,7 +55,7 @@ public class WorldScenes : EditorWindow
         }
         if (GUILayout.Button("Update Scene Data"))
         {
-            AtlasSceneManager.getSceneData();
+            AtlasSceneManager.getWorldMapData();
         }
         if (GUILayout.Button("Toggle Neighbors"))
         {

@@ -5,10 +5,11 @@ const child_process = require('child_process');
 // as well as exit code when it's done (using the callback).
 module.exports = {
   openTiledMap: (filename) => {
-    let command = `start ${__dirname}/../Assets/StreamingAssets/TiledMapFiles/${filename}.tmx`
+    let command = `start ${__dirname}/../Assets/SuperTiled2Unity/TiledMaps/${filename}.tmx`
     child_process.spawn(command, [], {
       encoding: 'utf8',
       shell: true
     });
   }
 }
+

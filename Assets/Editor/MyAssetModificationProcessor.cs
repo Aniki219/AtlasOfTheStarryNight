@@ -44,8 +44,8 @@ public class MyAssetModificationProcessor : UnityEditor.AssetModificationProcess
                     if (offset.x == 0 && offset.y == 0) continue;
 
                     Vector2 normOffset = new Vector2(
-                        offset.x / AtlasSceneManager.SCREEN_WIDTH,
-                        offset.y / AtlasSceneManager.SCREEN_HEIGHT);
+                        offset.x / AtlasSceneManager.SCREEN_TILES_WIDTH,
+                        offset.y / AtlasSceneManager.SCREEN_TILES_HEIGHT);
 
                     MapEditor.shiftScene(sceneName, -normOffset.x, -normOffset.y);
                 }

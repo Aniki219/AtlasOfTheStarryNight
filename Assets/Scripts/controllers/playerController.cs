@@ -164,7 +164,9 @@ public class PlayerController : StateMachine
         doubleJumpVelocity = Mathf.Abs(djgravity) * timeToDoubleJumpApex;
         setLastSafePosition();
         warpToCurrentDoor();
+    }
 
+    public void Awake(){
         if (created) Destroy(gameObject);
         created = true;
 
