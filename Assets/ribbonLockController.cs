@@ -10,7 +10,7 @@ public class ribbonLockController : MonoBehaviour
     void Start()
     {
         anim = GetComponent<Animator>();
-        healthController hc = GetComponentInParent<healthController>();
+        HealthController hc = GetComponentInParent<HealthController>();
         if (hc) hc.takeNoDamage = true;
         AtlasEventManager.Instance.onPlayerLand += OnLanding;
     }
@@ -37,7 +37,7 @@ public class ribbonLockController : MonoBehaviour
 
     public void selfDestruct()
     {
-        healthController hc = GetComponentInParent<healthController>();
+        HealthController hc = GetComponentInParent<HealthController>();
         if (hc) hc.takeNoDamage = false;
         Destroy(gameObject);
     }

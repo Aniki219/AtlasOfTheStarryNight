@@ -44,7 +44,7 @@ namespace States {
     public async override Task ExitState()
     {
       colliderManager.setActiveCollider("Standing");
-      controller.setXVelocity(Mathf.Clamp(controller.velocity.x, -6, 6), characterController.VelocityType.Absolute);
+      controller.setXVelocity(Mathf.Clamp(controller.velocity.x, -6, 6), CharacterController.VelocityType.Absolute);
 
       await base.ExitState();
       await Task.Yield();

@@ -6,8 +6,8 @@ namespace Transitions {
     public class CanJump<T> : IStateTransition where T : States.Jump {
         PlayerController pc;
 
-        public override void attach(State state) {
-            base.attach(state);
+        public override void Attach(State state) {
+            base.Attach(state);
             pc = (PlayerController)state.stateMachine;    
         }
 

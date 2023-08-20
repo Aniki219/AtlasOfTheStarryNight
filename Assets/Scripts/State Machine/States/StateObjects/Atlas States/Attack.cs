@@ -31,7 +31,7 @@ namespace States {
     public override void UpdateState()
     {
       base.UpdateState();
-      if (stateTime() >= clipLength) OnAnimationEnd();
+      if (StateTime() >= clipLength) OnAnimationEnd();
     }
 
     public override void OnAnimationEnd() {
@@ -72,7 +72,7 @@ namespace States {
     public override void UpdateState()
     {
       base.UpdateState();
-      if (stateTime() > 0.2f) {
+      if (StateTime() > 0.2f) {
         PauseTransition<CanLand<AttackLand>>();
       }
     }

@@ -7,9 +7,9 @@ public class chargerChargeController : StateMachineBehaviour
     //OnStateEnter is called when a transition starts and the state machine starts to evaluate this state
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
     {
-        Transform charger = animator.transform.parent;
-        chargerController cc = charger.GetComponent<chargerController>();
-        cc.StartCharge();
+        // Transform charger = animator.transform.parent;
+        // chargerController cc = charger.GetComponent<chargerController>();
+        // cc.StartCharge();
     }
 
     // OnStateUpdate is called on each Update frame between OnStateEnter and OnStateExit callbacks

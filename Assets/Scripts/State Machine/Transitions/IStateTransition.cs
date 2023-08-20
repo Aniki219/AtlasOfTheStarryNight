@@ -7,7 +7,7 @@ public abstract class IStateTransition {
     public bool skipWaitForExit {get; protected set;} = false;
     public float transitionTime {get; protected set;}
 
-    public virtual void attach(State state) {
+    public virtual void Attach(State state) {
         this.state = state;
     }
 
@@ -15,9 +15,11 @@ public abstract class IStateTransition {
         state.stateMachine.changeState(newState, skipWaitForExit);
     }
 
+    public virtual void changeState<T>() where T : State {
+        state.stateMachine.changeState(getNewState<T>(), skipWaitForExit);
+    }
+
     public virtual void checkCondition() {}
-
-
 
     public IStateTransition SkipWaitForExit() {
         skipWaitForExit = true;
@@ -34,7 +36,7 @@ public abstract class IStateTransition {
     }
 
     public bool canTransition() {
-        return !paused && (transitionTime < state.stateTime());
+        return !paused && (transitionTime < state.StateTime());
     }
 
     public IStateTransition TransitionTime(float time) {

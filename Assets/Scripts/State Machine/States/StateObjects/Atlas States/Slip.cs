@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 
 namespace States {
-  public class Slip : State {
+  public class Slip : AtlasState {
     public Slip() {
       behaviors = new List<IStateBehavior>() {
         new Behaviors.SlipBehavior(),

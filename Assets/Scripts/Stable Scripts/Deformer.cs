@@ -106,9 +106,9 @@ public class Deformer : MonoBehaviour
 
     public void setFacing(float vel)
     {
-        //During Movement we can keep track of the direction the player is facing each frame
-        if (Mathf.Approximately(vel, 0)) return;
-        transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * facing, transform.localScale.y, transform.localScale.z);
+        // //During Movement we can keep track of the direction the player is facing each frame
+        // if (Mathf.Approximately(vel, 0)) return;
+        // transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * facing, transform.localScale.y, transform.localScale.z);
     }
 
     public int getFacing() {

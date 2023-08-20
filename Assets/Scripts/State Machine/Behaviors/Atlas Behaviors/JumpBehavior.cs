@@ -21,7 +21,7 @@ public class JumpBehavior : IStateBehavior
     protected bool variableJump;
 
     protected PlayerController pc;
-    protected characterController cc;
+    protected CharacterController cc;
 
     public enum LockoutType {
         None,

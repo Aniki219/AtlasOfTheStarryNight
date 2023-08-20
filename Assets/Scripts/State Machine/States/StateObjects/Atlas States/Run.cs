@@ -9,7 +9,7 @@ namespace States {
       new List<IStateTransition>() {
           new CanAttack(),
           new CanBroom(),
-          new CanJump<States.GroundJump>(),
+          new CanJump<GroundJump>(),
           new CanSlip(),
           new CanLift(),
           new CanCrouch(),

@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class IncendiaryParticleController : MonoBehaviour
 {
-    healthController hc;
+    HealthController hc;
     public float duration = 2f;
     public float dps = 0.5f;
 
     // Start is called before the first frame update
     void Start()
     {
-        hc = GetComponentInParent<healthController>();
+        hc = GetComponentInParent<HealthController>();
         Destroy(gameObject, duration);
     }
 

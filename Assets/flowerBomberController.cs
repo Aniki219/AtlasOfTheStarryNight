@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class flowerBomberController : MonoBehaviour
 {
-    characterController cc;
-    healthController hc;
+    CharacterController cc;
+    HealthController hc;
     Animator anim;
     Deformer deformer;
 
@@ -20,8 +20,8 @@ public class flowerBomberController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cc = GetComponent<characterController>();
-        hc = GetComponent<healthController>();
+        cc = GetComponent<CharacterController>();
+        hc = GetComponent<HealthController>();
         anim = GetComponentInChildren<Animator>();
         deformer = GetComponentInChildren<Deformer>();
 

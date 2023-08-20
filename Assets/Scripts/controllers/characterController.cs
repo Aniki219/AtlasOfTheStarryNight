@@ -6,8 +6,7 @@ using UnityEngine.Events;
 using System.Collections.Generic;
 using System.Linq;
 
-[RequireComponent(typeof(ColliderManager), typeof(StateMachine))]
-public class characterController : MonoBehaviour
+public class CharacterController : MonoBehaviour
 {
     #region Defs
     [Foldout("Debug", true)] public bool debug = false;
@@ -57,7 +56,7 @@ public class characterController : MonoBehaviour
 
     [Foldout("Gravity")] public float maxSlope = 0.5f;
 
-    StateMachine stateMachine;
+    EntityStateMachine stateMachine;
     ColliderManager colliderManager;
     BoundaryPoints boundaryPoints;
 
@@ -79,7 +78,7 @@ public class characterController : MonoBehaviour
     {
         gravity = gameManager.Instance.gravity;
         colliderManager = GetComponent<ColliderManager>();
-        stateMachine = GetComponent<StateMachine>();
+        stateMachine = GetComponent<EntityStateMachine>();
         collisions.Init();
     }
 

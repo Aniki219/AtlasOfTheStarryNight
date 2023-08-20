@@ -79,7 +79,7 @@ public class gameManager : ScriptableObject
         {
             instance.player.transform.position = new Vector3(playerStartX, playerStartY, 0);
             Physics2D.SyncTransforms();
-            instance.player.GetComponent<characterController>().collisions.setCollidable(true);
+            instance.player.GetComponent<CharacterController>().collisions.setCollidable(true);
             PlayerController.State playerState = playerCtrl.depState;
             if (instance.playerCtrl.depState == PlayerController.State.Wait)
             {

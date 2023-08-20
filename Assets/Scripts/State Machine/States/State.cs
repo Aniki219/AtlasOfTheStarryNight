@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 [Serializable]
 public abstract class State
 {
-    public StateMachine stateMachine;
+    //TODO: We need to make EntityState class
+    public EntityStateMachine stateMachine;
     public Transform transform;
     
     public List<IStateBehavior> behaviors {get; protected set;} = new List<IStateBehavior>();
@@ -23,7 +24,8 @@ public abstract class State
     public float stateStartTime {get; private set;}
 
     public virtual void Attach(StateMachine stateMachine) {
-        this.stateMachine = stateMachine;
+        //TODO EntityState
+        this.stateMachine = (EntityStateMachine)stateMachine;
         attachComponents();
     }
 
@@ -128,34 +130,36 @@ public abstract class State
     public async Task WaitForPhaseAnimation(StateMachine.Phase phase) {
         try {
         await AtlasHelpers.WaitSeconds(
-            Mathf.Max(FindStatePhaseClip(phase).length - stateTime(), 0)
+            Mathf.Max(FindStatePhaseClip(phase).length - StateTime(), 0)
         );
         } catch(Exception e) {
             Debug.Log(GetType().Name + phase.ToString() + e);
         }
     }
 
-    public float stateTime() {
+    public float StateTime() {
         return Time.time - stateStartTime;
     }
 
     public void SetAnimation(StateMachine.Phase phase = StateMachine.Phase.Start) {
-        if (!anim) return;
+        if (!anim) {Debug.Log(stateMachine.transform.name + " has no animator"); return;}
         int stateHash = FindStatePhaseHash(phase);
         if (stateHash != -1) anim.Play(stateHash);
     }
 
     public AnimationClip FindStatePhaseClip(StateMachine.Phase phase, bool canCheckGenericName = true) {
-        string stateName = GetType().Name;
+        string stateName = stateMachine.animClipPrefix + GetType().Name;
         string phaseName = phase.Equals(StateMachine.Phase.Update) ? "" : phase.ToString();
+
         AnimationClip clip = AtlasHelpers.FindAnimation(anim, stateName + phaseName);
         if (clip == null && canCheckGenericName) clip = AtlasHelpers.FindAnimation(anim, stateName);
         return clip;
     }
 
     public int FindStatePhaseHash(StateMachine.Phase phase, bool canCheckGenericName = true) {
-        string stateName = GetType().Name;
+        string stateName = stateMachine.animClipPrefix + GetType().Name;
         string phaseName = phase.Equals(StateMachine.Phase.Update) ? "" : phase.ToString();
+
         if (anim.HasState(0, Animator.StringToHash(stateName + phaseName))) {
             return Animator.StringToHash(stateName + phaseName);
         }
@@ -178,24 +182,71 @@ public abstract class State
     public Transform sprite;
     public ColliderManager colliderManager;
     public ParticleMaker particleMaker;
-    public characterController controller;
-    public atlasSpriteController spriteController;
-    public BroomEffectsController broomEffectsController;
+    public CharacterController controller;
 
     protected virtual void attachComponents() {
         transform = stateMachine.GetComponent<Transform>();
-        controller = stateMachine.GetComponent<characterController>();
+        controller = stateMachine.GetComponent<CharacterController>();
         colliderManager = stateMachine.GetComponent<ColliderManager>();
         particleMaker = stateMachine.GetComponentInChildren<ParticleMaker>();
-        broomEffectsController = stateMachine.GetComponentInChildren<BroomEffectsController>();
-        
+                
         anim = stateMachine.GetComponentInChildren<Animator>();
         sprite = anim.transform;
-        spriteController = stateMachine.GetComponentInChildren<atlasSpriteController>();
         deformer = stateMachine.GetComponentInChildren<Deformer>();
 
         behaviors.ForEach(b => b.attach(this));
-        transitions.ForEach(t => t.attach(this));
+        transitions.ForEach(t => t.Attach(this));
     }
 #endregion
+
+    public class TPManager
+    {
+        private readonly List<TransitionProbability> transitionProbabilities;
+        private readonly State state;
+        
+        public TPManager(State _state, params TransitionProbability[] tps) {
+            state = _state;
+            transitionProbabilities = tps.ToList();
+            state.transitions.AddRange(tps.Select(tp => tp.transition));
+
+            pauseTransitions();
+
+            float totalAssignedProbability = transitionProbabilities.Aggregate(0f, (total, t) => total + t.probability);
+            if (totalAssignedProbability > 1.0f) throw new Exception(state.GetType() + " transition probabilities exceed 1.0");
+            List<TransitionProbability> unassignedProbabilities = transitionProbabilities.Where(tp => tp.probability == 0).ToList();
+            
+            if (unassignedProbabilities.Count() > 0) {
+                float defaultProbability = 1.0f - totalAssignedProbability / unassignedProbabilities.Count();
+                unassignedProbabilities.Select(tp => tp.probability = defaultProbability);
+            }
+        }
+
+        public class TransitionProbability {
+            public IStateTransition transition;
+            public float probability;
+
+            public TransitionProbability(IStateTransition _transition, float _probability = 0) {
+                transition = _transition;
+                probability = _probability;
+            }
+        }
+
+        public void Update() {
+            float r = UnityEngine.Random.value;
+
+            pauseTransitions();
+            float total = 0;
+            foreach (TransitionProbability tp in transitionProbabilities) {
+                if (tp.probability + total > r) {
+                    tp.transition.Unpause();
+                    break;
+                }
+                total += tp.probability;
+            }
+        }
+
+        private void pauseTransitions() {
+            transitionProbabilities.ForEach(tp => tp.transition.Pause());
+        }
+    }
 }

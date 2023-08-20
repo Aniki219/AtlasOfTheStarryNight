@@ -6,7 +6,7 @@ using Transitions;
 
 namespace States
 {
-  public class WallSlide : State {
+  public class WallSlide : AtlasState {
     PlayerController pc;
 
     public WallSlide() {

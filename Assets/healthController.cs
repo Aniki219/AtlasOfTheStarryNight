@@ -6,7 +6,7 @@ using UnityEditor;
 using UnityEngine.Events;
 using MyBox;
 
-public class healthController : MonoBehaviour
+public class HealthController : MonoBehaviour
 {
     [HideInInspector] public float hitpoints;
     public float maxHitpoints = 3;

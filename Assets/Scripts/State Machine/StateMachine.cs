@@ -5,10 +5,9 @@ public abstract class StateMachine : MonoBehaviour {
   public State state { get; private set; } = new States.Init();
   public State startState;
 
+//TODO: No dude
   public StateDisplay stateDisplay;
-  public Phase phase {get; private set;} = Phase.Start;
-
-  public int facing {get; protected set;} = 1;
+  public Phase phase {get; protected set;} = Phase.Start;
 
   public enum Phase {
     Start,
@@ -35,16 +34,20 @@ public abstract class StateMachine : MonoBehaviour {
   struct ChangeStateRequest {
     public State newState;
     public bool skipWaitForExit;
+
+    public ChangeStateRequest(State _newState, bool _skipWaitForExit) {
+      newState = _newState;
+      skipWaitForExit = _skipWaitForExit;
+    }
   }
+
   ChangeStateRequest changeStateRequest;
   public void changeState(State newState, bool skipWaitForExit = false) {
     if (checkState(newState)) {
       return;
     }
     if (phase.Equals(Phase.Update)) {
-      changeStateRequest = new ChangeStateRequest();
-      changeStateRequest.newState = newState;
-      changeStateRequest.skipWaitForExit = skipWaitForExit;  
+      changeStateRequest = new ChangeStateRequest(newState, skipWaitForExit);
     } else {
       doChangeState(newState, skipWaitForExit);
     }
@@ -70,7 +73,7 @@ public abstract class StateMachine : MonoBehaviour {
     changePhase(Phase.Update);
   }
 
-  private void changePhase(Phase to) {
+  protected virtual void changePhase(Phase to) {
     phase = to;
     if (stateDisplay) {
       stateDisplay.setPhase(to.ToString());
@@ -80,11 +83,5 @@ public abstract class StateMachine : MonoBehaviour {
 
   public bool checkState(State other) {
     return state.GetType().Equals(other.GetType());
-  }
-
-  public virtual void setFacing(float vel)
-  {
-    int dir = AtlasHelpers.Sign(vel);
-    if (dir != 0) facing = dir;
   }
 }

@@ -4,10 +4,10 @@ using System;
 namespace Transitions {
     public class CanSlip : IStateTransition {
         PlayerController pc;
-        characterController cc;
+        CharacterController cc;
 
-        public override void attach(State state) {
-            base.attach(state);
+        public override void Attach(State state) {
+            base.Attach(state);
             pc = (PlayerController)state.stateMachine;
             cc = state.controller;
         }

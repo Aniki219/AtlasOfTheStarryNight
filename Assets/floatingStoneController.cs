@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class floatingStoneController : MonoBehaviour
 {
-    characterController controller;
+    CharacterController controller;
     public Vector2 velocity;
     bool isMoving = false;
 
@@ -12,7 +12,7 @@ public class floatingStoneController : MonoBehaviour
     void Start()
     {
         velocity = Vector2.zero;
-        controller = GetComponent<characterController>();
+        controller = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame

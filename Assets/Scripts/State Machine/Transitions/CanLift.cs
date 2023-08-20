@@ -5,8 +5,8 @@ namespace Transitions {
     public class CanLift : IStateTransition {
         PlayerController pc;
 
-        public override void attach(State state) {
-            base.attach(state);
+        public override void Attach(State state) {
+            base.Attach(state);
             pc = (PlayerController)state.stateMachine;
         }
         public override void checkCondition() {

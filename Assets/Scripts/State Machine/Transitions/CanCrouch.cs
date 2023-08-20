@@ -5,10 +5,10 @@ using States;
 namespace Transitions {
 public class CanCrouch : IStateTransition {
     PlayerController pc;
-    characterController cc;
+    CharacterController cc;
 
-    public override void attach(State state) {
-        base.attach(state);
+    public override void Attach(State state) {
+        base.Attach(state);
         pc = (PlayerController)state.stateMachine;
         cc = state.controller;    
     }

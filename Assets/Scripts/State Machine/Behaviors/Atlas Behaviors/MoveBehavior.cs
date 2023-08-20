@@ -14,7 +14,7 @@ public class MoveBehavior : IStateBehavior
     float xVelocitySmoothing;
 
     PlayerController pc;
-    characterController cc;
+    CharacterController cc;
 
     public override void attach(State state) {
         this.state = state;

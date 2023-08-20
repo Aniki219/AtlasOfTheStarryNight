@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class atlasSpriteController : MonoBehaviour
+public class AtlasSpriteController : MonoBehaviour
 {
     PlayerController pc;
     SpriteRenderer sprite;

@@ -11,9 +11,9 @@ namespace Transitions {
     public class CanTurnAround : IStateTransition {
         protected PlayerController pc;
 
-        public override void attach(State state)
+        public override void Attach(State state)
         {
-            base.attach(state);
+            base.Attach(state);
             pc = (PlayerController)state.stateMachine;
         }
 

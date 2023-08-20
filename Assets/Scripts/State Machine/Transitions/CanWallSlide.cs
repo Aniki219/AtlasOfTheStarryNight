@@ -3,11 +3,11 @@ using System;
 
 namespace Transitions {
     public class CanWallSlide : IStateTransition {
-        private characterController cc;
+        private CharacterController cc;
         private Collider2D collider;
 
-        public override void attach(State state) {
-            base.attach(state);
+        public override void Attach(State state) {
+            base.Attach(state);
             cc = state.controller;
             collider = state.colliderManager.getCollider();
         }
@@ -26,11 +26,11 @@ namespace Transitions {
     }
 
     public class CanUnwallSlide : CanWallSlide {
-        private characterController cc;
+        private CharacterController cc;
         private Collider2D collider;
 
-        public override void attach(State state) {
-            base.attach(state);
+        public override void Attach(State state) {
+            base.Attach(state);
             cc = state.controller;
             collider = collider = state.colliderManager.getCollider();
         }

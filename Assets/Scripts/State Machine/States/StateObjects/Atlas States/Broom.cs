@@ -3,9 +3,9 @@ using UnityEngine;
 using System.Threading.Tasks;
 
 namespace States {
-  public class Broom : State {
+  public class Broom : AtlasState {
     protected PlayerController pc;
-    protected characterController cc;
+    protected CharacterController cc;
     protected float targetBroomSpeed;
     private float currentBroomSpeed;
     protected float smoothTime;
@@ -56,7 +56,7 @@ namespace States {
     public override void UpdateState() {
       base.UpdateState();
 
-      if (stateTime() > 0.1f) {
+      if (StateTime() > 0.1f) {
         if (AtlasInputManager.getKeyPressed("Broom") || 
           (!AtlasInputManager.getKey("Broom") && AtlasInputManager.Instance.holdBroom))
         {
@@ -77,7 +77,7 @@ namespace States {
       if (smoothTime == 0) {
         currentBroomSpeed = targetBroomSpeed;
       } else {
-        currentBroomSpeed = EasingFunctions.EaseInQuint(4, targetBroomSpeed, Mathf.Clamp(stateTime()/smoothTime, 0, 1));
+        currentBroomSpeed = EasingFunctions.EaseInQuint(4, targetBroomSpeed, Mathf.Clamp(StateTime()/smoothTime, 0, 1));
       }
       cc.velocity.y = steerSpeed * vdir;
       cc.velocity.x = currentBroomSpeed * pc.facing;

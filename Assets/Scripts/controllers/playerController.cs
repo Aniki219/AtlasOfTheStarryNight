@@ -7,8 +7,7 @@ using UnityEngine.SceneManagement;
 
 using MyBox;
 
-[RequireComponent (typeof (characterController))]
-public class PlayerController : StateMachine
+public class PlayerController : EntityStateMachine
 {
     #region Vars
     //float jumpHeight = 2.2f;
@@ -64,15 +63,10 @@ public class PlayerController : StateMachine
     float velocityXSmoothing;
     Vector3 velocitySmoothing;
 
-    [HideInInspector] public characterController controller;
-    ParticleMaker particleMaker;
-    Animator anim;
-    Transform sprite;
     [HideInInspector] public BroomEffectsController broomEffects {get; private set;}
     [HideInInspector] public NovaManager novaManager {get; private set;}
-    atlasSpriteController spriteController;
-    ColliderManager colliderManager;
-    Deformer deformer;
+    AtlasSpriteController spriteController;
+
     stepSounds steps;
 
     [Foldout("Object References")]
@@ -147,13 +141,8 @@ public class PlayerController : StateMachine
         sprite = transform.Find("AtlasSprite");
         broomEffects = GetComponentInChildren<BroomEffectsController>();
         novaManager = GetComponent<NovaManager>();
-        spriteController = sprite.GetComponent<atlasSpriteController>();
+        spriteController = sprite.GetComponent<AtlasSpriteController>();
 
-        anim = GetComponentInChildren<Animator>();
-        deformer = GetComponentInChildren<Deformer>();
-        controller = GetComponent<characterController>();
-        particleMaker = GetComponentInChildren<ParticleMaker>();
-        colliderManager = GetComponent<ColliderManager>();
         steps = GetComponentInChildren<stepSounds>();
         hanger = transform.Find("AtlasSprite/Hanger");
 
@@ -1012,17 +1001,6 @@ public class PlayerController : StateMachine
     //     }
     //     sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
     // }
-    public override void setFacing(float vel) {
-        if (Mathf.Abs(vel) < 0.01f) return;
-        if (AtlasHelpers.Sign(vel) == 0) return;
-        // if (facing != (int)Mathf.Sign(vel) && 
-        //     anim.GetBool("isRunning") && 
-        //     !anim.GetBool("cantTurnAround")) {
-        //         anim.SetTrigger("turnAround");
-        //     }
-        base.setFacing(vel);
-        sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
-    }
 
     public void OnBonkCeiling()
     {
