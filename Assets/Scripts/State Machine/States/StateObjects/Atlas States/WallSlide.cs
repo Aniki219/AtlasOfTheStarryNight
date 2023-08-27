@@ -23,8 +23,8 @@ namespace States
     }
 
     protected override void attachComponents() {
-      base.attachComponents();
       pc = (PlayerController)stateMachine;
+      base.attachComponents();
     }
 
     public override async Task StartState() {

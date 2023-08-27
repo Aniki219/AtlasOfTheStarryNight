@@ -20,18 +20,11 @@ namespace States {
     public async override Task StartState()
     {
       await base.StartState();
-      AnimationClip clip = FindStatePhaseClip(StateMachine.Phase.Start);
-      if (clip) {
-        clipLength = clip.length;
-      } else {
-        Debug.LogWarning("No clip found for " + GetType());
-      }
     }
 
     public override void UpdateState()
     {
       base.UpdateState();
-      if (StateTime() >= clipLength) OnAnimationEnd();
     }
 
     public override void OnAnimationEnd() {
@@ -91,7 +84,7 @@ namespace States {
       public async override Task StartState()
       {
         if (AtlasInputManager.getAxis("Dpad").getDirection().x.Equals(TiltDirection.Forward)) {
-          controller.Move(50*Vector3.right*stateMachine.facing);
+          controller.Move(10*Vector3.right*stateMachine.facing);
         }
         await base.StartState();
       }

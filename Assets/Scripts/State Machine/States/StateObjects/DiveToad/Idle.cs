@@ -42,12 +42,14 @@ namespace States.DiveToad {
       float dx = playerPosition.x - transform.position.x;
       float dy = transform.position.y - playerPosition.y;
 
+      if (ec.playerSpotted) {
+        ec.FaceTowardsPlayer();
+      }
+
       if (ec.awakened && ec.canAct()) {
         ec.playerSpotted = Mathf.Abs(dx) <= 3.0f && dy > -1f && dy < 5f;
 
-        if (ec.playerSpotted) {
-          ec.FaceTowardsPlayer();
-        } else {
+        if (!ec.playerSpotted) {
           randomlyTurnAround();
         }
       } else {

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System;
 using System.Threading.Tasks;
 
 public abstract class StateMachine : MonoBehaviour {
@@ -51,6 +52,10 @@ public abstract class StateMachine : MonoBehaviour {
     } else {
       doChangeState(newState, skipWaitForExit);
     }
+  }
+
+  public void changeState<T>(bool skipWaitForExit = false) where T : State {
+    changeState((T) Activator.CreateInstance(typeof(T)));
   }
 
   /* Exit finishes and Start begins on the same Update tick

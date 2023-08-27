@@ -48,35 +48,35 @@ public class EnemyController : EntityStateMachine
         setFacing(AtlasHelpers.Sign(dx));
     }
 
-    public void hurt(HitBox hitbox)
-    {
-        // if (!hitbox) return;
-        // float kbStrength = (hitbox.knockback ? 2.5f : 1.5f) / weight;
-        // float dx = hitbox.kbDir.x;
-        // float dy = hitbox.kbDir.y;
+    // public override void hurt(HitBox hitbox)
+    // {
+    //     if (!hitbox) return;
+    //     float kbStrength = (hitbox.knockback ? 2.5f : 1.5f) / weight;
+    //     float dx = hitbox.kbDir.x;
+    //     float dy = hitbox.kbDir.y;
 
-        // if (hitbox.explosive)
-        // {
-        //     Vector2 dir = (transform.position - hitbox.position).normalized;
-        //     dx = dir.x;
-        //     dy = dir.y;
-        // }
-        // controller.velocity.x = kbStrength * dx;
-        // controller.velocity.y = kbStrength * 1.5f * dy;
-        // act = Mathf.Max(actionCoolDown / 2.0f, act);
-        // anim.SetBool("Hurt", true);
+    //     if (hitbox.explosive)
+    //     {
+    //         Vector2 dir = (transform.position - hitbox.position).normalized;
+    //         dx = dir.x;
+    //         dy = dir.y;
+    //     }
+    //     controller.velocity.x = kbStrength * dx;
+    //     controller.velocity.y = kbStrength * 1.5f * dy;
+    //     act = Mathf.Max(actionCoolDown / 2.0f, act);
+    //     anim.SetBool("Hurt", true);
 
-        // if (hitbox.incendiary)
-        // {
-        //     Vector2 size = GetComponent<BoxCollider2D>().size/2.0f;
-        //     Vector3 rpos = new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y), 0);
-        //     gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
-        // }
+    //     if (hitbox.incendiary)
+    //     {
+    //         Vector2 size = GetComponent<BoxCollider2D>().size/2.0f;
+    //         Vector3 rpos = new Vector3(Random.Range(-size.x, size.x), Random.Range(-size.y, size.y), 0);
+    //         gameManager.createInstance("Effects/Fire/IncendiaryParticle", rpos + transform.position, transform);
+    //     }
 
-        // deformer.flashColor();
+    //     deformer.flashColor();
 
-        // StartCoroutine(getHurt());
-    }
+    //     StartCoroutine(getHurt());
+    // }
 
     protected bool lineOfSight()
     {
@@ -130,11 +130,11 @@ public class EnemyController : EntityStateMachine
         // }
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D other)
-    {
-        if (harmEnemies && other.CompareTag("Enemy")) {
-            HealthController hc = other.GetComponent<HealthController>();
-            hc.takeDamage(3.0f);
-        }
-    }
+    // protected override void OnTriggerEnter2D(Collider2D other)
+    // {
+    //     if (harmEnemies && other.CompareTag("Enemy")) {
+    //         HealthController hc = other.GetComponent<HealthController>();
+    //         hc.takeDamage(3.0f);
+    //     }
+    // }
 }

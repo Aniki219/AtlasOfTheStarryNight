@@ -14852,10 +14852,10 @@ GameObject:
   - component: {fileID: 1908161218}
   - component: {fileID: 1908161220}
   - component: {fileID: 1908161219}
-  - component: {fileID: 1908161221}
   - component: {fileID: 425218680454007812}
   - component: {fileID: 3056712456514079565}
   - component: {fileID: 5229143239224678870}
+  - component: {fileID: 6334588534286666948}
   m_Layer: 9
   m_Name: AtlasSprite
   m_TagString: Untagged
@@ -14951,20 +14951,6 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
---- !u!114 &1908161221
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1908161217}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b2d6549d57a14d74a9e40260e1ba29e3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dustTrail: {fileID: 1381289503}
-  doubleJumpParticle: {fileID: 0}
 --- !u!114 &425218680454007812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15007,6 +14993,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a6804eaa2f9061449c2965d01f4cb47, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6334588534286666948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1908161217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d6549d57a14d74a9e40260e1ba29e3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dustTrail: {fileID: 1381289503}
 --- !u!1 &2141113705
 GameObject:
   m_ObjectHideFlags: 0
@@ -19948,6 +19947,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stateDisplay: {fileID: 0}
+  facing: 1
+  controller: {fileID: 1721639758}
+  particleMaker: {fileID: 0}
+  anim: {fileID: 0}
+  sprite: {fileID: 0}
+  colliderManager: {fileID: 0}
+  deformer: {fileID: 0}
   airAccelerationTime: 0.1
   airDeccelerationTime: 0.12
   groundAccelerationTime: 0.025
@@ -19959,7 +19965,7 @@ MonoBehaviour:
   jumpVelocity: 8.8
   doubleJumpVelocity: 7.2000003
   wallBlastDelay: 0.2
-  hasBroom: 0
+  hasBroom: 1
   hasDoubleJump: 1
   hasWallJump: 1
   canDoubleJump: 1
@@ -19971,7 +19977,6 @@ MonoBehaviour:
   invulnerable: 0
   dropThroughPlatforms: 0
   resetPosition: 0
-  controller: {fileID: 1721639758}
   playerCanvas: {fileID: 8046800161178818592}
   liftableObject: {fileID: 0}
   heldObject: {fileID: 0}

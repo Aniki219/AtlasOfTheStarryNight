@@ -34,4 +34,15 @@ public abstract class EntityStateMachine : StateMachine {
 
     sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
   }
+
+  protected virtual void OnTriggerEnter2D(Collider2D other)
+  {
+    if (other.tag == "AllyHitbox")
+    {
+      HitBox hb = other.GetComponent<AllyHitBoxController>().hitbox;
+      hurt(hb);
+    }
+  }
+
+  public virtual void hurt(HitBox hitbox) {}
 }

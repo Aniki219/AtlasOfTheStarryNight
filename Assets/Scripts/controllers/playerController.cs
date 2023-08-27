@@ -6,6 +6,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 using MyBox;
+using States;
 
 public class PlayerController : EntityStateMachine
 {
@@ -24,7 +25,7 @@ public class PlayerController : EntityStateMachine
     [Foldout("Acceleration Constants")]
     public float groundDeccelerationTime = 0f;
 
-    float resetTime = 0.25f;
+
     [HideInInspector] public Vector3 lastSafePosition;
 
     doorController currentDoor = null;
@@ -166,11 +167,6 @@ public class PlayerController : EntityStateMachine
     {
         base.Update();
 
-        if (isGrounded()) {
-            canBroom = true && hasBroom;
-            canDoubleJump = true && hasDoubleJump;
-        }
-
         if (Input.GetKeyDown(KeyCode.Space)) {
             gameManager.setPause(gameManager.PauseType.TOGGLE);
         }
@@ -248,6 +244,20 @@ public class PlayerController : EntityStateMachine
     {
         checkRoomBoundaries();
         handleControllerDebug();
+        
+        if (isGrounded()) {
+            canBroom = true && hasBroom;
+            canDoubleJump = true && hasDoubleJump;
+            checkSafePosition();
+        }
+        Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+    }
+
+    private void checkSafePosition() {
+        if (controller.velocity.y <= 0 && controller.isSafePosition())
+        {
+            lastSafePosition = transform.position;
+        }
     }
 
     private void handleControllerDebug() {
@@ -327,7 +337,7 @@ public class PlayerController : EntityStateMachine
 
     }
 
-    private void OnTriggerEnter2D(Collider2D other)
+    protected override void OnTriggerEnter2D(Collider2D other)
     {
         List<Collider2D> hitters = new List<Collider2D>();
         other.GetContacts(hitters);
@@ -422,7 +432,7 @@ public class PlayerController : EntityStateMachine
         }
     }
 
-    private void OnTriggerStay2D(Collider2D other)
+    public void OnTriggerStay2D(Collider2D other)
     {
         if (other.gameObject.layer == LayerMask.NameToLayer("BroomTrigger") && depState == State.Broom)
         {
@@ -433,26 +443,14 @@ public class PlayerController : EntityStateMachine
             liftObject(other.gameObject);
         }
 
-        if (other.CompareTag("ResetDamaging"))
-        {
-            if (graceFrames > 0)
-            {
-                graceFrames--;
-            } else
-            {
-                resetPosition = true;
-            }
-        };
-
         if (other.CompareTag("ResetDrown"))
         {
             drown();
         }
 
-        if (intangibleStates.Contains(depState)) return;
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger") && (!invulnerable || other.CompareTag("ResetDamaging")))
         {
-            if (other.CompareTag("ResetDamaging") && graceFrames > 0) return;
+            if (!controller.collisions.isTangible()) return;
 
             if (other.CompareTag("Projectile"))
             {
@@ -460,7 +458,13 @@ public class PlayerController : EntityStateMachine
                 if (p.hurtPlayer) p.hit();
             }
 
-            startBonk(1, resetPosition);
+            Hurt hurtState = new Hurt();
+
+            if (other.CompareTag("ResetDamaging")) {
+                hurtState = hurtState.Resetting();
+            }
+            
+            changeState(hurtState);
 
             return;
         }
@@ -721,73 +725,18 @@ public class PlayerController : EntityStateMachine
         }
         GetComponentInChildren<SpriteRenderer>().enabled = true;
     }
-    IEnumerator jumpCoroutine(bool dj = false)
-    {
-        controller.velocity.y = dj ? doubleJumpVelocity : jumpVelocity;
-        controller.resetGravity();
 
-        for (int i = 0; i < variableJumpIncrements; i++)
-        {
-            if (!AtlasInputManager.getKey("Jump"))
-            {
-                if (dj)
-                {
-                    controller.velocity.y = Mathf.Min(controller.velocity.y, doubleJumpVelocity/2.0f);
-                }
-                else
-                {
-                    controller.velocity.y /= 4;
-                }
-                i = variableJumpIncrements;
-                yield return 0;
-            }
-            yield return new WaitForSeconds(4 / 60.0f);
-        }
-    }
-    IEnumerator WallJumpCoroutine()
-    {
-        depState = State.WallJump;
-        GameObject explosion = gameManager.createInstance("Effects/Explosions/wallBlast", transform.position + new Vector3(-0.80f * facing, 0.23f, 0));
-        explosion.transform.localScale = sprite.localScale;
-        if (screenShake) { Camera.main.GetComponent<cameraController>().StartShake(0.2f, 0.15f); }
-
-        SoundManager.Instance.playClip("wallBlast");
-        anim.SetBool("isJumping", false);
-        anim.SetBool("isFalling", false);
-        anim.SetBool("wallSlide", false);
-        anim.SetBool("wallBlast", true);
-
-        yield return new WaitForSeconds(wallBlastDelay);
-
-        anim.SetBool("isJumping", true);
-        anim.SetBool("wallBlast", false);
-
-        flipHorizontal();
-
-        controller.velocity.y = wallJumpVelocity;
-
-        float startTime = Time.time;
-        while (Time.time - startTime < 0.1f)
-        {
-            controller.velocity.x = wallJumpVelocity * facing;
-
-            if (AtlasInputManager.getKeyPressed("Broom") && canBroom)
-            {
-                triggerBroomStart();
-                yield break;
-            }
-            yield return new WaitForFixedUpdate();
-        }
-        anim.SetBool("wallBlast", false);
-        returnToMovement();
-    }
     IEnumerator invulnerableCoroutine(float invulnTime)
     {
-        StartCoroutine(flashEffect(invulnTime));
+        startFlashEffect(invulnTime);
         invulnerable = true;
         yield return new WaitForSeconds(invulnTime);
         invulnerable = false;
         invulnerableCRVar = null;
+    }
+
+    public void startFlashEffect(float time) {
+        StartCoroutine(flashEffect(time));
     }
     #endregion
 
@@ -937,43 +886,43 @@ public class PlayerController : EntityStateMachine
     }
     void handleTornado()
     {
-        canTornado = false;
-        canBroom = true;
-        canDoubleJump = true;
-        anim.SetBool("inTornado", true);
-        controller.velocity = Vector3.zero;
-        transform.position = Vector3.SmoothDamp(transform.position, currentTornado.position, ref velocitySmoothing, 0.05f);
+        // canTornado = false;
+        // canBroom = true;
+        // canDoubleJump = true;
+        // anim.SetBool("inTornado", true);
+        // controller.velocity = Vector3.zero;
+        // transform.position = Vector3.SmoothDamp(transform.position, currentTornado.position, ref velocitySmoothing, 0.05f);
 
-        if (AtlasInputManager.getKeyPressed("Jump"))
-        {
-            firstJump();
-            anim.SetBool("inTornado", false);
-            returnToMovement();
-            Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
-            if (nadoDeformer)
-            {
-                nadoDeformer.startDeform(new Vector3(0.75f, 2.0f, 1.0f), 0.1f);
-                SoundManager.Instance.playClip("LevelObjects/EnterTornado", 1);
-            }
-            currentTornado = null;
-        }
-        if (AtlasInputManager.getKeyPressed("Down"))
-        {
-            movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
-            if (mp)
-            {
-                controller.velocity.x = mp.getVelocity().x;
-            }
-            Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
-            if (nadoDeformer)
-            {
-                nadoDeformer.startDeform(new Vector3(2.0f, 0.25f, 1.0f), 0.1f);
-            }
-            anim.SetBool("inTornado", false);
-            returnToMovement();
-            currentTornado = null;
-            SoundManager.Instance.playClip("LevelObjects/EnterTornado", -1);
-        }
+        // if (AtlasInputManager.getKeyPressed("Jump"))
+        // {
+        //     firstJump();
+        //     anim.SetBool("inTornado", false);
+        //     returnToMovement();
+        //     Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
+        //     if (nadoDeformer)
+        //     {
+        //         nadoDeformer.startDeform(new Vector3(0.75f, 2.0f, 1.0f), 0.1f);
+        //         SoundManager.Instance.playClip("LevelObjects/EnterTornado", 1);
+        //     }
+        //     currentTornado = null;
+        // }
+        // if (AtlasInputManager.getKeyPressed("Down"))
+        // {
+        //     movingPlatform mp = currentTornado.GetComponent<movingPlatform>();
+        //     if (mp)
+        //     {
+        //         controller.velocity.x = mp.getVelocity().x;
+        //     }
+        //     Deformer nadoDeformer = currentTornado.GetComponent<Deformer>();
+        //     if (nadoDeformer)
+        //     {
+        //         nadoDeformer.startDeform(new Vector3(2.0f, 0.25f, 1.0f), 0.1f);
+        //     }
+        //     anim.SetBool("inTornado", false);
+        //     returnToMovement();
+        //     currentTornado = null;
+        //     SoundManager.Instance.playClip("LevelObjects/EnterTornado", -1);
+        // }
     }
     public void startEat()
     {
@@ -1000,7 +949,7 @@ public class PlayerController : EntityStateMachine
     //         anim.SetFloat("animDir", 1.0f);
     //     }
     //     sprite.localScale = new Vector3(Mathf.Abs(sprite.localScale.x) * facing, sprite.localScale.y, sprite.localScale.z);
-    // }
+// }
 
     public void OnBonkCeiling()
     {
@@ -1038,54 +987,6 @@ public class PlayerController : EntityStateMachine
     #endregion
 
     #region Jumps & WallJumps
-    void wallJumpInit()
-    {
-        // if (resourceManager.Instance.getPlayerMana() < 2)
-        // {
-        //     //state = State.Movement;
-        //     returnToMovement();
-        //     return;
-        // }
-        // resourceManager.Instance.usePlayerMana(2);
-        controller.velocity.y = 0;
-        StartCoroutine(WallJumpCoroutine());
-    }
-
-    void handleWallJump()
-    {
-    }
-
-    void firstJump()
-    {
-        // //Cancel jump if stuck under something while crawling
-        // if (isCrouching()) {
-        //     depState = State.Slide;
-        //     anim.SetTrigger("slide");
-        //     controller.velocity.x = facing * 6;
-        //     return;
-        // }
-
-        // SoundManager.Instance.playClip("jump2");
-        // deformer.startDeform(new Vector3(0.8f, 1.3f, 1.0f), 0.1f, 0.3f, Vector2.up, "jump", true);
-        // particleMaker.createDust(true);
-
-        // jumpCRVar = StartCoroutine(jumpCoroutine());
-    }
-
-    void doubleJump()
-    {
-        // returnToMovement();
-
-        // canDoubleJump = false;
-        // anim.SetTrigger("doubleJump");
-
-        // SoundManager.Instance.playClip("doubleJump");
-        // spriteController.doubleJumpParticle.Play();
-
-        // if (jumpCRVar != null) StopCoroutine(jumpCRVar);
-        // jumpCRVar = StartCoroutine(jumpCoroutine(true));
-    }
-
     public void bounce(float bounceVelocity, string sound = "jump2")
     {
         deformer.startDeform(new Vector3(0.8f, 1.4f, 1.0f), 0.1f, 0.3f, Vector2.up);
@@ -1253,23 +1154,23 @@ public class PlayerController : EntityStateMachine
     //Returnns to movement after reaching lastSafePosition
     void handleReset(bool isSafe = false)
     {
-        colliderManager.disableCollider("SecretCollider");
-        sprite.GetComponent<SpriteRenderer>().sortingOrder = 25;
-        controller.collisions.setTangible(false);
-        if (!starRotator)
-        {
-            starRotator = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarRotator"), transform);
-        }
-        if (Vector3.SqrMagnitude(lastSafePosition - transform.position) < 0.01f)
-        {
-            transform.position = lastSafePosition;
-            controller.velocity = Vector3.zero;
-            returnToMovement();
-            anim.SetBool("resetSpin", false);
-            StartCoroutine(flashEffect());
-            Destroy(starRotator);
-        }
-        transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime);
+    //     colliderManager.disableCollider("SecretCollider");
+    //     sprite.GetComponent<SpriteRenderer>().sortingOrder = 25;
+    //     //controller.collisions.setTangible(false);
+    //     if (!starRotator)
+    //     {
+    //         starRotator = Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarRotator"), transform);
+    //     }
+    //     if (Vector3.SqrMagnitude(lastSafePosition - transform.position) < 0.01f)
+    //     {
+    //         transform.position = lastSafePosition;
+    //         controller.velocity = Vector3.zero;
+    //         returnToMovement();
+    //         anim.SetBool("resetSpin", false);
+    //         StartCoroutine(flashEffect());
+    //         Destroy(starRotator);
+    //     }
+    //     transform.position = Vector3.SmoothDamp(transform.position, lastSafePosition, ref velocitySmoothing, resetTime);
     }
 
     //Always turns off resetPosition

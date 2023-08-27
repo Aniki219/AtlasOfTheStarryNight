@@ -23,6 +23,8 @@ public abstract class State
 
     public float stateStartTime {get; private set;}
 
+    float clipLength = Mathf.Infinity;
+
     public virtual void Attach(StateMachine stateMachine) {
         //TODO EntityState
         this.stateMachine = (EntityStateMachine)stateMachine;
@@ -46,6 +48,7 @@ public abstract class State
         transitions.Where(t => t.canTransition())
             .ToList()
             .ForEach(t => t.checkCondition());
+        if (StateTime() >= clipLength) OnAnimationEnd();
     }
 
     public virtual async Task ExitState() {
@@ -145,6 +148,13 @@ public abstract class State
         if (!anim) {Debug.Log(stateMachine.transform.name + " has no animator"); return;}
         int stateHash = FindStatePhaseHash(phase);
         if (stateHash != -1) anim.Play(stateHash);
+
+        AnimationClip clip = FindStatePhaseClip(StateMachine.Phase.Start);
+        if (clip) {
+            clipLength = clip.length;
+        } else {
+            Debug.LogWarning("No clip found for " + GetType());
+        }
     }
 
     public AnimationClip FindStatePhaseClip(StateMachine.Phase phase, bool canCheckGenericName = true) {

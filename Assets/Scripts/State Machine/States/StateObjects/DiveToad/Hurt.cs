@@ -26,7 +26,8 @@ namespace States.DiveToad {
     public async override Task StartState()
     {
       await base.StartState();
-      float kbStrength = (hitbox.knockback ? 2.5f : 1.5f);
+      ((EnemyController)stateMachine).FaceTowardsPlayer();
+      float kbStrength = hitbox.knockback ? 2.5f : 1.5f;
       float dx = hitbox.kbDir.x;
       float dy = hitbox.kbDir.y;
 
@@ -40,7 +41,7 @@ namespace States.DiveToad {
       controller.velocity.y = kbStrength * 1.5f * dy;
 
       //TODO: await hitbox.hitStun;
-      await AtlasHelpers.WaitSeconds(0.2f);
+      await AtlasHelpers.WaitSeconds(0.4f);
 
       stateMachine.changeState(new Idle());
     }

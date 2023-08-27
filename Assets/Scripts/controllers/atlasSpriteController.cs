@@ -8,7 +8,6 @@ public class AtlasSpriteController : MonoBehaviour
     SpriteRenderer sprite;
 
     public GameObject dustTrail;
-    public ParticleSystem doubleJumpParticle;
     // Start is called before the first frame update
     void Start()
     {

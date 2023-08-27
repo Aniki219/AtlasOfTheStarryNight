@@ -13,7 +13,8 @@ public class CharacterController : MonoBehaviour
     [ConditionalField(nameof(debug))] public bool showNormal = true;
     [ConditionalField(nameof(debug))] public bool showVelocityNormal = false;
     [ConditionalField(nameof(debug))] public bool showCollisionResolution = false;
-    [ConditionalField(nameof(debug))] public bool  highlightGrounded = false;
+    [ConditionalField(nameof(debug))] public bool showSafetyCheck = false;
+    [ConditionalField(nameof(debug))] public bool highlightGrounded = false;
     #if UNITY_EDITOR // conditional compilation is not mandatory
     [ButtonMethod]
     private void ToggleDebug()
@@ -152,6 +153,11 @@ public class CharacterController : MonoBehaviour
 
     public void Move(Vector3 vel) {
         vel = (vel + additionalVelocity) * Time.deltaTime;
+
+        if (!collisions.isTangible()) {
+            transform.position += vel;
+            return;
+        }
 
         if (collisions.hasNormWhere(norm => norm.y > 0) && 
             collisions.hasNormWhere(norm => norm.y < 0.75f) && 
@@ -366,31 +372,36 @@ public class CharacterController : MonoBehaviour
         BoxCollider2D collider = colliderManager.getCollider();
 
         if (!collisions.isTangible()) { return false; }
-        Vector3 boxCastOrigin = collider.transform.position - Vector3.right * safetyMargin/2 - collider.size.y/2 * Vector3.up;
+        Vector3 colliderWorldPos = transform.position + (Vector3)collider.offset;
+        Vector3 boxCastOrigin = colliderWorldPos - Vector3.right * safetyMargin/2;
 
-        //Debug.DrawLine((Vector2)boxCastOrigin + collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right - collider.size.y / 2 * Vector2.up);
-        //Debug.DrawLine((Vector2)boxCastOrigin - collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right + collider.size.y / 2 * Vector2.up);
+        Debug.DrawLine((Vector2)boxCastOrigin + collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right - collider.size.y / 2 * Vector2.up, Color.red);
+        Debug.DrawLine((Vector2)boxCastOrigin - collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right + collider.size.y / 2 * Vector2.up, Color.red);
 
-        LayerMask safeGroundMask = collisionMask & ~(LayerMask.GetMask("DesctructibleBlock"));
+        LayerMask safeGroundMask = collisionMask & ~LayerMask.GetMask("DesctructibleBlock");
 
-        if (Physics2D.Raycast(transform.position, Vector2.right, 0.4f, safeGroundMask)) return false;
-        if (Physics2D.Raycast(transform.position, -Vector2.right, 0.4f, safeGroundMask)) return false;
+        float sideDistance = 0.1f;
+        float downDistance = 0.2f;
+
+        if (showSafetyCheck) {
+            Debug.DrawLine(transform.position, transform.position + Vector3.right * sideDistance, Color.cyan);  
+            Debug.DrawLine(transform.position, transform.position + Vector3.left * sideDistance, Color.cyan);
+            Debug.DrawLine( colliderWorldPos + collider.size.x/2 * Vector3.right,
+                            colliderWorldPos + collider.size.x/2 * Vector3.right + (collider.size.y + downDistance) * Vector3.down,
+                            Color.cyan);
+            Debug.DrawLine( colliderWorldPos + collider.size.x/2 * Vector3.left,
+                            colliderWorldPos + collider.size.x/2 * Vector3.left + (collider.size.y + downDistance) * Vector3.down,
+                            Color.cyan);
+        }
+
+        if (Physics2D.Raycast(transform.position, Vector2.right, sideDistance, safeGroundMask)) return false;
+        if (Physics2D.Raycast(transform.position, -Vector2.right, sideDistance, safeGroundMask)) return false;
+        if (!Physics2D.Raycast(colliderWorldPos + collider.size.x/2 * Vector3.right, Vector2.down, collider.size.y + downDistance, safeGroundMask)) return false;
+        if (!Physics2D.Raycast(colliderWorldPos + collider.size.x/2 * Vector3.left, Vector2.down, collider.size.y + downDistance, safeGroundMask)) return false;
+        
         if (Physics2D.BoxCast(boxCastOrigin, collider.size, 0, Vector3.right, safetyMargin, dangerMask)) return false;
 
-        int rays = 0;
-        for (int i = 0; i < verticalRayCount; i++)
-        {
-            Vector2 rayOrigin = boundaryPoints.bottomLeft + (Vector2.right * verticalRaySpacing * i);
-            float maxDistance = 1 / 32f;// + skinWidth;
-
-            RaycastHit2D hit = Physics2D.Raycast(rayOrigin, -Vector2.up, maxDistance, safeGroundMask);
-
-            if (hit)
-            {
-                rays++;
-            }
-        }
-        return rays > 2;
+        return true;
     }
 #endregion
 
