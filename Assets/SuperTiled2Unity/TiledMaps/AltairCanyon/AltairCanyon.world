@@ -1,0 +1,321 @@
+{
+    "maps": [
+        {
+            "fileName": "Tutorial2.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -2064,
+            "y": 704
+        },
+        {
+            "fileName": "LowerFallsBridge.tmx",
+            "height": 288,
+            "width": 1536,
+            "x": 496,
+            "y": 128
+        },
+        {
+            "fileName": "AlicornAdit.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 2032,
+            "y": -448
+        },
+        {
+            "fileName": "AlicornBasin.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": 1008,
+            "y": -448
+        },
+        {
+            "fileName": "AlicornTalus.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 1520,
+            "y": -1312
+        },
+        {
+            "fileName": "AltairBornhardt.tmx",
+            "height": 576,
+            "width": 1024,
+            "x": -528,
+            "y": -448
+        },
+        {
+            "fileName": "AltairSummit.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 1520,
+            "y": -1600
+        },
+        {
+            "fileName": "BasinGrotto.tmx",
+            "height": 576,
+            "width": 512,
+            "x": 2032,
+            "y": 128
+        },
+        {
+            "fileName": "BasinTrail.tmx",
+            "height": 288,
+            "width": 1536,
+            "x": 496,
+            "y": 416
+        },
+        {
+            "fileName": "BigTreeCore.tmx",
+            "height": 576,
+            "width": 512,
+            "x": 2544,
+            "y": -160
+        },
+        {
+            "fileName": "EastArete.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 2032,
+            "y": -736
+        },
+        {
+            "fileName": "EastBasinForest1.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -16,
+            "y": 416
+        },
+        {
+            "fileName": "EastBasinForest2.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -528,
+            "y": 416
+        },
+        {
+            "fileName": "EastBasinForest3.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -16,
+            "y": 128
+        },
+        {
+            "fileName": "EastBasinForest4.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -528,
+            "y": 128
+        },
+        {
+            "fileName": "Tutorial1.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": -3088,
+            "y": 704
+        },
+        {
+            "fileName": "Tutorial3.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -1552,
+            "y": 704
+        },
+        {
+            "fileName": "Tutorial4.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -1040,
+            "y": 704
+        },
+        {
+            "fileName": "Tutorial5.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -528,
+            "y": 704
+        },
+        {
+            "fileName": "AltairGrotto.tmx",
+            "height": 576,
+            "width": 512,
+            "x": -16,
+            "y": 704
+        },
+        {
+            "fileName": "HeroStatue.tmx",
+            "height": 576,
+            "width": 1024,
+            "x": 496,
+            "y": 704
+        },
+        {
+            "fileName": "RootTunnel.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": 1520,
+            "y": 992
+        },
+        {
+            "fileName": "WitchsHut.tmx",
+            "height": 864,
+            "width": 1536,
+            "x": 2544,
+            "y": 416
+        },
+        {
+            "fileName": "EastCanyonTrail.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": 4080,
+            "y": 416
+        },
+        {
+            "fileName": "EastBranchLookout.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 3056,
+            "y": -160
+        },
+        {
+            "fileName": "EastBranchCore.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": 3056,
+            "y": 128
+        },
+        {
+            "fileName": "EasternScowle.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 2032,
+            "y": -160
+        },
+        {
+            "fileName": "MidpathScowle.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 1520,
+            "y": -160
+        },
+        {
+            "fileName": "MiddleFallsBridge.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": 496,
+            "y": -160
+        },
+        {
+            "fileName": "WestArete.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 496,
+            "y": -448
+        },
+        {
+            "fileName": "TangleForestMaw.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 496,
+            "y": -736
+        },
+        {
+            "fileName": "TwilightAnnex.tmx",
+            "height": 576,
+            "width": 512,
+            "x": 2544,
+            "y": -736
+        },
+        {
+            "fileName": "TangleForest.tmx",
+            "height": 576,
+            "width": 512,
+            "x": 1008,
+            "y": -1024
+        },
+        {
+            "fileName": "TangleForestEscape.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 1008,
+            "y": -1312
+        },
+        {
+            "fileName": "OuterCavernFace.tmx",
+            "height": 576,
+            "width": 512,
+            "x": 1520,
+            "y": -1024
+        },
+        {
+            "fileName": "UpperFallsBridge.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 2032,
+            "y": -1024
+        },
+        {
+            "fileName": "Roost.tmx",
+            "height": 288,
+            "width": 512,
+            "x": 2544,
+            "y": -1024
+        },
+        {
+            "fileName": "EasternPeak.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": 2032,
+            "y": -1312
+        },
+        {
+            "fileName": "StarCatcherTrail.tmx",
+            "height": 288,
+            "width": 1024,
+            "x": -1552,
+            "y": 416
+        },
+        {
+            "fileName": "EastSister.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -1040,
+            "y": 128
+        },
+        {
+            "fileName": "ElderColumn.tmx",
+            "height": 576,
+            "width": 512,
+            "x": -1552,
+            "y": -160
+        },
+        {
+            "fileName": "StarCatcherSheer.tmx",
+            "height": 576,
+            "width": 512,
+            "x": -1040,
+            "y": -448
+        },
+        {
+            "fileName": "ElderPeak.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -1552,
+            "y": -448
+        },
+        {
+            "fileName": "WesternNet.tmx",
+            "height": 288,
+            "width": 512,
+            "x": -2064,
+            "y": -160
+        },
+        {
+            "fileName": "WesternSister.tmx",
+            "height": 576,
+            "width": 512,
+            "x": -2064,
+            "y": 128
+        }
+    ],
+    "onlyShowAdjacentMaps": false,
+    "type": "world"
+}

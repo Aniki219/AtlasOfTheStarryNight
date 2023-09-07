@@ -1,0 +1,304 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "AltairCanyon/Tutorial1.tmx",
+    "console.history": [
+        "map.save",
+        "map",
+        "map.fileName",
+        "map.fileName = \"testmap\"",
+        "map.properties()",
+        "map.properties().foreach(p => console.log(p))",
+        "map.setProperty(\"fileName\", \"testfile\")",
+        "map.fileName",
+        "console.log(map.fileName)",
+        "map.property(\"fileName\")"
+    ],
+    "expandedProjectPaths": [
+    ],
+    "exportAsImage.drawTileGrid": false,
+    "exportAsImage.includeBackgroundColor": false,
+    "exportAsImage.useCurrentScale": true,
+    "exportAsImage.visibleLayersOnly": true,
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "AltairCanyon/AlicornAdit.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 334.84848484848476,
+                "y": -712.121212121212
+            }
+        },
+        "AltairCanyon/AlicornBasin.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 434.84848484848476,
+                "y": 466.66666666666674
+            }
+        },
+        "AltairCanyon/AlicornTalus.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -646,
+                "y": 756
+            }
+        },
+        "AltairCanyon/AltairBornhardt.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 2996,
+                "y": 112
+            }
+        },
+        "AltairCanyon/AltairGrotto.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -574,
+                "y": 52
+            }
+        },
+        "AltairCanyon/AltairSummit.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 1092,
+                "y": 2032
+            }
+        },
+        "AltairCanyon/BasinGrotto.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 898,
+                "y": -16
+            }
+        },
+        "AltairCanyon/BasinTrail.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 978,
+                "y": -520
+            }
+        },
+        "AltairCanyon/BigTreeCore.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -1150,
+                "y": 56
+            }
+        },
+        "AltairCanyon/EastArete.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -3234,
+                "y": 444
+            }
+        },
+        "AltairCanyon/EastBasinForest1.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 678,
+                "y": -336
+            }
+        },
+        "AltairCanyon/EastBasinForest2.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 278,
+                "y": 136
+            }
+        },
+        "AltairCanyon/EastBranchCore.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -2508,
+                "y": -32
+            }
+        },
+        "AltairCanyon/EastBranchLookout.tmx": {
+            "scale": 2.45107421875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.0101996095462,
+                "y": 143.6105024104546
+            }
+        },
+        "AltairCanyon/EastCanyonTrail.tmx": {
+            "scale": 1.225537109375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.0203992190924,
+                "y": 144.42647117415035
+            }
+        },
+        "AltairCanyon/EasternPeak.tmx": {
+            "scale": 0.125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -1332,
+                "y": 1536
+            }
+        },
+        "AltairCanyon/HeroStatue.tmx": {
+            "scale": 1.225537109375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.0203992190924,
+                "y": 288.03697358460494
+            }
+        },
+        "AltairCanyon/LowerFallsBridge.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 970,
+                "y": -240
+            }
+        },
+        "AltairCanyon/MidpathScowle.tmx": {
+            "scale": 0.33,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -74.24242424242425,
+                "y": 181.81818181818198
+            }
+        },
+        "AltairCanyon/OuterCavernFace.tmx": {
+            "scale": 1.484375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.33684210526314,
+                "y": 288.33684210526314
+            }
+        },
+        "AltairCanyon/RootTunnel.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 862,
+                "y": -424
+            }
+        },
+        "AltairCanyon/Tutorial1.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 512.5,
+                "y": 144
+            }
+        },
+        "AltairCanyon/Tutorial2.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.5,
+                "y": 144
+            }
+        },
+        "AltairCanyon/Tutorial3.tmx": {
+            "scale": 1,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 121.5,
+                "y": 92
+            }
+        },
+        "AltairCanyon/Tutorial4.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 624.3333333333333,
+                "y": 155.99999999999997
+            }
+        },
+        "AltairCanyon/Tutorial5.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 370.33333333333326,
+                "y": 163.33333333333331
+            }
+        },
+        "AltairCanyon/WitchsHut.tmx": {
+            "scale": 0.25,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": -174,
+                "y": 140
+            }
+        },
+        "AltairGrotto.tmx": {
+            "scale": 1.484375,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.33684210526314,
+                "y": 288.33684210526314
+            }
+        },
+        "Tilesets/16gon.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "testy.tmx": {
+            "scale": 2.45107421875,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 256.0101996095462,
+                "y": 144.01848679230247
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/aniki/dev/AtlasOfTheStarryNight/Assets/Tilesets/16gon",
+    "last.worldFilePath": "C:/Users/aniki/dev/AtlasOfTheStarryNight/Assets/SuperTiled2Unity/TiledMaps/AltairCanyon",
+    "loadedWorlds": [
+        "C:/Users/aniki/dev/AtlasOfTheStarryNight/Assets/StreamingAssets/TiledWorld/AltairCanyon.world",
+        "C:/Users/aniki/dev/AtlasOfTheStarryNight/Assets/SuperTiled2Unity/TiledMaps/AltairCanyon/AltairCanyon.world"
+    ],
+    "map.fixedSize": true,
+    "map.height": 18,
+    "map.lastUsedExportFilter": "JSON map files (*.json)",
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": 1,
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 96,
+    "openFiles": [
+        "AltairCanyon/Tutorial1.tmx",
+        "testy.tmx",
+        "Tilesets/16gon.tsx",
+        "AltairCanyon/Tutorial2.tmx"
+    ],
+    "project": "AtlasWorldMapProject.tiled-project",
+    "property.type": "int",
+    "recentFiles": [
+        "AltairCanyon/Tutorial2.tmx",
+        "Tilesets/16gon.tsx",
+        "testy.tmx",
+        "AltairCanyon/Tutorial1.tmx"
+    ],
+    "tileset.embedInMap": false,
+    "tileset.lastUsedExportFilter": "All Files (*)",
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.transparentColor": "#ff00ff",
+    "tileset.type": 0,
+    "tileset.useTransparentColor": false
+}
