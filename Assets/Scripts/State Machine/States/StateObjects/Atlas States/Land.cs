@@ -16,7 +16,7 @@ namespace States {
 
   public class AttackLand : Land {
     public AttackLand() {
-      AnimationClip attackLandClip = AnimMapper.getClip<States.AttackLand>();
+      AnimationClip attackLandClip = FindStatePhaseClip(StateMachine.Phase.Start);
       
       behaviors = new List<IStateBehavior>() {
         new Behaviors.LandBehavior(attackLandClip.length-0.1f),

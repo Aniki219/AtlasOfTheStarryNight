@@ -17,7 +17,7 @@ public class AtlasSceneManager : ScriptableObject
     private static AtlasSceneManager instance;
     public static AtlasSceneManager Instance { get { return instance; } }
 
-    private static string path = Application.streamingAssetsPath + "/TiledWorld/AltairCanyon.world";
+    private static string path = "Assets/SuperTiled2Unity/TiledMaps/AltairCanyon/AltairCanyon.world";//Application.streamingAssetsPath + "/TiledWorld/AltairCanyon.world";
     AtlasWorldMap sceneData;
     public AtlasMap currentScene;
     public List<AtlasMap> neighbors;

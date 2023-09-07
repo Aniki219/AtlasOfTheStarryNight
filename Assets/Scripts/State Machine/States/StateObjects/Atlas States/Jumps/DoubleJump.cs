@@ -35,7 +35,7 @@ namespace States {
 
     private async void playAnim() {
       PauseTransition<Transitions.CanFall>();
-      await AnimMapper.awaitClip<DoubleJump>();
+      await WaitForPhaseAnimation(StateMachine.Phase.Start);
       UnpauseTransition<Transitions.CanFall>();
     }
 

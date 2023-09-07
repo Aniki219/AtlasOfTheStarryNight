@@ -81,7 +81,6 @@ GameObject:
   - component: {fileID: 6280628106179491541}
   - component: {fileID: 6280628106179491540}
   - component: {fileID: 6280628106179491543}
-  - component: {fileID: 6280628106179491546}
   m_Layer: 10
   m_Name: GreenCharger
   m_TagString: Enemy
@@ -148,6 +147,7 @@ MonoBehaviour:
   showNormal: 1
   showVelocityNormal: 0
   showCollisionResolution: 0
+  showSafetyCheck: 0
   highlightGrounded: 0
   velocity: {x: 0, y: 0, z: 0}
   additionalVelocity: {x: 0, y: 0, z: 0}
@@ -210,7 +210,7 @@ MonoBehaviour:
   hurtCallback:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6280628106179491546}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: hurt
         m_Mode: 0
@@ -244,7 +244,7 @@ MonoBehaviour:
   blockCallback:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6280628106179491546}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: 
         m_MethodName: startRoll
         m_Mode: 1
@@ -257,30 +257,6 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   hurtSound: {fileID: 0}
---- !u!114 &6280628106179491546
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6280628106179491537}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0fbd21bf0133af449a1669466beb8301, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  currentState: 
-  weight: 1
-  visionRange: 5
-  moveSpeed: 1
-  velocity: {x: 0, y: 0, z: 0}
-  readyToPounce: 0
-  homeX: 0
-  targetX: 0
-  leashRange: 3
-  chargeVelocity: 5
-  chargeDuration: 1.5
-  starOrigin: {fileID: 0}
 --- !u!1 &6280628107221707902
 GameObject:
   m_ObjectHideFlags: 0

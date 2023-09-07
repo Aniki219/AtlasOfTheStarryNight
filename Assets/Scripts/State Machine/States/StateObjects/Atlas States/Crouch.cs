@@ -42,7 +42,7 @@ namespace States {
 
     async void performAnim() {
       PauseTransition<Transitions.CanUncrouch>();
-      await AnimMapper.awaitClip<States.Crouch>();
+      await WaitForPhaseAnimation(StateMachine.Phase.Start);
       UnpauseTransition<Transitions.CanUncrouch>();
     }
 

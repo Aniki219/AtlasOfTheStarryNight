@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class chargerController
+public class chargerController : MonoBehaviour
 {
     // public bool readyToPounce = false;
     // public float homeX;

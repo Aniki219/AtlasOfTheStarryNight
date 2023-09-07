@@ -43,7 +43,7 @@ namespace States {
       controller.canGravity = false;
 
       if (!quickBroom) {
-        await AtlasHelpers.WaitSeconds(AnimMapper.getClip<States.Broom>().length);
+        await WaitForPhaseAnimation(StateMachine.Phase.Start);
       } else {
         //await AtlasHelpers.WaitSeconds(0.1f);
       }
