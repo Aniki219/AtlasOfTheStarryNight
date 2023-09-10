@@ -145,7 +145,10 @@ public abstract class State
     }
 
     public void SetAnimation(StateMachine.Phase phase = StateMachine.Phase.Start) {
-        if (!anim) {Debug.Log(stateMachine.transform.name + " has no animator"); return;}
+        if (phase.Equals(StateMachine.Phase.Start) && skipStartAnim) {
+            phase = StateMachine.Phase.Update;
+        }
+        if (!anim) {return;}//Debug.Log(stateMachine.transform.name + " has no animator"); return;}
         int stateHash = FindStatePhaseHash(phase);
         if (stateHash != -1) anim.Play(stateHash);
 

@@ -12,6 +12,12 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/AltairGrotto.unity
     guid: 6fbf242f17868214ab51f9a04525772b
   - enabled: 1
+    path: Assets/Scenes/WorldMap/HeroStatue.unity
+    guid: 098b74a55382d624b993211099db4fc2
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/RootTunnel.unity
+    guid: 241c09e105c286647b91ba26d02e9ad6
+  - enabled: 1
     path: Assets/Scenes/WorldMap/template1x1.unity
     guid: eee0944264927524da6dfb2ea96d7488
   - enabled: 1
@@ -20,6 +26,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap/template2x1.unity
     guid: 4df9f2ce9b596554f8c537cd5ab5a604
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/template2x2.unity
+    guid: 5830699eec2d9604abc3b672d94b6dc4
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/template3x3.unity
+    guid: c33842cc641cacb44a197641f803f945
   - enabled: 1
     path: Assets/Scenes/WorldMap/Tutorial1.unity
     guid: e5e12260bbc61914695951d7d74a2372
@@ -35,6 +47,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap/Tutorial5.unity
     guid: 006412cc8bf342a42b9be382584d0abf
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/WitchsHut.unity
+    guid: 7558e1de80c7b3d4f9e040761074ae6a
   m_configObjects:
     com.unity.addressableassets: {fileID: 11400000, guid: 3f9e00d659e61034d8aed833d2097897,
       type: 2}

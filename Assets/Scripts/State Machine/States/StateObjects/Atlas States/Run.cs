@@ -4,28 +4,14 @@ using Behaviors;
 using Transitions;
 
 namespace States {
-  public class Idle : State {
-    public static readonly List<IStateTransition> defaultTransitions = 
-      new List<IStateTransition>() {
-          new CanAttack(),
-          new CanBroom(),
-          new CanJump<GroundJump>(),
-          new CanSlip(),
-          new CanLift(),
-          new CanCrouch(),
-          new RunIdle(),
-          new CanTurnAround(),
-          new CanFall(),
-      };
-
+  public class Idle : AtlasState {
     public Idle() {
       behaviors = new List<IStateBehavior>() {
         new MoveBehavior(),
       };
 
       transitions = new List<IStateTransition>();
-      transitions.AddRange(defaultTransitions.ToArray());
-      
+      transitions.AddRange(defaultTransitions.ToArray()); 
     }
   }
 

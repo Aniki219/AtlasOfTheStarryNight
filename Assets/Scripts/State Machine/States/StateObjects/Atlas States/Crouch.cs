@@ -1,10 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using Transitions;
 
 namespace States {
-  public class Crouch : State {
-    public Crouch() {
+  public abstract class CrouchBase : AtlasState {
+    public CrouchBase() {
       behaviors = new List<IStateBehavior>() {
         new Behaviors.MoveBehavior()
           .CanTurnAround(false)
@@ -13,25 +14,34 @@ namespace States {
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanAttack<States.Attacks.DownTilt>().SkipWaitForExit(),
-        new Transitions.CanJump<States.GroundJump>().Pause(),
-        new Transitions.CanBroom(),
-        new Transitions.CanSlip(),
-        new Transitions.CanSlide().SkipWaitForExit(),
-        new Transitions.CanFall(),
-        new Transitions.CanUncrouch(),
+        new CanAttack<Attacks.DownTilt>().SkipWaitForExit(),
+        new CanJump<GroundJump>().Pause(),
+        new CanBroom(),
+        new CanSlip(),
+        new CanSlide().SkipWaitForExit(),
+        new CanFall(),
+        new CanUncrouch(),
+        new CrouchCrawl().SkipWaitForExit(),
       };
     }
 
-    PlayerController pc;
-    Vector3 colliderStartSize;
-    Vector3 colliderStartOffset;
+    public override async Task ExitState()
+    {
+      anim.SetFloat("animDir", 1f);
+      UnpauseTransition<CanJump<GroundJump>>(); //cant becaue transitions go on Update phase
+      colliderManager.setActiveCollider("Standing");
+      
+      await base.ExitState();
+    }
+  }
 
+  public class Crouch : CrouchBase {
+    
     public override async Task StartState()
     {
       await base.StartState();
-      pc = (PlayerController)stateMachine;
       colliderManager.setActiveCollider("Crouching");
+      controller.velocity.x = 0;
 
       //TODO I think we need to fix the animator for this to work
       //alwaysUpdate = true;
@@ -40,11 +50,22 @@ namespace States {
       }     
     }
 
-    async void performAnim() {
-      PauseTransition<Transitions.CanUncrouch>();
+    private async void performAnim() {
+      PauseTransition<CanUncrouch>();
       await WaitForPhaseAnimation(StateMachine.Phase.Start);
-      UnpauseTransition<Transitions.CanUncrouch>();
+      UnpauseTransition<CanUncrouch>();
     }
+
+    public override async Task ExitState() {
+      GetBehavior<Behaviors.MoveBehavior>().MoveSpeedMod(1.0f);
+      SetAnimation(StateMachine.Phase.Exit);
+      if (controller.isGrounded()) {
+        await AtlasHelpers.WaitSeconds(AtlasHelpers.FindAnimation(anim, "CrouchExit").length);
+      }
+    }
+  }
+
+  public class Crawl : CrouchBase {
 
     public override void UpdateState()
     {
@@ -54,20 +75,6 @@ namespace States {
       } else {
         anim.SetFloat("animDir", 1f);
       }
-    }
-
-    public override async Task ExitState()
-    {
-      anim.SetFloat("animDir", 1f);
-      UnpauseTransition<Transitions.CanJump<States.GroundJump>>(); //cant becaue transitions go on Update phase
-      colliderManager.setActiveCollider("Standing");
-      
-      GetBehavior<Behaviors.MoveBehavior>().MoveSpeedMod(1.0f);
-      SetAnimation(StateMachine.Phase.Exit);
-      if (controller.isGrounded()) {
-        await AtlasHelpers.WaitSeconds(AtlasHelpers.FindAnimation(anim, "CrouchExit").length);
-      }
-      await base.ExitState();
     }
   }
 }

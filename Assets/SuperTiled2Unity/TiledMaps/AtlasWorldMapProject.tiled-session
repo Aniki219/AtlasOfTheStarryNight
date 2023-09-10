@@ -57,11 +57,11 @@
             }
         },
         "AltairCanyon/AltairGrotto.tmx": {
-            "scale": 0.25,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -574,
-                "y": 52
+                "x": -112.5,
+                "y": 201
             }
         },
         "AltairCanyon/AltairSummit.tmx": {
@@ -185,19 +185,19 @@
             }
         },
         "AltairCanyon/RootTunnel.tmx": {
-            "scale": 0.25,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 862,
-                "y": -424
+                "x": 789,
+                "y": 212
             }
         },
         "AltairCanyon/Tutorial1.tmx": {
-            "scale": 1,
+            "scale": 0.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 512.5,
-                "y": 144
+                "x": 3505,
+                "y": 126
             }
         },
         "AltairCanyon/Tutorial2.tmx": {
@@ -225,11 +225,11 @@
             }
         },
         "AltairCanyon/Tutorial5.tmx": {
-            "scale": 1.5,
+            "scale": 3,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 370.33333333333326,
-                "y": 163.33333333333331
+                "x": 419.83333333333326,
+                "y": 131.33333333333331
             }
         },
         "AltairCanyon/WitchsHut.tmx": {
@@ -256,8 +256,8 @@
             "scale": 2.45107421875,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 256.0101996095462,
-                "y": 144.01848679230247
+                "x": 255.6022152276983,
+                "y": 143.6105024104546
             }
         }
     },
@@ -284,6 +284,9 @@
     "project": "AtlasWorldMapProject.tiled-project",
     "property.type": "int",
     "recentFiles": [
+        "AltairCanyon/Tutorial5.tmx",
+        "AltairCanyon/RootTunnel.tmx",
+        "AltairCanyon/AltairGrotto.tmx",
         "AltairCanyon/Tutorial2.tmx",
         "Tilesets/16gon.tsx",
         "testy.tmx",

@@ -250,7 +250,10 @@ public class PlayerController : EntityStateMachine
             canDoubleJump = true && hasDoubleJump;
             checkSafePosition();
         }
-        Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+
+        if (controller.showSafetyCheck) {
+            Debug.DrawLine(lastSafePosition, lastSafePosition + Vector3.up, Color.blue);
+        }
     }
 
     private void checkSafePosition() {
