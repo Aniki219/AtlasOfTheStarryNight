@@ -375,8 +375,6 @@ public class CharacterController : MonoBehaviour
         Vector3 colliderWorldPos = transform.position + (Vector3)collider.offset;
         Vector3 boxCastOrigin = colliderWorldPos - Vector3.right * safetyMargin/2;
 
-        Debug.DrawLine((Vector2)boxCastOrigin + collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right - collider.size.y / 2 * Vector2.up, Color.red);
-        Debug.DrawLine((Vector2)boxCastOrigin - collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right + collider.size.y / 2 * Vector2.up, Color.red);
 
         LayerMask safeGroundMask = collisionMask & ~LayerMask.GetMask("DesctructibleBlock");
 
@@ -384,6 +382,9 @@ public class CharacterController : MonoBehaviour
         float downDistance = 0.2f;
 
         if (showSafetyCheck) {
+            Debug.DrawLine((Vector2)boxCastOrigin + collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right - collider.size.y / 2 * Vector2.up, Color.red);
+            Debug.DrawLine((Vector2)boxCastOrigin - collider.size.y / 2 * Vector2.up, (Vector2)boxCastOrigin + (safetyMargin + collider.size.x/2) * Vector2.right + collider.size.y / 2 * Vector2.up, Color.red);
+
             Debug.DrawLine(transform.position, transform.position + Vector3.right * sideDistance, Color.cyan);  
             Debug.DrawLine(transform.position, transform.position + Vector3.left * sideDistance, Color.cyan);
             Debug.DrawLine( colliderWorldPos + collider.size.x/2 * Vector3.right,

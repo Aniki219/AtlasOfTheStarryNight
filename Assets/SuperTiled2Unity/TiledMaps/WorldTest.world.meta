@@ -8,7 +8,8 @@ ScriptedImporter:
   assetBundleName: 
   assetBundleVariant: 
   script: {fileID: 11500000, guid: c6b19dac32d07094ca0a4ffc902a36c4, type: 3}
-  missingFiles: []
+  missingFiles:
+  - tiledTestMap.tmx
   errors: []
   warnings: []
   missingSortingLayers: []
