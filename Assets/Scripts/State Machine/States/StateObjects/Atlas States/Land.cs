@@ -1,30 +1,39 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 namespace States {
-  public class Land : State {
+  public class Land : AtlasState {
+    protected float duration = 0;
+
     public Land() {
-      behaviors = new List<IStateBehavior>() {
-        new Behaviors.LandBehavior(),
-      };
-
       transitions = new List<IStateTransition>() {
-
+        new Transitions.CanSlip()
       };
+    }
+
+    public async override Task StartState()
+    {
+      await base.StartState();
+
+      if (duration > 0) {
+        particleMaker.createDust(true);
+        controller.velocity = Vector3.zero;
+        
+        await AtlasHelpers.WaitSeconds(duration);
+      }
+      stateMachine.changeState(new Idle());
     }
   }
 
   public class AttackLand : Land {
-    public AttackLand() {
-      AnimationClip attackLandClip = FindStatePhaseClip(StateMachine.Phase.Start);
-      
-      behaviors = new List<IStateBehavior>() {
-        new Behaviors.LandBehavior(attackLandClip.length-0.1f),
-      };
 
-      transitions = new List<IStateTransition>() {
-        new Transitions.CanSlip(),
-      };
+    public async override Task StartState()
+    {
+      AnimationClip attackLandClip = FindStatePhaseClip(StateMachine.Phase.Start);
+      duration = attackLandClip.length - 0.1f;
+
+      await base.StartState();
     }
   }
 }

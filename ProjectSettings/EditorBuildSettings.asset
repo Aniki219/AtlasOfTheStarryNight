@@ -9,14 +9,104 @@ EditorBuildSettings:
     path: Assets/Scenes/WorldMap/16gonTest.unity
     guid: 1da251555f87fe14dacabbc25a7667ca
   - enabled: 1
+    path: Assets/Scenes/WorldMap/AlicornAdit.unity
+    guid: 5a4354222e7777a468e87f2a399e4b91
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/AlicornBasin.unity
+    guid: d7f5ae6fc234ada458af48781c0585fe
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/AlicornTalus.unity
+    guid: f678842492ef5674083ed6be55da177b
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/AltairBornhardt.unity
+    guid: 88427845726735a4abf064843b8bb6b1
+  - enabled: 1
     path: Assets/Scenes/WorldMap/AltairGrotto.unity
     guid: 6fbf242f17868214ab51f9a04525772b
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/AltairSummit.unity
+    guid: b54e8e736454f3847bd11668164c8150
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/BasinGrotto.unity
+    guid: e00c883bbf940ca49978126c0bd8e5ec
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/BasinTrail.unity
+    guid: 4276b0741e1852b4395be60c72fd30a4
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/BigTreeCore.unity
+    guid: 679d1dfb08b2b06489bb76455f181baf
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastArete.unity
+    guid: f64a1cd8e054b4d4baf7e420fa00ab74
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastBasinForest1.unity
+    guid: 88212b54ccfb0de4e833a65e82b4cb6e
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastBasinForest2.unity
+    guid: b8d9b12825728bb41af4168d65d56133
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastBasinForest3.unity
+    guid: 90232e5cd150e654da0cabb6b56ce054
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastBasinForest4.unity
+    guid: fee391a4daa4a624fb42ab559b29c4af
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastBranchLookout.unity
+    guid: 924b2131dbe720a42bab750154d6a528
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastCanyonTrail.unity
+    guid: fde1e8428aeffdf40a49ecf8515a5c24
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EasternPeak.unity
+    guid: bc17abedb890b6b4bbcf5ba98ce343be
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EasternScowle.unity
+    guid: 6a10154a495c78442a0f214f87390772
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/EastSister.unity
+    guid: 24ae1f3a5e9f2f7428e2e4f1185745d8
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/ElderClimb.unity
+    guid: 40dcbc9545ba91548a300c30087fbadd
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/ElderPeak.unity
+    guid: a1e8e55ab890cb64fb65fbf931168248
   - enabled: 1
     path: Assets/Scenes/WorldMap/HeroStatue.unity
     guid: 098b74a55382d624b993211099db4fc2
   - enabled: 1
+    path: Assets/Scenes/WorldMap/LowerFallsBridge.unity
+    guid: 654f18c4bd48a50418a03abe55dda2f5
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/MiddleFallsBridge.unity
+    guid: 1a1915e720f47e94bab449675e68ff08
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/MidpathScowle.unity
+    guid: c30be46311f1ee4489ccfbe7a60506f5
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/OuterCavernFace.unity
+    guid: b1f94200600a9ff4d87ecc5022fdce0e
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/Roost.unity
+    guid: 00adae832fe77804c95740654545439f
+  - enabled: 1
     path: Assets/Scenes/WorldMap/RootTunnel.unity
     guid: 241c09e105c286647b91ba26d02e9ad6
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/StarCatcherSheer.unity
+    guid: a4b9b849940562445adbbd77cc290faa
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/StarCatcherTrail.unity
+    guid: 935689b30f812b848b11f954d31561c1
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/TangleForest.unity
+    guid: b5588f783018e64448c1b38a2cb88821
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/TangleForestEscape.unity
+    guid: ab11f5e8fbfd46944a69f6cb76a8b41b
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/TangleForestMaw.unity
+    guid: b8c734266ce2f8c4f9fd06f457629871
   - enabled: 1
     path: Assets/Scenes/WorldMap/template1x1.unity
     guid: eee0944264927524da6dfb2ea96d7488
@@ -29,6 +119,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap/template2x2.unity
     guid: 5830699eec2d9604abc3b672d94b6dc4
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/template3x1.unity
+    guid: 2b7c1df7e7c231e4b93e165d15598238
   - enabled: 1
     path: Assets/Scenes/WorldMap/template3x3.unity
     guid: c33842cc641cacb44a197641f803f945
@@ -47,6 +140,24 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/WorldMap/Tutorial5.unity
     guid: 006412cc8bf342a42b9be382584d0abf
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/TwilightAnnex.unity
+    guid: 12bc6b517f8b40449939fe9d1c773323
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/UpperFallsBridge.unity
+    guid: 22e5c7e6093934342a78c05c3be01203
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/WestArete.unity
+    guid: 5f8ce69a190472d4eabf0d8416c02035
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/WestCanyonTrail.unity
+    guid: be1fa83040b7d8342b81679037b70230
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/WesternNet.unity
+    guid: cf6f69bffe90ac241b08245bef9ff471
+  - enabled: 1
+    path: Assets/Scenes/WorldMap/WesternSister.unity
+    guid: 9c6fbe0fd11da02438757e87d79d1abe
   - enabled: 1
     path: Assets/Scenes/WorldMap/WitchsHut.unity
     guid: 7558e1de80c7b3d4f9e040761074ae6a

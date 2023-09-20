@@ -12,7 +12,7 @@ public class AtlasSceneManager : ScriptableObject
 {
     public const int SCREEN_TILES_WIDTH = 16;
     public const int SCREEN_TILES_HEIGHT = 9;
-    public const int TILES_PER_UNIT = 32;
+    public const int PIXELS_PER_TILE = 32;
 
     private static AtlasSceneManager instance;
     public static AtlasSceneManager Instance { get { return instance; } }
@@ -75,6 +75,7 @@ public class AtlasSceneManager : ScriptableObject
             gameManager.Instance.currentDoorLabel = "none";
         }
         gameManager.Instance.switchScene(toScene.fileName, startx, starty);
+        //Debug.Log(toScene.fileName + ": " + startx + ", " + starty);
     }
 
     public static void printSceneNames()
@@ -177,10 +178,8 @@ public class AtlasSceneManager : ScriptableObject
         if (fileName == "Main Menu") return new AtlasMap();
         AtlasWorldMap worldMapData = getWorldMapData();
         //printSceneNames();
-        AtlasMap currentMap = worldMapData.maps.Find(map => map.fileName == fileName);
-
-        if (currentMap == null) throw new Exception("No WorldMap data found for Map with fileName: " + fileName);
-        return currentMap;
+        AtlasMap currentMap = worldMapData.maps.Find(map => map.fileName == fileName) ?? throw new Exception("No WorldMap data found for Map with fileName: " + fileName);
+    return currentMap;
     }
 }
 
@@ -188,8 +187,8 @@ public class AtlasSceneManager : ScriptableObject
 public class AtlasMap
 {
     public string fileName;
-    public int x;
-    public int y;
+    public float x;
+    public float y;
     public int height;
     public int width;
 
@@ -230,7 +229,7 @@ public class AtlasWorldMap
     {
         foreach (AtlasMap m in maps)
         {
-            Debug.Log(m.fileName);
+            Debug.Log(m.fileName + ": " + m.x + ", " + m.y);
         }
     }
 }
@@ -250,13 +249,13 @@ public struct AtlasWorldMapData
             string[] arr = Regex.Split(map.fileName, pattern);
             atlasMap.fileName = arr[arr.Length-3];
 
-            int xfactor = AtlasSceneManager.SCREEN_TILES_WIDTH * AtlasSceneManager.TILES_PER_UNIT;
-            int yfactor = AtlasSceneManager.SCREEN_TILES_HEIGHT * AtlasSceneManager.TILES_PER_UNIT;
+            int xfactor = AtlasSceneManager.SCREEN_TILES_WIDTH * AtlasSceneManager.PIXELS_PER_TILE;
+            int yfactor = AtlasSceneManager.SCREEN_TILES_HEIGHT * AtlasSceneManager.PIXELS_PER_TILE;
 
-            atlasMap.x = (int)(map.x / xfactor);
-            atlasMap.y = (int)(map.y / yfactor);
-            atlasMap.height = (int)(map.height / yfactor);
-            atlasMap.width = (int)(map.width / xfactor);
+            atlasMap.x = (map.x / xfactor);
+            atlasMap.y = (map.y / yfactor);
+            atlasMap.height = (map.height / yfactor);
+            atlasMap.width = (map.width / xfactor);
 
             return atlasMap;
         }).ToList<AtlasMap>();
