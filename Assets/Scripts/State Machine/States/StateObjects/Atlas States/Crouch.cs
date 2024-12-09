@@ -59,7 +59,7 @@ namespace States {
     public override async Task ExitState() {
       GetBehavior<Behaviors.MoveBehavior>().MoveSpeedMod(1.0f);
       SetAnimation(StateMachine.Phase.Exit);
-      if (controller.isGrounded()) {
+      if (controller.IsGrounded()) {
         await AtlasHelpers.WaitSeconds(AtlasHelpers.FindAnimation(anim, "CrouchExit").length);
       }
     }

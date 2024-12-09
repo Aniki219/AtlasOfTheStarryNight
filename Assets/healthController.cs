@@ -31,7 +31,7 @@ public class HealthController : MonoBehaviour
     public bool hurtByPlayer = true;
     [ConditionalField("hurtByPlayer")] public HurtEvent hurtCallback;
     [System.Serializable]
-    public class HurtEvent : UnityEvent<HitBox> {}
+    public class HurtEvent : UnityEvent<HitBox> { }
 
     public bool deadCallback = false;
     [ConditionalField("deadCallback")] public UnityEvent onDeath;
@@ -170,7 +170,8 @@ public class HealthController : MonoBehaviour
                 return;
             }
             float dmg = 1;
-            if (!takeOneDamage) {
+            if (!takeOneDamage)
+            {
                 dmg = hitbox.damage;
             }
             takeDamage(dmg, hitbox, true);

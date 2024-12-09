@@ -23,7 +23,7 @@ public class CanCrouch : IStateTransition {
         BoxCollider2D crouchCollider = state.colliderManager.getCollider("Crouching");
         Vector2 crouchColliderSize = crouchCollider.size;
         Vector2 crouchColliderOffset = crouchCollider.offset;
-        if (cc.isGrounded() &&
+        if (cc.IsGrounded() &&
             Mathf.Abs(cc.velocity.x) >= (pc.moveSpeed - 0.5f) &&
             AtlasHelpers.Sign(cc.collisions.getAverageNorm().x) +
                 AtlasHelpers.Sign(cc.velocity.x) == 0 &&
@@ -53,7 +53,7 @@ public class CanUncrouch : IStateTransition {
     }
 
     public static bool IsAllowed(State state) {
-        return AtlasInputManager.getAxis("Dpad").getValue().y >= 0 && state.controller.checkVertDist(0.3f);
+        return AtlasInputManager.getAxis("Dpad").getValue().y >= 0 && state.controller.CheckVertDist(0.3f);
     }
 }
 }

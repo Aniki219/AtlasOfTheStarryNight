@@ -22,7 +22,7 @@ public class CarryBehavior : IStateBehavior
     public override void UpdateBehavior() {
         if (!state.anim.GetBool("isHolding") ||
             !heldObject) {
-                state.stateMachine.changeState(new States.Idle());
+                state.stateMachine.ChangeState(new States.Idle());
         }
 
         heldObject.transform.localScale = new Vector3(pc.facing, 1, 1);
@@ -58,12 +58,12 @@ public class CarryBehavior : IStateBehavior
         heldObject.parent = null;
         SceneManager.MoveGameObjectToScene(heldObject.gameObject, SceneManager.GetActiveScene());
         heldObject = null;
-        state.stateMachine.changeState(new States.Idle());
+        state.stateMachine.ChangeState(new States.Idle());
     }
 
     public async override Task ExitBehavior() {
         pc.heldObject = null;
-        pc.changeState(new States.Idle());
+        pc.ChangeState(new States.Idle());
         await Task.Yield();
     }
 }

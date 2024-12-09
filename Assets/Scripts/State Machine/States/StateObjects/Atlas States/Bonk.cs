@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Threading.Tasks;
+using Behaviors;
 
 namespace States {
   public class Bonk : AtlasState {
     public Bonk() {
       behaviors = new List<IStateBehavior>() {
-
+        new ClearMomentum(),
       };
 
       transitions = new List<IStateTransition>() {
@@ -36,7 +37,7 @@ namespace States {
 
     public override void OnAnimationEnd()
     {
-      stateMachine.changeState(new Idle());
+      stateMachine.ChangeState(new Idle());
     }
 
     public override void UpdateState()

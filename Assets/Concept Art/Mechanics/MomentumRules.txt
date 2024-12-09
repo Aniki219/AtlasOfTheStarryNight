@@ -1,0 +1,10 @@
+1. the longer the player wall-rides, the longer the momentum effect lasts.
+	- momentumTime variable
+
+2. momentum changes to point in the direction you were last moving.
+
+3. momentum magnitude decreases over time but only after it's "momentumTime" ends.
+	- (1 - EaseInQuad)
+
+4. momentum's magnitude never increases and cannot exceed the magnitude of the previous displacement.
+	- displacement_n+1 <= d_n

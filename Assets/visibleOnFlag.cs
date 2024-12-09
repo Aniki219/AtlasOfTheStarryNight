@@ -29,7 +29,10 @@ public class visibleOnFlag : MonoBehaviour
         bool active = (gameFlagsManager.Instance.checkFlag(flagName) == visibleOn);
         if (tilemap) tilemap.enabled = active;
         if (col) col.enabled = tilemap.enabled;
-        if (!tilemap && !col && !active) Destroy(gameObject);
+        if (!tilemap && !col && !active)
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void OnDestroy()

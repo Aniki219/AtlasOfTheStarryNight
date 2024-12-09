@@ -8,7 +8,7 @@ namespace Transitions.DiveToad {
     public class CanFall<T> : IStateTransition where T : State {
         public override void checkCondition() {
             if (state.controller.velocity.y < -0.01f && 
-                !state.controller.isGrounded()) {
+                !state.controller.IsGrounded()) {
                 changeState<T>();
             }
         }

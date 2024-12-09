@@ -12,7 +12,7 @@ namespace Transitions {
         }
 
         public override void checkCondition() {
-            if (AtlasInputManager.getKeyPressed("Jump") && state.controller.checkVertDist(0.3f)) {
+            if (AtlasInputManager.getKeyPressed("Jump") && state.controller.CheckVertDist(0.3f)) {
                 changeState(getNewState<T>());
             }
         }

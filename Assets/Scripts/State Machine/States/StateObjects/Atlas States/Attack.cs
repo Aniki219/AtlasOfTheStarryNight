@@ -28,24 +28,24 @@ namespace States {
     }
 
     public override void OnAnimationEnd() {
-      if (!controller.isGrounded()) {
+      if (!controller.IsGrounded()) {
         if (controller.velocity.y > 0) {
-          stateMachine.changeState(new States.PostJump());
+          stateMachine.ChangeState(new States.PostJump());
           return;
         }
-        stateMachine.changeState(new States.Fall());
+        stateMachine.ChangeState(new States.Fall());
         return;
       }
       //Grounded
       if (AtlasInputManager.getAxis("Dpad").getDirection().y.Equals(TiltDirection.Down)) {
-        stateMachine.changeState(new States.Crouch().SkipStartAnim());
+        stateMachine.ChangeState(new States.Crouch().SkipStartAnim());
         return;
       }
       if (AtlasInputManager.getAxis("Dpad").getDirection().x.Equals(TiltDirection.Neutral)) {
-        stateMachine.changeState(new States.Run());
+        stateMachine.ChangeState(new States.Run());
         return;
       }
-      stateMachine.changeState(new States.Idle());
+      stateMachine.ChangeState(new States.Idle());
     }
   }
 
@@ -76,7 +76,7 @@ namespace States {
     public class DownTilt : Attack {
       public override void OnAnimationEnd() {
         Debug.Log("Crouch Anim End");
-        stateMachine.changeState(new States.Crouch().SkipStartAnim());
+        stateMachine.ChangeState(new States.Crouch().SkipStartAnim());
       }
     }
     public abstract class Jab : Attack {

@@ -47,7 +47,7 @@ namespace States {
       await AtlasHelpers.WaitSeconds(0.01f);
       pc.flipHorizontal();
       await AtlasHelpers.WaitSeconds(0.12f);
-      stateMachine.changeState(new States.PostJump().RemoveTransition<Transitions.CanTurnAround>());
+      stateMachine.ChangeState(new States.PostJump().RemoveTransition<Transitions.CanTurnAround>());
     }
 
     public override async Task ExitState() {

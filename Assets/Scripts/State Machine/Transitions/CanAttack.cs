@@ -8,7 +8,7 @@ namespace Transitions {
 public class CanAttack : IStateTransition {
     public override void checkCondition() {
         if (AtlasInputManager.getKeyPressed("Attack")) {
-            bool arial = !state.controller.isGrounded();
+            bool arial = !state.controller.IsGrounded();
             bool falling = state.controller.velocity.y < 0;
             TiltInfo direction = AtlasInputManager.getAxis("Dpad").getDirection();
 

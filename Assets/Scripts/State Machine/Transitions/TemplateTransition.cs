@@ -2,7 +2,7 @@
 using System;
 
 namespace Transitions {
-    public class TemplateTransition : IStateTransition {
+    public class TemplateTransision : IStateTransition {
         public override void checkCondition() {
 
         }

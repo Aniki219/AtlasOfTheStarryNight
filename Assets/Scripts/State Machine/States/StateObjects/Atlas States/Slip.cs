@@ -1,21 +1,23 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using Transitions;
 
 namespace States {
   public class Slip : AtlasState {
+    readonly float timeToSpinJump = 0.1f;
+    
     public Slip() {
       behaviors = new List<IStateBehavior>() {
-        new Behaviors.SlipBehavior(),
         new Behaviors.NovaBehavior().GainSpeed(NovaManager.GainSpeed.Fast),
       };
 
       transitions = new List<IStateTransition>() {
-        new Transitions.CanBroom(),
-        new Transitions.CanFall(),
+        new CanBroom(),
+        new CanFall(),
 
-        new Transitions.CanJump<States.GroundJump>(),
-        new Transitions.CanJump<States.SpinJump>(),
+        //new CanJump<GroundJump>(),
+        new CanJump<SpinJump>().Pause(),
       };
     }
 
@@ -23,6 +25,23 @@ namespace States {
     {
       await base.StartState();
       broomEffectsController.SetSlipSparks(true);
+
+      pc.setFacing(AtlasHelpers.Sign(controller.collisions.getGroundSlope().x));
+
+      controller.velocity.x = 0;
+      
+      await Task.Yield();
+    }
+
+    public override void UpdateState()
+    {
+      base.UpdateState();
+      if (controller.collisions.getGroundSlope().y > controller.maxSlope) {
+          pc.ChangeState(new Idle());
+      }
+      if (StateTime() > timeToSpinJump) {
+          GetTransition<CanJump<SpinJump>>().Unpause();
+      }
     }
 
     public override async Task ExitState()

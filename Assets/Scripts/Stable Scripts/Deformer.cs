@@ -93,7 +93,7 @@ public class Deformer : MonoBehaviour
                 Mathf.Abs(startScale.x),
                 Mathf.Abs(startScale.y),
                 Mathf.Abs(startScale.z)
-            ), 
+            ),
             new Vector3(
                 Mathf.Sign(transform.localScale.x),
                 Mathf.Sign(transform.localScale.y),
@@ -111,7 +111,8 @@ public class Deformer : MonoBehaviour
         // transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * facing, transform.localScale.y, transform.localScale.z);
     }
 
-    public int getFacing() {
+    public int getFacing()
+    {
         return facing;
     }
 
@@ -164,12 +165,13 @@ public class Deformer : MonoBehaviour
             {
                 newScale = Vector3.Lerp(Vector3.one, d.to, elapsedTime / d.timeTo);
             }
-            else 
+            else
             {
                 if (d.timeReturn < 0)
                 {
                     newScale = d.to;
-                } else
+                }
+                else
                 {
                     newScale = Vector3.Lerp(d.to, Vector3.one, (elapsedTime - d.timeTo) / d.timeReturn);
                 }
@@ -216,22 +218,24 @@ public class Deformer : MonoBehaviour
         deforms.Add(newDeform);
     }
 
-    public void flashColor(FlashColor _flashColor = null) {
-        if (flashColorRef != null && flashColorRef.Equals(_flashColor)) return;
-        endFlashColor();
-        if (_flashColor == null) {
-            flashColorRef = FlashColor.builder
-                .withColor(Color.white)
-                .withTimeUnits(TimeUnits.COUNTS)
-                .withCycleCount(1)
-                .build();
-        } else {
-            flashColorRef = _flashColor;
-        }
-        flashColorRef.task = StartCoroutine(nameof(performFlashColor));
+    public void flashColor(FlashColor _flashColor = null)
+    {
+        // if (flashColorRef != null && flashColorRef.Equals(_flashColor)) return;
+        // endFlashColor();
+        // if (_flashColor == null) {
+        //     flashColorRef = FlashColor.builder
+        //         .withColor(Color.white)
+        //         .withTimeUnits(TimeUnits.COUNTS)
+        //         .withCycleCount(1)
+        //         .build();
+        // } else {
+        //     flashColorRef = _flashColor;
+        // }
+        // flashColorRef.task = StartCoroutine(nameof(performFlashColor));
     }
 
-    public void endFlashColor() {
+    public void endFlashColor()
+    {
         if (flashColorRef == null || flashColorRef.task == null) return;
         StopCoroutine(flashColorRef.task);
         sprite.material = playerStatsManager.Instance.currentSkin;
@@ -239,27 +243,33 @@ public class Deformer : MonoBehaviour
         flashColorRef = null;
     }
 
-    private IEnumerator performFlashColor() {
+    private IEnumerator performFlashColor()
+    {
         int counts = 0;
         float startTime = Time.time;
         if (!flashColorRef.tint) sprite.material = flashMaterial;
-        while(condition()) {
+        while (condition())
+        {
             counts++;
             sprite.color = flashColorRef.color;
-            if (flashColorRef.timeUnits == TimeUnits.SECONDS) {
+            if (flashColorRef.timeUnits == TimeUnits.SECONDS)
+            {
                 yield return new WaitForSeconds(flashColorRef.effectDuration);
                 break;
             }
             yield return new WaitForSeconds(0.2f);
         }
-        
+
         endFlashColor();
 
-        bool condition() {
-            if (flashColorRef.timeUnits.Equals(TimeUnits.COUNTS)) {
+        bool condition()
+        {
+            if (flashColorRef.timeUnits.Equals(TimeUnits.COUNTS))
+            {
                 return counts < flashColorRef.effectDuration;
             }
-            if (flashColorRef.timeUnits.Equals(TimeUnits.SECONDS)) {
+            if (flashColorRef.timeUnits.Equals(TimeUnits.SECONDS))
+            {
                 return startTime + flashColorRef.effectDuration < Time.time;
             }
             //Continous
@@ -267,16 +277,18 @@ public class Deformer : MonoBehaviour
         }
     }
 
-    
+
 }
 
-public enum TimeUnits {
+public enum TimeUnits
+{
     SECONDS,
     COUNTS,
     CONTINUOUS
 }
 
-public class FlashColor {
+public class FlashColor
+{
     public TimeUnits timeUnits { get; private set; }
     public float effectDuration { get; private set; }
     public float cycleDuration { get; private set; }
@@ -286,7 +298,8 @@ public class FlashColor {
 
     public Coroutine task;
 
-    private FlashColor(FlashColorRequest fcrb) {
+    private FlashColor(FlashColorRequest fcrb)
+    {
         timeUnits = fcrb.timeUnits;
         effectDuration = fcrb.effectDuration;
         cycleDuration = fcrb.cycleDuration;
@@ -295,14 +308,16 @@ public class FlashColor {
         tint = fcrb.tint;
     }
 
-    public bool Equals(FlashColor other) {
+    public bool Equals(FlashColor other)
+    {
         if (other == null) return false;
         return color.Equals(other.color);
     }
 
     public static FlashColorRequest builder;
 
-    public struct FlashColorRequest {
+    public struct FlashColorRequest
+    {
         public TimeUnits timeUnits;
         public float effectDuration;
         public float cycleDuration;
@@ -310,37 +325,44 @@ public class FlashColor {
         public Color color;
         public bool tint;
 
-        public FlashColorRequest withTimeUnits(TimeUnits timeUnitsToUse) {
+        public FlashColorRequest withTimeUnits(TimeUnits timeUnitsToUse)
+        {
             timeUnits = timeUnitsToUse;
             return this;
         }
 
-        public FlashColorRequest withEffectDuration(float effectDurationToUse) {
+        public FlashColorRequest withEffectDuration(float effectDurationToUse)
+        {
             effectDuration = effectDurationToUse;
             return this;
         }
 
-        public FlashColorRequest withCycleDuration(float cycleDurationToUse) {
+        public FlashColorRequest withCycleDuration(float cycleDurationToUse)
+        {
             cycleDuration = cycleDurationToUse;
             return this;
         }
 
-        public FlashColorRequest withCycleCount(int cycleCountToUse) {
+        public FlashColorRequest withCycleCount(int cycleCountToUse)
+        {
             cycleCount = cycleCountToUse;
             return this;
         }
 
-        public FlashColorRequest withColor(Color colorToUse) {
+        public FlashColorRequest withColor(Color colorToUse)
+        {
             color = colorToUse;
             return this;
         }
 
-        public FlashColorRequest withTint(bool isTint) {
+        public FlashColorRequest withTint(bool isTint)
+        {
             tint = isTint;
             return this;
         }
 
-        public FlashColor build() {
+        public FlashColor build()
+        {
             return new FlashColor(this);
         }
     }

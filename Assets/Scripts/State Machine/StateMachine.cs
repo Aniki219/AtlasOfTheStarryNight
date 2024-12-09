@@ -18,7 +18,7 @@ public abstract class StateMachine : MonoBehaviour {
 
   public virtual void Start() {
     startState.Attach(this);
-    changeState(startState);
+    ChangeState(startState);
   }
 
   public virtual void Update() {
@@ -43,7 +43,7 @@ public abstract class StateMachine : MonoBehaviour {
   }
 
   ChangeStateRequest changeStateRequest;
-  public void changeState(State newState, bool skipWaitForExit = false) {
+  public void ChangeState(State newState, bool skipWaitForExit = false) {
     if (checkState(newState)) {
       return;
     }
@@ -55,21 +55,23 @@ public abstract class StateMachine : MonoBehaviour {
   }
 
   public void changeState<T>(bool skipWaitForExit = false) where T : State {
-    changeState((T) Activator.CreateInstance(typeof(T)));
+    ChangeState((T) Activator.CreateInstance(typeof(T)));
   }
 
   /* Exit finishes and Start begins on the same Update tick
   right now I want to use this fact for linking together novadash behavior
   */
   private async void doChangeState(State newState, bool skipWaitForExit = false) {
-    changePhase(Phase.Exit);
-    if (skipWaitForExit) {
-      _ = state.ExitState();
-      await Task.Delay(16);
-    } else {
-      await state.ExitState();
+    if (!state.skipExitState) {
+      changePhase(Phase.Exit);
+      if (skipWaitForExit) {
+        _ = state.ExitState();
+        await Task.Delay(16);
+      } else {
+        await state.ExitState();
+      }
+      state.PostExitState();
     }
-    state.PostExitState();
     
     state = newState;
     newState.Attach(this);

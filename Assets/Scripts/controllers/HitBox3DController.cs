@@ -13,12 +13,12 @@ public class HitBox3DController : MonoBehaviour
     {
         if (other.tag == "ResetDamaging")
         {
-            pc.startBonk(1, true);
+            pc.StartBonk(1, true);
         }
 
         if (other.gameObject.layer == LayerMask.NameToLayer("Danger"))
         {
-            pc.startBonk(1, false);
+            pc.StartBonk(1, false);
         }
     }
 }

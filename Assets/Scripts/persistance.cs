@@ -10,7 +10,7 @@ public class persistance : MonoBehaviour
     public bool persistant = true;
     public bool markRemovedOnDestroy = true;
     public bool onceEnemiesDefeated = false;
-    
+
     // Start is called before the first frame update
     void Start()
     {

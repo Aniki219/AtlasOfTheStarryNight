@@ -19,7 +19,9 @@ public abstract class State
     public bool hasEnded {get; private set;} = false;
 
     protected bool skipStartAnim = false;
-    public bool alwaysUpdate = false;
+    public bool alwaysUpdate {get; private set;} = false;
+    public bool skipStartState {get; private set;} = false; 
+    public bool skipExitState = false;
 
     public float stateStartTime {get; private set;}
 
@@ -156,7 +158,7 @@ public abstract class State
         if (clip) {
             clipLength = clip.length;
         } else {
-            Debug.LogWarning("No clip found for " + GetType());
+            //Debug.LogWarning("No clip found for " + GetType());
         }
     }
 

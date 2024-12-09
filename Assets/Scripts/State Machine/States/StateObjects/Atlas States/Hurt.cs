@@ -44,9 +44,9 @@ namespace States {
     public override void OnAnimationEnd()
     {
       if (reset) {
-        stateMachine.changeState(new Reset());
+        stateMachine.ChangeState(new Reset());
       } else {
-        stateMachine.changeState(new Idle());
+        stateMachine.ChangeState(new Idle());
       }
     }
 

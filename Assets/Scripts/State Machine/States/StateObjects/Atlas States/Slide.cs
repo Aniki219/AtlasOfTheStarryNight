@@ -35,7 +35,7 @@ namespace States {
       base.UpdateState();
       if (slideVelocityEaser.isComplete) {
           controller.setXVelocity(0);
-          stateMachine.changeState(new States.Crouch().SkipStartAnim());
+          stateMachine.ChangeState(new States.Crouch().SkipStartAnim());
       } else {
           controller.setXVelocity(slideVelocityEaser.Update());
       }

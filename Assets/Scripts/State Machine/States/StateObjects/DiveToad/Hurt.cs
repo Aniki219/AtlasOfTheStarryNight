@@ -43,7 +43,7 @@ namespace States.DiveToad {
       //TODO: await hitbox.hitStun;
       await AtlasHelpers.WaitSeconds(0.4f);
 
-      stateMachine.changeState(new Idle());
+      stateMachine.ChangeState(new Idle());
     }
 
     public override void UpdateState()

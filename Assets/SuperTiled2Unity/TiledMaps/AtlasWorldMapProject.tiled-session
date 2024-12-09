@@ -3,7 +3,7 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "AltairCanyon/Tutorial1.tmx",
+    "activeFile": "AltairCanyon/Tutorial5.tmx",
     "console.history": [
         "map.save",
         "map",
@@ -17,6 +17,8 @@
         "map.property(\"fileName\")"
     ],
     "expandedProjectPaths": [
+        "AltairCanyon",
+        "."
     ],
     "exportAsImage.drawTileGrid": false,
     "exportAsImage.includeBackgroundColor": false,
@@ -60,11 +62,11 @@
             }
         },
         "AltairCanyon/AltairGrotto.tmx": {
-            "scale": 1,
+            "scale": 0.75,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 915.5,
-                "y": 211.5
+                "x": 256.66666666666663,
+                "y": 288
             }
         },
         "AltairCanyon/AltairSummit.tmx": {
@@ -100,11 +102,11 @@
             }
         },
         "AltairCanyon/EastArete.tmx": {
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 153,
-                "y": 164.33333333333331
+                "x": 256.25,
+                "y": 144
             }
         },
         "AltairCanyon/EastBasinForest1.tmx": {
@@ -215,8 +217,8 @@
             "scale": 0.5,
             "selectedLayer": 1,
             "viewCenter": {
-                "x": 1657,
-                "y": -1403
+                "x": 513,
+                "y": 452
             }
         },
         "AltairCanyon/LowerFallsBridge.tmx": {
@@ -244,11 +246,11 @@
             }
         },
         "AltairCanyon/OuterCavernFace.tmx": {
-            "scale": 1.5,
+            "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 663.6666666666666,
-                "y": 451
+                "x": 256.25,
+                "y": 288
             }
         },
         "AltairCanyon/Roost.tmx": {
@@ -308,19 +310,19 @@
             }
         },
         "AltairCanyon/Tutorial1.tmx": {
-            "scale": 0.25,
+            "scale": 1.5,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 2194,
-                "y": 398
+                "x": 3003,
+                "y": 209.33333333333331
             }
         },
         "AltairCanyon/Tutorial2.tmx": {
             "scale": 0.33,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 360.6060606060606,
-                "y": 145.4545454545455
+                "x": 256.06060606060623,
+                "y": 142.4242424242425
             }
         },
         "AltairCanyon/Tutorial3.tmx": {
@@ -343,8 +345,8 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 186.75,
-                "y": 164.25
+                "x": 684.25,
+                "y": 94.5
             }
         },
         "AltairCanyon/TwilightAnnex.tmx": {
@@ -356,11 +358,11 @@
             }
         },
         "AltairCanyon/UpperFallsBridge.tmx": {
-            "scale": 0.5,
+            "scale": 1,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -57,
-                "y": 202
+                "x": 256.5,
+                "y": 144
             }
         },
         "AltairCanyon/WestArete.tmx": {
@@ -411,16 +413,16 @@
             "scale": 2,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": -18.75,
-                "y": 109.25
+                "x": 128.25,
+                "y": 144
             }
         },
         "AltairCanyon/rules.tmx": {
             "scale": 1.5,
-            "selectedLayer": 2,
+            "selectedLayer": 1,
             "viewCenter": {
-                "x": 253,
-                "y": 870.3333333333333
+                "x": 178.99999999999997,
+                "y": 138
             }
         },
         "AltairCanyon/rules.tmx#Blockout": {
@@ -438,12 +440,15 @@
             "scaleInDock": 1,
             "scaleInEditor": 1
         },
+        "Tilesets/Walls.tsx": {
+            "scaleInDock": 1
+        },
         "testy.tmx": {
             "scale": 2.45107421875,
             "selectedLayer": 0,
             "viewCenter": {
-                "x": 255.6022152276983,
-                "y": 143.6105024104546
+                "x": 255.19423084585046,
+                "y": 143.20251802860673
             }
         }
     },
@@ -466,23 +471,31 @@
         "AltairCanyon/Tutorial1.tmx",
         "testy.tmx",
         "Tilesets/16gon.tsx",
-        "AltairCanyon/Tutorial2.tmx"
+        "AltairCanyon/Tutorial2.tmx",
+        "AltairCanyon/AltairGrotto.tmx",
+        "AltairCanyon/rules.tmx",
+        "AltairCanyon/backgroundrules.tmx",
+        "AltairCanyon/Tutorial5.tmx",
+        "AltairCanyon/HeroStatue.tmx",
+        "AltairCanyon/EastArete.tmx",
+        "AltairCanyon/OuterCavernFace.tmx",
+        "AltairCanyon/UpperFallsBridge.tmx"
     ],
     "project": "AtlasWorldMapProject.tiled-project",
     "property.type": "color",
     "recentFiles": [
-        "AltairCanyon/rules.tmx",
-        "AltairCanyon/automap-tiles.tsx",
         "AltairCanyon/Tutorial1.tmx",
-        "AltairCanyon/WesternSister.tmx",
-        "AltairCanyon/StarCatcherTrail.tmx",
-        "AltairCanyon/EastBasinForest2.tmx",
-        "AltairCanyon/EastBasinForest1.tmx",
+        "testy.tmx",
+        "Tilesets/16gon.tsx",
+        "AltairCanyon/Tutorial2.tmx",
+        "AltairCanyon/AltairGrotto.tmx",
+        "AltairCanyon/rules.tmx",
+        "AltairCanyon/backgroundrules.tmx",
+        "AltairCanyon/UpperFallsBridge.tmx",
+        "AltairCanyon/OuterCavernFace.tmx",
+        "AltairCanyon/EastArete.tmx",
         "AltairCanyon/HeroStatue.tmx",
-        "AltairCanyon/BasinTrail.tmx",
-        "AltairCanyon/BasinGrotto.tmx",
-        "AltairCanyon/WitchsHut.tmx",
-        "AltairCanyon/Tutorial2.tmx"
+        "AltairCanyon/Tutorial5.tmx"
     ],
     "tileset.embedInMap": false,
     "tileset.lastUsedExportFilter": "All Files (*)",

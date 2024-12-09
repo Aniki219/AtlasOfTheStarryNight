@@ -16,7 +16,10 @@ public class selfDestruct : MonoBehaviour
 
     public void Start()
     {
-        if (lifetime != Mathf.Infinity) Destroy(gameObject, lifetime);
+        if (lifetime != Mathf.Infinity)
+        {
+            Destroy(gameObject, lifetime);
+        }
     }
 
     private void Update()

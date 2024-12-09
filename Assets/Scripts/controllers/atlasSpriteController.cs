@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class AtlasSpriteController : MonoBehaviour
 {
@@ -8,6 +9,12 @@ public class AtlasSpriteController : MonoBehaviour
     SpriteRenderer sprite;
 
     public GameObject dustTrail;
+    public ParticleSystem momentumTrail;
+
+    public float targetZRotation;
+    private float currentZRotation;
+    private float zSmoothing;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,7 +26,22 @@ public class AtlasSpriteController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        //momentumTrail.gameObject.SetActive(true);//pc.hasMomentum);
+
+        momentumTrail.textureSheetAnimation.SetSprite(0, sprite.sprite);
+
+        currentZRotation = Mathf.SmoothDampAngle(currentZRotation, targetZRotation, ref zSmoothing, 0.05f);
+
+        transform.localRotation = Quaternion.Euler(transform.localRotation.x, transform.localRotation.y, currentZRotation);
+    }
+
+    public void SetZRotation(float angle) {
+        sprite.transform.rotation = Quaternion.Euler(new Vector3(sprite.transform.localEulerAngles.x,
+                                                                 sprite.transform.localEulerAngles.y,
+                                                                 angle));
+        targetZRotation = angle;
+        currentZRotation = angle;
+        zSmoothing = 0;
     }
 
     public void returnToMovement()

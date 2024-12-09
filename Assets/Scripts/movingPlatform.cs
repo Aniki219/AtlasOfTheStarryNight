@@ -82,7 +82,7 @@ public class movingPlatform : MonoBehaviour
                 PlayerController pc = gameManager.Instance.playerCtrl;
                 if (pc.canMovingPlatform())
                 {
-                    if (velocity.y > 0 && !actor.transform.GetComponent<CharacterController>().checkVertDist(velocity.y))
+                    if (velocity.y > 0 && !actor.transform.GetComponent<CharacterController>().CheckVertDist(velocity.y))
                     {
                         pc.dropThroughPlatforms = true;
                         return;

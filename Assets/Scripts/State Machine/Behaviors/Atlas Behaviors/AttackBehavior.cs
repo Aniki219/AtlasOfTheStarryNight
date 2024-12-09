@@ -16,7 +16,7 @@ public class AttackBehavior : IStateBehavior
         //TODO: See if we can move `selectAttack()` into here
         state.deformer.RemoveDeform("fastfall");
         if (resetVelocity) state.controller.velocity = Vector3.zero;
-        if (!state.controller.isGrounded())
+        if (!state.controller.IsGrounded())
         {
             arialAttacking = true;
         }

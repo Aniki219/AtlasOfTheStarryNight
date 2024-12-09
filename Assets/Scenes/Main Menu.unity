@@ -337,6 +337,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1865960142, guid: b23c6ebcfdc05d9469ed81645de5d804, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1793932674423497018, guid: b23c6ebcfdc05d9469ed81645de5d804,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
@@ -367,10 +371,25 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_StringArgument
       value: LandingSite
       objectReference: {fileID: 0}
+    - target: {fileID: 6339712874867237023, guid: b23c6ebcfdc05d9469ed81645de5d804,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6339712875662715113, guid: b23c6ebcfdc05d9469ed81645de5d804,
         type: 3}
       propertyPath: m_Name
       value: MainMenuCanvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 6339712875662715113, guid: b23c6ebcfdc05d9469ed81645de5d804,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6339712875662715114, guid: b23c6ebcfdc05d9469ed81645de5d804,
+        type: 3}
+      propertyPath: m_AdditionalShaderChannelsFlag
+      value: 25
       objectReference: {fileID: 0}
     - target: {fileID: 6339712875662715117, guid: b23c6ebcfdc05d9469ed81645de5d804,
         type: 3}
@@ -475,6 +494,11 @@ PrefabInstance:
     - target: {fileID: 6339712875662715117, guid: b23c6ebcfdc05d9469ed81645de5d804,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8109742136121275662, guid: b23c6ebcfdc05d9469ed81645de5d804,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

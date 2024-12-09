@@ -6,7 +6,7 @@ namespace Transitions {
         bool attacking;
 
         public override void checkCondition() {
-            if (state.controller.isGrounded() && state.controller.velocity.y <= 0) {
+            if (state.controller.IsGrounded() && state.controller.velocity.y <= 0) {
                 doLand();
             }
         }

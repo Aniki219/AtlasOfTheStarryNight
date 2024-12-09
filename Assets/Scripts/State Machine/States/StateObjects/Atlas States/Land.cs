@@ -22,7 +22,7 @@ namespace States {
         
         await AtlasHelpers.WaitSeconds(duration);
       }
-      stateMachine.changeState(new Idle());
+      stateMachine.ChangeState(new Idle());
     }
   }
 

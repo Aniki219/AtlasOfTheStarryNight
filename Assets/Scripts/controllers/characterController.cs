@@ -24,6 +24,12 @@ public class CharacterController : MonoBehaviour
     #endif
 
 
+    [Foldout("Velocity")] public Vector3 momentum;
+    [Foldout("Velocity")] public Vector3 initialMomentum;
+    [Foldout("Velocity")] public float momentumStartTime;
+    [Foldout("Velocity")] public float momentumHangTime;
+    [Foldout("Velocity")] public float momentumDecayTime = 1.0f;
+
     [Foldout("Velocity")] public Vector3 velocity;
     public Vector3 velocityOut { get; private set;}
     [Foldout("Velocity")] [SerializeField] Vector3 additionalVelocity;
@@ -37,6 +43,7 @@ public class CharacterController : MonoBehaviour
     [Foldout("Collision Info")] public LayerMask dangerMask;
 
     [Foldout("Special")] public bool canCrouch = false;
+    [Foldout("Special")] public bool canDescendRamps = true;
 
     //TODO: wtf is this?
     private float safetyMargin = 1;
@@ -50,7 +57,7 @@ public class CharacterController : MonoBehaviour
     
     [Foldout("Gravity")] public float termVel = -10;
     [Foldout("Gravity")] public float gravityMod = 1.0f;
-    public float gravity {get; private set;}
+    [Foldout("Gravity")] [SerializeField] private float gravity;
     [Foldout("Gravity")] [SerializeField] private float currentGravity = 0;
     [Foldout("Gravity")] public float maxGravity = 8.0f;
     private float gravitySmoothing = 0;
@@ -83,8 +90,7 @@ public class CharacterController : MonoBehaviour
         collisions.Init();
     }
 
-    private void FixedUpdate()
-    {
+    private void FixedUpdate() {
         //Keep track of "justLanded" and "justHeadBonked"
         UpdateBoundaryPoints();
         if (canMove)
@@ -120,8 +126,7 @@ public class CharacterController : MonoBehaviour
         }
     }
 
-    private void doGravity()
-    {
+    private void doGravity() {
         if (collisions.isGrounded() && collisions.getGroundSlope().y >= maxSlope)
         {
             currentGravity = 0;
@@ -140,18 +145,32 @@ public class CharacterController : MonoBehaviour
         Absolute,
         Reverse
     }
+
     public void setXVelocity(float value, VelocityType vtype = VelocityType.Relative) {
         velocity.x = value;
         if (vtype.Equals(VelocityType.Relative)) velocity.x *= stateMachine.facing;
         if (vtype.Equals(VelocityType.Reverse)) velocity.x *= -stateMachine.facing;
     }
 
-    public void resetGravity()
-    {
+    public void resetGravity() {
         currentGravity = 0;
     }
 
     public void Move(Vector3 vel) {
+
+        float my = initialMomentum.y * Mathf.Clamp01(
+                    Mathf.Lerp(1, 0, Mathf.Max(Time.time - momentumStartTime - momentumHangTime, 0)/momentumDecayTime)
+                );
+        float mx = initialMomentum.x * Mathf.Clamp01(
+                    Mathf.Lerp(1, 0, Mathf.Max(Time.time - momentumStartTime - momentumHangTime, 0)/momentumDecayTime/2)
+                );
+        if (IsGrounded()) {
+            mx = my = 0;
+        }
+        momentum = new Vector2(mx, my);
+
+        vel += momentum;
+        
         vel = (vel + additionalVelocity) * Time.deltaTime;
 
         if (!collisions.isTangible()) {
@@ -172,16 +191,13 @@ public class CharacterController : MonoBehaviour
 
         Vector3 oldPosition = transform.position * 1.0f;
 
-        transform.position += (Vector3)resolveCollision(vel);
-        checkGrounded();
+        Vector3 d = (Vector3)resolveCollision(vel);
 
-        if (collisions.wasGrounded && !collisions.isGrounded() && vel.y <= 0) {
-            CollisionData checkDown = detectCollision(slopeDetectRange * Time.deltaTime * Vector2.down); 
-            if (checkDown.hit) {
-                float dist = Mathf.Abs(checkDown.distance);
-                transform.position += (Vector3)resolveCollision(dist * Vector3.down, false);
-                checkGrounded();
-            }
+        transform.position += d;
+        CheckGrounded();
+
+        if (canDescendRamps) {
+            DescendRamp(vel);
         }
 
         velocityOut = transform.position - oldPosition;
@@ -194,23 +210,37 @@ public class CharacterController : MonoBehaviour
 
         int tries = 0;
         while(tries <= 8) { 
-            CollisionData collisionData = detectCollision(dp);
+            CollisionData collisionData = DetectCollision(dp);
 
+            //TODO: seems wrong af??
             if (!canSlide) {
                 collisionData.normal = Vector2.up;
             }
 
             if (collisionData.hit) {
                 dp += collisionData.normal * (Mathf.Abs(collisionData.distance) + 0.002f);
-                if (Vector2.Dot(vel, collisionData.normal) > 0) {
-                    dp = collisionData.normal * vel.magnitude;
-                }
+
+                //TODO: what is this? step up??
+                // if (Vector2.Dot(vel, collisionData.normal) > 0) {
+                //     dp = collisionData.normal * vel.magnitude;
+                // }
             } else {
                 return dp;
             }
             tries++;
         }
         return Vector2.zero;
+    }
+
+    private void DescendRamp(Vector2 vel) {
+        if (collisions.wasGrounded && !collisions.isGrounded() && vel.y <= 0) {
+            CollisionData checkDown = DetectCollision(slopeDetectRange * Time.deltaTime * Vector2.down); 
+            if (checkDown.hit) {
+                float dist = Mathf.Abs(checkDown.distance);
+                transform.position += (Vector3)resolveCollision(dist * Vector3.down, false);
+                CheckGrounded();
+            }
+        }
     }
 
     public struct CollisionData {
@@ -221,7 +251,7 @@ public class CharacterController : MonoBehaviour
         public Collider2D otherCollider;
     }
 
-    public CollisionData detectCollision(Vector2 dp) {
+    public CollisionData DetectCollision(Vector2 dp) {
         BoxCollider2D collider = colliderManager.getCollider();
 
         Vector2 originalOffset = collider.offset;
@@ -267,10 +297,10 @@ public class CharacterController : MonoBehaviour
             }
 
             //Walk into steep walls as if they were vertical ->/ => ->|
-            // if (collisions.wasGrounded && returnData.normal.y < maxSlope && Mathf.Sign(returnData.normal.x) != Mathf.Sign(velocity.x) ) {
-            //     returnData.normal.y = 0;
-            //     returnData.normal.Normalize();
-            // }
+            if (collisions.wasGrounded && returnData.normal.y < maxSlope && Mathf.Sign(returnData.normal.x) != Mathf.Sign(velocity.x) ) {
+                returnData.normal.y = 0;
+                returnData.normal.Normalize();
+            }
 
         }
 
@@ -278,9 +308,9 @@ public class CharacterController : MonoBehaviour
         return returnData;
     }
 
-    public CollisionData checkGrounded()
+    public CollisionData CheckGrounded()
     {
-        CollisionData data = detectCollision(Vector2.up * ( - groundedCheckRange));
+        CollisionData data = DetectCollision(Vector2.up * ( - groundedCheckRange));
         if (!collisions.isGrounded() && data.hit) OnLanding.Invoke();
         if (velocity.y <= 0) collisions.setGroundSlope(data.normal);
         collisions.setGrounded(velocity.y <= 0 && data.hit);
@@ -290,8 +320,21 @@ public class CharacterController : MonoBehaviour
     [Range(0.002f, 0.020f)]
     public float groundedCheckRange = 0.008f;
 
-    public bool isGrounded() {
+    public bool IsGrounded() {
         return collisions.isGrounded();
+    }
+
+    public bool CollisionInMoveDirection() {
+        return 
+            velocity.x < 0 && collisions.getLeft() ||
+            velocity.x > 0 && collisions.getRight() ||
+            velocity.y < 0 && collisions.getBelow() ||
+            velocity.y > 0 && collisions.getAbove();
+    }
+
+    public bool HasSteepCollision() {
+        return 
+            collisions.hasNormWhere(norm => Mathf.Abs(Vector2.Dot(norm, velocity.normalized)) > 0.8f, true);
     }
 
     public void AddVelocity(Vector3 amount)
@@ -300,9 +343,13 @@ public class CharacterController : MonoBehaviour
         additionalVelocity += amount;
     }
 
-    public bool checkVertDist(float dist)
+    public bool CheckVertDist(float dist)
     {
-        return !detectCollision(Vector2.up * dist).hit;
+        return !DetectCollision(Vector2.up * dist).hit;
+    }
+
+    public float GetGravity() {
+        return gravity * gravityMod;
     }
 
 #region Rework needed
@@ -524,8 +571,9 @@ public class CharacterController : MonoBehaviour
             return (normals.Aggregate(Vector2.zero, (v1, v2) => v1 + v2) / normals.Count).normalized;
         }
 
-        public bool hasNormWhere(Predicate<Vector2> lambda) {
-            return normals.Find(lambda) != default;
+        public bool hasNormWhere(Predicate<Vector2> lambda, bool includeAverage = false) {
+            List<Vector2> n = includeAverage ? normals.Concat(new List<Vector2>{getAverageNorm()}).ToList() : normals; 
+            return n.Find(lambda) != default;
         }
 
         public void setCollidable(bool on = true) {

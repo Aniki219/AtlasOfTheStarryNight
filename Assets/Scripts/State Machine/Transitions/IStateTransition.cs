@@ -12,11 +12,11 @@ public abstract class IStateTransition {
     }
 
     public virtual void changeState(State newState) {
-        state.stateMachine.changeState(newState, skipWaitForExit);
+        state.stateMachine.ChangeState(newState, skipWaitForExit);
     }
 
     public virtual void changeState<T>() where T : State {
-        state.stateMachine.changeState(getNewState<T>(), skipWaitForExit);
+        state.stateMachine.ChangeState(getNewState<T>(), skipWaitForExit);
     }
 
     public virtual void checkCondition() {}

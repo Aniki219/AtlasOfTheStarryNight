@@ -69,7 +69,7 @@ public class JumpBehavior : IStateBehavior
     public async override Task StartBehavior() {
         startTime = Time.time;
         float h = apexHeight;
-        float g = state.controller.gravity * state.controller.gravityMod;
+        float g = state.controller.GetGravity();
         float viy = Mathf.Sqrt(-2*h*g);
         float apexTime = viy/-g;
         float vix = jumpDistance/(2*apexTime);
