@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -8,8 +8,25 @@ using UnityEngine.SceneManagement;
 using MyBox;
 using States;
 
+/*
+    This should be renamed PlayerStateMachine.
+    Or possibly AtlasStateMachine.
+    However the Atlas prefix seems to be how we signify
+    something is a part of our namespace rather than 
+    about the player character Atlas.
+
+    We should require components.
+*/
+
 public class PlayerController : EntityStateMachine
 {
+    /*
+        These Vars need to be cleaned up. A lot of these
+        should live in a State or Behavior now.
+
+        Vars here should have to do with specifically the
+        PlayerStateMachine
+    */
     #region Vars
     //float jumpHeight = 2.2f;
     float doubleJumpHeight = 1.5f;
@@ -94,6 +111,9 @@ public class PlayerController : EntityStateMachine
     public State depState = State.Movement;
     State depPrevState = State.Movement;
 
+    /*
+        Remove old State references
+    */
     public enum State
     {
         Wait,
@@ -916,6 +936,10 @@ public class PlayerController : EntityStateMachine
             }
         }
     }
+
+    /*
+        State Behavior
+    */
     void handleTornado()
     {
         // canTornado = false;
@@ -956,6 +980,9 @@ public class PlayerController : EntityStateMachine
         //     SoundManager.Instance.playClip("LevelObjects/EnterTornado", -1);
         // }
     }
+    /*
+        State Behavior
+    */
     public void startEat()
     {
         depState = State.Eat;
@@ -1001,6 +1028,10 @@ public class PlayerController : EntityStateMachine
         //     particleMaker.createDust(true);
         // }
     }
+
+    /*
+        Is this a State Behavior?
+    */
     public void hitLag(float duration = 0.1f)
     {
         StartCoroutine(doHitLag(duration));
@@ -1030,6 +1061,18 @@ public class PlayerController : EntityStateMachine
     #endregion
 
     #region Broom Mechanics
+    /*
+        This points out an interesting problem with our StateMachine
+        The way hitting a whooshberry should work now is that every
+        State needs a CanWooshBerry Transition.
+
+        Allowing an Override is useful, but leads to dangerous complications
+        such as a player activating a WhooshBerry when they are in the
+        Hurt or Menu State.
+
+        Maybe we can solve this with a general transition like CanBeActedUpon
+        or something.
+    */
     //Popping a WooshBerry calls this.
     public void triggerBroomStart(bool fast = false, float dir = 0)
     {
@@ -1106,6 +1149,9 @@ public class PlayerController : EntityStateMachine
     //     controller.velocity.x = moveSpeed * 2 * facing;
     // }
 
+    /*
+        This is a State Transition
+    */
     void endBroom()
     {
         controller.canGravity = true;
@@ -1116,6 +1162,9 @@ public class PlayerController : EntityStateMachine
     #endregion
 
     #region Damage, Bonking, and Reseting
+    /*
+        This is a State and Transition
+    */
     //Take whether to set resetPos or not
     //Set state to Hurt or Bonk
     public async void StartBonk(int damage = 0, bool reset = false)
@@ -1161,6 +1210,9 @@ public class PlayerController : EntityStateMachine
         await Task.Yield();
     }
 
+    /*
+        This is a State now
+    */
     void bonk()
     {
         // if (!isGrounded())
@@ -1169,6 +1221,9 @@ public class PlayerController : EntityStateMachine
         // }
     }
 
+    /*
+        This should be a State and Behavior
+    */
     public void drown()
     {
         if (!controller.collisions.isTangible()) { return; }
@@ -1183,6 +1238,9 @@ public class PlayerController : EntityStateMachine
         anim.SetTrigger("Drown");
     }
 
+    /*
+        This is a State Behavior now
+    */
     //Activates on State.Reset
     //Sets tangible to true
     //Returnns to movement after reaching lastSafePosition
@@ -1243,6 +1301,12 @@ public class PlayerController : EntityStateMachine
         ChangeState(new States.Idle());
     }
 
+    /*
+        These three methods are good examples of creating a API layer
+        between States and StateMachineComponents.
+
+        We should consider if these are generalized well enough
+    */
     public void resetAnimator(bool returnToIdle = false)
     {
         foreach (AnimatorControllerParameter parameter in anim.parameters)
@@ -1279,6 +1343,12 @@ public class PlayerController : EntityStateMachine
     {
         lastSafePosition = transform.position;
     }
+
+    /*
+        Why did we have so many ways to disable the
+        player? We should consolidate this to a single
+        method
+    */
     public void playerShouldWait()
     {
         if (gameManager.Instance.pauseMenus.Count > 0)
@@ -1299,6 +1369,10 @@ public class PlayerController : EntityStateMachine
             }
         }
     }
+
+    /*
+        Not sure this is different from FreezeCoroutine
+    */
 
     public void pauseUntilCondition()
     {
@@ -1327,11 +1401,23 @@ public class PlayerController : EntityStateMachine
         anim.speed = prevAnimSpeed;
     }
 
+
+    /*
+        This method is a bit overloaded right now.
+        But in general I think it's good to be able to
+        freeze an entity without changing its State.
+
+        This should however integrate better with the
+        StateMachine. Just pause the update method on
+        the StateMachine. Unless physics works outside
+        of State logic? This is a question we need to
+        consider. Ideally, physics should be a Behavior
+        so that we can control how an Entity acts.
+    */
     public void freezeForSeconds(float time, bool moveable = false)
     {
         StartCoroutine(freezeCoroutine(time, moveable));
     }
-
     IEnumerator freezeCoroutine(float time, bool moveable)
     {
         State prevState = depState;
@@ -1353,6 +1439,13 @@ public class PlayerController : EntityStateMachine
         Instantiate(Resources.Load<GameObject>("Prefabs/Effects/StarParticles"), (Vector3)position + Vector3.up * 0.5f, Quaternion.Euler((facing == 1) ? 180 : 0, 90, 0));
     }
 
+    /*
+        Questionable use. Feels like denormalization and
+        so far the only reference to this method is some
+        async good in the WallJump State.
+
+        Leave for now but revist at some point
+    */
     //Flip horizontal without turn animation
     public void flipHorizontal()
     {
@@ -1393,6 +1486,17 @@ public class PlayerController : EntityStateMachine
     }
     #endregion
 
+    /*
+        We should see the StateMachine as a layer between
+        States and any other StateMachine components such as
+        CharacterController.
+
+        Our StateMachines should have a interface for using
+        related component methods.
+
+        States should have a reference to their StateMachine
+        and no other components.
+    */
     #region isBools
     public bool isGrounded()
     {
