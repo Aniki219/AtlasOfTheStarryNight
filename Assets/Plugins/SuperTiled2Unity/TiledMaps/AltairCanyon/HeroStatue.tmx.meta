@@ -1,0 +1,51 @@
+fileFormatVersion: 2
+guid: 48e090a864285fd409c4186894f346ca
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 1fa25d03934ea624a82bf2fcee6f0873, type: 3}
+  missingFiles:
+  - ../../../Sprites/Set Pieces/underground fountain.png
+  errors:
+  - Errors detected in tileset '../Tilesets/16gon.tsx'. Check the tileset inspector
+    for more details. Your map may be broken until these are fixed.
+  - Errors detected in tileset '../Tilesets/Walls.tsx'. Check the tileset inspector
+    for more details. Your map may be broken until these are fixed.
+  - Could not find tile 103. Make sure the tilesets were successfully imported.
+  - Could not find tile 119. Make sure the tilesets were successfully imported.
+  - Could not find tile 120. Make sure the tilesets were successfully imported.
+  - Could not find tile 118. Make sure the tilesets were successfully imported.
+  - Could not find tile 102. Make sure the tilesets were successfully imported.
+  - Could not find tile 86. Make sure the tilesets were successfully imported.
+  - Could not find tile 104. Make sure the tilesets were successfully imported.
+  - Could not find tile 88. Make sure the tilesets were successfully imported.
+  - Could not find tile 87. Make sure the tilesets were successfully imported.
+  - 'Missing texture asset for image layer: ../../../Sprites/Set Pieces/underground
+    fountain.png'
+  - Could not find tile 291. Make sure the tilesets were successfully imported.
+  - Could not find tile 307. Make sure the tilesets were successfully imported.
+  - Could not find tile 308. Make sure the tilesets were successfully imported.
+  - Could not find tile 306. Make sure the tilesets were successfully imported.
+  - Could not find tile 292. Make sure the tilesets were successfully imported.
+  - Could not find tile 290. Make sure the tilesets were successfully imported.
+  - Could not find tile 314. Make sure the tilesets were successfully imported.
+  - Could not find tile 297. Make sure the tilesets were successfully imported.
+  - Could not find tile 275. Make sure the tilesets were successfully imported.
+  - Could not find tile 298. Make sure the tilesets were successfully imported.
+  warnings: []
+  missingSortingLayers: []
+  missingLayers: []
+  missingTags: []
+  importerVersion: 26
+  pixelsPerUnit: 32
+  edgesPerEllipse: 32
+  numberOfObjectsImported: 2
+  tilesAsObjects: 0
+  sortingMode: 0
+  isIsometric: 0
+  customImporterClassName: 
+  internalTilesets: []

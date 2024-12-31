@@ -1,0 +1,86 @@
+fileFormatVersion: 2
+guid: 7865989cab3f29d4ea63c78815d93ca3
+ScriptedImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 2
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+  script: {fileID: 11500000, guid: 1fa25d03934ea624a82bf2fcee6f0873, type: 3}
+  missingFiles:
+  - ../../../Tilesets/16gon/Sprite-0001.png
+  errors:
+  - 'Missing texture asset: ../../../Tilesets/16gon/Sprite-0001.png'
+  - Errors detected in tileset '../Tilesets/Walls.tsx'. Check the tileset inspector
+    for more details. Your map may be broken until these are fixed.
+  - Errors detected in tileset 'automap-tiles.tsx'. Check the tileset inspector for
+    more details. Your map may be broken until these are fixed.
+  - Errors detected in tileset '../Tilesets/16gon.tsx'. Check the tileset inspector
+    for more details. Your map may be broken until these are fixed.
+  - Could not find tile 51. Make sure the tilesets were successfully imported.
+  - Could not find tile 341. Make sure the tilesets were successfully imported.
+  - Could not find tile 339. Make sure the tilesets were successfully imported.
+  - Could not find tile 3. Make sure the tilesets were successfully imported.
+  - Could not find tile 346. Make sure the tilesets were successfully imported.
+  - Could not find tile 348. Make sure the tilesets were successfully imported.
+  - Could not find tile 349. Make sure the tilesets were successfully imported.
+  - Could not find tile 361. Make sure the tilesets were successfully imported.
+  - Could not find tile 369. Make sure the tilesets were successfully imported.
+  - Could not find tile 370. Make sure the tilesets were successfully imported.
+  - Could not find tile 378. Make sure the tilesets were successfully imported.
+  - Could not find tile 417. Make sure the tilesets were successfully imported.
+  - Could not find tile 418. Make sure the tilesets were successfully imported.
+  - Could not find tile 420. Make sure the tilesets were successfully imported.
+  - Could not find tile 421. Make sure the tilesets were successfully imported.
+  - Could not find tile 388. Make sure the tilesets were successfully imported.
+  - Could not find tile 396. Make sure the tilesets were successfully imported.
+  - Could not find tile 397. Make sure the tilesets were successfully imported.
+  - Could not find tile 405. Make sure the tilesets were successfully imported.
+  - Could not find tile 353. Make sure the tilesets were successfully imported.
+  - Could not find tile 359. Make sure the tilesets were successfully imported.
+  - Could not find tile 407. Make sure the tilesets were successfully imported.
+  - Could not find tile 413. Make sure the tilesets were successfully imported.
+  - Could not find tile 291. Make sure the tilesets were successfully imported.
+  - Could not find tile 279. Make sure the tilesets were successfully imported.
+  - Could not find tile 307. Make sure the tilesets were successfully imported.
+  - Could not find tile 275. Make sure the tilesets were successfully imported.
+  - Could not find tile 292. Make sure the tilesets were successfully imported.
+  - Could not find tile 290. Make sure the tilesets were successfully imported.
+  - Could not find tile 291. Make sure the tilesets were successfully imported.
+  - Could not find tile 275. Make sure the tilesets were successfully imported.
+  - Could not find tile 307. Make sure the tilesets were successfully imported.
+  - Could not find tile 292. Make sure the tilesets were successfully imported.
+  - Could not find tile 290. Make sure the tilesets were successfully imported.
+  - Could not find tile 276. Make sure the tilesets were successfully imported.
+  - Could not find tile 308. Make sure the tilesets were successfully imported.
+  - Could not find tile 306. Make sure the tilesets were successfully imported.
+  - Could not find tile 274. Make sure the tilesets were successfully imported.
+  - Could not find tile 295. Make sure the tilesets were successfully imported.
+  - Could not find tile 294. Make sure the tilesets were successfully imported.
+  - Could not find tile 296. Make sure the tilesets were successfully imported.
+  - Could not find tile 314. Make sure the tilesets were successfully imported.
+  - Could not find tile 297. Make sure the tilesets were successfully imported.
+  - Could not find tile 298. Make sure the tilesets were successfully imported.
+  - Could not find tile 282. Make sure the tilesets were successfully imported.
+  - Could not find tile 281. Make sure the tilesets were successfully imported.
+  - Could not find tile 313. Make sure the tilesets were successfully imported.
+  - Could not find tile 279. Make sure the tilesets were successfully imported.
+  - Could not find tile 280. Make sure the tilesets were successfully imported.
+  - Could not find tile 310. Make sure the tilesets were successfully imported.
+  - Could not find tile 311. Make sure the tilesets were successfully imported.
+  warnings:
+  - Tileset 'Blockout' is an embedded tileset. Exported tilesets are preferred.
+  missingSortingLayers: []
+  missingLayers: []
+  missingTags: []
+  importerVersion: 26
+  pixelsPerUnit: 32
+  edgesPerEllipse: 32
+  numberOfObjectsImported: 3
+  tilesAsObjects: 0
+  sortingMode: 0
+  isIsometric: 0
+  customImporterClassName: 
+  internalTilesets:
+  - {instanceID: 0}

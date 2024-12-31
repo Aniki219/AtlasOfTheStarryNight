@@ -17,7 +17,7 @@ public class AtlasSceneManager : ScriptableObject
     private static AtlasSceneManager instance;
     public static AtlasSceneManager Instance { get { return instance; } }
 
-    private static string path = "Assets/SuperTiled2Unity/TiledMaps/AltairCanyon/AltairCanyon.world";//Application.streamingAssetsPath + "/TiledWorld/AltairCanyon.world";
+    private static string path = "Assets/Plugins/SuperTiled2Unity/TiledMaps/AltairCanyon/AltairCanyon.world";//Application.streamingAssetsPath + "/TiledWorld/AltairCanyon.world";
     AtlasWorldMap sceneData;
     public AtlasMap currentScene;
     public List<AtlasMap> neighbors;
@@ -51,21 +51,23 @@ public class AtlasSceneManager : ScriptableObject
     public static void switchScene(Vector2 dir, bool clearDoorLabel = false)
     {
         GameObject player = gameManager.Instance.player;
-        
+
         AtlasMap fromScene = getMap();
 
         AtlasMap toScene = findMapByCoords(getPlayerCoords() + dir);
         if (toScene == null || toScene.fileName == "null") return;
-        
+
         Vector2 t = (fromScene.getCenter() - toScene.getCenter()) * -SCREEN_TILES_HEIGHT;
 
-        float startx = 0; 
+        float startx = 0;
         float starty = 0;
 
-        if (dir.x != 0) {
+        if (dir.x != 0)
+        {
             startx = (toScene.width * SCREEN_TILES_WIDTH * 0.5f - 0.3f) * -dir.x;
             starty = player.transform.position.y + t.y;
-        } else
+        }
+        else
         {
             startx = player.transform.position.x + t.x;
             starty = (toScene.height * SCREEN_TILES_HEIGHT * 0.5f - 0.4f) * dir.y;
@@ -145,8 +147,8 @@ public class AtlasSceneManager : ScriptableObject
 
         Vector2 d = playerWorldPosition - bottomLeft;
         Vector2 normd = new Vector2(
-            (int)Mathf.Clamp(d.x / SCREEN_TILES_WIDTH, 0, currentMap.width-1),
-            (int)Mathf.Clamp(d.y / SCREEN_TILES_HEIGHT, 0, currentMap.height-1));
+            (int)Mathf.Clamp(d.x / SCREEN_TILES_WIDTH, 0, currentMap.width - 1),
+            (int)Mathf.Clamp(d.y / SCREEN_TILES_HEIGHT, 0, currentMap.height - 1));
         playerCoords.x = normd.x + currentMap.x;
         playerCoords.y = currentMap.height - 1 - normd.y + currentMap.y;
 
@@ -156,7 +158,9 @@ public class AtlasSceneManager : ScriptableObject
     public static AtlasMap findMapByCoords(Vector2 mapCoords)
     {
         AtlasWorldMap sceneData = getWorldMapData();
-        AtlasMap rtnScene = sceneData.maps.Find(s => {return
+        AtlasMap rtnScene = sceneData.maps.Find(s =>
+        {
+            return
             mapCoords.x < s.x + s.width &&
             mapCoords.x >= s.x &&
             mapCoords.y < s.y + s.height &&
@@ -179,7 +183,7 @@ public class AtlasSceneManager : ScriptableObject
         AtlasWorldMap worldMapData = getWorldMapData();
         //printSceneNames();
         AtlasMap currentMap = worldMapData.maps.Find(map => map.fileName == fileName) ?? throw new Exception("No WorldMap data found for Map with fileName: " + fileName);
-    return currentMap;
+        return currentMap;
     }
 }
 
@@ -211,11 +215,13 @@ public class AtlasMap
         return center;
     }
 
-    public Vector2 getPositionCoords() {
+    public Vector2 getPositionCoords()
+    {
         return new Vector2(x, y);
     }
 
-    public Vector2 getSize() {
+    public Vector2 getSize()
+    {
         return new Vector2(width, height);
     }
 }
@@ -239,15 +245,17 @@ public struct AtlasWorldMapData
 {
     public List<AtlasMapData> maps;
 
-    public AtlasWorldMap build() {
+    public AtlasWorldMap build()
+    {
         AtlasWorldMap worldMap = new AtlasWorldMap();
-        List<AtlasMap> atlasMaps = maps.Select(map => {
+        List<AtlasMap> atlasMaps = maps.Select(map =>
+        {
             AtlasMap atlasMap = new AtlasMap();
 
             string pattern = @"(\/|\.)";
-            Regex regex = new Regex(pattern);   
+            Regex regex = new Regex(pattern);
             string[] arr = Regex.Split(map.fileName, pattern);
-            atlasMap.fileName = arr[arr.Length-3];
+            atlasMap.fileName = arr[arr.Length - 3];
 
             int xfactor = AtlasSceneManager.SCREEN_TILES_WIDTH * AtlasSceneManager.PIXELS_PER_TILE;
             int yfactor = AtlasSceneManager.SCREEN_TILES_HEIGHT * AtlasSceneManager.PIXELS_PER_TILE;
